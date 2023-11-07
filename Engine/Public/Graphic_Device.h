@@ -17,6 +17,9 @@ public:
 	HRESULT Init_Fence();
 	HRESULT Init_CommandObjects();
 	HRESULT Init_SwapChain(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMode, _uint iWinCX, _uint iWinCY);
+	// RenderTargetView, DepthStencilView
+	HRESULT Init_DescriptorHeap();
+	//HRESULT Init_RenderTargetView();
 	virtual HRESULT Free() override;
 
 private: // ComPtr
@@ -31,6 +34,10 @@ private: // Descriptor Desc
 	UINT m_iRtvDescriptorSize = 0;
 	UINT m_iDsvDescriptorSize = 0;
 	UINT m_iCbvSrvUavDescriptorSize = 0;
+private: // Descriptor Heap
+	static const int m_iSwapChainBufferCount = 2; // 더블 버퍼링때문에 2로 초기화
+	ComPtr<ID3D12DescriptorHeap> m_pRtvHeap = nullptr;
+	ComPtr<ID3D12DescriptorHeap> m_pDsvHeap = nullptr;
 };
 
 _NAMESPACE

@@ -127,6 +127,39 @@ HRESULT CGraphic_Device::Init_SwapChain(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMod
 	return S_OK;
 }
 
+HRESULT CGraphic_Device::Init_DescriptorHeap()
+{
+	// Descriptor狼 包府甫 困茄 D-Heap积己
+
+	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc;
+	rtvHeapDesc.NumDescriptors = m_iSwapChainBufferCount;\
+	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	rtvHeapDesc.NodeMask = 0;
+	if (FAILED(m_pDevice->CreateDescriptorHeap(
+		&rtvHeapDesc, IID_PPV_ARGS(m_pRtvHeap.GetAddressOf()))))
+	{
+		return E_FAIL;
+	}
+
+
+	D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc;
+	dsvHeapDesc.NumDescriptors = 1;
+	dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+	dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	dsvHeapDesc.NodeMask = 0;
+
+	if (FAILED(m_pDevice->CreateDescriptorHeap(
+		&dsvHeapDesc, IID_PPV_ARGS(m_pDsvHeap.GetAddressOf()))))
+	{
+		return E_FAIL;
+	}
+
+	
+
+	return S_OK;
+}
+
 HRESULT CGraphic_Device::Free()
 {
 	return S_OK;
