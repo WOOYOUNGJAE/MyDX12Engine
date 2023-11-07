@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{cfc243d5-d1ea-4265-9875-b8c63e12fb79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{f5318660-9683-418c-8219-989eaa5432d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Base">
+      <UniqueIdentifier>{7f0a1187-0c07-45e2-a96f-dbe797a43d78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\GameInstance">
+      <UniqueIdentifier>{a3b28b56-b250-4440-8d60-2daf277dcb8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{87b1b1b4-ef55-4dd3-a6cc-722f371c8b61}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Public\Engine_Typedef.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Engine_Defines.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Engine_Macros.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Engine_Functions.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Base.h">
+      <Filter>Utility\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\GameInstance.h">
+      <Filter>Utility\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\d3dx12.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\DX12Test.h" />
+    <ClInclude Include="..\Public\Graphic_Device.h" />
+    <ClInclude Include="..\Public\Engine_Struct.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Private\Base.cpp">
+      <Filter>Utility\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GameInstance.cpp">
+      <Filter>Utility\GameInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\DX12Test.cpp" />
+    <ClCompile Include="..\Private\Graphic_Device.cpp" />
+  </ItemGroup>
+</Project>
