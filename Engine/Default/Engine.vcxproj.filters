@@ -40,9 +40,11 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\DX12Test.h" />
-    <ClInclude Include="..\Public\Graphic_Device.h" />
     <ClInclude Include="..\Public\Engine_Struct.h">
       <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Graphic_Device.h">
+      <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +55,8 @@
       <Filter>Utility\GameInstance</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\DX12Test.cpp" />
-    <ClCompile Include="..\Private\Graphic_Device.cpp" />
+    <ClCompile Include="..\Private\Graphic_Device.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

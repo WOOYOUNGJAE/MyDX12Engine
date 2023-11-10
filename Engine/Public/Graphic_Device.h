@@ -16,13 +16,17 @@ public: // Init
 		_uint iWinCX, _uint iWinCY, _Inout_ ID3D12Device** ppDevice);
 	HRESULT Init_Fence();
 	HRESULT Init_CommandObjects();
-	HRESULT Init_SwapChain(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMode, _uint iWinCX, _uint iWinCY);
+	HRESULT Init_SwapChain(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMode);
 	// RenderTargetView, DepthStencilView
-	HRESULT Init_DescriptorHeap();
+	HRESULT Create_DescriptorHeap();
 	HRESULT Init_RenderTargetView();
-public:
+public: // LifeCycle
 	HRESULT Flush_CommandQueue();
 	virtual HRESULT Free() override;
+public:
+	HRESULT On_Resize();
+public: // Getter
+	D3D12_CPU_DESCRIPTOR_HANDLE Get_DepthStenciView() { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); }
 
 private: // ComPtr
 	ComPtr<IDXGIFactory4> m_pDxgi_Factory = nullptr;
@@ -40,8 +44,17 @@ private: // Descriptor Heap
 	static const int m_iSwapChainBufferCount = 2; // 더블 버퍼링때문에 2로 초기화
 	ComPtr<ID3D12DescriptorHeap> m_pRtvHeap = nullptr;
 	ComPtr<ID3D12DescriptorHeap> m_pDsvHeap = nullptr;
-private: // Fence
-	UINT64 m_iCurrentFence = 0;
+	ComPtr<ID3D12Resource> m_pSwapChainBuffer[m_iSwapChainBufferCount]{};
+	ComPtr<ID3D12Resource> m_pDepthStencilBuffer = nullptr;
+private:
+	D3D12_VIEWPORT m_viewportDesc;
+	D3D12_RECT m_ScissorRect;
+private: // Client Info
+	_uint m_iClientWinCX = 0;
+	_uint m_iClientWinCY = 0;
+private: // Current
+	UINT64 m_iCurrFence = 0;
+	_uint m_iCurrBackBuffer = 0;
 };
 
 _NAMESPACE
