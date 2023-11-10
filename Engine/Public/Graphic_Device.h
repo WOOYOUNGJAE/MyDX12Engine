@@ -11,7 +11,7 @@ public:
 	CGraphic_Device();
 	virtual ~CGraphic_Device() override = default;
 
-public:
+public: // Init
 	HRESULT Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMode,
 		_uint iWinCX, _uint iWinCY, _Inout_ ID3D12Device** ppDevice);
 	HRESULT Init_Fence();
@@ -19,7 +19,9 @@ public:
 	HRESULT Init_SwapChain(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMode, _uint iWinCX, _uint iWinCY);
 	// RenderTargetView, DepthStencilView
 	HRESULT Init_DescriptorHeap();
-	//HRESULT Init_RenderTargetView();
+	HRESULT Init_RenderTargetView();
+public:
+	HRESULT Flush_CommandQueue();
 	virtual HRESULT Free() override;
 
 private: // ComPtr
@@ -38,6 +40,8 @@ private: // Descriptor Heap
 	static const int m_iSwapChainBufferCount = 2; // 더블 버퍼링때문에 2로 초기화
 	ComPtr<ID3D12DescriptorHeap> m_pRtvHeap = nullptr;
 	ComPtr<ID3D12DescriptorHeap> m_pDsvHeap = nullptr;
+private: // Fence
+	UINT64 m_iCurrentFence = 0;
 };
 
 _NAMESPACE

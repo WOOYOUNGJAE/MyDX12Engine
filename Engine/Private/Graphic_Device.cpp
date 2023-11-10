@@ -120,7 +120,7 @@ HRESULT CGraphic_Device::Init_SwapChain(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMod
 	SwapChain.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 #pragma endregion SwapChainDesc
 
-	/* 백버퍼라는 텍스쳐를 생성했다. */
+	/* 백버퍼라는 텍스쳐를.. 생성했다. */
 	if (FAILED(m_pDxgi_Factory->CreateSwapChain(m_pCommandQueue.Get(), &SwapChain, m_pSwapChain.GetAddressOf())))
 		return E_FAIL;
 
@@ -156,6 +156,21 @@ HRESULT CGraphic_Device::Init_DescriptorHeap()
 	}
 
 	
+
+	return S_OK;
+}
+
+HRESULT CGraphic_Device::Init_RenderTargetView()
+{
+
+
+	return S_OK;
+}
+
+HRESULT CGraphic_Device::Flush_CommandQueue()
+{
+	// Fence Point 업데이트
+	++m_iCurrentFence;
 
 	return S_OK;
 }
