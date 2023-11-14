@@ -127,12 +127,12 @@ HRESULT CCubeMesh::Initialize()
 
 HRESULT CCubeMesh::Free()
 {
-
-
-
 	if (FAILED(CMeshGeometry::Free()))
 	{
 		return E_FAIL;
 	}
+
+	Safe_Delete_Array(m_vertexData);
+
 	return S_OK;
 }
