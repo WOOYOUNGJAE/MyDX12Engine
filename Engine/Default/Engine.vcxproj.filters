@@ -16,6 +16,18 @@
     <Filter Include="System">
       <UniqueIdentifier>{87b1b1b4-ef55-4dd3-a6cc-722f371c8b61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\Components">
+      <UniqueIdentifier>{e023286e-84c5-4a47-9a9e-3f35db58f842}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\Geometry">
+      <UniqueIdentifier>{a3610940-af9a-4b7f-a11a-ef859fa938ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\Geometry\2D">
+      <UniqueIdentifier>{e4a31efb-9c63-4db6-ae25-3f886bf97e03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\Geometry\3D">
+      <UniqueIdentifier>{c3999142-e124-405e-89ae-177a31cfb480}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -46,6 +58,9 @@
     <ClInclude Include="..\Public\Graphic_Device.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Device_Utils.h" />
+    <ClInclude Include="..\Public\MeshGeometry.h" />
+    <ClInclude Include="..\Public\Component.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -54,9 +69,11 @@
     <ClCompile Include="..\Private\GameInstance.cpp">
       <Filter>Utility\GameInstance</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\DX12Test.cpp" />
     <ClCompile Include="..\Private\Graphic_Device.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Device_Utils.cpp" />
+    <ClCompile Include="..\Private\MeshGeometry.cpp" />
+    <ClCompile Include="..\Private\Component.cpp" />
   </ItemGroup>
 </Project>

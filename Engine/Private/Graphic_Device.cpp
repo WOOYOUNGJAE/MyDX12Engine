@@ -10,6 +10,8 @@ CGraphic_Device::CGraphic_Device()
 HRESULT CGraphic_Device::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMode, _uint iWinCX, _uint iWinCY,
 	ID3D12Device** ppDevice)
 {
+	m_hWnd = hWnd;
+
 	m_iClientWinCX = iWinCX;
 	m_iClientWinCY = iWinCY;
 
@@ -36,11 +38,16 @@ HRESULT CGraphic_Device::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 		return E_FAIL;
 	}
 
-	if (FAILED(Init_Fence()))
+	// Init Fence
+	if (FAILED(m_pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_pFence))))
 	{
 		MSG_BOX("Failed To Create Fence");
 		return E_FAIL;
 	}
+
+	m_iRtvDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	m_iDsvDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+	m_iCbvSrvUavDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	// Skip 4X MSAA
 
@@ -50,9 +57,15 @@ HRESULT CGraphic_Device::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 		return E_FAIL;
 	}
 
-	if (FAILED(Init_SwapChain(hWnd, eWinMode)))
+	if (FAILED(Init_SwapChain(eWinMode)))
 	{
 		MSG_BOX("Failed to Create Swap Chain");
+		return E_FAIL;
+	}
+
+	if (FAILED(Create_DescriptorHeap()))
+	{
+		MSG_BOX("Failed to Create Descriptor Heap");
 		return E_FAIL;
 	}
 
@@ -63,19 +76,6 @@ HRESULT CGraphic_Device::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 	}
 	
 	return S_OK;
-}
-
-HRESULT CGraphic_Device::Init_Fence()
-{
-	HRESULT hr = S_OK;
-
-	hr = FAILED(m_pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_pFence)));
-
-	m_iRtvDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	m_iDsvDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
-	m_iCbvSrvUavDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
-	return hr;
 }
 
 HRESULT CGraphic_Device::Init_CommandObjects()
@@ -111,9 +111,10 @@ HRESULT CGraphic_Device::Init_CommandObjects()
 	return S_OK;
 }
 
-HRESULT CGraphic_Device::Init_SwapChain(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMode)
+HRESULT CGraphic_Device::Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode)
 {
 	/* 스왑체인을 생성한다. = 텍스쳐를 생성하는 행위 + 스왑하는 형태  */
+	m_pSwapChain.Reset();
 #pragma region SwapChainDesc
 	DXGI_SWAP_CHAIN_DESC		SwapChain;
 	ZeroMemory(&SwapChain, sizeof(DXGI_SWAP_CHAIN_DESC));
@@ -123,11 +124,11 @@ HRESULT CGraphic_Device::Init_SwapChain(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMod
 	SwapChain.BufferDesc.Height = m_iClientWinCY;
 
 
-	SwapChain.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	SwapChain.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	SwapChain.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	SwapChain.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	SwapChain.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	SwapChain.BufferCount = 1;
+	SwapChain.BufferCount = m_iSwapChainBufferCount;
 
 	/*스왑하는 형태*/
 	SwapChain.BufferDesc.RefreshRate.Numerator = 60;
@@ -135,10 +136,12 @@ HRESULT CGraphic_Device::Init_SwapChain(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMod
 	SwapChain.SampleDesc.Quality = 0;
 	SwapChain.SampleDesc.Count = 1;
 
-	SwapChain.OutputWindow = hWnd;
+	SwapChain.OutputWindow = m_hWnd;
 	SwapChain.Windowed = eWinMode;
-	SwapChain.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	SwapChain.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // DX11d은 그냥 Discard
+	SwapChain.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 #pragma endregion SwapChainDesc
+
 
 	/* 백버퍼라는 텍스쳐를.. 생성했다. */
 	if (FAILED(m_pDxgi_Factory->CreateSwapChain(m_pCommandQueue.Get(), &SwapChain, m_pSwapChain.GetAddressOf())))

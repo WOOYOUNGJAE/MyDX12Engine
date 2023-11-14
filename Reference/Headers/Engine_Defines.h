@@ -9,11 +9,12 @@
 #include <map>
 #include <algorithm>
 
-//#include "d3dx12.h"
+#include "d3dx12.h"
 #include <d3d12.h>
 #include <wrl.h>
 #include <d3dcompiler.h>
-#include <dxgi.h>
+//#include <dxgi.h>
+#include <dxgi1_4.h>
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
 #include <DirectXColors.h>
@@ -23,7 +24,7 @@ using namespace DirectX::PackedVector;
 using namespace Microsoft::WRL;
 
 // libs
-//#pragma comment(lib, "d3d12")
+#pragma comment(lib, "d3d12")
 #pragma comment(lib, "dxgi")
 #pragma comment(lib, "dxguid")
 #pragma comment(lib, "d3dcompiler")
@@ -47,7 +48,7 @@ using namespace Microsoft::WRL;
 #include "Engine_Typedef.h"
 #include "Engine_Functions.h"
 #include "Engine_Macros.h"
-//#include "Engine_Struct.h"
+#include "Engine_Struct.h"
 
 // namespace
 using namespace Engine;

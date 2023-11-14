@@ -164,7 +164,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Base.h" />
+    <ClInclude Include="..\Public\Component.h" />
     <ClInclude Include="..\Public\d3dx12.h" />
+    <ClInclude Include="..\Public\Device_Utils.h" />
     <ClInclude Include="..\Public\DX12Test.h" />
     <ClInclude Include="..\Public\Engine_Functions.h" />
     <ClInclude Include="..\Public\Engine_Macros.h" />
@@ -173,12 +175,15 @@
     <ClInclude Include="..\Public\Engine_Defines.h" />
     <ClInclude Include="..\Public\GameInstance.h" />
     <ClInclude Include="..\Public\Graphic_Device.h" />
+    <ClInclude Include="..\Public\MeshGeometry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp" />
-    <ClCompile Include="..\Private\DX12Test.cpp" />
+    <ClCompile Include="..\Private\Component.cpp" />
+    <ClCompile Include="..\Private\Device_Utils.cpp" />
     <ClCompile Include="..\Private\GameInstance.cpp" />
     <ClCompile Include="..\Private\Graphic_Device.cpp" />
+    <ClCompile Include="..\Private\MeshGeometry.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

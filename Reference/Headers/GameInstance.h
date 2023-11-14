@@ -1,5 +1,6 @@
 #pragma once
 #include "Base.h"
+#include "Engine_Struct.h"
 
 NAMESPACE_(Engine)
 
@@ -13,6 +14,13 @@ private:
 
 public:
 	HRESULT Free() override;
+
+public:
+	HRESULT Init_Engine(const GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Device** ppDevice);
+	HRESULT Release_Engine();
+
+private:
+	class CGraphic_Device* m_pGraphic_Device = nullptr;
 };
 
 _NAMESPACE
