@@ -28,6 +28,9 @@
     <Filter Include="Utility\Components\Geometry\3D">
       <UniqueIdentifier>{c3999142-e124-405e-89ae-177a31cfb480}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\GameInstance\Managers">
+      <UniqueIdentifier>{6c74e53b-2698-468c-8702-b8616bcff5b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -51,21 +54,27 @@
     <ClInclude Include="..\Public\d3dx12.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\DX12Test.h" />
     <ClInclude Include="..\Public\Engine_Struct.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Graphic_Device.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Device_Utils.h" />
     <ClInclude Include="..\Public\Component.h">
       <Filter>Utility\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\MeshGeometry.h">
       <Filter>Utility\Components\Geometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\CCubeMesh.h" />
+    <ClInclude Include="..\Public\DX12Test.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Device_Utils.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CubeMesh.h">
+      <Filter>Utility\Components\Geometry\3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -77,13 +86,17 @@
     <ClCompile Include="..\Private\Graphic_Device.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Device_Utils.cpp" />
     <ClCompile Include="..\Private\Component.cpp">
       <Filter>Utility\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\MeshGeometry.cpp">
       <Filter>Utility\Components\Geometry</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\CCubeMesh.cpp" />
+    <ClCompile Include="..\Private\Device_Utils.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CubeMesh.cpp">
+      <Filter>Utility\Components\Geometry\3D</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

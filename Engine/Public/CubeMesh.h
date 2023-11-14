@@ -7,6 +7,7 @@ private:
 	~CCubeMesh() override = default;
 
 public:
+	static CCubeMesh* Create();
 	CComponent* Clone(void* pArg) override;
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize() override;

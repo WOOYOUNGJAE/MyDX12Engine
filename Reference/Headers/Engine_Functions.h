@@ -2,14 +2,14 @@
 
 namespace Engine
 {
-	/*  */
+	/* ID3D12Device에도 AddRef()와 Release()라는 같은 이름의 함수가 존재 */
 	template <typename T>
 	unsigned long Safe_AddRef(T& pInstance)
 	{
 		unsigned long	dwRefCnt = { 0 };
 
 		if (nullptr != pInstance)
-			dwRefCnt = pInstance->Add_Ref();
+			dwRefCnt = pInstance->AddRef();
 
 		return dwRefCnt;
 	}

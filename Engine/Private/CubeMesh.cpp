@@ -1,5 +1,18 @@
-#include "CCubeMesh.h"
+#include "CubeMesh.h"
 #include "Device_Utils.h"
+
+CCubeMesh* CCubeMesh::Create()
+{
+	CCubeMesh* pInstance = new CCubeMesh();
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		Safe_Release(pInstance);
+		MSG_BOX("Failed to Init CubeMesh Prototype");
+	}
+
+	return pInstance;;
+}
 
 CComponent* CCubeMesh::Clone(void* pArg)
 {
@@ -97,6 +110,7 @@ HRESULT CCubeMesh::Initialize_Prototype()
 		MSG_BOX("CubeMesh : Failed to Create Buffer");
 		return E_FAIL;
 	}
+
 
 	return S_OK;
 }

@@ -27,7 +27,7 @@ public:
 	HRESULT On_Resize();
 public: // Getter
 	ComPtr<ID3D12Device> Get_Device() { return m_pDevice.Get(); }
-	ComPtr<ID3D12CommandList>  Get_CommandList() { return m_pCommandList.Get(); }
+	ComPtr<ID3D12GraphicsCommandList>  Get_CommandList() { return m_pCommandList.Get(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_DepthStenciView() { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); }
 
 private: // ComPtr
