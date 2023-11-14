@@ -1,7 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "Engine_Defines.h"
-class CMeshGeometry abstract: CComponent
+class CMeshGeometry abstract: public CComponent
 {
 protected:
 	CMeshGeometry() = default;
@@ -11,11 +11,18 @@ public:
 	virtual HRESULT Free() override;
 
 protected:
-	virtual HRESULT Create_Buffer(ID3D12GraphicsCommandList* cmdList,
-		const void* initData, UINT64 byteSize, Microsoft::WRL::ComPtr<ID3D12Resource>& uploadBuffer,
-		Microsoft::WRL::ComPtr<ID3D12Resource>* pOutResource);
 
 protected:
-	//std::array<>
+	MY_VERTEX* m_vertexData = nullptr; // Array
+	_float3* m_vertexPosArr = nullptr;
+	// Index 상속해서? TODO
+	ComPtr<ID3D12Resource> m_pResource = nullptr;
+	// 임시 저장공간
+	ComPtr<ID3DBlob> m_vertexBufferCPU = nullptr;
+	ComPtr<ID3DBlob> m_indexBufferCPU = nullptr;
+	ComPtr<ID3D12Resource> m_vertexBufferGPU = nullptr;
+	ComPtr<ID3D12Resource> m_indexBufferGPU = nullptr;
+	ComPtr<ID3D12Resource> m_vertexBufferUploader = nullptr;
+	ComPtr<ID3D12Resource> m_indexBufferUploader = nullptr;
 };
 

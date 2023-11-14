@@ -13,7 +13,7 @@ public:
 		const void* initData,
 		UINT64 byteSize,
 		Microsoft::WRL::ComPtr<ID3D12Resource>& uploadBuffer,
-		Microsoft::WRL::ComPtr<ID3D12Resource>* pOutResource);	
+		Microsoft::WRL::ComPtr<ID3D12Resource>& refOutResource);	
 
 };
 

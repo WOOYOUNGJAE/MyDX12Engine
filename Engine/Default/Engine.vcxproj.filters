@@ -59,8 +59,13 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Device_Utils.h" />
-    <ClInclude Include="..\Public\MeshGeometry.h" />
-    <ClInclude Include="..\Public\Component.h" />
+    <ClInclude Include="..\Public\Component.h">
+      <Filter>Utility\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MeshGeometry.h">
+      <Filter>Utility\Components\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CCubeMesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -73,7 +78,12 @@
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Device_Utils.cpp" />
-    <ClCompile Include="..\Private\MeshGeometry.cpp" />
-    <ClCompile Include="..\Private\Component.cpp" />
+    <ClCompile Include="..\Private\Component.cpp">
+      <Filter>Utility\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MeshGeometry.cpp">
+      <Filter>Utility\Components\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CCubeMesh.cpp" />
   </ItemGroup>
 </Project>

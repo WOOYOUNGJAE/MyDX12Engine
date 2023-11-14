@@ -1,8 +1,8 @@
 #include "Device_Utils.h"
 
 HRESULT CDevice_Utils::Create_Buffer_Default(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList,
-	const void* initData, UINT64 byteSize, Microsoft::WRL::ComPtr<ID3D12Resource>& uploadBuffer,
-	Microsoft::WRL::ComPtr<ID3D12Resource>* pOutResource)
+                                             const void* initData, UINT64 byteSize, Microsoft::WRL::ComPtr<ID3D12Resource>& uploadBuffer,
+                                             Microsoft::WRL::ComPtr<ID3D12Resource>& refOutResource)
 {
     ComPtr<ID3D12Resource> defaultBuffer;
 
@@ -54,7 +54,7 @@ HRESULT CDevice_Utils::Create_Buffer_Default(ID3D12Device* device, ID3D12Graphic
     UpdateSubresources<1>(cmdList, defaultBuffer.Get(), uploadBuffer.Get(), 0, 0, 1, &subResourceData);
     cmdList->ResourceBarrier(1, &tempBarrier);
 
-    *pOutResource = defaultBuffer; // 
+    refOutResource = defaultBuffer; // 
 
     // 이 함수 호출 이후에도 uploadBuffer를 유지해야 함
     // 복사가 완료되었음이 확실해진 후에 해제하면 됨

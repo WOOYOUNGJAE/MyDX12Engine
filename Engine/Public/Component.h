@@ -1,10 +1,9 @@
 #pragma once
 #include "Base.h"
-//#include "Engine_Defines.h"
 
 NAMESPACE_(Engine)
 
-class ENGINE_DLL CComponent abstract: CBase
+class ENGINE_DLL CComponent abstract: public CBase
 {
 protected:
 	CComponent();
@@ -16,8 +15,8 @@ public:
 	virtual CComponent* Clone(void* pArg) = 0;
 	virtual HRESULT Free() override;
 protected:
-	ID3D12Device* m_pDevice = nullptr;
-
+	ComPtr<ID3D12Device> m_pDevice = nullptr;
+	ComPtr<ID3D12GraphicsCommandList> m_pCommandList = nullptr;
 };
 
 _NAMESPACE
