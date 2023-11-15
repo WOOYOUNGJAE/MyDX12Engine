@@ -21,12 +21,26 @@ HRESULT CObjLayer::Late_Tick(_float fDeltaTime)
 
 HRESULT CObjLayer::Free()
 {
-	for (const auto& iter : m_GameObjList)
+	for (auto& iter : m_GameObjList)
 	{
 		Safe_Release(iter);
 	}
 
 	m_GameObjList.clear();
+
+	return S_OK;
+}
+
+HRESULT CObjLayer::Add_GameObject(CGameObject* pInstance)
+{
+	if (pInstance == nullptr)
+	{
+		MSG_BOX("Obj Layer : Instance nullptr");
+		return E_FAIL;
+	}
+
+	m_GameObjList.push_back(pInstance);
+
 
 	return S_OK;
 }
