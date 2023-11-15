@@ -15,8 +15,7 @@ public:
 	virtual CComponent* Clone(void* pArg) = 0;
 	virtual HRESULT Free() override;
 protected:
-	ComPtr<ID3D12Device> m_pDevice = nullptr;
-	ComPtr<ID3D12GraphicsCommandList> m_pCommandList = nullptr;
+	
 };
 
 _NAMESPACE
