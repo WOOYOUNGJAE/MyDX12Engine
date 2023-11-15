@@ -1,10 +1,15 @@
 #include "ComponentManager.h"
 #include "Component.h"
-
+#include "CubeMesh.h"
 IMPLEMENT_SINGLETON(CComponentManager)
 
 HRESULT CComponentManager::Initialize()
 {
+#pragma region Init_Basic_Components
+	Add_Prototype(L"CubeMesh", CCubeMesh::Create());
+#pragma endregion Init_Basic_Components
+
+
 	return S_OK;
 }
 

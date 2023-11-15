@@ -27,6 +27,8 @@ HRESULT CMainApp::Initialize()
 HRESULT CMainApp::Free()
 {
 	Safe_Release(m_pGameInstance);
+
+	CGameInstance::Release_Engine();
 	return S_OK;
 }
 

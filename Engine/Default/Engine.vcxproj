@@ -166,6 +166,7 @@
     <ClInclude Include="..\Public\Base.h" />
     <ClInclude Include="..\Public\Component.h" />
     <ClInclude Include="..\Public\ComponentManager.h" />
+    <ClInclude Include="..\Public\Cube.h" />
     <ClInclude Include="..\Public\CubeMesh.h" />
     <ClInclude Include="..\Public\d3dx12.h" />
     <ClInclude Include="..\Public\Device_Utils.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="..\Private\Base.cpp" />
     <ClCompile Include="..\Private\Component.cpp" />
     <ClCompile Include="..\Private\ComponentManager.cpp" />
+    <ClCompile Include="..\Private\Cube.cpp" />
     <ClCompile Include="..\Private\CubeMesh.cpp" />
     <ClCompile Include="..\Private\Device_Utils.cpp" />
     <ClCompile Include="..\Private\GameInstance.cpp" />

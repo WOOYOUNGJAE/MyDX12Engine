@@ -29,8 +29,10 @@ HRESULT CGameInstance::Free()
 HRESULT CGameInstance::Init_Engine(const GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Device** ppDevice)
 {
 	m_pGraphic_Device->Init_Graphic_Device(GraphicDesc.hWnd, GraphicDesc.eWinMode, GraphicDesc.iSizeX, GraphicDesc.iSizeY, ppDevice);
+	m_pComponentManager->Initialize();
+	m_pGameObjectManager->Initialize();
 
-	CCubeMesh* pInstance = CCubeMesh::Create(); // TODO Temp, Cube Test
+	//CCubeMesh* pInstance = CCubeMesh::Create(); // TODO Temp, Cube Test
 	return S_OK;
 }
 
@@ -44,10 +46,12 @@ void CGameInstance::Late_Tick(_float fDeltaTime)
 	m_pGameObjectManager->Late_Tick(fDeltaTime);
 }
 
-HRESULT CGameInstance::Release_Engine()
+void CGameInstance::Release_Engine()
 {
-
-	return S_OK;
+	// Destroy Managers or Singletons, 최종 삭제
+	CGraphic_Device::Destroy_Instance();
+	CComponentManager::Destroy_Instance();
+	CGameObjectManager::Destroy_Instance();
 }
 
 HRESULT CGameInstance::Add_ComPrototype(const wstring& strTag, CComponent* pComInstance)

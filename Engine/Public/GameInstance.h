@@ -19,7 +19,7 @@ public:
 	HRESULT Init_Engine(const GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Device** ppDevice);
 	void Tick(_float fDeltaTime);
 	void Late_Tick(_float fDeltaTime);
-	HRESULT Release_Engine();
+	static void Release_Engine();
 public: // Manager Function Offer
 	// ComponentManager
 	HRESULT Add_ComPrototype(const wstring& strTag, class CComponent* pComInstance);

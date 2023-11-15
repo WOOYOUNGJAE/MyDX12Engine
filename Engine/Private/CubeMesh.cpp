@@ -14,13 +14,9 @@ CCubeMesh* CCubeMesh::Create()
 	return pInstance;
 }
 
-// Component : Base,       CubeMesh : Derived
-// List<CComponent*> list
-// list.push_back(cubeMesh->Clone())
 CComponent* CCubeMesh::Clone(void* pArg)
 {
-	CComponent* pInstance = new CCubeMesh(*this);
-	CCubeMesh* pInstance1 = new CCubeMesh(*this);
+	CCubeMesh* pInstance = new CCubeMesh(*this);
 
 	if (FAILED(Initialize(pArg)))
 	{

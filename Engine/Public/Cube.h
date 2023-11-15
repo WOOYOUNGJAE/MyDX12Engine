@@ -1,13 +1,9 @@
 #pragma once
 #include "GameObject.h"
-#include "Client_Defines.h"
 
 NAMESPACE_(Engine)
-class CCubeMesh;
-_NAMESPACE
 
-NAMESPACE_(Client)
-class CCube : public CGameObject
+class ENGINE_DLL CCube : public CGameObject
 {
 protected:
 	CCube() = default;
@@ -25,7 +21,7 @@ public:
 	HRESULT Free() override;
 
 protected:
-	CCubeMesh* m_pCubeMeshCom = nullptr;
+	class CCubeMesh* m_pCubeMeshCom = nullptr;
 };
 
 _NAMESPACE

@@ -9,8 +9,8 @@ CMeshGeometry::CMeshGeometry() :
 
 HRESULT CMeshGeometry::Free()
 {
-	Safe_Delete_Array(m_vertexData);
-	Safe_Delete_Array(m_vertexPosArr);
+	/*Safe_Delete_Array(m_vertexData);
+	Safe_Delete_Array(m_vertexPosArr);*/
 
 	if (FAILED(CComponent::Free()))
 	{

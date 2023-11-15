@@ -1,20 +1,31 @@
 #include "GameObjectManager.h"
-#include "GameObject.h"
+#include "Cube.h"
 #include "ObjLayer.h"
 
 IMPLEMENT_SINGLETON(CGameObjectManager)
 
 HRESULT CGameObjectManager::Initialize()
 {
+#pragma region Init_Basic_GameObject
+	Add_Prototype(L"Cube", CCube::Create());
+#pragma endregion Init_Basic_GameObject
 	return S_OK;
 }
 
 HRESULT CGameObjectManager::Free()
 {
+	for (auto& pair : m_mapObjPrototypes)
+	{
+		Safe_Release(pair.second);
+	}
+	m_mapObjPrototypes.clear();
+
 	for (auto& pair : m_mapLayer)
 	{
 		Safe_Release(pair.second);
 	}
+	m_mapLayer.clear();
+
 	return S_OK;
 }
 

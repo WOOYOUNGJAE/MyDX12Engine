@@ -40,6 +40,9 @@
     <Filter Include="Utility\Components\GeometryMesh\3D">
       <UniqueIdentifier>{c3999142-e124-405e-89ae-177a31cfb480}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\GameObjects\DefaultGeometry">
+      <UniqueIdentifier>{bf6fbe13-91ac-468b-8cd8-26f76d6f2db5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -96,6 +99,9 @@
     <ClInclude Include="..\Public\GameObjectManager.h">
       <Filter>Utility\GameInstance\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Cube.h">
+      <Filter>Utility\GameObjects\DefaultGeometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -130,6 +136,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\GameObjectManager.cpp">
       <Filter>Utility\GameInstance\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Cube.cpp">
+      <Filter>Utility\GameObjects\DefaultGeometry</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

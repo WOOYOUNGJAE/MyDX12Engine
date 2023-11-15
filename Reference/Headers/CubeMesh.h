@@ -7,13 +7,14 @@ class ENGINE_DLL CCubeMesh final: public CMeshGeometry
 {
 private:
 	CCubeMesh() = default;
+	CCubeMesh(const CCubeMesh& rhs) : CMeshGeometry(rhs) {}
 	~CCubeMesh() override = default;
 
 public:
 	static CCubeMesh* Create();
-	CComponent* Clone(void* pArg) override;
+	CComponent* Clone(void* pArg = nullptr) override;
 	HRESULT Initialize_Prototype() override;
-	HRESULT Initialize() override;
+	HRESULT Initialize(void* pArg) override; // Do Nothing (InitÀº Copy¿ë)
 	HRESULT Free() override;
 
 private:

@@ -1,10 +1,9 @@
-#include "pch.h"
 #include "CubeMesh.h"
 #include "Cube.h"
 
 CCube* CCube::Create()
 {
-	CCube* pInstance = new CCube();
+	CCube* pInstance = new CCube;
 
 	if (pInstance)
 	{
@@ -16,6 +15,7 @@ CCube* CCube::Create()
 
 CGameObject* CCube::Clone(void* pArg)
 {
+	
 	return nullptr;
 }
 
