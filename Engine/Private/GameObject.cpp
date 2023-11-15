@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "GameInstance.h"
 
 HRESULT CGameObject::Free()
 {
@@ -25,7 +26,21 @@ HRESULT CGameObject::Add_Component(const wstring& strComTag, CComponent** ppOutC
 		return S_OK; // 크래시는 일단 안함
 	}
 
+	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
 
+	CComponent* pComponent = pGameInstance->Clone_ComPrototye(strComTag, pArg);
+	if (pComponent == nullptr)
+	{
+		return E_FAIL;
+	}
 
+	// TODO: SafeAdd Component?
+
+	m_mapComponents.emplace(strComTag, pComponent);
+
+	*ppOutCom = pComponent;
+
+	Safe_Release(pGameInstance);
 	return S_OK;
 }

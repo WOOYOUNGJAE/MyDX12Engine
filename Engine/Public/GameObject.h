@@ -23,7 +23,7 @@ public:
 
 protected:
 	//ID3D12Device*
-	map<wstring, class CComponent*> m_mapComponents;
+	map<wstring, CComponent*> m_mapComponents;
 };
 
 _NAMESPACE
