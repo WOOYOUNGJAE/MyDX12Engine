@@ -12,9 +12,9 @@ protected:
 public: // LifeCycle
 	virtual HRESULT Initialize_Prototype() = 0;
 	virtual HRESULT Initialize() = 0;
-	virtual HRESULT Tick(_float fDeltaTime) = 0;
-	virtual HRESULT Late_Tick(_float fDeltaTime) = 0;
-	virtual HRESULT Render() = 0;
+	virtual void Tick(_float fDeltaTime) = 0;
+	virtual void Late_Tick(_float fDeltaTime) = 0;
+	virtual void Render() = 0;
 	HRESULT Free() override;
 public:
 	virtual _bool Com_Already_Owned(const wstring& strComTag);

@@ -177,8 +177,10 @@
     <ClInclude Include="..\Public\Engine_Defines.h" />
     <ClInclude Include="..\Public\GameInstance.h" />
     <ClInclude Include="..\Public\GameObject.h" />
+    <ClInclude Include="..\Public\GameObjectManager.h" />
     <ClInclude Include="..\Public\Graphic_Device.h" />
     <ClInclude Include="..\Public\MeshGeometry.h" />
+    <ClInclude Include="..\Public\ObjLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp" />
@@ -188,8 +190,10 @@
     <ClCompile Include="..\Private\Device_Utils.cpp" />
     <ClCompile Include="..\Private\GameInstance.cpp" />
     <ClCompile Include="..\Private\GameObject.cpp" />
+    <ClCompile Include="..\Private\GameObjectManager.cpp" />
     <ClCompile Include="..\Private\Graphic_Device.cpp" />
     <ClCompile Include="..\Private\MeshGeometry.cpp" />
+    <ClCompile Include="..\Private\ObjLayer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
