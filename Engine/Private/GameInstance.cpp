@@ -31,7 +31,7 @@ HRESULT CGameInstance::Init_Engine(const GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D
 	m_pGraphic_Device->Init_Graphic_Device(GraphicDesc.hWnd, GraphicDesc.eWinMode, GraphicDesc.iSizeX, GraphicDesc.iSizeY, ppDevice);
 	m_pComponentManager->Initialize();
 	m_pGameObjectManager->Initialize();
-
+;
 	//CCubeMesh* pInstance = CCubeMesh::Create(); // TODO Temp, Cube Test
 	return S_OK;
 }

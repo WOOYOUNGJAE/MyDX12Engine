@@ -18,7 +18,7 @@ CComponent* CCubeMesh::Clone(void* pArg)
 {
 	CCubeMesh* pInstance = new CCubeMesh(*this);
 
-	if (FAILED(Initialize(pArg)))
+	if (FAILED(pInstance->Initialize(pArg)))
 	{
 		Safe_Release(pInstance);
 		MSG_BOX("CubeMesh : Failed to Clone");

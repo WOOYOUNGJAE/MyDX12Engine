@@ -21,6 +21,9 @@ CGameObject* CCube::Clone(void* pArg)
 
 HRESULT CCube::Initialize_Prototype()
 {
+	// ±âº» ÄÄÆ÷³ÍÆ® ºÎÂø
+	Add_Component(L"CubeMesh", (CComponent**)(&m_pCubeMeshCom));
+
 	return S_OK;
 }
 
@@ -43,5 +46,7 @@ void CCube::Render()
 
 HRESULT CCube::Free()
 {
+	Safe_Release(m_pCubeMeshCom);
+
 	return CGameObject::Free();
 }
