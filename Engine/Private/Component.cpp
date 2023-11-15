@@ -12,7 +12,7 @@ HRESULT CComponent::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CComponent::Initialize()
+HRESULT CComponent::Initialize(void* pArg)
 {
 	return S_OK;
 }

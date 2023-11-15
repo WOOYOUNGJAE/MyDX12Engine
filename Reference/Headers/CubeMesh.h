@@ -1,6 +1,9 @@
 #pragma once
 #include "MeshGeometry.h"
-class CCubeMesh final: public CMeshGeometry
+
+NAMESPACE_(Engine)
+
+class ENGINE_DLL CCubeMesh final: public CMeshGeometry
 {
 private:
 	CCubeMesh() = default;
@@ -16,3 +19,4 @@ public:
 private:
 };
 
+_NAMESPACE

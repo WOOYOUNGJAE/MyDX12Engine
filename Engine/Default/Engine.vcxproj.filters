@@ -19,15 +19,6 @@
     <Filter Include="Utility\Components">
       <UniqueIdentifier>{e023286e-84c5-4a47-9a9e-3f35db58f842}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\Components\Geometry">
-      <UniqueIdentifier>{a3610940-af9a-4b7f-a11a-ef859fa938ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\Components\Geometry\2D">
-      <UniqueIdentifier>{e4a31efb-9c63-4db6-ae25-3f886bf97e03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\Components\Geometry\3D">
-      <UniqueIdentifier>{c3999142-e124-405e-89ae-177a31cfb480}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility\GameInstance\Managers">
       <UniqueIdentifier>{6c74e53b-2698-468c-8702-b8616bcff5b7}</UniqueIdentifier>
     </Filter>
@@ -39,6 +30,15 @@
     </Filter>
     <Filter Include="Utility\GameObjects\Layer">
       <UniqueIdentifier>{e5814d4f-af50-4c15-89d4-ef9b8164ae12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\GeometryMesh">
+      <UniqueIdentifier>{a3610940-af9a-4b7f-a11a-ef859fa938ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\GeometryMesh\2D">
+      <UniqueIdentifier>{e4a31efb-9c63-4db6-ae25-3f886bf97e03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\GeometryMesh\3D">
+      <UniqueIdentifier>{c3999142-e124-405e-89ae-177a31cfb480}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,7 +73,7 @@
       <Filter>Utility\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\MeshGeometry.h">
-      <Filter>Utility\Components\Geometry</Filter>
+      <Filter>Utility\Components\GeometryMesh</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\DX12Test.h">
       <Filter>Utility</Filter>
@@ -82,7 +82,7 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CubeMesh.h">
-      <Filter>Utility\Components\Geometry\3D</Filter>
+      <Filter>Utility\Components\GeometryMesh\3D</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\GameObject.h">
       <Filter>Utility\GameObjects</Filter>
@@ -90,8 +90,12 @@
     <ClInclude Include="..\Public\ComponentManager.h">
       <Filter>Utility\GameInstance\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\GameObjectManager.h" />
-    <ClInclude Include="..\Public\ObjLayer.h" />
+    <ClInclude Include="..\Public\ObjLayer.h">
+      <Filter>Utility\GameObjects\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\GameObjectManager.h">
+      <Filter>Utility\GameInstance\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -107,13 +111,13 @@
       <Filter>Utility\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\MeshGeometry.cpp">
-      <Filter>Utility\Components\Geometry</Filter>
+      <Filter>Utility\Components\GeometryMesh</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Device_Utils.cpp">
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CubeMesh.cpp">
-      <Filter>Utility\Components\Geometry\3D</Filter>
+      <Filter>Utility\Components\GeometryMesh\3D</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\GameObject.cpp">
       <Filter>Utility\GameObjects</Filter>
@@ -121,7 +125,11 @@
     <ClCompile Include="..\Private\ComponentManager.cpp">
       <Filter>Utility\GameInstance\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\GameObjectManager.cpp" />
-    <ClCompile Include="..\Private\ObjLayer.cpp" />
+    <ClCompile Include="..\Private\ObjLayer.cpp">
+      <Filter>Utility\GameObjects\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GameObjectManager.cpp">
+      <Filter>Utility\GameInstance\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

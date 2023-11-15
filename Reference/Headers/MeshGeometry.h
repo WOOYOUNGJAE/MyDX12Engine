@@ -1,10 +1,12 @@
 #pragma once
 #include "Component.h"
 #include "Engine_Defines.h"
+
+NAMESPACE_(Engine)
 class CMeshGeometry abstract: public CComponent
 {
 protected:
-	CMeshGeometry() = default;
+	CMeshGeometry();
 	~CMeshGeometry() override = default;
 
 public:
@@ -13,6 +15,8 @@ public:
 protected:
 
 protected:
+	ComPtr<ID3D12Device> m_pDevice = nullptr;
+	ComPtr<ID3D12GraphicsCommandList> m_pCommandList = nullptr;
 	MY_VERTEX* m_vertexData = nullptr; // Array
 	_float3* m_vertexPosArr = nullptr;
 	// Index 상속해서? TODO
@@ -26,3 +30,4 @@ protected:
 	ComPtr<ID3D12Resource> m_indexBufferUploader = nullptr;
 };
 
+_NAMESPACE

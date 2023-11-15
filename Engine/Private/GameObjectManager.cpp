@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "ObjLayer.h"
 
+IMPLEMENT_SINGLETON(CGameObjectManager)
+
 HRESULT CGameObjectManager::Initialize()
 {
 	return S_OK;
@@ -9,6 +11,10 @@ HRESULT CGameObjectManager::Initialize()
 
 HRESULT CGameObjectManager::Free()
 {
+	for (auto& pair : m_mapLayer)
+	{
+		Safe_Release(pair.second);
+	}
 	return S_OK;
 }
 

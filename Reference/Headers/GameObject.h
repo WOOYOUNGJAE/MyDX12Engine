@@ -23,6 +23,7 @@ public:
 	virtual HRESULT Add_Component(const wstring& strComTag, class CComponent** ppOutCom, void* pArg = nullptr);
 
 protected:
+	//ID3D12Device*
 	map<wstring, CComponent*> m_mapComponents;
 };
 

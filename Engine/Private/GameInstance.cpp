@@ -34,6 +34,16 @@ HRESULT CGameInstance::Init_Engine(const GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D
 	return S_OK;
 }
 
+void CGameInstance::Tick(_float fDeltaTime)
+{
+	m_pGameObjectManager->Tick(fDeltaTime);
+}
+
+void CGameInstance::Late_Tick(_float fDeltaTime)
+{
+	m_pGameObjectManager->Late_Tick(fDeltaTime);
+}
+
 HRESULT CGameInstance::Release_Engine()
 {
 

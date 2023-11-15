@@ -1,10 +1,11 @@
 #pragma once
 #include "Base.h"
-
+#include "Client_Defines.h"
 NAMESPACE_(Engine)
 class CGameInstance;
 _NAMESPACE
 
+NAMESPACE_(Client)
 class CMainApp : public CBase
 {
 private:
@@ -21,3 +22,4 @@ private:
 	CGameInstance* m_pGameInstance = nullptr;
 };
 
+_NAMESPACE

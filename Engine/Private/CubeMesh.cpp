@@ -11,17 +11,22 @@ CCubeMesh* CCubeMesh::Create()
 		MSG_BOX("Failed to Init CubeMesh Prototype");
 	}
 
-	return pInstance;;
+	return pInstance;
 }
 
+// Component : Base,       CubeMesh : Derived
+// List<CComponent*> list
+// list.push_back(cubeMesh->Clone())
 CComponent* CCubeMesh::Clone(void* pArg)
 {
-	CCubeMesh* pInstance = new CCubeMesh(*this); // TODO ±Ì¿∫ ∫πªÁ
+	CComponent* pInstance = new CCubeMesh(*this);
+	CCubeMesh* pInstance1 = new CCubeMesh(*this);
 
-	if (pInstance)
+	if (FAILED(Initialize(pArg)))
 	{
-		CComponent::Initialize();
-		Initialize();
+		Safe_Release(pInstance);
+		MSG_BOX("CubeMesh : Failed to Clone");
+		return nullptr;
 	}
 
 	return pInstance;
@@ -115,14 +120,9 @@ HRESULT CCubeMesh::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CCubeMesh::Initialize()
+HRESULT CCubeMesh::Initialize(void* pArg)
 {
-	if (FAILED(CMeshGeometry::Initialize()))
-	{
-		return E_FAIL;
-	}
-
-	return S_OK;
+	return Initialize_Prototype();
 }
 
 HRESULT CCubeMesh::Free()

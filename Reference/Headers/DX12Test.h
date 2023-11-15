@@ -1,4 +1,6 @@
 #pragma once
+#include <functional>
+
 #include "Engine_Defines.h"
 class DX12Test
 {

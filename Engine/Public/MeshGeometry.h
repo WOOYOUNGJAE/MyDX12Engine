@@ -1,16 +1,18 @@
 #pragma once
 #include "Component.h"
 #include "Engine_Defines.h"
+
+NAMESPACE_(Engine)
+// MeshGeometry는 Prototype만 가능, Clone 비허용.
 class CMeshGeometry abstract: public CComponent
 {
 protected:
 	CMeshGeometry();
+	CMeshGeometry(const CMeshGeometry& rhs): CComponent(rhs) {}
 	~CMeshGeometry() override = default;
 
 public:
 	virtual HRESULT Free() override;
-
-protected:
 
 protected:
 	ComPtr<ID3D12Device> m_pDevice = nullptr;
@@ -28,3 +30,4 @@ protected:
 	ComPtr<ID3D12Resource> m_indexBufferUploader = nullptr;
 };
 
+_NAMESPACE
