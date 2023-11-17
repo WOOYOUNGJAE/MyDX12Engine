@@ -1,7 +1,6 @@
 #pragma once
 #include "Component.h"
 #include "Engine_Defines.h"
-#include "UploadBuffer.h"
 
 NAMESPACE_(Engine)
 	// MeshGeometry는 Prototype만 가능, Clone 비허용.
@@ -33,9 +32,10 @@ protected:
 	ComPtr<ID3D12Resource> m_indexBufferGPU = nullptr;
 	ComPtr<ID3D12Resource> m_vertexBufferUploader = nullptr;
 	ComPtr<ID3D12Resource> m_indexBufferUploader = nullptr;
-	// ConstantBuffer
+	//// ConstantBuffer
 	//template <typename T>
-	class CUploadBuffer<_float4x4>* m_constantBufferUploader = nullptr;
+	//class CUploadBuffer;
+	//CUploadBuffer<_float4x4>* m_pUploadBuffer_Constant = nullptr;
 };
 
 _NAMESPACE

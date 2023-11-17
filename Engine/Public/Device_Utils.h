@@ -1,5 +1,8 @@
 #pragma once
 #include "Engine_Defines.h"
+
+NAMESPACE_(Engine)
+
 class CDevice_Utils
 {
 private:
@@ -24,3 +27,4 @@ public:
 
 };
 
+_NAMESPACE
