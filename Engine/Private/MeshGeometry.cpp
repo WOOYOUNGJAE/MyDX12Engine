@@ -7,6 +7,17 @@ CMeshGeometry::CMeshGeometry() :
 {
 }
 
+HRESULT CMeshGeometry::Initialize_Prototype()
+{
+	if (m_pDevice == nullptr || m_pCommandList == nullptr)
+	{
+		MSG_BOX("MeshGeometry: Device Null");
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 HRESULT CMeshGeometry::Free()
 {
 	/*Safe_Delete_Array(m_vertexData);

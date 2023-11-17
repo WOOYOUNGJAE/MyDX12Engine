@@ -1,6 +1,10 @@
 #include "CubeMesh.h"
 #include "Device_Utils.h"
 
+#ifdef _DEBUG
+_uint CCubeMesh::m_iClonedNum = 0;
+#endif _DEBUG
+
 CCubeMesh* CCubeMesh::Create()
 {
 	CCubeMesh* pInstance = new CCubeMesh();
@@ -16,6 +20,11 @@ CCubeMesh* CCubeMesh::Create()
 
 CComponent* CCubeMesh::Clone(void* pArg)
 {
+#ifdef _DEBUG
+	++m_iClonedNum;
+#endif // DEBUG
+
+
 	CCubeMesh* pInstance = new CCubeMesh(*this);
 
 

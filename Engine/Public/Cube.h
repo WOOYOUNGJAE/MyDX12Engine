@@ -22,6 +22,10 @@ public:
 
 protected:
 	class CCubeMesh* m_pCubeMeshCom = nullptr;
+
+#ifdef _DEBUG
+	static _uint m_iClonedNum;
+#endif // DEBUG
 };
 
 _NAMESPACE

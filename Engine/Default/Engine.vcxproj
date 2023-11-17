@@ -185,6 +185,7 @@
     <ClInclude Include="..\Public\MeshGeometry.h" />
     <ClInclude Include="..\Public\ObjLayer.h" />
     <ClInclude Include="..\Public\Renderer.h" />
+    <ClInclude Include="..\Public\UploadBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp" />

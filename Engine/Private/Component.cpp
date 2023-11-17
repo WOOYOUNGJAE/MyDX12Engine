@@ -1,6 +1,7 @@
 #include "Component.h"
 #include "Graphic_Device.h"
 
+
 CComponent::CComponent()
 
 {

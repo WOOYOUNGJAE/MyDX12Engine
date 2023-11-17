@@ -14,8 +14,7 @@ public:
 	virtual HRESULT Initialize(void* pArg = nullptr);
 	virtual CComponent* Clone(void* pArg = nullptr) = 0;
 	virtual HRESULT Free() override;
-protected:
-	
+
 };
 
 _NAMESPACE

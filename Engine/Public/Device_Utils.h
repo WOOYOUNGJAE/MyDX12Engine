@@ -13,8 +13,14 @@ public:
 		ID3D12GraphicsCommandList* cmdList,
 		const void* initData,
 		UINT64 byteSize,
-		Microsoft::WRL::ComPtr<ID3D12Resource>& uploadBuffer,
-		Microsoft::WRL::ComPtr<ID3D12Resource>& refOutResource);	
+		ComPtr<ID3D12Resource>& uploadBuffer,
+		ComPtr<ID3D12Resource>& refOutResource);
+
+	// 256의 최소 공배수로 계산
+	static _uint ConstantBufferByteSize(_uint iByteSize)
+	{
+		return (iByteSize + 255) & ~255;
+	}
 
 };
 

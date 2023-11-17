@@ -1,6 +1,10 @@
 #include "CubeMesh.h"
 #include "Cube.h"
 
+#ifdef _DEBUG
+_uint CCube::m_iClonedNum = 0;
+#endif _DEBUG
+
 CCube* CCube::Create()
 {
 	CCube* pInstance = new CCube;
@@ -15,7 +19,10 @@ CCube* CCube::Create()
 
 CGameObject* CCube::Clone(void* pArg)
 {
-	
+#ifdef _DEBUG
+	++m_iClonedNum;
+#endif // DEBUG
+
 	return nullptr;
 }
 

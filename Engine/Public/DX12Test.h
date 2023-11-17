@@ -9,7 +9,7 @@ class DX12Test
         //ID3D12GraphicsCommandList::IASetIndexBuffer()
         //ID3D12GraphicsCommandList::DrawIndexedInstanced()
 
-        
+         
     }
 };
 

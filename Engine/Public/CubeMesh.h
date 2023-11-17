@@ -18,6 +18,10 @@ public:
 	HRESULT Free() override;
 
 private:
+#ifdef _DEBUG
+	static _uint m_iClonedNum;
+#endif // DEBUG
+
 };
 
 _NAMESPACE
