@@ -7,6 +7,7 @@ private:
 	~CDevice_Utils() = default;
 
 public:
+	/// 버텍스, 인덱스 버퍼 모두 가능
 	static HRESULT Create_Buffer_Default(
 		ID3D12Device* device,
 		ID3D12GraphicsCommandList* cmdList,

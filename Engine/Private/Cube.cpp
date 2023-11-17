@@ -22,7 +22,8 @@ CGameObject* CCube::Clone(void* pArg)
 HRESULT CCube::Initialize_Prototype()
 {
 	// ±âº» ÄÄÆ÷³ÍÆ® ºÎÂø
-	Add_Component(L"CubeMesh", (CComponent**)(&m_pCubeMeshCom));
+	Add_Component(L"CubeMesh", reinterpret_cast<CComponent**>(&m_pCubeMeshCom));
+
 
 	return S_OK;
 }

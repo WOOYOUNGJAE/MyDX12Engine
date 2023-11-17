@@ -102,6 +102,7 @@
     <ClInclude Include="..\Public\Cube.h">
       <Filter>Utility\GameObjects\DefaultGeometry</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -140,5 +141,9 @@
     <ClCompile Include="..\Private\Cube.cpp">
       <Filter>Utility\GameObjects\DefaultGeometry</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Renderer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaderTest.hlsl" />
   </ItemGroup>
 </Project>

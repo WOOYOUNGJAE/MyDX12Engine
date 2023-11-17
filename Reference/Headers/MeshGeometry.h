@@ -11,7 +11,10 @@ protected:
 	CMeshGeometry(const CMeshGeometry& rhs): CComponent(rhs),
 	m_pDevice(rhs.m_pDevice),
 	m_pCommandList(rhs.m_pCommandList)
-	{}
+	{
+		m_pDevice->AddRef();
+		m_pCommandList->AddRef();
+	}
 	~CMeshGeometry() override = default;
 
 public:

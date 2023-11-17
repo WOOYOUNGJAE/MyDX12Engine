@@ -18,6 +18,7 @@ CComponent* CCubeMesh::Clone(void* pArg)
 {
 	CCubeMesh* pInstance = new CCubeMesh(*this);
 
+
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
 		Safe_Release(pInstance);

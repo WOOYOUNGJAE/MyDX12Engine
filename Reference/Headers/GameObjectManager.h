@@ -11,7 +11,7 @@ class CGameObjectManager : public CBase
 {
 	DECLARE_SINGLETON(CGameObjectManager)
 
-protected:
+private:
 	CGameObjectManager() = default;
 	~CGameObjectManager() override = default;
 

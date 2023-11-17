@@ -170,7 +170,9 @@
     <ClInclude Include="..\Public\CubeMesh.h" />
     <ClInclude Include="..\Public\d3dx12.h" />
     <ClInclude Include="..\Public\Device_Utils.h" />
-    <ClInclude Include="..\Public\DX12Test.h" />
+    <ClInclude Include="..\Public\DX12Test.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Public\Engine_Functions.h" />
     <ClInclude Include="..\Public\Engine_Macros.h" />
     <ClInclude Include="..\Public\Engine_Struct.h" />
@@ -182,6 +184,7 @@
     <ClInclude Include="..\Public\Graphic_Device.h" />
     <ClInclude Include="..\Public\MeshGeometry.h" />
     <ClInclude Include="..\Public\ObjLayer.h" />
+    <ClInclude Include="..\Public\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp" />
@@ -196,6 +199,12 @@
     <ClCompile Include="..\Private\Graphic_Device.cpp" />
     <ClCompile Include="..\Private\MeshGeometry.cpp" />
     <ClCompile Include="..\Private\ObjLayer.cpp" />
+    <ClCompile Include="..\Private\Renderer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaderTest.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
