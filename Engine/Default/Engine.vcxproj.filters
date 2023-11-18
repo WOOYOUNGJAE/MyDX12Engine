@@ -46,6 +46,9 @@
     <Filter Include="Utility\PipleLine">
       <UniqueIdentifier>{2a2d9e89-7411-42c6-8e73-e246818c33bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\Components\Shader">
+      <UniqueIdentifier>{288c46b5-b6e7-47e4-b1b7-f19de8a39648}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -111,7 +114,10 @@
     <ClInclude Include="..\Public\UploadBuffer.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Pipeline.h" />
+    <ClInclude Include="..\Public\Pipeline.h">
+      <Filter>Utility\PipleLine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -153,7 +159,10 @@
     <ClCompile Include="..\Private\Renderer.cpp">
       <Filter>Utility\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Pipeline.cpp" />
+    <ClCompile Include="..\Private\Pipeline.cpp">
+      <Filter>Utility\PipleLine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />

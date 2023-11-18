@@ -22,4 +22,12 @@ namespace Engine
 		_float4 vColor;
 		// TODO ..추가 예정
 	};
+
+	struct SHADER_INIT_DESC
+	{
+		const std::wstring& filename;
+		const D3D_SHADER_MACRO* defines;
+		const std::string& entrypoint;
+		const std::string& target;
+	};
 }
