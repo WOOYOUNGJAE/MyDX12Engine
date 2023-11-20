@@ -173,6 +173,9 @@
     <ClInclude Include="..\Public\DX12Test.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\Public\Engine_Enums.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Public\Engine_Functions.h" />
     <ClInclude Include="..\Public\Engine_Macros.h" />
     <ClInclude Include="..\Public\Engine_Struct.h" />

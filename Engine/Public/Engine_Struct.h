@@ -30,4 +30,16 @@ namespace Engine
 		std::string& entrypoint; // 쉐이더 프로그램 짐입점 함수 이름, 하나의 hlsl에는 여러 함수(쉐이더) 가능
 		std::string& target; // 쉐이더 종류와 버전
 	};
+
+	struct VERTEX_INPUT_ELEMENT_DESC_BUILT_IN
+	{
+		VERTEX_INPUT_ELEMENT_DESC_BUILT_IN()
+		{
+			Default_Position = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+			Default_Color = { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+		}
+		D3D12_INPUT_ELEMENT_DESC Default_Position;
+		D3D12_INPUT_ELEMENT_DESC Default_Color;
+	};
+
 }

@@ -3,7 +3,7 @@
 #include "UploadBuffer.h"
 
 NAMESPACE_(Engine)
-
+using namespace std;
 // 파이프라인 중 공유해야 하는 자원 관리
 // CGraphic_Device's Friend
 class CPipeline : public CBase
@@ -17,12 +17,14 @@ public:
 	HRESULT Initialize();
 	HRESULT Init_ConstantBuffers();
 	HRESULT Init_RootSignature();
+	void Pipeline_Tick();
 	HRESULT Free() override;
 public:
 	CUploadBuffer<_float4x4>* Get_UploadBuffer() { return m_pUploadBuffer_Constant; }
 
 public: // typedef
 	typedef ComPtr<ID3D12PipelineState> PSO;
+	typedef list<class CGameObject*> PipelineLayer;
 	enum ENUM_PSO { PSO_DEFAULT, PSO_END };
 	enum ENUM_RootSig {RootSig_DEFAULT, RootSig_END};
 private: // Graphic Device
@@ -36,6 +38,8 @@ private: // Root Signature
 	ComPtr<ID3D12RootSignature> m_RootSig[RootSig_END];
 private: // PSO
 	PSO m_PSOArr[PSO_END];
+	PipelineLayer m_vecPipelineLayerArr[PSO_END]; // 게임 오브젝트의 Pipeline_Tick을 대신해 돌려주는 함수
+	//CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT<>
 };
 
 _NAMESPACE

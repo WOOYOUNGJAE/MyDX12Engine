@@ -118,6 +118,9 @@
       <Filter>Utility\PipleLine</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Shader.h" />
+    <ClInclude Include="..\Public\Engine_Enums.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">

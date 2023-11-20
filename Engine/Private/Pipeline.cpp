@@ -1,4 +1,6 @@
 #include "Pipeline.h"
+
+#include "GameObject.h"
 #include "Graphic_Device.h"
 
 IMPLEMENT_SINGLETON(CPipeline)
@@ -122,6 +124,17 @@ HRESULT CPipeline::Init_RootSignature()
 	}
 
 	return S_OK;
+}
+
+void CPipeline::Pipeline_Tick()
+{
+	for (auto& iter : m_vecPipelineLayerArr)
+	{
+		for (auto& innerIter : iter)
+		{
+			innerIter->Pipeline_Tick();
+		}
+	}
 }
 
 HRESULT CPipeline::Free()

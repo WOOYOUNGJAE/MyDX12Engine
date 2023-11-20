@@ -15,6 +15,7 @@ public: // LifeCycle
 	virtual CGameObject* Clone(void* pArg = nullptr) = 0;
 	virtual void Tick(_float fDeltaTime) = 0;
 	virtual void Late_Tick(_float fDeltaTime) = 0;
+	virtual void Pipeline_Tick() = 0;
 	virtual void Render() = 0;
 	HRESULT Free() override;
 public:
@@ -24,6 +25,7 @@ public:
 
 protected:
 	map<wstring, CComponent*> m_mapComponents;
+	_uint m_eENUM_PSO = 0; // PSO_DEFAULT
 };
 
 _NAMESPACE

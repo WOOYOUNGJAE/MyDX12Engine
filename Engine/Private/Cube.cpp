@@ -48,6 +48,10 @@ void CCube::Late_Tick(_float fDeltaTime)
 {
 }
 
+void CCube::Pipeline_Tick()
+{
+}
+
 void CCube::Render()
 {
 }

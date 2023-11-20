@@ -24,8 +24,9 @@ private:
 	SHADER_TYPE m_eShaderType = SHADER_TYPE_END;
 private:
 	// ID3DBlob : 범용 메모리 버퍼, 
-	vector<ComPtr<ID3DBlob>> m_shaderByteCode;
+	ComPtr<ID3DBlob> m_shaderByteCodeArr[SHADER_TYPE_END];
 	//ComPtr<ID3DBlob> m_psByteCode = nullptr;
+	vector<D3D12_INPUT_ELEMENT_DESC> m_vecInputLayout;
 };
 
 _NAMESPACE

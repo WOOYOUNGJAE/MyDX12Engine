@@ -17,6 +17,7 @@ public:
 	HRESULT Initialize(void* pArg) override;
 	void Tick(_float fDeltaTime) override;
 	void Late_Tick(_float fDeltaTime) override;
+	void Pipeline_Tick() override;
 	void Render() override;
 	HRESULT Free() override;
 
