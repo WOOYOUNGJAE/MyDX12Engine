@@ -1,3 +1,4 @@
+#pragma region Includes
 #include "GameInstance.h"
 #include "Graphic_Device.h"
 #include "ComponentManager.h"
@@ -5,20 +6,26 @@
 #include "GameObject.h"
 #include "Component.h"
 #include "CubeMesh.h"
+#include "Pipeline.h"  
+#pragma endregion
+
 IMPLEMENT_SINGLETON(CGameInstance)
 
 CGameInstance::CGameInstance() :
 m_pGraphic_Device(CGraphic_Device::Get_Instance()),
 m_pComponentManager(CComponentManager::Get_Instance()),
-m_pGameObjectManager(CGameObjectManager::Get_Instance())
+m_pGameObjectManager(CGameObjectManager::Get_Instance()),
+m_pPipeline(CPipeline::Get_Instance())
 {
 	Safe_AddRef(m_pGraphic_Device);
 	Safe_AddRef(m_pComponentManager);
 	Safe_AddRef(m_pGameObjectManager);
+	Safe_AddRef(m_pPipeline);
 }
 
 HRESULT CGameInstance::Free()
 {
+	Safe_Release(m_pPipeline);
 	Safe_Release(m_pGameObjectManager);
 	Safe_Release(m_pComponentManager);
 	Safe_Release(m_pGraphic_Device);
@@ -28,10 +35,19 @@ HRESULT CGameInstance::Free()
 
 HRESULT CGameInstance::Init_Engine(const GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Device** ppDevice)
 {
-	m_pGraphic_Device->Init_Graphic_Device(GraphicDesc.hWnd, GraphicDesc.eWinMode, GraphicDesc.iSizeX, GraphicDesc.iSizeY, ppDevice);
+	if (FAILED(m_pGraphic_Device->Init_Graphic_Device(GraphicDesc.hWnd, GraphicDesc.eWinMode, GraphicDesc.iSizeX, GraphicDesc.iSizeY, ppDevice)))
+	{
+		return E_FAIL;
+	}
+
 	m_pComponentManager->Initialize();
 	m_pGameObjectManager->Initialize();
-;
+
+	if (FAILED(m_pPipeline->Initialize()))
+	{
+		return E_FAIL;
+	}
+	
 	//CCubeMesh* pInstance = CCubeMesh::Create(); // TODO Temp, Cube Test
 	return S_OK;
 }
@@ -49,9 +65,10 @@ void CGameInstance::Late_Tick(_float fDeltaTime)
 void CGameInstance::Release_Engine()
 {
 	// Destroy Managers or Singletons, 최종 삭제
-	CGraphic_Device::Destroy_Instance();
+	CPipeline::Destroy_Instance();
 	CComponentManager::Destroy_Instance();
 	CGameObjectManager::Destroy_Instance();
+	CGraphic_Device::Destroy_Instance();
 }
 
 HRESULT CGameInstance::Add_ComPrototype(const wstring& strTag, CComponent* pComInstance)

@@ -190,6 +190,7 @@
     <ClInclude Include="..\Public\Pipeline.h" />
     <ClInclude Include="..\Public\Renderer.h" />
     <ClInclude Include="..\Public\Shader.h" />
+    <ClInclude Include="..\Public\Transform.h" />
     <ClInclude Include="..\Public\UploadBuffer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -208,10 +209,14 @@
     <ClCompile Include="..\Private\Pipeline.cpp" />
     <ClCompile Include="..\Private\Renderer.cpp" />
     <ClCompile Include="..\Private\Shader.cpp" />
+    <ClCompile Include="..\Private\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\Shader\pShader_Default.hlsl" />
+    <FxCompile Include="..\Bin\Shader\vShader_Default.hlsl" />
     <FxCompile Include="shaderTest.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

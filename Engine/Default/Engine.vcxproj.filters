@@ -49,6 +49,12 @@
     <Filter Include="Utility\Components\Shader">
       <UniqueIdentifier>{288c46b5-b6e7-47e4-b1b7-f19de8a39648}</UniqueIdentifier>
     </Filter>
+    <Filter Include="0.Shaders">
+      <UniqueIdentifier>{78eb3ad9-c6c8-4308-be57-35e2ca5c0ed0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\Transform">
+      <UniqueIdentifier>{b500aa2c-f20d-441d-9ecc-22b6baa991ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -117,9 +123,14 @@
     <ClInclude Include="..\Public\Pipeline.h">
       <Filter>Utility\PipleLine</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Shader.h" />
     <ClInclude Include="..\Public\Engine_Enums.h">
       <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Shader.h">
+      <Filter>Utility\Components\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Transform.h">
+      <Filter>Utility\Components\Transform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -165,9 +176,20 @@
     <ClCompile Include="..\Private\Pipeline.cpp">
       <Filter>Utility\PipleLine</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Shader.cpp" />
+    <ClCompile Include="..\Private\Shader.cpp">
+      <Filter>Utility\Components\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Transform.cpp">
+      <Filter>Utility\Components\Transform</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />
+    <FxCompile Include="..\Bin\Shader\vShader_Default.hlsl">
+      <Filter>0.Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\pShader_Default.hlsl">
+      <Filter>0.Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
