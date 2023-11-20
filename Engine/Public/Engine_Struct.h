@@ -25,9 +25,9 @@ namespace Engine
 
 	struct SHADER_INIT_DESC
 	{
-		const std::wstring& filename;
-		const D3D_SHADER_MACRO* defines;
-		const std::string& entrypoint;
-		const std::string& target;
+		std::wstring& filename; // 경로
+		D3D_SHADER_MACRO* defines; // 고급옵션, 일반적으로 nullptr
+		std::string& entrypoint; // 쉐이더 프로그램 짐입점 함수 이름, 하나의 hlsl에는 여러 함수(쉐이더) 가능
+		std::string& target; // 쉐이더 종류와 버전
 	};
 }

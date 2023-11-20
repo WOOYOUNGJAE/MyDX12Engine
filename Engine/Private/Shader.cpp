@@ -5,11 +5,11 @@ CShader::CShader() /*:
 	m_pDevice(CGraphic_Device::Get_Instance()->Get_Device()),
 	m_pCommandList(CGraphic_Device::Get_Instance()->Get_CommandList())*/
 {
+	m_shaderByteCode.reserve(SHADER_TYPE_END);
 }
 
 CShader::CShader(const CShader& rhs) :
-	m_vsByteCode(rhs.m_vsByteCode),
-	m_psByteCode(rhs.m_psByteCode)
+	m_shaderByteCode(rhs.m_shaderByteCode)
 {
 }
 
@@ -51,7 +51,16 @@ HRESULT CShader::Initialize_Prototype(const SHADER_INIT_DESC& shaderInput)
 		return E_FAIL;
 	}
 
-	m_vsByteCode = CDevice_Utils::CompileShader(shaderInput.filename, shaderInput.defines, shaderInput.entrypoint, shaderInput.target);
+	if (shaderInput.filename.find(L"vShader"))
+	{
+		m_eShaderType = TYPE_VERTEX;
+	}
+	else if (shaderInput.filename.find(L"pShader"))
+	{
+		m_eShaderType = TYPE_PIXEL;		
+	}
+
+	m_shaderByteCode[m_eShaderType] = CDevice_Utils::CompileShader(shaderInput.filename, shaderInput.defines, shaderInput.entrypoint, shaderInput.target);
 
 	return S_OK;
 }
