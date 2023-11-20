@@ -13,6 +13,12 @@ private:
 	CPipeline();
 	~CPipeline() override = default;
 
+public: // typedef
+	typedef ComPtr<ID3D12PipelineState> PSO;
+	typedef list<class CGameObject*> PipelineLayer;
+	enum ENUM_PSO { PSO_DEFAULT, PSO_END };
+	enum ENUM_RootSig {RootSig_DEFAULT, RootSig_END};
+
 public:
 	HRESULT Initialize();
 	HRESULT Init_ConstantBuffers();
@@ -21,12 +27,9 @@ public:
 	HRESULT Free() override;
 public:
 	CUploadBuffer<_float4x4>* Get_UploadBuffer() { return m_pUploadBuffer_Constant; }
+	// TODO : Build PSO Overrides
+	HRESULT Build_PSO(const D3D12_GRAPHICS_PIPELINE_STATE_DESC& pipeline_desc, ENUM_PSO psoIndex);
 
-public: // typedef
-	typedef ComPtr<ID3D12PipelineState> PSO;
-	typedef list<class CGameObject*> PipelineLayer;
-	enum ENUM_PSO { PSO_DEFAULT, PSO_END };
-	enum ENUM_RootSig {RootSig_DEFAULT, RootSig_END};
 private: // Graphic Device
 	class CGraphic_Device* m_pGraphic_Device = nullptr; // Singleton Class
 	ComPtr<ID3D12Device> m_pDevice = nullptr; // Real Device

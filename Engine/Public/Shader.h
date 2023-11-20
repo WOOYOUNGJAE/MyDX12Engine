@@ -15,7 +15,11 @@ public:
 	CComponent* Clone(void* pArg) override;
 	HRESULT Initialize_Prototype(const SHADER_INIT_DESC& shaderInput);
 	HRESULT Free() override;
-
+public:
+	void Push_InputLayout(D3D12_INPUT_ELEMENT_DESC desc)
+	{
+		m_vecInputLayout.push_back(desc);
+	}
 public:
 	enum SHADER_TYPE {TYPE_VERTEX, TYPE_PIXEL, SHADER_TYPE_END,
 	};

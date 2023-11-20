@@ -7,9 +7,9 @@ CShader::CShader() /*:
 {
 }
 
-CShader::CShader(const CShader& rhs) :
-	m_shaderByteCodeArr(rhs.m_shaderByteCodeArr)
+CShader::CShader(const CShader& rhs)
 {
+	memcpy(m_shaderByteCodeArr, rhs.m_shaderByteCodeArr, sizeof(ComPtr<ID3DBlob>) * SHADER_TYPE_END);
 }
 
 CShader* CShader::Create(const SHADER_INIT_DESC& shaderInput)
@@ -18,13 +18,13 @@ CShader* CShader::Create(const SHADER_INIT_DESC& shaderInput)
 
 	if (pInstance == nullptr)
 	{
-		MSG_BOX("Shader : Failed to Create Shader");
+		MSG_BOX("Shader : Fail to Create Shader");
 		Safe_Release(pInstance);
 	}
 
 	if (FAILED(pInstance->Initialize_Prototype(shaderInput)))
 	{
-		MSG_BOX("Shader : Failed to Create Shader");
+		MSG_BOX("Shader : Fail to Create Shader");
 		Safe_Release(pInstance);
 	}
 
@@ -62,13 +62,14 @@ HRESULT CShader::Initialize_Prototype(const SHADER_INIT_DESC& shaderInput)
 
 	m_shaderByteCodeArr[m_eShaderType] = CDevice_Utils::CompileShader(shaderInput.filename, shaderInput.defines, shaderInput.entrypoint, shaderInput.target);
 
-	for (auto& iter : m_shaderByteCodeArr)
+	/*for (auto& iter : m_shaderByteCodeArr)
 	{
 		if (iter == nullptr)
 			continue;
+	}*/
 
 
-	}
+
 	return S_OK;
 }
 

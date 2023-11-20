@@ -1,6 +1,7 @@
 #include "Pipeline.h"
 
 #include "GameObject.h"
+#include "Shader.h"
 #include "Graphic_Device.h"
 
 IMPLEMENT_SINGLETON(CPipeline)
@@ -140,6 +141,18 @@ void CPipeline::Pipeline_Tick()
 HRESULT CPipeline::Free()
 {
 	Safe_Release(m_pGraphic_Device);
+	return S_OK;
+}
+
+HRESULT CPipeline::Build_PSO(const D3D12_GRAPHICS_PIPELINE_STATE_DESC& pipeline_desc, ENUM_PSO psoIndex)
+{
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC pso_desc = pipeline_desc;
+	if (FAILED(m_pDevice->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(&(m_PSOArr[psoIndex])))))
+	{
+		MSG_BOX("Failed to Create PSO");
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 
