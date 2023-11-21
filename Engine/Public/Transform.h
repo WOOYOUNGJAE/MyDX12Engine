@@ -21,14 +21,15 @@ public:
 	CComponent* Clone(void* pArg) override;
 
 public: // getter setter
-	_float4x4 WorldMatrix() { return m_WorldMatrix; }
+	_matrix WorldMatrix() { return XMLoadFloat4x4(&m_WorldMatrix); }
+	_matrix WorldMatrix_Inverse() { return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)); }
 	_float3 Position() { return m_Position; }
 	_float3 Right() { return m_Right; }
 	_float3 Up() { return m_Up; }
 	_float3 Look() { return m_Look; }
-	void Set_Look(const _float3& look) { m_Look = look; }
-	void Set_Scale(const _float3& scale) { m_Scale = scale; }
-	void Set_Position(const _float3& pos) { m_Position = pos; }
+	void Set_Look(const _float3& look) { m_Look = look; Refresh_Transform(LOOK); }
+	void Set_Scale(const _float3& scale) { m_Scale = scale; Refresh_Transform(SCALE);	}
+	void Set_Position(const _float3& pos) { m_Position = pos; Refresh_Transform(POSITION); }
 	void Set_WorldMatrix(const _float4x4& matrix) { m_WorldMatrix = matrix; }
 	void Set_WorldMatrix(MATRIX_ENUM eEnum, _fvector vVec);
 public:
@@ -37,8 +38,6 @@ private:
 	_vector Get_MatrixRow(MATRIX_ENUM eEnum);
 	_float3 Get_ScaleXYZ();
 	void Refresh_MatrixScaled(const _float3& scale);
-public:
-	_float3 m_Position;
 
 private:
 	_float4x4 m_WorldMatrix;
@@ -46,46 +45,47 @@ private:
 	_float3 m_Right;
 	_float3 m_Up;
 	_float3 m_Look;
-
-};
-
-#pragma region TransformOperation
-// 외부에서 직접적으로 포지션 값을 변경하는 동시에 트랜스폼의 월드 매트릭스도 변경하게 끔
-
-class Position
-{
-public:
-	Position() = default;
-	~Position()
-	{	
-		Safe_Release(m_pOwner);
-	}
-
-public: // Operator Overload
-	_float3 operator+(_vector vVector)
-	{
-		_vector vPos = XMLoadFloat3(&m_Position);
-
-		vPos = XMVectorAdd(vPos, vVector);
-		XMStoreFloat3(&m_Position, vPos);
-		m_pOwner->Set_Position(m_Position);
-		m_pOwner->Refresh_Transform();
-		return m_Position;
-	}
-	_float3 operator-(_vector vVector)
-	{
-		_vector vPos = XMLoadFloat3(&m_Position);
-
-		vPos = XMVectorAdd(vPos, -vVector);
-		XMStoreFloat3(&m_Position, vPos);
-		return m_Position;
-	}
-public:
-	void Set_Owner(CTransform* pOwner) { m_pOwner = pOwner; Safe_AddRef(m_pOwner); }
-private:
 	_float3 m_Position;
-	CTransform* m_pOwner = nullptr;
+
 };
-#pragma endregion TransformOperation
+//
+//#pragma region TransformOperation
+//// 외부에서 직접적으로 포지션 값을 변경하는 동시에 트랜스폼의 월드 매트릭스도 변경하게 끔
+//
+//class Position
+//{
+//public:
+//	Position() = default;
+//	~Position()
+//	{	
+//		Safe_Release(m_pOwner);
+//	}
+//
+//public: // Operator Overload
+//	_float3 operator+(_vector vVector)
+//	{
+//		_vector vPos = XMLoadFloat3(&m_Position);
+//
+//		vPos = XMVectorAdd(vPos, vVector);
+//		XMStoreFloat3(&m_Position, vPos);
+//		m_pOwner->Set_Position(m_Position);
+//		m_pOwner->Refresh_Transform();
+//		return m_Position;
+//	}
+//	_float3 operator-(_vector vVector)
+//	{
+//		_vector vPos = XMLoadFloat3(&m_Position);
+//
+//		vPos = XMVectorAdd(vPos, -vVector);
+//		XMStoreFloat3(&m_Position, vPos);
+//		return m_Position;
+//	}
+//public:
+//	void Set_Owner(CTransform* pOwner) { m_pOwner = pOwner; Safe_AddRef(m_pOwner); }
+//private:
+//	_float3 m_Position;
+//	CTransform* m_pOwner = nullptr;
+//};
+//#pragma endregion TransformOperation
 
 _NAMESPACE
