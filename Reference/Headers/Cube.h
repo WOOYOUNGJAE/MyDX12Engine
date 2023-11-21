@@ -17,11 +17,17 @@ public:
 	HRESULT Initialize(void* pArg) override;
 	void Tick(_float fDeltaTime) override;
 	void Late_Tick(_float fDeltaTime) override;
+	void Pipeline_Tick() override;
 	void Render() override;
 	HRESULT Free() override;
 
 protected:
+	class CTransform* m_pTransform = nullptr;
 	class CCubeMesh* m_pCubeMeshCom = nullptr;
+
+#ifdef _DEBUG
+	static _uint m_iClonedNum;
+#endif // DEBUG
 };
 
 _NAMESPACE

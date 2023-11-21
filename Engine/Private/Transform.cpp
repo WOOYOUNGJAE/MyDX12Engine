@@ -1,5 +1,54 @@
 #include "Transform.h"
 
+CTransform* CTransform::Create()
+{
+	CTransform* pInstance = new CTransform();
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		MSG_BOX("Transform: Failed to Create Transform");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+CComponent* CTransform::Clone(void* pArg)
+{
+	CTransform* pInstance = new CTransform(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX("Transform: Failed to Clone Transform");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+HRESULT CTransform::Initialize_Prototype()
+{
+	if (FAILED(CComponent::Initialize_Prototype()))
+	{
+		return E_FAIL;
+	}
+
+	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
+
+	return S_OK;
+}
+
+HRESULT CTransform::Initialize(void* pArg)
+{
+	return S_OK;
+}
+
+
+HRESULT CTransform::Free()
+{
+	return CComponent::Free();
+}
+
 void CTransform::Set_WorldMatrix(MATRIX_ENUM eEnum, _fvector vVec)
 {
 	_matrix		WorldMatrix = XMLoadFloat4x4(&m_WorldMatrix);

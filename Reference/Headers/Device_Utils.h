@@ -1,5 +1,8 @@
 #pragma once
 #include "Engine_Defines.h"
+
+NAMESPACE_(Engine)
+
 class CDevice_Utils
 {
 private:
@@ -13,8 +16,21 @@ public:
 		ID3D12GraphicsCommandList* cmdList,
 		const void* initData,
 		UINT64 byteSize,
-		Microsoft::WRL::ComPtr<ID3D12Resource>& uploadBuffer,
-		Microsoft::WRL::ComPtr<ID3D12Resource>& refOutResource);	
+		ComPtr<ID3D12Resource>& uploadBuffer,
+		ComPtr<ID3D12Resource>& refOutResource);
+
+	// 256의 최소 공배수로 계산
+	static _uint ConstantBufferByteSize(_uint iByteSize)
+	{
+		return (iByteSize + 255) & ~255;
+	}
+
+	static ComPtr<ID3DBlob> CompileShader(
+		const std::wstring& filename,
+		const D3D_SHADER_MACRO* defines,
+		const std::string& entrypoint,
+		const std::string& target);
 
 };
 
+_NAMESPACE

@@ -10,6 +10,9 @@ private:
 public:
 	HRESULT Free() override;
 
+public:
+
+
 private: // typedef
 	typedef ComPtr<ID3D12PipelineState> PSO;
 	enum ENUM_PSO { PSO_DEFAULT, ENUM_PSO_END };

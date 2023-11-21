@@ -1,4 +1,5 @@
 #include "CubeMesh.h"
+#include "Transform.h"
 #include "Cube.h"
 
 #ifdef _DEBUG
@@ -29,6 +30,7 @@ CGameObject* CCube::Clone(void* pArg)
 HRESULT CCube::Initialize_Prototype()
 {
 	// ±âº» ÄÄÆ÷³ÍÆ® ºÎÂø
+	Add_Component(L"Transform", reinterpret_cast<CComponent**>(&m_pTransform));
 	Add_Component(L"CubeMesh", reinterpret_cast<CComponent**>(&m_pCubeMeshCom));
 
 
@@ -59,6 +61,7 @@ void CCube::Render()
 HRESULT CCube::Free()
 {
 	Safe_Release(m_pCubeMeshCom);
+	Safe_Release(m_pTransform);
 
 	return CGameObject::Free();
 }

@@ -3,7 +3,7 @@
 #include "Engine_Defines.h"
 
 NAMESPACE_(Engine)
-// MeshGeometry는 Prototype만 가능, Clone 비허용.
+	// MeshGeometry는 Prototype만 가능, Clone 비허용.
 class CMeshGeometry abstract: public CComponent
 {
 protected:
@@ -11,13 +11,11 @@ protected:
 	CMeshGeometry(const CMeshGeometry& rhs): CComponent(rhs),
 	m_pDevice(rhs.m_pDevice),
 	m_pCommandList(rhs.m_pCommandList)
-	{
-		m_pDevice->AddRef();
-		m_pCommandList->AddRef();
-	}
+	{}
 	~CMeshGeometry() override = default;
 
 public:
+	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Free() override;
 
 protected:
@@ -34,6 +32,10 @@ protected:
 	ComPtr<ID3D12Resource> m_indexBufferGPU = nullptr;
 	ComPtr<ID3D12Resource> m_vertexBufferUploader = nullptr;
 	ComPtr<ID3D12Resource> m_indexBufferUploader = nullptr;
+	//// ConstantBuffer
+	//template <typename T>
+	//class CUploadBuffer;
+	//CUploadBuffer<_float4x4>* m_pUploadBuffer_Constant = nullptr;
 };
 
 _NAMESPACE

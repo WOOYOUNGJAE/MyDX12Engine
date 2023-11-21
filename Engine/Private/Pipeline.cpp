@@ -6,16 +6,19 @@
 
 IMPLEMENT_SINGLETON(CPipeline)
 
-CPipeline::CPipeline() :
-	m_pGraphic_Device(CGraphic_Device::Get_Instance()),
-	m_pDevice(m_pGraphic_Device->Get_Device()),
-	m_pCommandList(m_pGraphic_Device->Get_CommandList())
+CPipeline::CPipeline()
+	
 {
-	Safe_AddRef(m_pGraphic_Device);
 }
 
 HRESULT CPipeline::Initialize()
 {
+	// GraphicDevice들의 멤버들이 초기화 된 후 참조
+	m_pGraphic_Device = CGraphic_Device::Get_Instance();
+	m_pDevice = m_pGraphic_Device->Get_Device();
+	m_pCommandList= m_pGraphic_Device->Get_CommandList();
+	Safe_AddRef(m_pGraphic_Device);
+
 	// Create ConstantBufferView Descriptor Heap
 	{
 		D3D12_DESCRIPTOR_HEAP_DESC cbvHeapDesc;
@@ -140,6 +143,7 @@ void CPipeline::Pipeline_Tick()
 
 HRESULT CPipeline::Free()
 {
+	Safe_Release(m_pUploadBuffer_Constant);
 	Safe_Release(m_pGraphic_Device);
 	return S_OK;
 }

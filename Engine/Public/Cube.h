@@ -22,6 +22,7 @@ public:
 	HRESULT Free() override;
 
 protected:
+	class CTransform* m_pTransform = nullptr;
 	class CCubeMesh* m_pCubeMeshCom = nullptr;
 
 #ifdef _DEBUG
