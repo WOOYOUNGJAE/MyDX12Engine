@@ -7,7 +7,6 @@
 IMPLEMENT_SINGLETON(CPipeline)
 
 CPipeline::CPipeline()
-	
 {
 }
 

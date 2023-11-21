@@ -58,7 +58,7 @@ void CTransform::Set_WorldMatrix(MATRIX_ENUM eEnum, _fvector vVec)
 	XMStoreFloat4x4(&m_WorldMatrix, WorldMatrix);
 }
 
-void CTransform::Refresh_Transform(TRANSFORM_ENUM eEnum)
+void CTransform::Refresh_WorldMatrix(TRANSFORM_ENUM eEnum)
 {
 	switch (eEnum)
 	{

@@ -39,6 +39,8 @@ private: // ConstantBuffer
 	CUploadBuffer<_float4x4>* m_pUploadBuffer_Constant = nullptr;
 private: // Root Signature
 	ComPtr<ID3D12RootSignature> m_RootSig[RootSig_END];
+private: //Shader Class
+	map<wstring, class CShader*> map_Shader;
 private: // PSO
 	PSO m_PSOArr[PSO_END];
 	PipelineLayer m_vecPipelineLayerArr[PSO_END]; // 게임 오브젝트의 Pipeline_Tick을 대신해 돌려주는 함수
