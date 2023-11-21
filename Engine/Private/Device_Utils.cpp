@@ -75,15 +75,17 @@ ComPtr<ID3DBlob> CDevice_Utils::CompileShader(const std::wstring& filename, cons
     ComPtr<ID3DBlob> byteCode = nullptr;
     ComPtr<ID3DBlob> errors;
 
-    if (FAILED(D3DCompileFromFile(filename.c_str(), defines, D3D_COMPILE_STANDARD_FILE_INCLUDE,
-        entrypoint.c_str(), target.c_str(), compileFlags, 0, &byteCode, &errors)))
+    hr = D3DCompileFromFile(filename.c_str(), defines, D3D_COMPILE_STANDARD_FILE_INCLUDE,
+        entrypoint.c_str(), target.c_str(), compileFlags, 0, &byteCode, &errors);
+
+    if (FAILED(hr))
     {
         MSG_BOX("Failed to Compile Shader");
-        return byteCode;
+
+	    if (errors != nullptr)
+	        OutputDebugStringA((char*)errors->GetBufferPointer());
     }
 
-    if (errors != nullptr)
-        OutputDebugStringA((char*)errors->GetBufferPointer());
 
     return byteCode;
 }

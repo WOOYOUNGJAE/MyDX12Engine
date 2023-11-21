@@ -1,13 +1,15 @@
 #include "Pipeline.h"
 
+#include "ComponentManager.h"
 #include "GameObject.h"
 #include "Shader.h"
 #include "Graphic_Device.h"
 
 IMPLEMENT_SINGLETON(CPipeline)
 
-CPipeline::CPipeline()
+CPipeline::CPipeline() : m_pComponentManager(CComponentManager::Get_Instance())
 {
+	Safe_AddRef(m_pComponentManager);
 }
 
 HRESULT CPipeline::Initialize()
@@ -43,6 +45,33 @@ HRESULT CPipeline::Initialize()
 		return E_FAIL;
 	}
 
+	// Build PSO
+	{
+		D3D12_GRAPHICS_PIPELINE_STATE_DESC pso_desc{};
+		pso_desc.InputLayout = { m_vecInputLayout[InputLayout_DEFAULT].data(), (UINT)m_vecInputLayout[InputLayout_DEFAULT].size() };
+		pso_desc.pRootSignature = m_RootSig[RootSig_DEFAULT].Get();
+		// VertexShader ByteCode
+		//ComPtr<ID3DBlob> byteCode = dynamic_cast<CShader*>(m_pComponentManager->Find_Prototype(L"vShader_Default"))->Get_ByteCode(CShader::TYPE_VERTEX);
+		ComPtr<ID3DBlob>  byteCode = dynamic_cast<CShader*>(m_pComponentManager->Find_Prototype(L"vShader_Default"))->Get_ByteCode(CShader::TYPE_VERTEX);
+		pso_desc.VS =
+		{
+			reinterpret_cast<BYTE*>(byteCode->GetBufferPointer()),
+			byteCode->GetBufferSize()
+		};
+		//byteCode = dynamic_cast<CShader*>(m_pComponentManager->Find_Prototype(L"pShader_Default"))->Get_ByteCode(CShader::TYPE_PIXEL);
+		pso_desc.PS =
+		{
+			reinterpret_cast<BYTE*>(byteCode->GetBufferPointer()),
+			byteCode->GetBufferSize()
+		};
+
+		if (FAILED(Build_PSO(pso_desc, ENUM_PSO::PSO_DEFAULT)))
+		{
+			MSG_BOX("Pipeline : Build PSO Failed ");
+			return E_FAIL;
+		}
+
+	}
 	return S_OK;
 }
 
@@ -142,6 +171,7 @@ void CPipeline::Pipeline_Tick()
 
 HRESULT CPipeline::Free()
 {
+	Safe_Release(m_pComponentManager);
 	Safe_Release(m_pUploadBuffer_Constant);
 	Safe_Release(m_pGraphic_Device);
 	return S_OK;

@@ -3,6 +3,7 @@
 #include "Transform.h"
 #include "CubeMesh.h"
 #include "Shader.h"
+#include "Pipeline.h"
 IMPLEMENT_SINGLETON(CComponentManager)
 
 HRESULT CComponentManager::Initialize()
@@ -12,14 +13,25 @@ HRESULT CComponentManager::Initialize()
 	Add_Prototype(L"CubeMesh", CCubeMesh::Create());
 	// CShader
 	SHADER_INIT_DESC shader_desc{};
-	shader_desc.filename = L"../Bin/Shader/vShader_Default.hlsl";
+	shader_desc.filename = L"..\\Bin\\Shader\\vShader_Default.hlsl";
 	shader_desc.defines = nullptr;
 	shader_desc.entrypoint = "main";
 	shader_desc.target = "vs_5_0";
 	Add_Prototype(L"vShader_Default", CShader::Create(shader_desc));
-
+	shader_desc.filename = L"..\\Bin\\Shader\\pShader_Default.hlsl";
+	shader_desc.target = "ps_5_0";
+	Add_Prototype(L"pShader_Default", CShader::Create(shader_desc));
 #pragma endregion Init_Basic_Components
-
+	D3D12_INPUT_ELEMENT_DESC input_layout_desc[2]
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+	};
+	CPipeline* pPipeline = CPipeline::Get_Instance();
+	for (auto& iter : input_layout_desc)
+	{
+		pPipeline->Push_InputLayout(iter, CPipeline::InputLayout_DEFAULT);
+	}
 
 	return S_OK;
 }

@@ -50,13 +50,17 @@ HRESULT CShader::Initialize_Prototype(const SHADER_INIT_DESC& shaderInput)
 		return E_FAIL;
 	}
 
-	if (shaderInput.filename.find(L"vShader"))
+	if (shaderInput.filename.find(L"vShader") != wstring::npos) //파일 이름에 vShader이 없지 않으면
 	{
 		m_eShaderType = TYPE_VERTEX;
 	}
-	else if (shaderInput.filename.find(L"pShader"))
+	else if (shaderInput.filename.find(L"pShader") != wstring::npos)
 	{
 		m_eShaderType = TYPE_PIXEL;		
+	}
+	else
+	{
+		int a = 1;
 	}
 	//else if () {}
 
