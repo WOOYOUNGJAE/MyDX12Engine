@@ -5,6 +5,8 @@ NAMESPACE_(Engine)
 using namespace std;
 class ENGINE_DLL CShader : public CComponent
 {
+public: // typedef
+	enum SHADER_TYPE {TYPE_VERTEX, TYPE_PIXEL, SHADER_TYPE_END,};
 private:
 	CShader();
 	CShader(const CShader& rhs);
@@ -15,13 +17,12 @@ public:
 	CComponent* Clone(void* pArg) override;
 	HRESULT Initialize_Prototype(const SHADER_INIT_DESC& shaderInput);
 	HRESULT Free() override;
-public:
+public: // getter setter
+	ComPtr<ID3DBlob> Get_ByteCode(SHADER_TYPE eShaderType) { return m_shaderByteCodeArr[eShaderType].Get(); }
 	/*void Push_InputLayout(D3D12_INPUT_ELEMENT_DESC desc)
 	{
 		m_vecInputLayout.push_back(desc);
 	}*/
-public:
-	enum SHADER_TYPE {TYPE_VERTEX, TYPE_PIXEL, SHADER_TYPE_END,};
 private:
 	SHADER_TYPE m_eShaderType = SHADER_TYPE_END;
 private:

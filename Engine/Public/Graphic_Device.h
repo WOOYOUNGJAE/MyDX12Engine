@@ -51,6 +51,8 @@ private: // Descriptor Heap
 private:
 	D3D12_VIEWPORT m_viewportDesc;
 	D3D12_RECT m_ScissorRect;
+	DXGI_FORMAT m_BackBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
+	DXGI_FORMAT m_DepthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 private: // From Client
 	HWND m_hWnd = nullptr;
 	_uint m_iClientWinCX = 0;

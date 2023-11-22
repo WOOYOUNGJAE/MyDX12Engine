@@ -51,19 +51,27 @@ HRESULT CPipeline::Initialize()
 		pso_desc.InputLayout = { m_vecInputLayout[InputLayout_DEFAULT].data(), (UINT)m_vecInputLayout[InputLayout_DEFAULT].size() };
 		pso_desc.pRootSignature = m_RootSig[RootSig_DEFAULT].Get();
 		// VertexShader ByteCode
-		//ComPtr<ID3DBlob> byteCode = dynamic_cast<CShader*>(m_pComponentManager->Find_Prototype(L"vShader_Default"))->Get_ByteCode(CShader::TYPE_VERTEX);
 		ComPtr<ID3DBlob>  byteCode = dynamic_cast<CShader*>(m_pComponentManager->Find_Prototype(L"vShader_Default"))->Get_ByteCode(CShader::TYPE_VERTEX);
 		pso_desc.VS =
 		{
 			reinterpret_cast<BYTE*>(byteCode->GetBufferPointer()),
 			byteCode->GetBufferSize()
 		};
-		//byteCode = dynamic_cast<CShader*>(m_pComponentManager->Find_Prototype(L"pShader_Default"))->Get_ByteCode(CShader::TYPE_PIXEL);
+		byteCode = dynamic_cast<CShader*>(m_pComponentManager->Find_Prototype(L"pShader_Default"))->Get_ByteCode(CShader::TYPE_PIXEL);
 		pso_desc.PS =
 		{
 			reinterpret_cast<BYTE*>(byteCode->GetBufferPointer()),
 			byteCode->GetBufferSize()
 		};
+		pso_desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+		pso_desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+		pso_desc.SampleMask = UINT_MAX;
+		pso_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+		pso_desc.NumRenderTargets = 1;
+		pso_desc.RTVFormats[0] = m_pGraphic_Device->m_BackBufferFormat;
+		pso_desc.SampleDesc.Count = 1;
+		pso_desc.SampleDesc.Quality = 0;
+		pso_desc.DSVFormat = m_pGraphic_Device->m_DepthStencilFormat;
 
 		if (FAILED(Build_PSO(pso_desc, ENUM_PSO::PSO_DEFAULT)))
 		{
