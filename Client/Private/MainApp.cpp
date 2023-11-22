@@ -3,6 +3,7 @@
 
 #include "Client_Defines.h"
 #include "GameInstance.h"
+#include "Camera_Free.h"
 CMainApp::CMainApp() : m_pGameInstance{ CGameInstance::Get_Instance()}
 {
 	Safe_AddRef(m_pGameInstance);
@@ -21,7 +22,31 @@ HRESULT CMainApp::Initialize()
 	graphic_desc.eWinMode = GRAPHIC_DESC::WINMODE_WIN;
 
 	m_pGameInstance->Init_Engine(graphic_desc, &m_pDevice);
+
+#pragma region InLevel
+	if (FAILED(m_pGameInstance->Add_GameObjPrototype(L"Camera_Free", CCamera_Free::Create())))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", L"Default")))
+	{
+		return E_FAIL;
+	}
+#pragma endregion InLevel
 	return S_OK;
+}
+
+void CMainApp::Tick(_float fDeltaTime)
+{
+}
+
+void CMainApp::Late_Tick(_float fDeltaTime)
+{
+}
+
+void CMainApp::Render()
+{
+
 }
 
 HRESULT CMainApp::Free()

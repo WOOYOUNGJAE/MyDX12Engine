@@ -15,6 +15,9 @@ private:
 public:
 	static CMainApp* Create();
 	HRESULT Initialize();
+	void Tick(_float fDeltaTime);
+	void Late_Tick(_float fDeltaTime);
+	void Render();
 	virtual HRESULT Free() override;
 
 private:

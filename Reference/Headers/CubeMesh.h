@@ -17,10 +17,6 @@ public:
 	HRESULT Initialize(void* pArg) override; // Do Nothing (InitÀº Copy¿ë)
 	HRESULT Free() override;
 
-private:
-#ifdef _DEBUG
-	static _uint m_iClonedNum;
-#endif // DEBUG
 
 };
 

@@ -22,12 +22,9 @@ public:
 	HRESULT Free() override;
 
 protected:
-	class CTransform* m_pTransform = nullptr;
+	class CTransform* m_pTransformCom = nullptr;
 	class CCubeMesh* m_pCubeMeshCom = nullptr;
 
-#ifdef _DEBUG
-	static _uint m_iClonedNum;
-#endif // DEBUG
 };
 
 _NAMESPACE

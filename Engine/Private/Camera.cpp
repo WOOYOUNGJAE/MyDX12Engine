@@ -6,6 +6,17 @@ CCamera::CCamera() : m_pPipeline(CPipeline::Get_Instance())
 {
 	Safe_AddRef(m_pPipeline);
 }
+CCamera::CCamera(const CCamera& rhs) : CGameObject(rhs), m_pPipeline(rhs.m_pPipeline)
+{
+	Safe_AddRef(m_pPipeline);
+}
+
+HRESULT CCamera::Initialize_Prototype()
+{
+	Add_Component(L"Transform", reinterpret_cast<CComponent**>(&m_pTransformCom));
+
+	return S_OK;
+}
 
 HRESULT CCamera::Free()
 {

@@ -16,6 +16,16 @@ public:
 
 	// 소멸자 역할, 예외적으로 자식에서 부모의 소멸자를 호출하는 경우 대비
 	virtual HRESULT Free() = 0;
+
+#ifdef _DEBUG
+protected:
+	static _uint m_iClonedNum;
+//#ifdef _DEBUG 활용
+//	_uint Class::m_iClonedNum = 0;
+//	++m_iClonedNum;
+//#endif // DEBUG
+#endif // _DEBUG
+
 private:
 	_ulong m_dwRefCnt = 0;
 };

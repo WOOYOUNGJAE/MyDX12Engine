@@ -25,9 +25,6 @@
     <Filter Include="Utility\GameObjects">
       <UniqueIdentifier>{b648ccc0-ad02-49e2-8643-24c88c47df4b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\Renderer">
-      <UniqueIdentifier>{6720adc2-4a2d-4fed-ab18-e5877f8f6b1f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility\GameObjects\Layer">
       <UniqueIdentifier>{e5814d4f-af50-4c15-89d4-ef9b8164ae12}</UniqueIdentifier>
     </Filter>
@@ -57,6 +54,9 @@
     </Filter>
     <Filter Include="Utility\GameObjects\Camera">
       <UniqueIdentifier>{2bdad7d6-89e6-4cde-84be-b60495e3375e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\Renderer">
+      <UniqueIdentifier>{8f25aa8b-c0b4-4cdf-b681-c5aaf42a16e6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -117,9 +117,6 @@
     <ClInclude Include="..\Public\Cube.h">
       <Filter>Utility\GameObjects\DefaultGeometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Renderer.h">
-      <Filter>Utility\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\UploadBuffer.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -137,6 +134,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Camera.h">
       <Filter>Utility\GameObjects\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Renderer.h">
+      <Filter>Utility\Components\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -176,9 +176,6 @@
     <ClCompile Include="..\Private\Cube.cpp">
       <Filter>Utility\GameObjects\DefaultGeometry</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Renderer.cpp">
-      <Filter>Utility\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Pipeline.cpp">
       <Filter>Utility\PipleLine</Filter>
     </ClCompile>
@@ -190,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Camera.cpp">
       <Filter>Utility\GameObjects\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Renderer.cpp">
+      <Filter>Utility\Components\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

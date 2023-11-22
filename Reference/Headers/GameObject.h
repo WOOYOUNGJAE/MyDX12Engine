@@ -15,8 +15,8 @@ public: // LifeCycle
 	virtual CGameObject* Clone(void* pArg = nullptr) = 0;
 	virtual void Tick(_float fDeltaTime) = 0;
 	virtual void Late_Tick(_float fDeltaTime) = 0;
-	virtual void Pipeline_Tick() = 0;
-	virtual void Render() = 0;
+	virtual void Pipeline_Tick(){};
+	virtual void Render(){};
 	HRESULT Free() override;
 public:
 	virtual _bool Com_Already_Owned(const wstring& strComTag);

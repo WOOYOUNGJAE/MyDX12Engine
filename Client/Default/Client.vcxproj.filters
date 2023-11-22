@@ -13,6 +13,9 @@
     <Filter Include="GameObject">
       <UniqueIdentifier>{1d6cf8a3-6347-4d6a-bdc4-72776376496a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject\Camera">
+      <UniqueIdentifier>{5dcd12a3-29a9-47dc-a5c5-df3a0ed1e67e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -36,6 +39,9 @@
     <ClInclude Include="..\Public\MainApp.h">
       <Filter>MainApp</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Camera_Free.h">
+      <Filter>GameObject\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -46,6 +52,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\MainApp.cpp">
       <Filter>MainApp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera_Free.cpp">
+      <Filter>GameObject\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

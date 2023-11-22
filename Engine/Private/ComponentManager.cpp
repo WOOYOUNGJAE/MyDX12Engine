@@ -3,6 +3,7 @@
 #include "Transform.h"
 #include "CubeMesh.h"
 #include "Shader.h"
+#include "Renderer.h"
 #include "Pipeline.h"
 IMPLEMENT_SINGLETON(CComponentManager)
 
@@ -21,7 +22,10 @@ HRESULT CComponentManager::Initialize()
 	shader_desc.filename = L"..\\Bin\\Shader\\pShader_Default.hlsl";
 	shader_desc.target = "ps_5_0";
 	Add_Prototype(L"pShader_Default", CShader::Create(shader_desc));
+	Add_Prototype(L"Renderer", CRenderer::Create());
+	
 #pragma endregion Init_Basic_Components
+
 	D3D12_INPUT_ELEMENT_DESC input_layout_desc[2]
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
