@@ -55,6 +55,9 @@
     <Filter Include="Utility\Components\Transform">
       <UniqueIdentifier>{b500aa2c-f20d-441d-9ecc-22b6baa991ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\GameObjects\Camera">
+      <UniqueIdentifier>{2bdad7d6-89e6-4cde-84be-b60495e3375e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -132,6 +135,9 @@
     <ClInclude Include="..\Public\Transform.h">
       <Filter>Utility\Components\Transform</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Camera.h">
+      <Filter>Utility\GameObjects\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -181,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Transform.cpp">
       <Filter>Utility\Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera.cpp">
+      <Filter>Utility\GameObjects\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

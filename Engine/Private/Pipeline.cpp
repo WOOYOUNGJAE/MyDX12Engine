@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Shader.h"
 #include "Graphic_Device.h"
+#include "Transform.h"
 
 IMPLEMENT_SINGLETON(CPipeline)
 
@@ -196,4 +197,3 @@ HRESULT CPipeline::Build_PSO(const D3D12_GRAPHICS_PIPELINE_STATE_DESC& pipeline_
 
 	return S_OK;
 }
-
