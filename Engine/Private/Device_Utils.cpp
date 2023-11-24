@@ -78,6 +78,7 @@ ComPtr<ID3DBlob> CDevice_Utils::CompileShader(const std::wstring& filename, cons
     hr = D3DCompileFromFile(filename.c_str(), defines, D3D_COMPILE_STANDARD_FILE_INCLUDE,
         entrypoint.c_str(), target.c_str(), compileFlags, 0, &byteCode, &errors);
 
+
     if (FAILED(hr))
     {
         MSG_BOX("Failed to Compile Shader");

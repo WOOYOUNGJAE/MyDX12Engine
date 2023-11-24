@@ -69,7 +69,6 @@ HRESULT CShader::Initialize_Prototype(const SHADER_INIT_DESC* shaderInputArr, _u
 		//else if () {}
 
 		m_shaderByteCodeArr[eCurType] = CDevice_Utils::CompileShader(shaderInputArr[i].filename, shaderInputArr[i].defines, shaderInputArr[i].entrypoint, shaderInputArr[i].target);
-		
 	}
 
 	return S_OK;

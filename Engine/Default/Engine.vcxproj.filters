@@ -194,8 +194,5 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />
-    <FxCompile Include="..\Bin\Shader\color.hlsl">
-      <Filter>0.Shaders</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>
