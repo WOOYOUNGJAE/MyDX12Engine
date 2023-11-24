@@ -18,11 +18,11 @@ HRESULT CComponentManager::Initialize()
 		pShader_desc[0].filename = L"..\\Bin\\Shader\\color.hlsl";
 		pShader_desc[0].defines = nullptr;
 		pShader_desc[0].entrypoint = "VS";
-		pShader_desc[0].target = "vs_5_0";
+		pShader_desc[0].target = "vs_5_1";
 
 		pShader_desc[1] = pShader_desc[0];
 		pShader_desc[1].entrypoint = "PS";
-		pShader_desc[1].target = "ps_5_0";
+		pShader_desc[1].target = "ps_5_1";
 		Add_Prototype(L"Shader_Default", CShader::Create(pShader_desc, 2));
 		Safe_Delete_Array(pShader_desc);		
 		//Add_Prototype(L"vShader_Default", CShader::Create(shader_desc));
