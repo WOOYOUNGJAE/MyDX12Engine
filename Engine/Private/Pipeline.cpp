@@ -15,6 +15,7 @@ CPipeline::CPipeline() : m_pComponentManager(CComponentManager::Get_Instance())
 
 HRESULT CPipeline::Initialize()
 {
+	HRESULT hr = S_OK;
 	// GraphicDevice들의 멤버들이 초기화 된 후 참조
 	m_pGraphic_Device = CGraphic_Device::Get_Instance();
 	m_pDevice = m_pGraphic_Device->Get_Device();
@@ -29,21 +30,24 @@ HRESULT CPipeline::Initialize()
 		cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 		cbvHeapDesc.NodeMask = 0;
 
-		if (FAILED(m_pDevice->CreateDescriptorHeap(&cbvHeapDesc,
-			IID_PPV_ARGS(&m_pCbvHeap))))
+		hr = m_pDevice->CreateDescriptorHeap(&cbvHeapDesc,
+			IID_PPV_ARGS(&m_pCbvHeap));
+		if (FAILED(hr))
 		{
-			return E_FAIL;
+			return hr;
 		}
 	}
 
-	if (FAILED(Init_ConstantBuffers()))
+	hr = Init_ConstantBuffers();
+	if (FAILED(hr))
 	{
-		return E_FAIL;
+		return hr;
 	}
 
-	if (FAILED(Init_RootSignature()))
+	hr = Init_RootSignature();
+	if (FAILED(hr))
 	{
-		return E_FAIL;
+		return hr;
 	}
 
 	// Build PSO
@@ -75,14 +79,15 @@ HRESULT CPipeline::Initialize()
 		pso_desc.SampleDesc.Quality = 0;
 		pso_desc.DSVFormat = m_pGraphic_Device->m_DepthStencilFormat;
 
-		if (FAILED(Build_PSO(pso_desc, ENUM_PSO::PSO_DEFAULT)))
+		hr = Build_PSO(pso_desc, ENUM_PSO::PSO_DEFAULT);
+		if (FAILED(hr))
 		{
 			MSG_BOX("Pipeline : Build PSO Failed ");
-			return E_FAIL;
+			return hr;
 		}
 		
 	}
-	return S_OK;
+	return hr;
 }
 
 HRESULT CPipeline::Init_ConstantBuffers()
@@ -190,13 +195,14 @@ HRESULT CPipeline::Free()
 
 HRESULT CPipeline::Build_PSO(const D3D12_GRAPHICS_PIPELINE_STATE_DESC& pipeline_desc, ENUM_PSO psoIndex)
 {
+	HRESULT hr = S_OK;
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pso_desc = pipeline_desc;
-	//HRESULT hr = m_pDevice->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(&(m_PSOArr[psoIndex])));
-	if (FAILED(m_pDevice->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(&(m_PSOArr[psoIndex])))))
+	hr = m_pDevice->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(&(m_PSOArr[psoIndex])));
+	if (FAILED(hr))
 	{
 		MSG_BOX("Failed to Create PSO");
-		return E_FAIL;
+		return hr;
 	}
 
-	return S_OK;
+	return hr;
 }

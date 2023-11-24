@@ -32,7 +32,7 @@ private:
 	SHADER_TYPE m_eShaderType = SHADER_TYPE_END;
 private:
 	// ID3DBlob : 범용 메모리 버퍼, 
-	ComPtr<ID3DBlob> m_shaderByteCodeArr[SHADER_TYPE_END];
+	ComPtr<ID3DBlob> m_shaderByteCodeArr[SHADER_TYPE_END]{};
 	//vector<D3D12_INPUT_ELEMENT_DESC> m_vecInputLayout;
 private: // pointer
 	class CPipeline* m_pPipeline = nullptr;

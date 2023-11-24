@@ -53,13 +53,14 @@ HRESULT CShader::Initialize_Prototype(const SHADER_INIT_DESC* shaderInputArr, _u
 
 	for (int i = 0; i < iArrSize; ++i)
 	{
+		SHADER_TYPE eCurType = SHADER_TYPE_END;
 		if (shaderInputArr[i].entrypoint == "VS")
 		{
-			m_eShaderType = TYPE_VERTEX;
+			eCurType = TYPE_VERTEX;
 		}
 		else if (shaderInputArr[i].entrypoint == "PS")
 		{
-			m_eShaderType = TYPE_PIXEL;		
+			eCurType = TYPE_PIXEL;
 		}
 		else
 		{
@@ -67,7 +68,7 @@ HRESULT CShader::Initialize_Prototype(const SHADER_INIT_DESC* shaderInputArr, _u
 		}
 		//else if () {}
 
-		m_shaderByteCodeArr[m_eShaderType] = CDevice_Utils::CompileShader(shaderInputArr[i].filename, shaderInputArr[i].defines, shaderInputArr[i].entrypoint, shaderInputArr[i].target);
+		m_shaderByteCodeArr[eCurType] = CDevice_Utils::CompileShader(shaderInputArr[i].filename, shaderInputArr[i].defines, shaderInputArr[i].entrypoint, shaderInputArr[i].target);
 		
 	}
 
