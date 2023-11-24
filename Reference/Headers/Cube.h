@@ -24,7 +24,7 @@ public:
 protected:
 	class CTransform* m_pTransformCom = nullptr;
 	class CCubeMesh* m_pCubeMeshCom = nullptr;
-
+	class CRenderer* m_pRendererCom = nullptr;
 };
 
 _NAMESPACE

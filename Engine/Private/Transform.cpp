@@ -1,5 +1,5 @@
 #include "Transform.h"
-
+#include "Shader.h"
 CTransform* CTransform::Create()
 {
 	CTransform* pInstance = new CTransform();
@@ -33,7 +33,8 @@ HRESULT CTransform::Initialize_Prototype()
 		return E_FAIL;
 	}
 
-	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
+	Matrix_Identity(m_WorldMatrix);
+	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
 
 	return S_OK;
 }
@@ -57,6 +58,11 @@ void CTransform::Set_WorldMatrix(MATRIX_ENUM eEnum, _fvector vVec)
 
 	XMStoreFloat4x4(&m_WorldMatrix, WorldMatrix);
 }
+
+//void CTransform::Bind_ShaderResource(const std::string& strConstantName, CShader* pShader)
+//{
+//
+//}
 
 void CTransform::Refresh_WorldMatrix(TRANSFORM_ENUM eEnum)
 {
@@ -103,7 +109,6 @@ void CTransform::Refresh_WorldMatrix(TRANSFORM_ENUM eEnum)
 		break;
 	}
 }
-
 _vector CTransform::Get_MatrixRow(MATRIX_ENUM eEnum)
 {
 	_matrix WorldMatrix = XMLoadFloat4x4(&m_WorldMatrix);

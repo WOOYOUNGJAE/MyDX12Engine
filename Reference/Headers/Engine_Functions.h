@@ -49,4 +49,22 @@ namespace Engine
 			pPointer = nullptr;
 		}
 	}
+
+	namespace MyMath
+	{
+		static void Matrix_Identity(XMFLOAT4X4& mat)
+		{
+			XMStoreFloat4x4(&mat, XMMatrixIdentity());
+		}
+		static XMFLOAT4X4 Matrix_Identity()
+		{
+			static XMFLOAT4X4 I(
+				1.0f, 0.0f, 0.0f, 0.0f,
+				0.0f, 1.0f, 0.0f, 0.0f,
+				0.0f, 0.0f, 1.0f, 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f);
+
+			return I;
+		}
+	}
 }

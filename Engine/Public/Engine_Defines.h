@@ -53,3 +53,4 @@ using namespace Microsoft::WRL;
 
 // namespace
 using namespace Engine;
+using namespace Engine::MyMath;

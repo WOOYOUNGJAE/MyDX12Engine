@@ -13,15 +13,21 @@ HRESULT CComponentManager::Initialize()
 	Add_Prototype(L"Transform", CTransform::Create());
 	Add_Prototype(L"CubeMesh", CCubeMesh::Create());
 	// CShader
-	SHADER_INIT_DESC shader_desc{};
-	shader_desc.filename = L"..\\Bin\\Shader\\vShader_Default.hlsl";
-	shader_desc.defines = nullptr;
-	shader_desc.entrypoint = "main";
-	shader_desc.target = "vs_5_0";
-	Add_Prototype(L"vShader_Default", CShader::Create(shader_desc));
-	shader_desc.filename = L"..\\Bin\\Shader\\pShader_Default.hlsl";
-	shader_desc.target = "ps_5_0";
-	Add_Prototype(L"pShader_Default", CShader::Create(shader_desc));
+	{
+		SHADER_INIT_DESC* pShader_desc = new SHADER_INIT_DESC[2]{};
+		pShader_desc[0].filename = L"..\\Bin\\Shader\\color.hlsl";
+		pShader_desc[0].defines = nullptr;
+		pShader_desc[0].entrypoint = "VS";
+		pShader_desc[0].target = "vs_5_0";
+
+		pShader_desc[1] = pShader_desc[0];
+		pShader_desc[1].entrypoint = "PS";
+		pShader_desc[1].target = "ps_5_0";
+		Add_Prototype(L"Shader_Default", CShader::Create(pShader_desc, 2));
+		Safe_Delete_Array(pShader_desc);		
+		//Add_Prototype(L"vShader_Default", CShader::Create(shader_desc));
+	}
+
 	Add_Prototype(L"Renderer", CRenderer::Create());
 	
 #pragma endregion Init_Basic_Components

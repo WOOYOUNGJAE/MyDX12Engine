@@ -1,4 +1,6 @@
 #pragma once
+#include <inttypes.h>
+
 #include "Component.h"
 
 NAMESPACE_(Engine)
@@ -13,9 +15,9 @@ private:
 	~CShader() override = default;
 
 public:
-	static CShader* Create(const SHADER_INIT_DESC& shaderInput);
+	static CShader* Create(const SHADER_INIT_DESC* shaderInputArr, _uint iArrSize = 1);
 	CComponent* Clone(void* pArg) override;
-	HRESULT Initialize_Prototype(const SHADER_INIT_DESC& shaderInput);
+	HRESULT Initialize_Prototype(const SHADER_INIT_DESC* shaderInputArr, _uint iArrSize = 1);
 	HRESULT Free() override;
 public: // getter setter
 	ComPtr<ID3DBlob> Get_ByteCode(SHADER_TYPE eShaderType) { return m_shaderByteCodeArr[eShaderType].Get(); }
@@ -23,12 +25,17 @@ public: // getter setter
 	{
 		m_vecInputLayout.push_back(desc);
 	}*/
+public:
+	void Bind_Matrix(const string& strConstantName, const _float4x4& matrix);
+	//void Bind_Resource();
 private:
 	SHADER_TYPE m_eShaderType = SHADER_TYPE_END;
 private:
 	// ID3DBlob : 범용 메모리 버퍼, 
 	ComPtr<ID3DBlob> m_shaderByteCodeArr[SHADER_TYPE_END];
 	//vector<D3D12_INPUT_ELEMENT_DESC> m_vecInputLayout;
+private: // pointer
+	class CPipeline* m_pPipeline = nullptr;
 };
 
 _NAMESPACE

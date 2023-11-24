@@ -1,18 +1,19 @@
 #include "Shader.h"
 #include "Device_Utils.h"
+#include "Pipeline.h"
 
-CShader::CShader() /*:
-	m_pDevice(CGraphic_Device::Get_Instance()->Get_Device()),
-	m_pCommandList(CGraphic_Device::Get_Instance()->Get_CommandList())*/
+CShader::CShader(): m_pPipeline(CPipeline::Get_Instance())
 {
+	Safe_AddRef(m_pPipeline);
 }
 
-CShader::CShader(const CShader& rhs)
+CShader::CShader(const CShader& rhs) : m_pPipeline(rhs.m_pPipeline)
 {
+	Safe_AddRef(m_pPipeline);
 	memcpy(m_shaderByteCodeArr, rhs.m_shaderByteCodeArr, sizeof(ComPtr<ID3DBlob>) * SHADER_TYPE_END);
 }
 
-CShader* CShader::Create(const SHADER_INIT_DESC& shaderInput)
+CShader* CShader::Create(const SHADER_INIT_DESC* shaderInputArr, _uint iArrSize)
 {
 	CShader* pInstance = new CShader();
 
@@ -22,7 +23,7 @@ CShader* CShader::Create(const SHADER_INIT_DESC& shaderInput)
 		Safe_Release(pInstance);
 	}
 
-	if (FAILED(pInstance->Initialize_Prototype(shaderInput)))
+	if (FAILED(pInstance->Initialize_Prototype(shaderInputArr, iArrSize)))
 	{
 		MSG_BOX("Shader : Fail to Create Shader");
 		Safe_Release(pInstance);
@@ -43,41 +44,44 @@ CComponent* CShader::Clone(void* pArg)
 	return pInstance;
 }
 
-HRESULT CShader::Initialize_Prototype(const SHADER_INIT_DESC& shaderInput)
+HRESULT CShader::Initialize_Prototype(const SHADER_INIT_DESC* shaderInputArr, _uint iArrSize)
 {
 	if (FAILED(CComponent::Initialize_Prototype()))
 	{
 		return E_FAIL;
 	}
 
-	if (shaderInput.filename.find(L"vShader") != wstring::npos) //파일 이름에 vShader이 없지 않으면
+	for (int i = 0; i < iArrSize; ++i)
 	{
-		m_eShaderType = TYPE_VERTEX;
+		if (shaderInputArr[i].entrypoint == "VS")
+		{
+			m_eShaderType = TYPE_VERTEX;
+		}
+		else if (shaderInputArr[i].entrypoint == "PS")
+		{
+			m_eShaderType = TYPE_PIXEL;		
+		}
+		else
+		{
+			int a = 1;
+		}
+		//else if () {}
+
+		m_shaderByteCodeArr[m_eShaderType] = CDevice_Utils::CompileShader(shaderInputArr[i].filename, shaderInputArr[i].defines, shaderInputArr[i].entrypoint, shaderInputArr[i].target);
+		
 	}
-	else if (shaderInput.filename.find(L"pShader") != wstring::npos)
-	{
-		m_eShaderType = TYPE_PIXEL;		
-	}
-	else
-	{
-		int a = 1;
-	}
-	//else if () {}
-
-	m_shaderByteCodeArr[m_eShaderType] = CDevice_Utils::CompileShader(shaderInput.filename, shaderInput.defines, shaderInput.entrypoint, shaderInput.target);
-
-	/*for (auto& iter : m_shaderByteCodeArr)
-	{
-		if (iter == nullptr)
-			continue;
-	}*/
-
-
 
 	return S_OK;
 }
 
 HRESULT CShader::Free()
 {
+	Safe_Release(m_pPipeline);
+
 	return CComponent::Free();
+}
+
+void CShader::Bind_Matrix(const string& strConstantName, const _float4x4& matrix)
+{
+	
 }

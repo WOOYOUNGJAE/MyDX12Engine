@@ -31,6 +31,9 @@ public: // getter setter
 	void Set_Position(const _float3& pos) { m_Position = pos; Refresh_WorldMatrix(POSITION); }
 	void Set_WorldMatrix(const _float4x4& matrix) { m_WorldMatrix = matrix; }
 	void Set_WorldMatrix(MATRIX_ENUM eEnum, _fvector vVec);
+public:
+	//void Bind_ShaderResource(const std::string& strConstantName, class CShader* pShader);
+
 private:
 	_vector Get_MatrixRow(MATRIX_ENUM eEnum);
 	_float3 Get_ScaleXYZ();

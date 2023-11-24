@@ -33,7 +33,7 @@ HRESULT CPipeline::Initialize()
 			IID_PPV_ARGS(&m_pCbvHeap))))
 		{
 			return E_FAIL;
-		}		
+		}
 	}
 
 	if (FAILED(Init_ConstantBuffers()))
@@ -66,7 +66,7 @@ HRESULT CPipeline::Initialize()
 		};
 		pso_desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 		pso_desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-		pso_desc.SampleMask = UINT_MAX;
+		pso_desc.SampleMask = UINT_MAX; // 그 어떤 표본도 비활성화 하지 않음
 		pso_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 		pso_desc.NumRenderTargets = 1;
 		pso_desc.RTVFormats[0] = m_pGraphic_Device->m_BackBufferFormat;
@@ -79,7 +79,7 @@ HRESULT CPipeline::Initialize()
 			MSG_BOX("Pipeline : Build PSO Failed ");
 			return E_FAIL;
 		}
-
+		
 	}
 	return S_OK;
 }
@@ -118,6 +118,7 @@ HRESULT CPipeline::Init_ConstantBuffers()
 
 HRESULT CPipeline::Init_RootSignature()
 {
+	// TODO RootSig 서술자 테이블 2개로 사용하기 -> default?
 	// RootSig_DEFAULT
 
 	// 루트 시그니쳐는 테이블이거나 루트 서술자 또는 루트 상수이다.

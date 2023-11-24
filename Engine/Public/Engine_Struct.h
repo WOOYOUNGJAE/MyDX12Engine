@@ -42,4 +42,35 @@ namespace Engine
 		D3D12_INPUT_ELEMENT_DESC Default_Color;
 	};
 
+	struct CONSTANT_BUFFER_DATA
+	{
+		CONSTANT_BUFFER_DATA()
+		{
+			XMStoreFloat4x4(&WorldViewProj, XMMatrixIdentity());
+		}
+		_float4x4 WorldViewProj;
+	};
+
+	struct MyVector
+	{
+		MyVector(float _x, float _y, float _z)
+		{
+			x = _x; y = _y; z = _z;
+			XMFLOAT3 tempFloat3(x, y, z);
+			vector = XMLoadFloat3(&tempFloat3);
+		}
+
+		MyVector operator+(const MyVector& rhs)
+		{
+			XMVECTOR tempVector = XMVectorAdd(vector, rhs.vector);
+			XMFLOAT3 tempFloat3{};
+			XMStoreFloat3(&tempFloat3, tempVector);
+			return MyVector(tempFloat3.x, tempFloat3.y, tempFloat3.z);
+		}
+
+		float x;
+		float y;
+		float z;
+		XMVECTOR vector;
+	};
 }

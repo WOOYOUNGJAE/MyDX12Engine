@@ -121,7 +121,7 @@ HRESULT CCubeMesh::Initialize_Prototype()
 
 HRESULT CCubeMesh::Initialize(void* pArg)
 {
-	return Initialize_Prototype();
+	return CMeshGeometry::Initialize(pArg);
 }
 
 HRESULT CCubeMesh::Free()

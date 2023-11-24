@@ -1,6 +1,7 @@
 #include "CubeMesh.h"
 #include "Transform.h"
 #include "Cube.h"
+#include "Renderer.h"
 
 CCube* CCube::Create()
 {
@@ -24,7 +25,7 @@ HRESULT CCube::Initialize_Prototype()
 	// ±âº» ÄÄÆ÷³ÍÆ® ºÎÂø
 	Add_Component(L"Transform", reinterpret_cast<CComponent**>(&m_pTransformCom));
 	Add_Component(L"CubeMesh", reinterpret_cast<CComponent**>(&m_pCubeMeshCom));
-
+	Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));
 
 	return S_OK;
 }
@@ -44,14 +45,17 @@ void CCube::Late_Tick(_float fDeltaTime)
 
 void CCube::Pipeline_Tick()
 {
+
 }
 
 void CCube::Render()
 {
+	m_pRendererCom->AddTo_RenderGroup(CRenderer::NOBLEND, this);
 }
 
 HRESULT CCube::Free()
 {
+	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pCubeMeshCom);
 	Safe_Release(m_pTransformCom);
 
