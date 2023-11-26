@@ -148,25 +148,24 @@ HRESULT CPipeline::Init_ConstantBuffers()
 
 HRESULT CPipeline::Init_RootSignature()
 {
-	// TODO RootSig 서술자 테이블 2개로 사용하기 -> default?
 	// RootSig_DEFAULT
 
-	// 루트 시그니쳐는 테이블이거나 루트 서술자 또는 루트 상수이다.
-	CD3DX12_ROOT_PARAMETER slotRootParameter[1];
+	// CBV 하나를 담는 서술자 테이블 생성, 현재 Default는 ConstantObject, ConstantPass로 총 두개
+	CD3DX12_DESCRIPTOR_RANGE cbvTable0;
+	cbvTable0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,	1, 0);
+	CD3DX12_DESCRIPTOR_RANGE cbvTable1;
+	cbvTable0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,	1, 1/*인덱스*/);
 
-	// CBV 하나를 담는 서술자 테이블 생성
-	CD3DX12_DESCRIPTOR_RANGE cbvTable;
-	cbvTable.Init(
-		D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
-		1, // 테이블의 서술자 개수
-		0
-	);
-	slotRootParameter[0].InitAsDescriptorTable(1, &cbvTable);
+	// 루트 시그니쳐는 테이블이거나 루트 서술자 또는 루트 상수이다.
+	CD3DX12_ROOT_PARAMETER slotRootParameterArr[2];
+
+	slotRootParameterArr[0].InitAsDescriptorTable(1, &cbvTable0);
+	slotRootParameterArr[1].InitAsDescriptorTable(1, &cbvTable1);
 
 	// 루트 시그니쳐는 루트 매개변수들의 배열
 	CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(
-		1, 
-		slotRootParameter, 
+		2, 
+		slotRootParameterArr,
 		0, 
 		nullptr,
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
