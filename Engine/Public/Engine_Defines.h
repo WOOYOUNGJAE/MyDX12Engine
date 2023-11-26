@@ -54,3 +54,6 @@ using namespace Microsoft::WRL;
 // namespace
 using namespace Engine;
 using namespace Engine::MyMath;
+
+// extern
+extern _uint g_iNumFrameResource;

@@ -28,7 +28,8 @@ HRESULT CGraphic_Device::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 
 	CreateDXGIFactory1(IID_PPV_ARGS(&m_pDxgi_Factory));
 
-#ifdef _DEBUG
+#ifdef _DEBUG // DirectX Debug Layer
+
 	ComPtr<ID3D12Debug> debugController;
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController))))
 	{

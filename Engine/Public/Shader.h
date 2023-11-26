@@ -30,10 +30,12 @@ public:
 	//void Bind_Resource();
 private:
 	SHADER_TYPE m_eShaderType = SHADER_TYPE_END;
-private:
+private: // 바이너리 데이터
 	// ID3DBlob : 범용 메모리 버퍼, 
 	ComPtr<ID3DBlob> m_shaderByteCodeArr[SHADER_TYPE_END]{};
 	//vector<D3D12_INPUT_ELEMENT_DESC> m_vecInputLayout;
+private:
+	int m_iNumFramesDirty = 0; // = g_numFrameResources
 private: // pointer
 	class CPipeline* m_pPipeline = nullptr;
 };

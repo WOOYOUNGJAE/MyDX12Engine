@@ -126,12 +126,12 @@ HRESULT CCubeMesh::Initialize(void* pArg)
 
 HRESULT CCubeMesh::Free()
 {
+	Safe_Delete_Array(m_vertexData);
+
 	if (FAILED(CMeshGeometry::Free()))
 	{
 		return E_FAIL;
 	}
-
-	Safe_Delete_Array(m_vertexData);
 
 	return S_OK;
 }

@@ -5,12 +5,23 @@
 #include "Shader.h"
 #include "Graphic_Device.h"
 #include "Transform.h"
-
 IMPLEMENT_SINGLETON(CPipeline)
 
+_uint g_iNumFrameResource = 3; // extern frame resource num;
 CPipeline::CPipeline() : m_pComponentManager(CComponentManager::Get_Instance())
 {
 	Safe_AddRef(m_pComponentManager);
+}
+
+CPipeline::FrameResource::FrameResource(ID3D12Device* device, UINT passCount, UINT objectCount)
+{
+	if (FAILED(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(CmdListAlloc.GetAddressOf()))))
+	{
+		MSG_BOX("FrameResource : CommandAllocator Failed");
+		return;
+	}
+	/*PassCB = std::make_unique<UploadBuffer<PassConstants>>(device, passCount, true);
+	ObjectCB = std::make_unique<UploadBuffer<ObjectConstants>>(device, objectCount, true);*/
 }
 
 HRESULT CPipeline::Initialize()
@@ -87,6 +98,19 @@ HRESULT CPipeline::Initialize()
 		}
 		
 	}
+	return hr;
+}
+
+HRESULT CPipeline::Init_FrameResource()
+{
+	HRESULT hr = S_OK;
+	m_vecFrameResource.reserve(g_iNumFrameResource);
+	for (int i = 0; i < g_iNumFrameResource; ++i)
+	{
+		FrameResource* pFrameResource = new FrameResource(m_pDevice.Get(), 1, 0/*TODO:RenderItemSize*/);
+		m_vecFrameResource.push_back(pFrameResource);
+	}
+
 	return hr;
 }
 
@@ -187,6 +211,10 @@ void CPipeline::Pipeline_Tick()
 
 HRESULT CPipeline::Free()
 {
+	for (auto& iter : m_vecFrameResource)
+	{
+		Safe_Delete(iter);
+	}
 	Safe_Release(m_pComponentManager);
 	Safe_Release(m_pUploadBuffer_Constant);
 	Safe_Release(m_pGraphic_Device);

@@ -17,6 +17,8 @@ protected:
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Free() override;
+public:
+
 
 protected:
 	ComPtr<ID3D12Device> m_pDevice = nullptr;

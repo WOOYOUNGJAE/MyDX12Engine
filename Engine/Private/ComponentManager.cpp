@@ -25,12 +25,11 @@ HRESULT CComponentManager::Initialize()
 		pShader_desc[1].target = "ps_5_0";
 		Add_Prototype(L"Shader_Default", CShader::Create(pShader_desc, 2));
 		Safe_Delete_Array(pShader_desc);		
-		//Add_Prototype(L"vShader_Default", CShader::Create(shader_desc));
 	}
 
 	Add_Prototype(L"Renderer", CRenderer::Create());
-	
 #pragma endregion Init_Basic_Components
+	
 
 	D3D12_INPUT_ELEMENT_DESC input_layout_desc[2]
 	{
