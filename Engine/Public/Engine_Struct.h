@@ -73,4 +73,5 @@ namespace Engine
 		float z;
 		XMVECTOR vector;
 	};
+
 }

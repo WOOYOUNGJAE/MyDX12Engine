@@ -6,7 +6,7 @@ NAMESPACE_(Engine)
 class CGraphic_Device : public CBase
 {
 	DECLARE_SINGLETON(CGraphic_Device)
-	friend class CPipeline;
+	friend class CPipelineManager;
 public:
 	CGraphic_Device();
 	virtual ~CGraphic_Device() override = default;

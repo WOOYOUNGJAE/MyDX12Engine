@@ -58,6 +58,9 @@
     <Filter Include="Utility\Components\Renderer">
       <UniqueIdentifier>{8f25aa8b-c0b4-4cdf-b681-c5aaf42a16e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\PipleLine\PSO">
+      <UniqueIdentifier>{41b3bb80-a7e6-4cc6-9896-3640acc0ba3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -120,7 +123,7 @@
     <ClInclude Include="..\Public\UploadBuffer.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Pipeline.h">
+    <ClInclude Include="..\Public\PipelineManager.h">
       <Filter>Utility\PipleLine</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Engine_Enums.h">
@@ -137,6 +140,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Renderer.h">
       <Filter>Utility\Components\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\PSO.h">
+      <Filter>Utility\PipleLine\PSO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -176,7 +182,7 @@
     <ClCompile Include="..\Private\Cube.cpp">
       <Filter>Utility\GameObjects\DefaultGeometry</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Pipeline.cpp">
+    <ClCompile Include="..\Private\PipelineManager.cpp">
       <Filter>Utility\PipleLine</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Shader.cpp">
@@ -190,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Renderer.cpp">
       <Filter>Utility\Components\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\PSO.cpp">
+      <Filter>Utility\PipleLine\PSO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

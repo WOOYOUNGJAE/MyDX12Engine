@@ -196,7 +196,8 @@
     <ClInclude Include="..\Public\Graphic_Device.h" />
     <ClInclude Include="..\Public\MeshGeometry.h" />
     <ClInclude Include="..\Public\ObjLayer.h" />
-    <ClInclude Include="..\Public\Pipeline.h" />
+    <ClInclude Include="..\Public\PipelineManager.h" />
+    <ClInclude Include="..\Public\PSO.h" />
     <ClInclude Include="..\Public\Renderer.h" />
     <ClInclude Include="..\Public\Shader.h" />
     <ClInclude Include="..\Public\Transform.h" />
@@ -216,7 +217,8 @@
     <ClCompile Include="..\Private\Graphic_Device.cpp" />
     <ClCompile Include="..\Private\MeshGeometry.cpp" />
     <ClCompile Include="..\Private\ObjLayer.cpp" />
-    <ClCompile Include="..\Private\Pipeline.cpp" />
+    <ClCompile Include="..\Private\PipelineManager.cpp" />
+    <ClCompile Include="..\Private\PSO.cpp" />
     <ClCompile Include="..\Private\Renderer.cpp" />
     <ClCompile Include="..\Private\Shader.cpp" />
     <ClCompile Include="..\Private\Transform.cpp" />

@@ -21,6 +21,8 @@ public:
 	HRESULT Free() override;
 public: // getter setter
 	ComPtr<ID3DBlob> Get_ByteCode(SHADER_TYPE eShaderType) { return m_shaderByteCodeArr[eShaderType].Get(); }
+	int Get_NumDirty() { return m_iNumFramesDirty; }
+	int& Get_NumDirtyRef() { return m_iNumFramesDirty; }
 	/*void Push_InputLayout(D3D12_INPUT_ELEMENT_DESC desc)
 	{
 		m_vecInputLayout.push_back(desc);
@@ -37,7 +39,7 @@ private: // 바이너리 데이터
 private:
 	int m_iNumFramesDirty = 0; // = g_numFrameResources
 private: // pointer
-	class CPipeline* m_pPipeline = nullptr;
+	class CPipelineManager* m_pPipelineManager = nullptr;
 };
 
 _NAMESPACE

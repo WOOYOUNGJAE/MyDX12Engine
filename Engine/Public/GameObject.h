@@ -19,6 +19,10 @@ public: // LifeCycle
 	virtual void Render(){};
 	HRESULT Free() override;
 public:
+	virtual int& Get_NumFrameDirtyRef() = 0;
+	virtual _matrix Get_WorldMatrix() = 0;
+	virtual _float3 Get_Pos() = 0;
+public:
 	virtual _bool Com_Already_Owned(const wstring& strComTag);
 	// 이미 있는지, 컴포넌트 생성, 맵에 넣기, 
 	virtual HRESULT Add_Component(const wstring& strComTag, class CComponent** ppOutCom, void* pArg = nullptr);

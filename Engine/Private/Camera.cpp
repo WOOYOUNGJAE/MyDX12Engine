@@ -1,14 +1,14 @@
 #include "Camera.h"
-#include "Pipeline.h"
+#include "PipelineManager.h"
 #include "Transform.h"
 
-CCamera::CCamera() : m_pPipeline(CPipeline::Get_Instance())
+CCamera::CCamera() : m_pPipelineManager(CPipelineManager::Get_Instance())
 {
-	Safe_AddRef(m_pPipeline);
+	Safe_AddRef(m_pPipelineManager);
 }
-CCamera::CCamera(const CCamera& rhs) : CGameObject(rhs), m_pPipeline(rhs.m_pPipeline)
+CCamera::CCamera(const CCamera& rhs) : CGameObject(rhs), m_pPipelineManager(rhs.m_pPipelineManager)
 {
-	Safe_AddRef(m_pPipeline);
+	Safe_AddRef(m_pPipelineManager);
 }
 
 HRESULT CCamera::Initialize_Prototype()
@@ -21,7 +21,7 @@ HRESULT CCamera::Initialize_Prototype()
 HRESULT CCamera::Free()
 {
 	Safe_Release(m_pTransformCom);
-	Safe_Release(m_pPipeline);
+	Safe_Release(m_pPipelineManager);
 	return CGameObject::Free();
 }
 
@@ -36,7 +36,12 @@ void CCamera::Late_Tick(_float fDeltaTime)
 
 void CCamera::Update_PipelineView()
 {
-	m_pPipeline->Update_Matrix(m_pTransformCom->WorldMatrix_Inverse(), CPipeline::VIEW_MAT);
+	m_pPipelineManager->Update_Matrix(m_pTransformCom->WorldMatrix_Inverse(), CPipelineManager::VIEW_MAT);
 
-	m_pPipeline->Update_Matrix(XMMatrixPerspectiveFovLH(m_fFovy, m_fAspect, m_fNear, m_fFar), CPipeline::PROJ_MAT);
+	m_pPipelineManager->Update_Matrix(XMMatrixPerspectiveFovLH(m_fFovy, m_fAspect, m_fNear, m_fFar), CPipelineManager::PROJ_MAT);
+}
+
+_float3 CCamera::Get_Pos()
+{
+	return m_pTransformCom->Position();
 }

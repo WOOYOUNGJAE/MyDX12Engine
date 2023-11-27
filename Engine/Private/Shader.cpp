@@ -1,15 +1,15 @@
 #include "Shader.h"
 #include "Device_Utils.h"
-#include "Pipeline.h"
+#include "PipelineManager.h"
 
-CShader::CShader(): m_pPipeline(CPipeline::Get_Instance())
+CShader::CShader(): m_pPipelineManager(CPipelineManager::Get_Instance())
 {
-	Safe_AddRef(m_pPipeline);
+	Safe_AddRef(m_pPipelineManager);
 }
 
-CShader::CShader(const CShader& rhs) : m_pPipeline(rhs.m_pPipeline)
+CShader::CShader(const CShader& rhs) : m_pPipelineManager(rhs.m_pPipelineManager)
 {
-	Safe_AddRef(m_pPipeline);
+	Safe_AddRef(m_pPipelineManager);
 	memcpy(m_shaderByteCodeArr, rhs.m_shaderByteCodeArr, sizeof(ComPtr<ID3DBlob>) * SHADER_TYPE_END);
 }
 
@@ -76,7 +76,7 @@ HRESULT CShader::Initialize_Prototype(const SHADER_INIT_DESC* shaderInputArr, _u
 
 HRESULT CShader::Free()
 {
-	Safe_Release(m_pPipeline);
+	Safe_Release(m_pPipelineManager);
 
 	return CComponent::Free();
 }

@@ -2,6 +2,7 @@
 #include "Transform.h"
 #include "Cube.h"
 #include "Renderer.h"
+#include "Shader.h"
 
 CCube* CCube::Create()
 {
@@ -60,4 +61,19 @@ HRESULT CCube::Free()
 	Safe_Release(m_pTransformCom);
 
 	return CGameObject::Free();
+}
+
+int& CCube::Get_NumFrameDirtyRef()
+{
+	return m_pShaderCom->Get_NumDirtyRef();
+}
+
+_matrix CCube::Get_WorldMatrix()
+{
+	return m_pTransformCom->WorldMatrix();
+}
+
+_float3 CCube::Get_Pos()
+{
+	return m_pTransformCom->Position();
 }

@@ -1,5 +1,5 @@
 #include "Graphic_Device.h"
-#include "Pipeline.h"
+#include "PipelineManager.h"
 
 IMPLEMENT_SINGLETON(CGraphic_Device)
 

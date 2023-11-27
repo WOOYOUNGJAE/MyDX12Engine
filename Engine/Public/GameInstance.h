@@ -33,7 +33,7 @@ private:
 	class CGraphic_Device* m_pGraphic_Device = nullptr;
 	class CComponentManager* m_pComponentManager = nullptr;
 	class CGameObjectManager* m_pGameObjectManager = nullptr;
-	class CPipeline* m_pPipeline = nullptr;
+	class CPipelineManager* m_pPipelineManager = nullptr;
 };
 
 _NAMESPACE

@@ -1,10 +1,10 @@
+#include "PipelineManager.h"
 #include "ComponentManager.h"
 #include "Component.h"
 #include "Transform.h"
 #include "CubeMesh.h"
 #include "Shader.h"
 #include "Renderer.h"
-#include "Pipeline.h"
 IMPLEMENT_SINGLETON(CComponentManager)
 
 HRESULT CComponentManager::Initialize()
@@ -36,10 +36,10 @@ HRESULT CComponentManager::Initialize()
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
 	};
-	CPipeline* pPipeline = CPipeline::Get_Instance();
+	CPipelineManager* pPipelineManager = CPipelineManager::Get_Instance();
 	for (auto& iter : input_layout_desc)
 	{
-		pPipeline->Push_InputLayout(iter, CPipeline::InputLayout_DEFAULT);
+		pPipelineManager->Push_InputLayout(iter, CPipelineManager::InputLayout_DEFAULT);
 	}
 
 	return S_OK;
