@@ -17,7 +17,7 @@ public: // Init
 	HRESULT Init_CommandObjects();
 	HRESULT Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode);
 	// RenderTargetView, DepthStencilView
-	HRESULT Create_DescriptorHeap();
+	HRESULT Create_RTV_DSV_DescriptorHeap();
 	HRESULT Init_RenderTargetView();
 
 public: // LifeCycle

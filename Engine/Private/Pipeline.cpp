@@ -1,6 +1,7 @@
 #include "Pipeline.h"
 
 #include "ComponentManager.h"
+#include "GameObjectManager.h"
 #include "GameObject.h"
 #include "Shader.h"
 #include "Graphic_Device.h"
@@ -33,10 +34,32 @@ HRESULT CPipeline::Initialize()
 	m_pCommandList= m_pGraphic_Device->Get_CommandList();
 	Safe_AddRef(m_pGraphic_Device);
 
+	// Build Root Signiture
+	hr = Init_RootSignature();
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	hr = Init_FrameResource();
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+
 	// Create ConstantBufferView Descriptor Heap
 	{
+		_uint iNumObj = (_uint)CGameObjectManager::Get_Instance()->Get_ObjPrototypeMap().size();
+
+		// 각 FrameResource의 물체마다 하나씩 CBV서술자 필요. +1은 Pass CBV 위한 것
+		_uint iNumDescriptors = (iNumObj + 1) * g_iNumFrameResource;
+
+		// Pass별 CBV의 시작 오프셋 지정
+		m_iPassCBVOffset = iNumObj * g_iNumFrameResource;
+
 		D3D12_DESCRIPTOR_HEAP_DESC cbvHeapDesc;
-		cbvHeapDesc.NumDescriptors = 1;
+		cbvHeapDesc.NumDescriptors = iNumDescriptors;
 		cbvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 		cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 		cbvHeapDesc.NodeMask = 0;
@@ -55,11 +78,6 @@ HRESULT CPipeline::Initialize()
 		return hr;
 	}
 
-	hr = Init_RootSignature();
-	if (FAILED(hr))
-	{
-		return hr;
-	}
 
 	// Build PSO
 	{

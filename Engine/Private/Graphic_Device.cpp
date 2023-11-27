@@ -73,7 +73,7 @@ HRESULT CGraphic_Device::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 		return E_FAIL;
 	}
 
-	if (FAILED(Create_DescriptorHeap()))
+	if (FAILED(Create_RTV_DSV_DescriptorHeap()))
 	{
 		MSG_BOX("Failed to Create Descriptor Heap");
 		return E_FAIL;
@@ -160,7 +160,7 @@ HRESULT CGraphic_Device::Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode)
 	return S_OK;
 }
 
-HRESULT CGraphic_Device::Create_DescriptorHeap()
+HRESULT CGraphic_Device::Create_RTV_DSV_DescriptorHeap()
 {
 	// Descriptor의 관리를 위한 D-Heap생성
 	// SwapChainBufferCount개 (스왑체인 버퍼)서술자를 담는 RTV힙

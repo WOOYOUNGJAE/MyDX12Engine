@@ -20,6 +20,8 @@ public:
 	HRESULT Free() override;
 	HRESULT Tick(_float fDeltaTime);
 	HRESULT Late_Tick(_float fDeltaTime);
+public: // getter
+	const map<wstring, CGameObject*>& Get_ObjPrototypeMap() { return m_mapObjPrototypes; }
 public:
 	CGameObject* Find_Prototype(const wstring& strTag);
 	CObjLayer* Find_Layer(const wstring& strTag);

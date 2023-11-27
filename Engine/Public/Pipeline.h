@@ -67,7 +67,7 @@ private:
 	HRESULT Init_FrameResource();
 	HRESULT Init_ConstantBuffers();
 	HRESULT Init_RootSignature();
-
+	//HRESULT 
 private: // Graphic Device
 	class CGraphic_Device* m_pGraphic_Device = nullptr; // Singleton Class
 	ComPtr<ID3D12Device> m_pDevice = nullptr; // Real Device
@@ -80,7 +80,8 @@ private: // Frame Resource
 private: // Camera Property
 	_float4x4 m_pipelineMatrix[ENUM_PIPELINE_MAT_END];
 	//_float4 m_CamPosition;
-private: // ConstantBuffer	
+private: // ConstantBuffer
+	_uint m_iPassCBVOffset = 0;
 	ComPtr<ID3D12DescriptorHeap> m_pCbvHeap = nullptr;
 	CUploadBuffer<_float4x4>* m_pUploadBuffer_Constant = nullptr;
 private: // Input layout
