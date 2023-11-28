@@ -6,7 +6,7 @@ NAMESPACE_(Engine)
 class ENGINE_DLL CCubeMesh final: public CMeshGeometry
 {
 private:
-	CCubeMesh() = default;
+	CCubeMesh();
 	CCubeMesh(const CCubeMesh& rhs) : CMeshGeometry(rhs) {}
 	~CCubeMesh() override = default;
 

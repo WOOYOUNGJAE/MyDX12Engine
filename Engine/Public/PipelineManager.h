@@ -70,6 +70,7 @@ public: // typedef
 public:
 	HRESULT Initialize();
 	void Pipeline_Tick(_float fDeltaTime);
+	void Render();
 	HRESULT Free() override;
 public:
 	// TODO : Build PSO Overrides

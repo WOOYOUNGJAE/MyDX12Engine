@@ -18,10 +18,14 @@ public: // LifeCycle
 	virtual void Pipeline_Tick(){};
 	virtual void Render(){};
 	HRESULT Free() override;
-public:
+public: // getter setter
 	virtual int& Get_NumFrameDirtyRef() = 0;
 	virtual _matrix Get_WorldMatrix() = 0;
 	virtual _float3 Get_Pos() = 0;
+	virtual D3D12_VERTEX_BUFFER_VIEW VertexBufferView() = 0;
+	virtual D3D12_INDEX_BUFFER_VIEW IndexBufferView()const = 0;
+	virtual D3D12_PRIMITIVE_TOPOLOGY PrimitiveType()const {	return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;} // Default;
+	virtual _uint Num_Indices() = 0;
 public:
 	virtual _bool Com_Already_Owned(const wstring& strComTag);
 	// 이미 있는지, 컴포넌트 생성, 맵에 넣기, 

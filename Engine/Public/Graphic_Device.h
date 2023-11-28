@@ -29,7 +29,9 @@ public: // Getter
 	ComPtr<ID3D12Device> Get_Device() { return m_pDevice.Get(); }
 	ComPtr<ID3D12GraphicsCommandList>  Get_CommandList() { return m_pCommandList.Get(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_DepthStenciView() { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); }
-
+	ID3D12Resource* CurrentBackBuffer() { return m_pSwapChainBuffer[m_iCurrBackBuffer].Get(); }
+	D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView() const;
+	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView()const { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); };
 private: // ComPtr
 	ComPtr<IDXGIFactory4> m_pDxgi_Factory = nullptr;
 	ComPtr<ID3D12Device> m_pDevice = nullptr;
@@ -49,7 +51,7 @@ private: // Descriptor Heap
 	ComPtr<ID3D12Resource> m_pSwapChainBuffer[m_iSwapChainBufferCount]{};
 	ComPtr<ID3D12Resource> m_pDepthStencilBuffer = nullptr;
 private:
-	D3D12_VIEWPORT m_viewportDesc;
+	D3D12_VIEWPORT m_screenViewport;
 	D3D12_RECT m_ScissorRect;
 	DXGI_FORMAT m_BackBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 	DXGI_FORMAT m_DepthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;

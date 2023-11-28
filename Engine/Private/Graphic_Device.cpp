@@ -17,12 +17,12 @@ HRESULT CGraphic_Device::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 	m_iClientWinCY = iWinCY;
 
 	// viewport
-	m_viewportDesc.TopLeftX = 0;
-	m_viewportDesc.TopLeftY = 0;
-	m_viewportDesc.Width = static_cast<float>(m_iClientWinCX);
-	m_viewportDesc.Height = static_cast<float>(m_iClientWinCY);
-	m_viewportDesc.MinDepth = 0.0f;
-	m_viewportDesc.MaxDepth = 1.0f;
+	m_screenViewport.TopLeftX = 0;
+	m_screenViewport.TopLeftY = 0;
+	m_screenViewport.Width = static_cast<float>(m_iClientWinCX);
+	m_screenViewport.Height = static_cast<float>(m_iClientWinCY);
+	m_screenViewport.MinDepth = 0.0f;
+	m_screenViewport.MaxDepth = 1.0f;
 
 	m_ScissorRect = { 0, 0, static_cast<LONG>(m_iClientWinCX), static_cast<LONG>(m_iClientWinCY )};
 
@@ -343,14 +343,22 @@ HRESULT CGraphic_Device::On_Resize()
 	Flush_CommandQueue();
 
 	// viewport
-	m_viewportDesc.TopLeftX = 0;
-	m_viewportDesc.TopLeftY = 0;
-	m_viewportDesc.Width = static_cast<float>(m_iClientWinCX);
-	m_viewportDesc.Height = static_cast<float>(m_iClientWinCY);
-	m_viewportDesc.MinDepth = 0.0f;
-	m_viewportDesc.MaxDepth = 1.0f;
+	m_screenViewport.TopLeftX = 0;
+	m_screenViewport.TopLeftY = 0;
+	m_screenViewport.Width = static_cast<float>(m_iClientWinCX);
+	m_screenViewport.Height = static_cast<float>(m_iClientWinCY);
+	m_screenViewport.MinDepth = 0.0f;
+	m_screenViewport.MaxDepth = 1.0f;
 
 	m_ScissorRect = { 0, 0, static_cast<LONG>(m_iClientWinCX), static_cast<LONG>(m_iClientWinCY) };
 
 	return S_OK;
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE CGraphic_Device::CurrentBackBufferView() const
+{
+	return CD3DX12_CPU_DESCRIPTOR_HANDLE(
+		m_pRtvHeap ->GetCPUDescriptorHandleForHeapStart(),
+		m_iCurrBackBuffer,
+		m_iRtvDescriptorSize);
 }

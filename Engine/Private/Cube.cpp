@@ -77,3 +77,18 @@ _float3 CCube::Get_Pos()
 {
 	return m_pTransformCom->Position();
 }
+
+D3D12_VERTEX_BUFFER_VIEW CCube::VertexBufferView()
+{
+	return m_pCubeMeshCom->VertexBufferView();
+}
+
+D3D12_INDEX_BUFFER_VIEW CCube::IndexBufferView() const
+{
+	return m_pCubeMeshCom->IndexBufferView();
+}
+
+_uint CCube::Num_Indices()
+{
+	return m_pCubeMeshCom->Num_Indices();
+}

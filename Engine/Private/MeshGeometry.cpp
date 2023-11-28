@@ -31,3 +31,23 @@ HRESULT CMeshGeometry::Free()
 
 	return S_OK;
 }
+
+D3D12_VERTEX_BUFFER_VIEW CMeshGeometry::VertexBufferView()
+{
+	D3D12_VERTEX_BUFFER_VIEW vbv;
+	vbv.BufferLocation = m_vertexBufferGPU->GetGPUVirtualAddress();
+	vbv.StrideInBytes = m_iVertexByteStride;
+	vbv.SizeInBytes = m_iVertexBufferByteSize;
+
+	return vbv;
+}
+
+D3D12_INDEX_BUFFER_VIEW CMeshGeometry::IndexBufferView() const
+{
+	D3D12_INDEX_BUFFER_VIEW ibv;
+	ibv.BufferLocation = m_indexBufferGPU->GetGPUVirtualAddress();
+	ibv.Format = IndexFormat;
+	ibv.SizeInBytes = m_iIndexBufferByteSize;
+
+	return ibv;
+}

@@ -299,6 +299,7 @@ void CPipelineManager::Pipeline_Tick(_float fDeltaTime)
 	Update_MainPassCB(fDeltaTime);
 }
 
+
 void CPipelineManager::Update_ObjectCBs(_float fDeltaTime)
 {
 	auto curObjectCB = m_pCurFrameResource->m_pObjectCB;
@@ -356,6 +357,106 @@ void CPipelineManager::Update_MainPassCB(_float fDeltaTime)
 	currPassCB->CopyData(0, m_MainPassCB);
 }
 
+void CPipelineManager::Render()
+{
+#pragma region 명령 구축 후 제출
+	auto cmdListAlloc = m_pCurFrameResource->CmdListAlloc;
+
+	// CommandList가 끝난 이후에만 reset 가능
+	cmdListAlloc.Reset();
+
+	// A command list can be reset after it has been added to the command queue via ExecuteCommandList.
+	// Reusing the command list reuses memory.
+	m_pCommandList->Reset(cmdListAlloc.Get(), m_PSOArr[PSO_DEFAULT].Get());
+
+	m_pCommandList->RSSetViewports(1, &m_pGraphic_Device->m_screenViewport);
+	m_pCommandList->RSSetScissorRects(1, &m_pGraphic_Device->m_ScissorRect);
+
+	// Indicate a state transition on the resource usage.
+	m_pCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_pGraphic_Device->CurrentBackBuffer(),
+		D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	// Clear the back buffer and depth buffer.
+	m_pCommandList->ClearRenderTargetView(m_pGraphic_Device->CurrentBackBufferView(), Colors::LightSteelBlue, 0, nullptr);
+	m_pCommandList->ClearDepthStencilView(m_pGraphic_Device->DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
+
+	// Specify the buffers we are going to render to.
+	m_pCommandList->OMSetRenderTargets(1, &m_pGraphic_Device->CurrentBackBufferView(), true, &m_pGraphic_Device->DepthStencilView());
+
+	ID3D12DescriptorHeap* descriptorHeaps[] = { m_pCbvHeap.Get() };
+	m_pCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+
+	m_pCommandList->SetGraphicsRootSignature(m_RootSigArr[RootSig_DEFAULT].Get());
+
+	int passCbvIndex = m_iPassCBVOffset + m_iCurFrameResourceIndex;
+	auto passCbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(m_pCbvHeap->GetGPUDescriptorHandleForHeapStart());
+	passCbvHandle.Offset(passCbvIndex, m_iCbvSrvUavDescriptorSize);
+	m_pCommandList->SetGraphicsRootDescriptorTable(1, passCbvHandle);
+
+
+#pragma region Draw
+	UINT objCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(ObjectConstants));
+
+	auto objectCB = m_pCurFrameResource->m_pObjectCB->Get_UploadBuffer();
+
+	// For each render item...
+	_uint iTmpObjCBIndex = 0;
+	_uint iNumObject = m_pGameObjectManager->Get_ObjPrototypeMap().size();
+	for (auto& pair : m_pGameObjectManager->Get_ObjPrototypeMap()) 
+	{
+		auto pObject = pair.second;
+
+		m_pCommandList.Get()->IASetVertexBuffers(0, 1, &pObject->VertexBufferView());
+		m_pCommandList.Get()->IASetIndexBuffer(&pObject->IndexBufferView());
+		m_pCommandList.Get()->IASetPrimitiveTopology(pObject->PrimitiveType());
+
+		// Offset to the CBV in the descriptor heap for this object and for this frame resource.
+		UINT cbvIndex = m_iCurFrameResourceIndex * iNumObject + iTmpObjCBIndex++;
+		auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(m_pCbvHeap->GetGPUDescriptorHandleForHeapStart());
+		cbvHandle.Offset(cbvIndex, m_iCbvSrvUavDescriptorSize);
+
+		m_pCommandList.Get()->SetGraphicsRootDescriptorTable(0, cbvHandle);
+
+		m_pCommandList.Get()->DrawIndexedInstanced(
+			pObject->Num_Indices(), 
+			1, 
+			0, 
+			0, 
+			0);
+	}
+
+#pragma endregion
+
+
+	// Indicate a state transition on the resource usage.
+	m_pCommandList.Get()->ResourceBarrier(
+		1, 
+		&CD3DX12_RESOURCE_BARRIER::Transition(m_pGraphic_Device->CurrentBackBuffer(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, 
+			D3D12_RESOURCE_STATE_PRESENT));
+
+	// Done recording commands.
+	m_pCommandList.Get()->Close();
+
+	// Add the command list to the queue for execution.
+	ID3D12CommandList* cmdsLists[] = { m_pCommandList.Get() };
+	m_pGraphic_Device->m_pCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
+
+	// Swap the back and front buffers
+	m_pGraphic_Device->m_pSwapChain->Present(0, 0);
+	m_pGraphic_Device->m_iCurrBackBuffer = (m_pGraphic_Device->m_iCurrBackBuffer + 1) % m_pGraphic_Device->m_iSwapChainBufferCount;
+#pragma endregion
+
+
+	// Advance the fence value to mark commands up to this fence point.
+	m_pCurFrameResource->Fence = ++m_pGraphic_Device->m_iCurrFence;
+
+	// Add an instruction to the command queue to set a new fence point. 
+	// Because we are on the GPU timeline, the new fence point won't be 
+	// set until the GPU finishes processing all the commands prior to this Signal().
+	//  이 함수 실행 이전까지 명령 처리 후에 새 울타리 지점(mCurrentFence) 설정하도록
+	m_pGraphic_Device->m_pCommandQueue->Signal(m_pGraphic_Device->m_pFence.Get(), m_pGraphic_Device->m_iCurrFence);
+}
 HRESULT CPipelineManager::Free()
 {
 	for (auto& iter : m_vecFrameResource)

@@ -1,6 +1,16 @@
 #include "CubeMesh.h"
 #include "Device_Utils.h"
 
+CCubeMesh::CCubeMesh()
+{
+	m_iNumVertex = 8;
+	m_iNumIndices = 6 * 6;
+	m_iVertexByteStride = sizeof(MY_VERTEX);
+	m_iVertexBufferByteSize = m_iNumVertex * m_iVertexBufferByteSize;
+	IndexFormat = DXGI_FORMAT_R16_UINT;
+	m_iIndexBufferByteSize = m_iNumIndices * sizeof(_ushort);
+}
+
 CCubeMesh* CCubeMesh::Create()
 {
 	CCubeMesh* pInstance = new CCubeMesh();
