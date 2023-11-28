@@ -4,6 +4,7 @@
 #include "Client_Defines.h"
 #include "GameInstance.h"
 #include "Camera_Free.h"
+
 CMainApp::CMainApp() : m_pGameInstance{ CGameInstance::Get_Instance()}
 {
 	Safe_AddRef(m_pGameInstance);
@@ -21,27 +22,31 @@ HRESULT CMainApp::Initialize()
 	graphic_desc.iSizeY = g_iWinSizeY;
 	graphic_desc.eWinMode = GRAPHIC_DESC::WINMODE_WIN;
 
-	m_pGameInstance->Init_Engine(graphic_desc, &m_pDevice);
+	CGameObject* pObjectControlling = nullptr;
 
+	HRESULT hr = 
+	m_pGameInstance->Init_Engine(graphic_desc, &m_pDevice);
+	if (FAILED(hr)) { return hr; }
 #pragma region InLevel
-	if (FAILED(m_pGameInstance->Add_GameObjPrototype(L"Camera_Free", CCamera_Free::Create())))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", L"Default")))
-	{
-		return E_FAIL;
-	}
+	hr = m_pGameInstance->Add_GameObjPrototype(L"Camera_Free", CCamera_Free::Create());
+	if (FAILED(hr)) { return hr; }
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", L"Default");
+	if (FAILED(hr)) { return hr; }
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", L"Layer0", &pObjectControlling);
+	if (FAILED(hr)) { return hr; }
+	m_pGameInstance->Update_ObjPipelineLayer(pObjectControlling, Pipeline::ENUM_PSO::PSO_DEFAULT);
 #pragma endregion InLevel
 	return S_OK;
 }
 
 void CMainApp::Tick(_float fDeltaTime)
 {
+	m_pGameInstance->Tick(fDeltaTime);
 }
 
 void CMainApp::Late_Tick(_float fDeltaTime)
 {
+	m_pGameInstance->Late_Tick(fDeltaTime);
 }
 
 void CMainApp::Render()

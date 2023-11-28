@@ -7,6 +7,7 @@ class CCamera_Free : public CCamera
 {
 private:
 	CCamera_Free() = default;
+	CCamera_Free(CCamera_Free& rhs);
 	~CCamera_Free() override = default;
 
 public:

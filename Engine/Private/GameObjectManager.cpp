@@ -130,3 +130,35 @@ HRESULT CGameObjectManager::Add_GameObject_InScene(const wstring& strPrototypeTa
 
 	return S_OK;
 }
+
+HRESULT CGameObjectManager::Add_GameObject_InScene(const wstring& strPrototypeTag, const wstring& strLayerTag,
+	CGameObject** pOutObj, void* pArg)
+{
+	auto prototypePair = m_mapObjPrototypes.find(strPrototypeTag);
+
+	// 못 찾았을 때
+	if (prototypePair == m_mapObjPrototypes.end())
+	{
+		MSG_BOX("GameObjectMananger : Prototype Doesn't Exist");
+		return E_FAIL;
+	}
+
+	CGameObject* pGameObject = prototypePair->second->Clone(pArg);
+
+	CObjLayer* pLayer = Find_Layer(strLayerTag);
+
+	// 처음 보는 레이어라면 추가
+	if (pLayer == nullptr)
+	{
+		pLayer = CObjLayer::Create();
+		pLayer->Add_GameObject(pGameObject); // 레이어에 넣고
+		m_mapLayer.emplace(strLayerTag, pLayer); // 레이어 자체를 추가
+	}
+
+	// 이미 존재하는 레이어에 추가
+	pLayer->Add_GameObject(pGameObject);
+
+	*pOutObj = pGameObject;
+
+	return S_OK;
+}

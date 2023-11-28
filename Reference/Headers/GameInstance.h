@@ -28,12 +28,14 @@ public: // Manager Function Offer
 	HRESULT Add_GameObjPrototype(const wstring& strTag, class CGameObject* pInstance);
 	CGameObject* Clone_GameObject(const wstring& strPrototypeTag, void* pArg = nullptr);
 	HRESULT Add_GameObject_InScene(const wstring& strPrototypeTag, const wstring& strLayerTag, void* pArg = nullptr);
-
+	HRESULT Add_GameObject_InScene(const wstring& strPrototypeTag, const wstring& strLayerTag, CGameObject** pOutObj , void* pArg = nullptr);
+	// Pipeline manager
+	void Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum);
 private:
 	class CGraphic_Device* m_pGraphic_Device = nullptr;
 	class CComponentManager* m_pComponentManager = nullptr;
 	class CGameObjectManager* m_pGameObjectManager = nullptr;
-	class CPipeline* m_pPipeline = nullptr;
+	class CPipelineManager* m_pPipelineManager = nullptr;
 };
 
 _NAMESPACE

@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "Camera_Free.h"
 
+CCamera_Free::CCamera_Free(CCamera_Free& rhs) : CCamera(rhs)
+{
+}
+
 CCamera_Free* CCamera_Free::Create()
 {
 	CCamera_Free* pInstance = new CCamera_Free();

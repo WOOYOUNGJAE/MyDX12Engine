@@ -20,7 +20,7 @@ public: // typedef
 	};
 public:
 	HRESULT Initialize_Prototype() override;
-	HRESULT Initialize(void* pArg) override { return S_OK; }
+	HRESULT Initialize(void* pArg) override;
 	HRESULT Free() override;
 	void Tick(_float fDeltaTime) override;
 	void Late_Tick(_float fDeltaTime) override;
@@ -33,10 +33,10 @@ protected: // pointer
 protected:
 	CAMERA_DESC cam_desc = { 0.f, 0.f, 0.f, 1.f };
 
-	_float m_fFovy = 0.f;
-	_float m_fAspect = 0.f;
-	_float m_fNear = 0.f;
-	_float m_fFar = 1.f;
+	_float m_fFovy = XMConvertToRadians(60.f);
+	_float m_fAspect = (_float)1280 / 720; // TODO TEMP
+	_float m_fNear = 0.2f;
+	_float m_fFar = 300.f;
 };
 
 _NAMESPACE

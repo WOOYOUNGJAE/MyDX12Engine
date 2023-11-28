@@ -20,11 +20,19 @@ public:
 	void Pipeline_Tick() override;
 	void Render() override;
 	HRESULT Free() override;
+public:
+	int& Get_NumFrameDirtyRef() override;
+	_matrix Get_WorldMatrix() override;
+	_float3 Get_Pos() override;
+	D3D12_VERTEX_BUFFER_VIEW VertexBufferView() override;
+	D3D12_INDEX_BUFFER_VIEW IndexBufferView() const override;
+	_uint Num_Indices() override;
 
 protected:
 	class CTransform* m_pTransformCom = nullptr;
 	class CCubeMesh* m_pCubeMeshCom = nullptr;
 	class CRenderer* m_pRendererCom = nullptr;
+	class CShader* m_pShaderCom = nullptr;
 };
 
 _NAMESPACE

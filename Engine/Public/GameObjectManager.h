@@ -30,6 +30,7 @@ public:
 	CGameObject* Clone_GameObject(const wstring& strPrototypeTag, void* pArg = nullptr);
 	// Client 에서 G_Obj를 생성할 때, 레이어에도 넣음
 	HRESULT Add_GameObject_InScene(const wstring& strPrototypeTag, const wstring& strLayerTag, void* pArg = nullptr);
+	HRESULT Add_GameObject_InScene(const wstring& strPrototypeTag, const wstring& strLayerTag, CGameObject** pOutObj, void* pArg = nullptr);
 
 
 private:

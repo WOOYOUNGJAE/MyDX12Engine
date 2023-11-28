@@ -38,7 +38,7 @@ HRESULT CPipelineManager::Initialize()
 	m_pCommandList= m_pGraphic_Device->Get_CommandList();
 	Safe_AddRef(m_pGraphic_Device);
 
-	// Build Root Signiture
+	// Build Root Signature
 	hr = Init_RootSignature();
 	if (FAILED(hr))
 	{
@@ -55,7 +55,7 @@ HRESULT CPipelineManager::Initialize()
 	// Create ConstantBufferView Descriptor Heap
 	{
 		_uint iNumObj = m_pGameObjectManager->Get_ObjPrototypeMap().size();
-
+		iNumObj = 100; // TODO : 동적 생성 대비해 여유롭게 100개
 		// 각 FrameResource의 물체마다 하나씩 CBV서술자 필요. +1은 Pass CBV 위한 것
 		_uint iNumDescriptors = (iNumObj + 1) * g_iNumFrameResource;
 
@@ -126,10 +126,12 @@ HRESULT CPipelineManager::Initialize()
 HRESULT CPipelineManager::Init_FrameResource()
 {
 	HRESULT hr = S_OK;
+	UINT iObjCount = m_pGameObjectManager->Get_ObjPrototypeMap().size(); // TODO : 동적 생성 대비해 여유롭게 100개
+	iObjCount = 100; 
 	m_vecFrameResource.reserve(g_iNumFrameResource);
 	for (int i = 0; i < g_iNumFrameResource; ++i)
 	{
-		FrameResource* pFrameResource = new FrameResource(m_pDevice.Get(), 1, 0/*TODO:RenderItemSize*/);
+		FrameResource* pFrameResource = new FrameResource(m_pDevice.Get(), 1, iObjCount);
 		m_vecFrameResource.push_back(pFrameResource);
 	}
 
@@ -142,6 +144,7 @@ HRESULT CPipelineManager::Init_ConstantBuffersView()
 	_uint objCBByteSize =  CDevice_Utils::ConstantBufferByteSize(sizeof(ObjectConstants));
 
 	_uint objCount = (_uint)CGameObjectManager::Get_Instance()->Get_ObjPrototypeMap().size();
+	objCount = 100; // TODO : 동적 생성 대비해 여유롭게 100개
 	// 0번에서 n-1번까지의 서술자들은 0번 FrameResource를 위한 물체별 CBV을 담고,
 	// n~2n-1은 1번 FrameResource를 위한 물체별 CBV,
 	// 2n~3n-1은 2번 FrameResource를 위한 물체별 CBV, 3n, 3n+1, 3n+2는 각 FrameResource의 Pass CBV를 담음
@@ -219,13 +222,14 @@ HRESULT CPipelineManager::Init_ConstantBuffersView()
 
 HRESULT CPipelineManager::Init_RootSignature()
 {
+	HRESULT hr = S_OK;
 	// RootSig_DEFAULT
 
 	// CBV 하나를 담는 서술자 테이블 생성, 현재 Default는 ConstantObject, ConstantPass로 총 두개
 	CD3DX12_DESCRIPTOR_RANGE cbvTable0;
 	cbvTable0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,	1, 0);
 	CD3DX12_DESCRIPTOR_RANGE cbvTable1;
-	cbvTable0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,	1, 1/*인덱스*/);
+	cbvTable1.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,	1, 1/*인덱스*/);
 
 	// 루트 시그니쳐는 테이블이거나 루트 서술자 또는 루트 상수이다.
 	CD3DX12_ROOT_PARAMETER slotRootParameterArr[2];
@@ -245,10 +249,11 @@ HRESULT CPipelineManager::Init_RootSignature()
 	ComPtr<ID3DBlob> serializedRootSig = nullptr;
 	ComPtr<ID3DBlob> errorBlob = nullptr;
 
-	if (FAILED(D3D12SerializeRootSignature(&rootSigDesc, D3D_ROOT_SIGNATURE_VERSION_1,
-		serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf())))
+	hr = D3D12SerializeRootSignature(&rootSigDesc, D3D_ROOT_SIGNATURE_VERSION_1,
+		serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf());
+	if (FAILED(hr))
 	{
-		return E_FAIL;
+		return hr;
 	}
 
 	if (errorBlob)
@@ -303,21 +308,28 @@ void CPipelineManager::Pipeline_Tick(_float fDeltaTime)
 void CPipelineManager::Update_ObjectCBs(_float fDeltaTime)
 {
 	auto curObjectCB = m_pCurFrameResource->m_pObjectCB;
-	for (auto& pair : m_pGameObjectManager->Get_ObjPrototypeMap())
+	for (auto& layerIter : m_vecPipelineLayerArr)
 	{
-		// Only update the cbuffer data if the constants have changed.  
-		// This needs to be tracked per frame resource.
-		if (pair.second->Get_NumFrameDirtyRef() > 0)
+		for (auto& iter : layerIter)
 		{
-			_matrix world = pair.second->Get_WorldMatrix();
+			if (iter == nullptr)
+			{
+				break;
+			}
+			// Only update the cbuffer data if the constants have changed.  
+			// This needs to be tracked per frame resource.
+			if (iter->Get_NumFrameDirtyRef() > 0)
+			{
+				_matrix world = iter->Get_WorldMatrix();
 
-			ObjectConstants objConstants;
-			XMStoreFloat4x4(&objConstants.World, XMMatrixTranspose(world));
+				ObjectConstants objConstants;
+				XMStoreFloat4x4(&objConstants.World, XMMatrixTranspose(world));
 
-			curObjectCB->CopyData(0, objConstants);
+				curObjectCB->CopyData(0, objConstants);
 
-			// Next FrameResource need to be updated too.
-			--pair.second->Get_NumFrameDirtyRef();
+				// Next FrameResource need to be updated too.
+				--iter->Get_NumFrameDirtyRef();
+			}
 		}
 	}
 }
@@ -363,12 +375,12 @@ void CPipelineManager::Render()
 	auto cmdListAlloc = m_pCurFrameResource->CmdListAlloc;
 
 	// CommandList가 끝난 이후에만 reset 가능
-	cmdListAlloc.Reset();
+	HRESULT hr = cmdListAlloc->Reset();
 
 	// A command list can be reset after it has been added to the command queue via ExecuteCommandList.
 	// Reusing the command list reuses memory.
-	m_pCommandList->Reset(cmdListAlloc.Get(), m_PSOArr[PSO_DEFAULT].Get());
-
+	m_pCommandList.Get()->Reset(cmdListAlloc.Get(), m_PSOArr[PSO_DEFAULT].Get());
+	int a = 1;
 	m_pCommandList->RSSetViewports(1, &m_pGraphic_Device->m_screenViewport);
 	m_pCommandList->RSSetScissorRects(1, &m_pGraphic_Device->m_ScissorRect);
 
@@ -401,28 +413,36 @@ void CPipelineManager::Render()
 
 	// For each render item...
 	_uint iTmpObjCBIndex = 0;
-	_uint iNumObject = m_pGameObjectManager->Get_ObjPrototypeMap().size();
-	for (auto& pair : m_pGameObjectManager->Get_ObjPrototypeMap()) 
+	//_uint iNumObject = m_pGameObjectManager->Get_ObjPrototypeMap().size();
+	_uint iNumObject = 0;
+	for (auto& iter : m_vecPipelineLayerArr)
 	{
-		auto pObject = pair.second;
+		iNumObject += iter.size();
+	}
+	for (auto& layerIter : m_vecPipelineLayerArr)
+	{
+		for (auto& iter : layerIter)
+		{
+			auto pObject = iter;
 
-		m_pCommandList.Get()->IASetVertexBuffers(0, 1, &pObject->VertexBufferView());
-		m_pCommandList.Get()->IASetIndexBuffer(&pObject->IndexBufferView());
-		m_pCommandList.Get()->IASetPrimitiveTopology(pObject->PrimitiveType());
+			m_pCommandList.Get()->IASetVertexBuffers(0, 1, &pObject->VertexBufferView());
+			m_pCommandList.Get()->IASetIndexBuffer(&pObject->IndexBufferView());
+			m_pCommandList.Get()->IASetPrimitiveTopology(pObject->PrimitiveType());
 
-		// Offset to the CBV in the descriptor heap for this object and for this frame resource.
-		UINT cbvIndex = m_iCurFrameResourceIndex * iNumObject + iTmpObjCBIndex++;
-		auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(m_pCbvHeap->GetGPUDescriptorHandleForHeapStart());
-		cbvHandle.Offset(cbvIndex, m_iCbvSrvUavDescriptorSize);
+			// Offset to the CBV in the descriptor heap for this object and for this frame resource.
+			UINT cbvIndex = m_iCurFrameResourceIndex * iNumObject + iTmpObjCBIndex++;
+			auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(m_pCbvHeap->GetGPUDescriptorHandleForHeapStart());
+			cbvHandle.Offset(cbvIndex, m_iCbvSrvUavDescriptorSize);
 
-		m_pCommandList.Get()->SetGraphicsRootDescriptorTable(0, cbvHandle);
+			m_pCommandList.Get()->SetGraphicsRootDescriptorTable(0, cbvHandle);
 
-		m_pCommandList.Get()->DrawIndexedInstanced(
-			pObject->Num_Indices(), 
-			1, 
-			0, 
-			0, 
-			0);
+			m_pCommandList.Get()->DrawIndexedInstanced(
+				pObject->Num_Indices(),
+				1,
+				0,
+				0,
+				0);
+		}
 	}
 
 #pragma endregion
@@ -469,6 +489,12 @@ HRESULT CPipelineManager::Free()
 	return S_OK;
 }
 
+HRESULT CPipelineManager::Re_Initialize()
+{
+	HRESULT hr = S_OK;
+	return hr;
+}
+
 HRESULT CPipelineManager::Build_PSO(const D3D12_GRAPHICS_PIPELINE_STATE_DESC& pipeline_desc, ENUM_PSO psoIndex)
 {
 	HRESULT hr = S_OK;
@@ -481,4 +507,28 @@ HRESULT CPipelineManager::Build_PSO(const D3D12_GRAPHICS_PIPELINE_STATE_DESC& pi
 	}
 
 	return hr;
+}
+
+void CPipelineManager::Update_ObjPipelineLayer(CGameObject* pObject, ENUM_PSO ePsoEnum)
+{
+	for (auto& listIter : m_vecPipelineLayerArr)
+	{
+		for (auto& objIter = listIter.begin(); objIter != listIter.end(); ++objIter)
+		{
+			
+			if (*objIter == pObject)
+			{
+				// 새로 넣어주고 기존꺼 지워주기
+				m_vecPipelineLayerArr[ePsoEnum].push_back(pObject);
+				objIter = listIter.erase(objIter);
+				return;
+			}
+			else
+			{
+				++objIter;
+			}
+		}
+	}
+	// 못 찾았으면 (아예 처음 호출) 넣어주기
+	m_vecPipelineLayerArr[ePsoEnum].push_back(pObject);
 }

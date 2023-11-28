@@ -8,6 +8,21 @@ CMeshGeometry::CMeshGeometry() :
 {
 }
 
+CMeshGeometry::CMeshGeometry(const CMeshGeometry& rhs) : CComponent(rhs),
+m_pDevice(rhs.m_pDevice),
+m_pCommandList(rhs.m_pCommandList),
+m_vertexData(rhs.m_vertexData),
+m_vertexPosArr(rhs.m_vertexPosArr),
+m_pResource(rhs.m_pResource.Get()),
+m_vertexBufferCPU(rhs.m_vertexBufferCPU.Get()),
+m_indexBufferCPU(rhs.m_indexBufferCPU.Get()),
+m_vertexBufferGPU(rhs.m_vertexBufferGPU.Get()),
+m_indexBufferGPU(rhs.m_indexBufferGPU.Get()),
+m_vertexBufferUploader(rhs.m_vertexBufferUploader.Get()),
+m_indexBufferUploader(rhs.m_indexBufferUploader.Get())
+{
+}
+
 HRESULT CMeshGeometry::Initialize_Prototype()
 {
 	if (m_pDevice == nullptr || m_pCommandList == nullptr)

@@ -18,8 +18,8 @@ namespace Engine
 			COLOR,
 			NORMAL,
 		};
-		_float3 vPos;
-		_float4 vColor;
+		_float3 pos;
+		_float4 color;
 		// TODO ..추가 예정
 	};
 
@@ -73,4 +73,5 @@ namespace Engine
 		float z;
 		XMVECTOR vector;
 	};
+
 }

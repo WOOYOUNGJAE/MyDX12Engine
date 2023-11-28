@@ -60,6 +60,8 @@ void CGameInstance::Tick(_float fDeltaTime)
 void CGameInstance::Late_Tick(_float fDeltaTime)
 {
 	m_pGameObjectManager->Late_Tick(fDeltaTime);
+	m_pPipelineManager->Pipeline_Tick(fDeltaTime);
+	m_pPipelineManager->Render();
 }
 
 void CGameInstance::Release_Engine()
@@ -109,4 +111,16 @@ CGameObject* CGameInstance::Clone_GameObject(const wstring& strPrototypeTag, voi
 HRESULT CGameInstance::Add_GameObject_InScene(const wstring& strPrototypeTag, const wstring& strLayerTag, void* pArg)
 {
 	return m_pGameObjectManager->Add_GameObject_InScene(strPrototypeTag, strLayerTag, pArg);
+}
+
+HRESULT CGameInstance::Add_GameObject_InScene(const wstring& strPrototypeTag, const wstring& strLayerTag,
+	CGameObject** pOutObj, void* pArg)
+{
+	HRESULT hr = m_pGameObjectManager->Add_GameObject_InScene(strPrototypeTag, strLayerTag, pOutObj, pArg);
+	return hr;
+}
+
+void CGameInstance::Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum)
+{
+	m_pPipelineManager->Update_ObjPipelineLayer(pObject, (ENUM_PSO)ePsoEnum);
 }

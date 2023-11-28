@@ -8,10 +8,7 @@ class CMeshGeometry abstract: public CComponent
 {
 protected:
 	CMeshGeometry();
-	CMeshGeometry(const CMeshGeometry& rhs): CComponent(rhs),
-	m_pDevice(rhs.m_pDevice),
-	m_pCommandList(rhs.m_pCommandList)
-	{}
+	CMeshGeometry(const CMeshGeometry& rhs);
 	~CMeshGeometry() override = default;
 
 public:

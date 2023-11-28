@@ -27,6 +27,7 @@ public:
 	D3D12_VERTEX_BUFFER_VIEW VertexBufferView() override;
 	D3D12_INDEX_BUFFER_VIEW IndexBufferView() const override;
 	_uint Num_Indices() override;
+
 protected:
 	class CTransform* m_pTransformCom = nullptr;
 	class CCubeMesh* m_pCubeMeshCom = nullptr;

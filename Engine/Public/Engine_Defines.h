@@ -50,7 +50,7 @@ using namespace Microsoft::WRL;
 #include "Engine_Functions.h"
 #include "Engine_Macros.h"
 #include "Engine_Struct.h"
-
+#include "Engine_Enums.h"
 // namespace
 using namespace Engine;
 using namespace Engine::MyMath;

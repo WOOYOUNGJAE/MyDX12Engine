@@ -18,22 +18,40 @@ CCube* CCube::Create()
 
 CGameObject* CCube::Clone(void* pArg)
 {
-	return nullptr;
+	CCube* pInstance = new CCube(*this);
+
+	if (pInstance)
+	{
+		if (FAILED(pInstance->Initialize(pArg)))
+		{
+			Safe_Release(pInstance);
+			return pInstance;
+		}
+	}
+
+	return pInstance;
 }
 
 HRESULT CCube::Initialize_Prototype()
 {
-	// ±âº» ÄÄÆ÷³ÍÆ® ºÎÂø
-	Add_Component(L"Transform", reinterpret_cast<CComponent**>(&m_pTransformCom));
-	Add_Component(L"CubeMesh", reinterpret_cast<CComponent**>(&m_pCubeMeshCom));
-	Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));
 
 	return S_OK;
 }
 
 HRESULT CCube::Initialize(void* pArg)
 {
-	return S_OK;
+	HRESULT hr = S_OK;
+	// ±âº» ÄÄÆ÷³ÍÆ® ºÎÂø
+	hr = Add_Component(L"Transform", reinterpret_cast<CComponent**>(&m_pTransformCom));
+	if (FAILED(hr)) return hr;
+	hr = Add_Component(L"CubeMesh", reinterpret_cast<CComponent**>(&m_pCubeMeshCom));
+	if (FAILED(hr)) return hr;
+	hr = Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));
+	if (FAILED(hr)) return hr;
+	hr = Add_Component(L"Shader_Default", reinterpret_cast<CComponent**>(&m_pShaderCom));
+	if (FAILED(hr)) return hr;
+
+	return hr;
 }
 
 void CCube::Tick(_float fDeltaTime)
