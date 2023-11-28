@@ -56,8 +56,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     MSG msg;
 
     // 기본 메시지 루프입니다:
-    CGameInstance* pGameInstance = CGameInstance::Get_Instance();
-    Safe_AddRef(pGameInstance);
+    //CGameInstance* pGameInstance = CGameInstance::Get_Instance();
+    //Safe_AddRef(pGameInstance);
 
     while (true)
     {
@@ -78,8 +78,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         pMainApp->Render();
     }
 
-    pGameInstance->Destroy_Instance(); // TODO : MainApp 내에서 일괄적으로 하도록
-    Safe_Release(pGameInstance);
+    //pGameInstance->Destroy_Instance(); // TODO : MainApp 내에서 일괄적으로 하도록
+    //Safe_Release(pGameInstance);
 
     if (Safe_Release(pMainApp) != 0)
     {

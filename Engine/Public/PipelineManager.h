@@ -107,7 +107,7 @@ private: // Graphic Device
 private: // Frame Resource
 	//
 	vector<FrameResource*> m_vecFrameResource;
-	FrameResource* m_pCurFrameResource = nullptr;
+	FrameResource* m_pCurFrameResource = nullptr; // Pointer
 	int m_iCurFrameResourceIndex = 0;
 
 	//unordered_map<string, ComPtr<PassConstant>>  

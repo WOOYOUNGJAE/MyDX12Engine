@@ -10,7 +10,7 @@ protected:
 
 public:
 	// RefCount 증가 후의 값 리턴
-	_ulong AddRef() { return ++m_dwRefCnt; }
+	_ulong AddRef();
 	// RefCount 감소 시키기 이전 값 리턴
 	_ulong Release();
 

@@ -74,6 +74,7 @@ void CCube::Render()
 
 HRESULT CCube::Free()
 {
+	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pCubeMeshCom);
 	Safe_Release(m_pTransformCom);
