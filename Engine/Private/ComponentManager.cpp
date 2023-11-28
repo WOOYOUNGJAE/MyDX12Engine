@@ -10,8 +10,8 @@ IMPLEMENT_SINGLETON(CComponentManager)
 HRESULT CComponentManager::Initialize()
 {
 #pragma region Init_Basic_Components
-	Add_Prototype(L"Transform", CTransform::Create());
-	Add_Prototype(L"CubeMesh", CCubeMesh::Create());
+	//Add_Prototype(L"Transform", CTransform::Create());
+	//Add_Prototype(L"CubeMesh", CCubeMesh::Create());
 	// CShader
 	{
 		SHADER_INIT_DESC* pShader_desc = new SHADER_INIT_DESC[2]{};
@@ -27,7 +27,7 @@ HRESULT CComponentManager::Initialize()
 		Safe_Delete_Array(pShader_desc);		
 	}
 
-	Add_Prototype(L"Renderer", CRenderer::Create());
+	//Add_Prototype(L"Renderer", CRenderer::Create());
 #pragma endregion Init_Basic_Components
 	
 
