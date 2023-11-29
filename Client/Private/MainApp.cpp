@@ -7,7 +7,7 @@
 
 CMainApp::CMainApp() : m_pGameInstance{ CGameInstance::Get_Instance()}
 {
-	//Safe_AddRef(m_pGameInstance);
+	Safe_AddRef(m_pGameInstance);
 }
 
 CMainApp::~CMainApp()
@@ -33,8 +33,8 @@ HRESULT CMainApp::Initialize()
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", L"Default");
 	if (FAILED(hr)) { return hr; }*/
 	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", L"Layer0", &pObjectControlling);
-	if (FAILED(hr)) { return hr; }
-	m_pGameInstance->Update_ObjPipelineLayer(pObjectControlling, Pipeline::ENUM_PSO::PSO_DEFAULT);*/
+	if (FAILED(hr)) { return hr; }*/
+	//m_pGameInstance->Update_ObjPipelineLayer(pObjectControlling, Pipeline::ENUM_PSO::PSO_DEFAULT);
 #pragma endregion InLevel
 	return S_OK;
 }

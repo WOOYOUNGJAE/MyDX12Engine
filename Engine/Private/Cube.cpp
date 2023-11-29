@@ -56,19 +56,23 @@ HRESULT CCube::Initialize(void* pArg)
 
 void CCube::Tick(_float fDeltaTime)
 {
+	int a = 0;
 }
 
 void CCube::Late_Tick(_float fDeltaTime)
 {
+	int a = 0;
 }
 
 void CCube::Pipeline_Tick()
 {
+	int a = 0;
 
 }
 
 void CCube::Render()
 {
+	int a = 0;
 	m_pRendererCom->AddTo_RenderGroup(CRenderer::NOBLEND, this);
 }
 

@@ -39,7 +39,6 @@ private: // 바이너리 데이터
 private:
 	int m_iNumFramesDirty = 0; // = g_numFrameResources
 private: // pointer
-	class CPipelineManager* m_pPipelineManager = nullptr;
 };
 
 _NAMESPACE

@@ -513,7 +513,7 @@ void CPipelineManager::Update_ObjPipelineLayer(CGameObject* pObject, ENUM_PSO eP
 {
 	for (auto& listIter : m_vecPipelineLayerArr)
 	{
-		for (auto& objIter = listIter.begin(); objIter != listIter.end(); ++objIter)
+		for (auto& objIter = listIter.begin(); objIter != listIter.end();)
 		{
 			
 			if (*objIter == pObject)

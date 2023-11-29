@@ -53,7 +53,6 @@ public: // typedef
 		{
 			Safe_Release(m_pObjectCB);
 			Safe_Release(m_pPassCB);
-			Safe_Release(CmdListAlloc);
 		};
 
 		// GPU가 명령을 다 처리한후 할당자를 재설정해야 하기 때문에 프레임마다 할당자 필요

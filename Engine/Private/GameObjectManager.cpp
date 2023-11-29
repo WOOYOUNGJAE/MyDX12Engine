@@ -7,7 +7,7 @@ IMPLEMENT_SINGLETON(CGameObjectManager)
 HRESULT CGameObjectManager::Initialize()
 {
 #pragma region Init_Basic_GameObject
-	//Add_Prototype(L"Cube", CCube::Create());
+	Add_Prototype(L"Cube", CCube::Create());
 #pragma endregion Init_Basic_GameObject
 	return S_OK;
 }
@@ -153,6 +153,10 @@ HRESULT CGameObjectManager::Add_GameObject_InScene(const wstring& strPrototypeTa
 		pLayer = CObjLayer::Create();
 		pLayer->Add_GameObject(pGameObject); // 레이어에 넣고
 		m_mapLayer.emplace(strLayerTag, pLayer); // 레이어 자체를 추가
+
+		*pOutObj = pGameObject;
+
+		return S_OK;
 	}
 
 	// 이미 존재하는 레이어에 추가

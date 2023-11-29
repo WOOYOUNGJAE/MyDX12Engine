@@ -17,10 +17,10 @@ m_pComponentManager(CComponentManager::Get_Instance()),
 m_pGameObjectManager(CGameObjectManager::Get_Instance()),
 m_pPipelineManager(CPipelineManager::Get_Instance())
 {
-	Safe_AddRef(m_pGraphic_Device);
+	/*Safe_AddRef(m_pGraphic_Device);
 	Safe_AddRef(m_pComponentManager);
 	Safe_AddRef(m_pGameObjectManager);
-	Safe_AddRef(m_pPipelineManager);
+	Safe_AddRef(m_pPipelineManager);*/
 }
 
 HRESULT CGameInstance::Free()
@@ -29,6 +29,7 @@ HRESULT CGameInstance::Free()
 	Safe_Release(m_pGameObjectManager);
 	Safe_Release(m_pComponentManager);
 	Safe_Release(m_pGraphic_Device);
+	
 
 	return S_OK;
 }
@@ -41,27 +42,26 @@ HRESULT CGameInstance::Init_Engine(const GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D
 	}
 
 	m_pComponentManager->Initialize();
-	m_pGameObjectManager->Initialize();
+	//m_pGameObjectManager->Initialize();
 
-	if (FAILED(m_pPipelineManager->Initialize()))
+	/*if (FAILED(m_pPipelineManager->Initialize()))
 	{
 		return E_FAIL;
-	}
+	}*/
 	
-	//CCubeMesh* pInstance = CCubeMesh::Create(); // TODO Temp, Cube Test
 	return S_OK;
 }
 
 void CGameInstance::Tick(_float fDeltaTime)
 {
-	m_pGameObjectManager->Tick(fDeltaTime);
+	//m_pGameObjectManager->Tick(fDeltaTime);
 }
 
 void CGameInstance::Late_Tick(_float fDeltaTime)
 {
-	m_pGameObjectManager->Late_Tick(fDeltaTime);
+	/*m_pGameObjectManager->Late_Tick(fDeltaTime);
 	m_pPipelineManager->Pipeline_Tick(fDeltaTime);
-	m_pPipelineManager->Render();
+	m_pPipelineManager->Render();*/
 }
 
 void CGameInstance::Release_Engine()
@@ -71,6 +71,7 @@ void CGameInstance::Release_Engine()
 	CComponentManager::Destroy_Instance();
 	CGameObjectManager::Destroy_Instance();
 	CGraphic_Device::Destroy_Instance();
+	CGameInstance::Get_Instance()->Destroy_Instance();
 }
 
 HRESULT CGameInstance::Add_ComPrototype(const wstring& strTag, CComponent* pComInstance)
@@ -122,5 +123,10 @@ HRESULT CGameInstance::Add_GameObject_InScene(const wstring& strPrototypeTag, co
 
 void CGameInstance::Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum)
 {
+	if (pObject == nullptr)
+	{
+		MSG_BOX("GameInstance : UpdatePipelineLayer Failed : null");
+		return;
+	}
 	m_pPipelineManager->Update_ObjPipelineLayer(pObject, (ENUM_PSO)ePsoEnum);
 }

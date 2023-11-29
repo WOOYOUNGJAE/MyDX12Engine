@@ -10,7 +10,7 @@ protected:
 	CCube(const CCube& rhs): CGameObject(rhs){}
 	~CCube() override = default;
 
-public:
+public: // LifeCycle
 	static CCube* Create();
 	CGameObject* Clone(void* pArg) override;
 	HRESULT Initialize_Prototype() override;
@@ -20,7 +20,7 @@ public:
 	void Pipeline_Tick() override;
 	void Render() override;
 	HRESULT Free() override;
-public:
+public: // getter setter 
 	int& Get_NumFrameDirtyRef() override;
 	_matrix Get_WorldMatrix() override;
 	_float3 Get_Pos() override;
@@ -31,8 +31,8 @@ public:
 protected:
 	class CTransform* m_pTransformCom = nullptr;
 	class CCubeMesh* m_pCubeMeshCom = nullptr;
-	class CRenderer* m_pRendererCom = nullptr;
 	class CShader* m_pShaderCom = nullptr;
+	class CRenderer* m_pRendererCom = nullptr; // TODO : Pipeline이 대체할 가능성
 };
 
 _NAMESPACE
