@@ -17,10 +17,10 @@ m_pComponentManager(CComponentManager::Get_Instance()),
 m_pGameObjectManager(CGameObjectManager::Get_Instance()),
 m_pPipelineManager(CPipelineManager::Get_Instance())
 {
-	/*Safe_AddRef(m_pGraphic_Device);
+	Safe_AddRef(m_pGraphic_Device);
 	Safe_AddRef(m_pComponentManager);
 	Safe_AddRef(m_pGameObjectManager);
-	Safe_AddRef(m_pPipelineManager);*/
+	Safe_AddRef(m_pPipelineManager);
 }
 
 HRESULT CGameInstance::Free()
@@ -42,26 +42,26 @@ HRESULT CGameInstance::Init_Engine(const GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D
 	}
 
 	m_pComponentManager->Initialize();
-	//m_pGameObjectManager->Initialize();
+	m_pGameObjectManager->Initialize();
 
-	/*if (FAILED(m_pPipelineManager->Initialize()))
+	if (FAILED(m_pPipelineManager->Initialize()))
 	{
 		return E_FAIL;
-	}*/
+	}
 	
 	return S_OK;
 }
 
 void CGameInstance::Tick(_float fDeltaTime)
 {
-	//m_pGameObjectManager->Tick(fDeltaTime);
+	m_pGameObjectManager->Tick(fDeltaTime);
 }
 
 void CGameInstance::Late_Tick(_float fDeltaTime)
 {
-	/*m_pGameObjectManager->Late_Tick(fDeltaTime);
+	m_pGameObjectManager->Late_Tick(fDeltaTime);
 	m_pPipelineManager->Pipeline_Tick(fDeltaTime);
-	m_pPipelineManager->Render();*/
+	m_pPipelineManager->Render();
 }
 
 void CGameInstance::Release_Engine()

@@ -14,8 +14,8 @@ CPipelineManager::CPipelineManager() :
 m_pComponentManager(CComponentManager::Get_Instance()),
 m_pGameObjectManager(CGameObjectManager::Get_Instance())
 {
-	Safe_AddRef(m_pComponentManager);
-	Safe_AddRef(m_pGameObjectManager);
+	/*Safe_AddRef(m_pComponentManager);
+	Safe_AddRef(m_pGameObjectManager);*/
 }
 
 CPipelineManager::FrameResource::FrameResource(ID3D12Device* device, UINT passCount, UINT objectCount)
@@ -483,8 +483,8 @@ HRESULT CPipelineManager::Free()
 	{
 		Safe_Delete(iter);
 	}
-	Safe_Release(m_pGameObjectManager);
-	Safe_Release(m_pComponentManager);
+	/*Safe_Release(m_pGameObjectManager);
+	Safe_Release(m_pComponentManager);*/
 	Safe_Release(m_pGraphic_Device);
 	return S_OK;
 }

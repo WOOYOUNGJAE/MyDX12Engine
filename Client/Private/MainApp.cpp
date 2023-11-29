@@ -28,13 +28,13 @@ HRESULT CMainApp::Initialize()
 	m_pGameInstance->Init_Engine(graphic_desc, &m_pDevice);
 	if (FAILED(hr)) { return hr; }
 #pragma region InLevel
-	/*hr = m_pGameInstance->Add_GameObjPrototype(L"Camera_Free", CCamera_Free::Create());
+	hr = m_pGameInstance->Add_GameObjPrototype(L"Camera_Free", CCamera_Free::Create());
 	if (FAILED(hr)) { return hr; }
-	hr = m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", L"Default");
+	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", L"Default");
 	if (FAILED(hr)) { return hr; }*/
 	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", L"Layer0", &pObjectControlling);
-	if (FAILED(hr)) { return hr; }*/
-	//m_pGameInstance->Update_ObjPipelineLayer(pObjectControlling, Pipeline::ENUM_PSO::PSO_DEFAULT);
+	if (FAILED(hr)) { return hr; }
+	m_pGameInstance->Update_ObjPipelineLayer(pObjectControlling, Pipeline::ENUM_PSO::PSO_DEFAULT);*/
 #pragma endregion InLevel
 	return S_OK;
 }
