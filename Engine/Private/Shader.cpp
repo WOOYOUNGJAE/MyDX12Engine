@@ -38,7 +38,7 @@ CComponent* CShader::Clone(void* pArg)
 	{
 		Safe_Release(pInstance);
 	}
-
+	pInstance->m_bIsCloned = true;
 	return pInstance;
 }
 

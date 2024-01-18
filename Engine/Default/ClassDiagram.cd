@@ -1,0 +1,942 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT&lt;InnerStructType, Type, DefaultArg&gt;" Collapsed="true">
+    <Position X="6.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAgAAAARAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CD3DX12_STATE_OBJECT_DESC" Collapsed="true">
+    <Position X="36.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BACAAAAAAAAAAEAAAAAAAFAAAAAACEIAIAACAEAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CD3DX12_DXIL_LIBRARY_SUBOBJECT" Collapsed="true">
+    <Position X="32.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAgAEAAAAAAAEAAgAAAABAEAQACAgAAAAE=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CD3DX12_EXISTING_COLLECTION_SUBOBJECT" Collapsed="true">
+    <Position X="36.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAggAEAAAAAAAEAAAAAQEBAAAQACAgAAEAE=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CD3DX12_SUBOBJECT_TO_EXPORTS_ASSOCIATION_SUBOBJECT" Collapsed="true">
+    <Position X="38" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAggAAAAAAAAAAAAAEAAAAAAABAKAQACAkAAAAE=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CD3DX12_DXIL_SUBOBJECT_TO_EXPORTS_ASSOCIATION" Collapsed="true">
+    <Position X="34.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAgAAAAAAAAAAAAAAFAAAAAAABIIAQACAhAAAAE=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CD3DX12_HIT_GROUP_SUBOBJECT" Collapsed="true">
+    <Position X="39.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAgAAgQAAAIQAAAAAECAAAQAABAAAQACAgAAAIA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CD3DX12_RAYTRACING_SHADER_CONFIG_SUBOBJECT" Collapsed="true">
+    <Position X="32.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAgAAAAAAAAAAAEAAAABAABAAAQACAgAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CD3DX12_RAYTRACING_PIPELINE_CONFIG_SUBOBJECT" Collapsed="true">
+    <Position X="45" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAgAAQAAAAAEAAAAAAABAAAQACAgAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CD3DX12_GLOBAL_ROOT_SIGNATURE_SUBOBJECT" Collapsed="true">
+    <Position X="38" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQAAAIAAAAAAAhAAAQgCAgAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CD3DX12_LOCAL_ROOT_SIGNATURE_SUBOBJECT" Collapsed="true">
+    <Position X="41.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQIAAIAAAAAAAhAAAQACAgAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CD3DX12_STATE_OBJECT_CONFIG_SUBOBJECT" Collapsed="true">
+    <Position X="34.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAAAAAAAAEAAEAAAABAAAQACAgBAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CD3DX12_NODE_MASK_SUBOBJECT" Collapsed="true">
+    <Position X="43.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAEAAAAIAABAAAQACAgAAAAQ=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DX12Test" Collapsed="true">
+    <Position X="41.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\DX12Test.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBase" Collapsed="true">
+    <Position X="16.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACBAAAEAAAAAAAACAAAAAAAAAAABACAAI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Base.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CGameInstance" Collapsed="true">
+    <Position X="5.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CEAAAAgAACBABBAEAAAABAACAAAABAAAAAQAIAAAQCI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\GameInstance.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CComponentManager" Collapsed="true">
+    <Position X="7.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAIAAgAAAAAAAAAAQAAAAAAAACAAAI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\ComponentManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CGameObjectManager" Collapsed="true">
+    <Position X="12.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAQAAAAAACAAQAEEAgAAAAGAAAAAAAEQAAAAACAQAI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\GameObjectManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CComponent" Collapsed="true">
+    <Position X="18" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAUAAAAAEAAAAAQAAAAAAAAAAAAAAABI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Component.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMeshGeometry" Collapsed="true">
+    <Position X="14.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAABAAAAAAAgAAIQADAEQAAQACAAQAIAACSBABgIgII=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\MeshGeometry.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CCubeMesh" Collapsed="true">
+    <Position X="14.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAQAAAAAEAAAAAAAAAEIAAAAAAAAAABI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\CubeMesh.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CShader" Collapsed="true">
+    <Position X="16.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACIAgAAAAAAAAAAEBQAIEAAAgEAAAAAAAAAAABI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Shader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CTransform" Collapsed="true">
+    <Position X="19" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAIQAAAAACAIASAgAwAEQBAAABZECEBAAACBIAAAABI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Transform.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CRenderer" Collapsed="true">
+    <Position X="21.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAQAAAACEAAAAAAAAAEAAABAAAAAAARI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Renderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CGameObject" Collapsed="true">
+    <Position X="29.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>yAAAAAIAAAAAgQAgAAAEAAAAAAIAQAAABBAAARAIQFI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\GameObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CObjLayer" Collapsed="true">
+    <Position X="3.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAQAAQAAAAAgQAAAAAAAAAAAAAEAAAAAAAAAAQAI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\ObjLayer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CCube" Collapsed="true">
+    <Position X="28" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>SAAAAAAAAAAAoSAgAAAEEAAgAAAEQEAABBAQABAAQBI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Cube.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CCamera" Collapsed="true">
+    <Position X="30.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>iAgABAAAAAIBBQIAAAAkEAAAAAAAAABABAAAAAAAQAI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPipelineManager" Collapsed="true">
+    <Position X="10" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BEAABAAaQJHAAQAwACCECBAAAACABgKgIBwBAAAQAAI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\PipelineManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CDevice_Utils" Collapsed="true">
+    <Position X="39.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAAAAAAAEAAAAAAAQAAAAQAABAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Device_Utils.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CGraphic_Device" Collapsed="true">
+    <Position X="23.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAkoQLwCEAMIIgADEAECYAAQoAgAIAEgAQCBAAQCI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Graphic_Device.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CUploadBuffer&lt;T&gt;" Collapsed="true">
+    <Position X="25.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgCAAAAAAAAAAAAAAAAAAAAAQAAAAGAAAIAAIBAQAAI=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\UploadBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="CD3DX12_DEFAULT" Collapsed="true">
+    <Position X="39.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_RECT" Collapsed="true">
+    <Position X="36.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_VIEWPORT" Collapsed="true">
+    <Position X="36.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_BOX" Collapsed="true">
+    <Position X="34.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_DEPTH_STENCIL_DESC" Collapsed="true">
+    <Position X="41.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_DEPTH_STENCIL_DESC1" Collapsed="true">
+    <Position X="43.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_BLEND_DESC" Collapsed="true">
+    <Position X="32.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_RASTERIZER_DESC" Collapsed="true">
+    <Position X="34.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_RESOURCE_ALLOCATION_INFO" Collapsed="true">
+    <Position X="38" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_HEAP_PROPERTIES" Collapsed="true">
+    <Position X="38" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_HEAP_DESC" Collapsed="true">
+    <Position X="36.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_CLEAR_VALUE" Collapsed="true">
+    <Position X="36.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_RANGE" Collapsed="true">
+    <Position X="45" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_RANGE_UINT64" Collapsed="true">
+    <Position X="32.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_SUBRESOURCE_RANGE_UINT64" Collapsed="true">
+    <Position X="36.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_SHADER_BYTECODE" Collapsed="true">
+    <Position X="45" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_TILED_RESOURCE_COORDINATE" Collapsed="true">
+    <Position X="45" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_TILE_REGION_SIZE" Collapsed="true">
+    <Position X="41.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_SUBRESOURCE_TILING" Collapsed="true">
+    <Position X="38" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_TILE_SHAPE" Collapsed="true">
+    <Position X="43.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_RESOURCE_BARRIER" Collapsed="true">
+    <Position X="39.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAQAAAAAAAAAABAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_PACKED_MIP_INFO" Collapsed="true">
+    <Position X="39.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_SUBRESOURCE_FOOTPRINT" Collapsed="true">
+    <Position X="34.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_TEXTURE_COPY_LOCATION" Collapsed="true">
+    <Position X="39.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_DESCRIPTOR_RANGE" Collapsed="true">
+    <Position X="45" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_ROOT_DESCRIPTOR_TABLE" Collapsed="true">
+    <Position X="32.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_ROOT_CONSTANTS" Collapsed="true">
+    <Position X="43.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAACAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_ROOT_DESCRIPTOR" Collapsed="true">
+    <Position X="45" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_ROOT_PARAMETER" Collapsed="true">
+    <Position X="38" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIQAAAAAAAACAAAAAAAAAAAECAAAAAAgAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_STATIC_SAMPLER_DESC" Collapsed="true">
+    <Position X="32.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_ROOT_SIGNATURE_DESC" Collapsed="true">
+    <Position X="41.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_DESCRIPTOR_RANGE1" Collapsed="true">
+    <Position X="32.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAgA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_ROOT_DESCRIPTOR_TABLE1" Collapsed="true">
+    <Position X="34.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_ROOT_DESCRIPTOR1" Collapsed="true">
+    <Position X="36.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_ROOT_PARAMETER1" Collapsed="true">
+    <Position X="39.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAABAAACAAAAAAAAAAAECAAAAAAgAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC" Collapsed="true">
+    <Position X="32.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAQAAAIAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_CPU_DESCRIPTOR_HANDLE" Collapsed="true">
+    <Position X="38" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAAAAAAAARAAAAAAAAAAAAAgAAAAgAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_GPU_DESCRIPTOR_HANDLE" Collapsed="true">
+    <Position X="34.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAAAAAAAARAAAAAAAAAAAAAgAAAAgAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_RESOURCE_DESC" Collapsed="true">
+    <Position X="41.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIA0AAAAAgAAAAAAAgCAAAAAAAgAAAAAAAAQQA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_VIEW_INSTANCING_DESC" Collapsed="true">
+    <Position X="34.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_RT_FORMAT_ARRAY" Collapsed="true">
+    <Position X="43.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DefaultSampleMask" Collapsed="true">
+    <Position X="41.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DefaultSampleDesc" Collapsed="true">
+    <Position X="39.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ID3DX12PipelineParserCallbacks" Collapsed="true">
+    <Position X="2" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>oACACEAAAMAASQEICAgCQQAAAAAIAgEAACAEBIAAACA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_PIPELINE_STATE_STREAM1" Collapsed="true">
+    <Position X="43.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CgGABIAgEBAEAEAAgAAAAAABAAIAQAAABAAAAiCAGUg=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_PIPELINE_STATE_STREAM" Collapsed="true">
+    <Position X="41.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CgGABIAgEBAEAEAAgAAAAAABAAIAQAAABAAAAiCAGUg=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CD3DX12_PIPELINE_STATE_STREAM_PARSE_HELPER" Collapsed="true">
+    <Position X="2" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>oACACUAAAIAAYAEIAAgCQQAAAIAIAgEAACAEBIAAACA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Engine::GRAPHIC_DESC" Collapsed="true">
+    <Position X="43.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAIAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Struct.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Engine::MY_VERTEX" Collapsed="true">
+    <Position X="45" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Struct.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Engine::SHADER_INIT_DESC" Collapsed="true">
+    <Position X="34.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAACAIAAAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Struct.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Engine::VERTEX_INPUT_ELEMENT_DESC_BUILT_IN" Collapsed="true">
+    <Position X="36.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAIA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Struct.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Engine::CONSTANT_BUFFER_DATA" Collapsed="true">
+    <Position X="38" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAACAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Struct.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Engine::MyVector" Collapsed="true">
+    <Position X="32.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAgAABgAQAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Struct.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_FLAGS" Collapsed="true">
+    <Position X="9.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_NODE_MASK" Collapsed="true">
+    <Position X="12.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_ROOT_SIGNATURE" Collapsed="true">
+    <Position X="12.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_INPUT_LAYOUT" Collapsed="true">
+    <Position X="0.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_IB_STRIP_CUT_VALUE" Collapsed="true">
+    <Position X="0.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_PRIMITIVE_TOPOLOGY" Collapsed="true">
+    <Position X="6.5" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_VS" Collapsed="true">
+    <Position X="6.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_GS" Collapsed="true">
+    <Position X="12.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_STREAM_OUTPUT" Collapsed="true">
+    <Position X="0.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_HS" Collapsed="true">
+    <Position X="9.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_DS" Collapsed="true">
+    <Position X="3.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_PS" Collapsed="true">
+    <Position X="9.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_CS" Collapsed="true">
+    <Position X="3.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_BLEND_DESC" Collapsed="true">
+    <Position X="6.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_DEPTH_STENCIL" Collapsed="true">
+    <Position X="6.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_DEPTH_STENCIL1" Collapsed="true">
+    <Position X="9.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_DEPTH_STENCIL_FORMAT" Collapsed="true">
+    <Position X="9.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_RASTERIZER" Collapsed="true">
+    <Position X="3.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_RENDER_TARGET_FORMATS" Collapsed="true">
+    <Position X="3.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_SAMPLE_DESC" Collapsed="true">
+    <Position X="9.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_SAMPLE_MASK" Collapsed="true">
+    <Position X="3.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_CACHED_PSO" Collapsed="true">
+    <Position X="6.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="CD3DX12_PIPELINE_STATE_STREAM_VIEW_INSTANCING" Collapsed="true">
+    <Position X="6.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\d3dx12.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_uchar" Collapsed="true">
+    <Position X="39.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_char" Collapsed="true">
+    <Position X="36.25" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_ubyte" Collapsed="true">
+    <Position X="38" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_byte" Collapsed="true">
+    <Position X="34.5" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_ushort" Collapsed="true">
+    <Position X="45" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_short" Collapsed="true">
+    <Position X="34.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_uint" Collapsed="true">
+    <Position X="41.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_int" Collapsed="true">
+    <Position X="43.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_ulong" Collapsed="true">
+    <Position X="43.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_long" Collapsed="true">
+    <Position X="45" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_float" Collapsed="true">
+    <Position X="41.5" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_double" Collapsed="true">
+    <Position X="39.75" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_bool" Collapsed="true">
+    <Position X="32.75" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_tchar" Collapsed="true">
+    <Position X="36.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_float2" Collapsed="true">
+    <Position X="43.25" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_float3" Collapsed="true">
+    <Position X="45" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_float4" Collapsed="true">
+    <Position X="32.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_vector" Collapsed="true">
+    <Position X="32.75" Y="13.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_fvector" Collapsed="true">
+    <Position X="38" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_gvector" Collapsed="true">
+    <Position X="39.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_hvector" Collapsed="true">
+    <Position X="41.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_cvector" Collapsed="true">
+    <Position X="38" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_float4x4" Collapsed="true">
+    <Position X="34.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_matrix" Collapsed="true">
+    <Position X="32.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Engine::_fmatrix" Collapsed="true">
+    <Position X="36.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Typedef.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="Engine::Pipeline::ENUM_PSO" Collapsed="true">
+    <Position X="32.75" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Enums.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

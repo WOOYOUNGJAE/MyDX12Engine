@@ -38,6 +38,10 @@ HRESULT CMeshGeometry::Free()
 {
 	/*Safe_Delete_Array(m_vertexData);
 	Safe_Delete_Array(m_vertexPosArr);*/
+	if (m_bIsCloned == false)
+	{
+		Safe_Delete_Array(m_vertexData); // Prototype 경우에만 해제
+	}
 
 	if (FAILED(CComponent::Free()))
 	{

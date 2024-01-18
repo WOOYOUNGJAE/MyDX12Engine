@@ -15,7 +15,7 @@ HRESULT CComponentManager::Initialize()
 	// CShader
 	{
 		SHADER_INIT_DESC* pShader_desc = new SHADER_INIT_DESC[2]{};
-		pShader_desc[0].filename = L"..\\Bin\\Shader\\color0.hlsl";
+		pShader_desc[0].filename = L"..\\Bin\\Shader\\color1.hlsl";
 		pShader_desc[0].defines = nullptr;
 		pShader_desc[0].entrypoint = "VS";
 		pShader_desc[0].target = "vs_5_0";

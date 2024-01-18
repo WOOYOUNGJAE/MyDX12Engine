@@ -22,7 +22,7 @@ CComponent* CTransform::Clone(void* pArg)
 		MSG_BOX("Transform: Failed to Clone Transform");
 		Safe_Release(pInstance);
 	}
-
+	pInstance->m_bIsCloned = true;
 	return pInstance;
 }
 

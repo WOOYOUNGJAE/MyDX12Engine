@@ -3,6 +3,7 @@
 #include "Client_Defines.h"
 
 NAMESPACE_(Client)
+using namespace Engine;
 class CCamera_Free : public CCamera
 {
 private:

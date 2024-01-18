@@ -459,7 +459,7 @@ void CPipelineManager::Render()
 	m_pCommandList.Get()->Close();
 
 	// Add the command list to the queue for execution.
-	ID3D12CommandList* cmdsLists[] = { m_pCommandList.Get() };
+	ID3D12CommandList* cmdsLists[] = { m_pCommandList.Get() }; // CommandList 여러개 가능
 	m_pGraphic_Device->m_pCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
 
 	// Swap the back and front buffers

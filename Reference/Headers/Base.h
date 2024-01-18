@@ -28,5 +28,7 @@ protected:
 
 private:
 	_ulong m_dwRefCnt = 0;
+protected:
+	_bool m_bIsCloned = false;
 };
 _NAMESPACE

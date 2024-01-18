@@ -204,4 +204,7 @@
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
 </Project>

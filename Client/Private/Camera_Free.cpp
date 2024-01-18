@@ -26,6 +26,8 @@ CGameObject* CCamera_Free::Clone(void* pArg)
 		MSG_BOX("CameraFree: Failed to Clone CameraFree");
 	}
 
+	pInstance->m_bIsCloned = true;
+
 	return pInstance;
 }
 

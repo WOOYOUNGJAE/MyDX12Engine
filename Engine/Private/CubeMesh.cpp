@@ -26,8 +26,6 @@ CCubeMesh* CCubeMesh::Create()
 
 CComponent* CCubeMesh::Clone(void* pArg)
 {
-
-
 	CCubeMesh* pInstance = new CCubeMesh(*this);
 
 
@@ -37,7 +35,7 @@ CComponent* CCubeMesh::Clone(void* pArg)
 		MSG_BOX("CubeMesh : Failed to Clone");
 		return nullptr;
 	}
-
+	pInstance->m_bIsCloned = true;
 	return pInstance;
 }
 
@@ -136,7 +134,6 @@ HRESULT CCubeMesh::Initialize(void* pArg)
 
 HRESULT CCubeMesh::Free()
 {
-	Safe_Delete_Array(m_vertexData);
 
 	if (FAILED(CMeshGeometry::Free()))
 	{

@@ -5,6 +5,7 @@
 #include "GameInstance.h"
 #include "Camera_Free.h"
 
+
 CMainApp::CMainApp() : m_pGameInstance{ CGameInstance::Get_Instance()}
 {
 	Safe_AddRef(m_pGameInstance);
@@ -16,6 +17,14 @@ CMainApp::~CMainApp()
 
 HRESULT CMainApp::Initialize()
 {
+#ifdef _DEBUG
+	AllocConsole();
+	freopen("CONIN$", "r", stdin);
+	freopen("CONOUT$", "w", stdout);
+	freopen("CONOUT$", "w", stderr);
+#endif // _DEBUG
+
+
 	GRAPHIC_DESC graphic_desc{};
 	graphic_desc.hWnd = g_hwnd;
 	graphic_desc.iSizeX = g_iWinSizeX;
@@ -30,11 +39,11 @@ HRESULT CMainApp::Initialize()
 #pragma region InLevel
 	hr = m_pGameInstance->Add_GameObjPrototype(L"Camera_Free", CCamera_Free::Create());
 	if (FAILED(hr)) { return hr; }
-	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", L"Default");
-	if (FAILED(hr)) { return hr; }*/
-	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", L"Layer0", &pObjectControlling);
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", L"Default");
 	if (FAILED(hr)) { return hr; }
-	m_pGameInstance->Update_ObjPipelineLayer(pObjectControlling, Pipeline::ENUM_PSO::PSO_DEFAULT);*/
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", L"Layer0", &pObjectControlling);
+	if (FAILED(hr)) { return hr; }
+	m_pGameInstance->Update_ObjPipelineLayer(pObjectControlling, Pipeline::ENUM_PSO::PSO_DEFAULT);
 #pragma endregion InLevel
 	return S_OK;
 }
@@ -59,6 +68,7 @@ HRESULT CMainApp::Free()
 	Safe_Release(m_pGameInstance);
 
 	CGameInstance::Release_Engine();
+	FreeConsole();
 	return S_OK;
 }
 

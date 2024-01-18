@@ -28,7 +28,7 @@ CGameObject* CCube::Clone(void* pArg)
 			return pInstance;
 		}
 	}
-
+	pInstance->m_bIsCloned = true;
 	return pInstance;
 }
 
