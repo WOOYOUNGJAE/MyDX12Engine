@@ -38,7 +38,9 @@ private: // 바이너리 데이터
 	//vector<D3D12_INPUT_ELEMENT_DESC> m_vecInputLayout;
 private:
 	int m_iNumFramesDirty = 0; // = g_numFrameResources
-private: // pointer
+private:
+	ID3D12RootSignature* m_pRootSig = nullptr;
+	ID3D12PipelineState* m_pPSO = nullptr;
 };
 
 _NAMESPACE

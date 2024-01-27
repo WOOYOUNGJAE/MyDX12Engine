@@ -1,6 +1,6 @@
 #include "Graphic_Device.h"
 #include "PipelineManager.h"
-
+#include "Renderer.h"
 IMPLEMENT_SINGLETON(CGraphic_Device)
 
 CGraphic_Device::CGraphic_Device()
@@ -54,6 +54,9 @@ HRESULT CGraphic_Device::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 		MSG_BOX("Failed To Create Fence");
 		return E_FAIL;
 	}
+	// Fence Event
+	m_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+	
 
 	// 한 블럭 사이즈
 	m_iRtvDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
@@ -124,39 +127,70 @@ HRESULT CGraphic_Device::Init_CommandObjects()
 
 HRESULT CGraphic_Device::Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode)
 {
+	HRESULT hr = S_OK;
 	/* 스왑체인을 생성한다. = 텍스쳐를 생성하는 행위 + 스왑하는 형태  */
 	m_pSwapChain.Reset();
 #pragma region SwapChainDesc
-	DXGI_SWAP_CHAIN_DESC		SwapChain;
-	ZeroMemory(&SwapChain, sizeof(DXGI_SWAP_CHAIN_DESC));
+	DXGI_SWAP_CHAIN_DESC		SwapChainDesc;
+	ZeroMemory(&SwapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
 
 	/*텍스쳐(백버퍼)를 생성하는 행위*/
-	SwapChain.BufferDesc.Width = m_iClientWinCX;
-	SwapChain.BufferDesc.Height = m_iClientWinCY;
+	SwapChainDesc.BufferDesc.Width = m_iClientWinCX;
+	SwapChainDesc.BufferDesc.Height = m_iClientWinCY;
 
 
-	SwapChain.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	SwapChain.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	SwapChain.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	SwapChain.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	SwapChain.BufferCount = m_iSwapChainBufferCount;
+	SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	SwapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	SwapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	SwapChainDesc.BufferCount = m_iSwapChainBufferCount;
 
 	/*스왑하는 형태*/
-	SwapChain.BufferDesc.RefreshRate.Numerator = 60;
-	SwapChain.BufferDesc.RefreshRate.Denominator = 1;
-	SwapChain.SampleDesc.Quality = 0;
-	SwapChain.SampleDesc.Count = 1;
+	SwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+	SwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+	SwapChainDesc.SampleDesc.Quality = 0;
+	SwapChainDesc.SampleDesc.Count = 1;
 
-	SwapChain.OutputWindow = m_hWnd;
-	SwapChain.Windowed = eWinMode;
-	SwapChain.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // DX11d은 그냥 Discard
-	SwapChain.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	SwapChainDesc.OutputWindow = m_hWnd;
+	SwapChainDesc.Windowed = eWinMode;
+	SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // DX11d은 그냥 Discard
+	SwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 #pragma endregion SwapChainDesc
 
+	// Describe and create the swap chain.
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
+	swapChainDesc.BufferCount = m_iSwapChainBufferCount;
+	swapChainDesc.Width = m_iClientWinCX;
+	swapChainDesc.Height = m_iClientWinCY;
+	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+	swapChainDesc.SampleDesc.Count = 1;
 
-	/* 백버퍼라는 텍스쳐를.. 생성했다. */
-	if (FAILED(m_pDxgi_Factory->CreateSwapChain(m_pCommandQueue.Get(), &SwapChain, m_pSwapChain.GetAddressOf())))
-		return E_FAIL;
+	ComPtr<IDXGISwapChain1> swapChain;
+	hr = m_pDxgi_Factory->CreateSwapChainForHwnd(
+		m_pCommandQueue.Get(),        // Swap chain needs the queue so that it can force a flush on it.
+		m_hWnd,
+		&swapChainDesc,
+		nullptr,
+		nullptr,
+		&swapChain
+	);
+	if (FAILED(hr))	return E_FAIL;
+
+	// This sample does not support fullscreen transitions.
+	hr = m_pDxgi_Factory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_ALT_ENTER);
+	if (FAILED(hr))	return E_FAIL;
+
+	hr = swapChain.As(&m_pSwapChain);
+	if (FAILED(hr))	return E_FAIL;
+
+	m_iBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();
+
+
+	///* 백버퍼라는 텍스쳐를.. 생성했다. */
+	//hr = m_pDxgi_Factory->CreateSwapChainForHwnd(m_pCommandQueue.Get(), m_hWnd, &SwapChainDesc, m_pSwapChain.GetAddressOf()));
+	//if (FAILED(hr))	return E_FAIL;
 
 	return S_OK;
 }
@@ -218,6 +252,8 @@ HRESULT CGraphic_Device::Free()
 		// GPU의 자원을 해제하기 전에 명령 대기열 비워야 안전
 		Flush_CommandQueue();
 	}
+
+	CloseHandle(m_fenceEvent);
 	return S_OK;
 }
 
@@ -242,7 +278,7 @@ HRESULT CGraphic_Device::On_Resize()
 	// 기존 RTV, DSV 버퍼 리셋
 	for (int i = 0; i < m_iSwapChainBufferCount; ++i)
 	{
-		m_pSwapChainBuffer[i].Reset();
+		m_pRenderTargets[i].Reset();
 	}
 	m_pDepthStencilBuffer.Reset();
 
@@ -262,14 +298,15 @@ HRESULT CGraphic_Device::On_Resize()
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHeapHandle(m_pRtvHeap->GetCPUDescriptorHandleForHeapStart());
 	for (_int i = 0; i < m_iSwapChainBufferCount; ++i)
 	{
-		if (FAILED(m_pSwapChain->GetBuffer(i, IID_PPV_ARGS(&m_pSwapChainBuffer[i]))))
+		if (FAILED(m_pSwapChain->GetBuffer(i, IID_PPV_ARGS(&m_pRenderTargets[i]))))
 		{
 			return E_FAIL;
 		}
-		m_pDevice->CreateRenderTargetView(m_pSwapChainBuffer[i].Get(), nullptr,
+		m_pDevice->CreateRenderTargetView(m_pRenderTargets[i].Get(), nullptr,
 			rtvHeapHandle);
 		rtvHeapHandle.Offset(1, m_iRtvDescriptorSize);
 	}
+	m_iBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();
 
 	// Create Depth Stencil Buffer
 	{

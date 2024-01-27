@@ -144,6 +144,10 @@
     <ClInclude Include="..\Public\PSO.h">
       <Filter>Utility\PipleLine\PSO</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\P_ManagerLegacy.h" />
+    <ClInclude Include="..\Public\TriangleMesh.h">
+      <Filter>Utility\Components\GeometryMesh\2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -199,6 +203,10 @@
     </ClCompile>
     <ClCompile Include="..\Private\PSO.cpp">
       <Filter>Utility\PipleLine\PSO</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\azn2w\Git\MyDX12Engine\Engine\Private\P_ManagerLegacy.cpp" />
+    <ClCompile Include="..\Private\TriangleMesh.cpp">
+      <Filter>Utility\Components\GeometryMesh\2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

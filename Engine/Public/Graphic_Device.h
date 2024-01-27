@@ -7,6 +7,7 @@ class CGraphic_Device : public CBase
 {
 	DECLARE_SINGLETON(CGraphic_Device)
 	friend class CPipelineManager;
+	friend class CRenderer;
 public:
 	CGraphic_Device();
 	virtual ~CGraphic_Device() override = default;
@@ -29,17 +30,22 @@ public: // Getter
 	ComPtr<ID3D12Device> Get_Device() { return m_pDevice.Get(); }
 	ComPtr<ID3D12GraphicsCommandList>  Get_CommandList() { return m_pCommandList.Get(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_DepthStenciView() { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); }
-	ID3D12Resource* CurrentBackBuffer() { return m_pSwapChainBuffer[m_iCurrBackBuffer].Get(); }
+	ID3D12Resource* CurrentBackBuffer() { return m_pRenderTargets[m_iCurrBackBuffer].Get(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView() const;
 	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView()const { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); };
 private: // ComPtr
 	ComPtr<IDXGIFactory4> m_pDxgi_Factory = nullptr;
 	ComPtr<ID3D12Device> m_pDevice = nullptr;
-	ComPtr<IDXGISwapChain> m_pSwapChain = nullptr;
-	ComPtr<ID3D12Fence> m_pFence = nullptr;
 	ComPtr<ID3D12CommandQueue> m_pCommandQueue = nullptr;
 	ComPtr<ID3D12CommandAllocator> m_pCmdAllocator = nullptr;
 	ComPtr<ID3D12GraphicsCommandList> m_pCommandList = nullptr;
+private: // SwapChain
+	ComPtr<IDXGISwapChain3> m_pSwapChain = nullptr;
+	UINT m_iBufferIndex = 0;
+private: // Fence
+	ComPtr<ID3D12Fence> m_pFence = nullptr;
+	HANDLE m_fenceEvent = nullptr;
+	UINT64 m_iFenceValue = 0;
 private: // Descriptor Desc
 	UINT m_iRtvDescriptorSize = 0;
 	UINT m_iDsvDescriptorSize = 0;
@@ -48,7 +54,7 @@ private: // Descriptor Heap
 	static const int m_iSwapChainBufferCount = 2; // 더블 버퍼링때문에 2로 초기화
 	ComPtr<ID3D12DescriptorHeap> m_pRtvHeap = nullptr;
 	ComPtr<ID3D12DescriptorHeap> m_pDsvHeap = nullptr;
-	ComPtr<ID3D12Resource> m_pSwapChainBuffer[m_iSwapChainBufferCount]{};
+	ComPtr<ID3D12Resource> m_pRenderTargets[m_iSwapChainBufferCount]{};
 	ComPtr<ID3D12Resource> m_pDepthStencilBuffer = nullptr;
 private:
 	D3D12_VIEWPORT m_screenViewport;

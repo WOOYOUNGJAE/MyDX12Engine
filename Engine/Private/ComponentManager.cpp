@@ -5,6 +5,7 @@
 #include "CubeMesh.h"
 #include "Shader.h"
 #include "Renderer.h"
+#include "TriangleMesh.h"
 IMPLEMENT_SINGLETON(CComponentManager)
 
 HRESULT CComponentManager::Initialize()
@@ -12,6 +13,7 @@ HRESULT CComponentManager::Initialize()
 #pragma region Init_Basic_Components
 	Add_Prototype(L"Transform", CTransform::Create());
 	Add_Prototype(L"CubeMesh", CCubeMesh::Create());
+	Add_Prototype(L"TriangleMesh", CTriangleMesh::Create());
 	// CShader
 	{
 		SHADER_INIT_DESC* pShader_desc = new SHADER_INIT_DESC[2]{};
@@ -39,7 +41,8 @@ HRESULT CComponentManager::Initialize()
 	CPipelineManager* pPipelineManager = CPipelineManager::Get_Instance();
 	for (auto& iter : input_layout_desc)
 	{
-		pPipelineManager->Push_InputLayout(iter, CPipelineManager::InputLayout_DEFAULT);
+		//pPipelineManager->Push_NewInputLayout(iter, CPipelineManager::InputLayout_DEFAULT);;
+		pPipelineManager->Push_NewInputLayout(L"Default", iter);
 	}
 
 	return S_OK;

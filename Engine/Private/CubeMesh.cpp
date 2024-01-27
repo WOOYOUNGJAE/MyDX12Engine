@@ -6,7 +6,7 @@ CCubeMesh::CCubeMesh()
 	m_iNumVertex = 8;
 	m_iNumIndices = 6 * 6;
 	m_iVertexByteStride = sizeof(MY_VERTEX);
-	m_iVertexBufferByteSize = m_iNumVertex * m_iVertexBufferByteSize;
+	m_iVertexBufferByteSize = m_iNumVertex * m_iVertexByteStride;
 	IndexFormat = DXGI_FORMAT_R16_UINT;
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(_ushort);
 }
@@ -41,16 +41,15 @@ CComponent* CCubeMesh::Clone(void* pArg)
 
 HRESULT CCubeMesh::Initialize_Prototype()
 {
+	HRESULT hr = S_OK;
 	if (m_pDevice == nullptr || m_pCommandList == nullptr)
 	{
 		MSG_BOX("CubeMesh: Device Null");
 		return E_FAIL;
 	}
 
-	if (FAILED(CMeshGeometry::Initialize_Prototype()))
-	{
-		return E_FAIL;
-	}
+	hr = CMeshGeometry::Initialize_Prototype();
+	if (FAILED(hr)) { return E_FAIL; }
 
 	m_vertexData = new MY_VERTEX[8]
 	{
@@ -95,29 +94,33 @@ HRESULT CCubeMesh::Initialize_Prototype()
 	const _uint iVertexBufferSize = sizeof(MY_VERTEX) * 8;
 	const _uint iIndexBufferSize = sizeof(_ushort) * 8;
 
-	if (FAILED(D3DCreateBlob(iVertexBufferSize, &m_vertexBufferCPU)))
+	hr = D3DCreateBlob(iVertexBufferSize, &m_vertexBufferCPU);
+	if (FAILED(hr))
 	{
 		MSG_BOX("CubeMesh : Failed to Create Blob");
 		return E_FAIL;
 	}
 	memcpy(m_vertexBufferCPU->GetBufferPointer(), m_vertexData, iVertexBufferSize);
 
-	if (FAILED(D3DCreateBlob(iIndexBufferSize, &m_indexBufferCPU)))
+	hr = D3DCreateBlob(iIndexBufferSize, &m_indexBufferCPU);
+	if (FAILED(hr))
 	{
 		MSG_BOX("CubeMesh : Failed to Create Blob");
 		return E_FAIL;
 	}
 	memcpy(m_indexBufferCPU->GetBufferPointer(), indexData, iIndexBufferSize);
 
-	if (FAILED(CDevice_Utils::Create_Buffer_Default(m_pDevice.Get(), m_pCommandList.Get(),
-		m_vertexData, iVertexBufferSize, m_vertexBufferUploader, m_vertexBufferGPU)))
+	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice.Get(), m_pCommandList.Get(),
+		m_vertexData, iVertexBufferSize, m_vertexBufferUploader, m_vertexBufferGPU);
+	if (FAILED(hr))
 	{
 		MSG_BOX("CubeMesh : Failed to Create Buffer");
 		return E_FAIL;
 	}
 
-	if (FAILED(CDevice_Utils::Create_Buffer_Default(m_pDevice.Get(), m_pCommandList.Get(),
-		indexData, iIndexBufferSize, m_indexBufferUploader, m_indexBufferGPU)))
+	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice.Get(), m_pCommandList.Get(),
+		indexData, iIndexBufferSize, m_indexBufferUploader, m_indexBufferGPU);
+	if (FAILED(hr))
 	{
 		MSG_BOX("CubeMesh : Failed to Create Buffer");
 		return E_FAIL;
