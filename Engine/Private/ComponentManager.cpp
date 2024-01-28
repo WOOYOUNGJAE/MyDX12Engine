@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "Transform.h"
 #include "CubeMesh.h"
+#include "Graphic_Device.h"
 #include "Shader.h"
 #include "Renderer.h"
 #include "TriangleMesh.h"
@@ -11,9 +12,10 @@ IMPLEMENT_SINGLETON(CComponentManager)
 HRESULT CComponentManager::Initialize()
 {
 #pragma region Init_Basic_Components
+	CGraphic_Device::Get_Instance()->Reset_CmdList();
 	Add_Prototype(L"Transform", CTransform::Create());
-	Add_Prototype(L"CubeMesh", CCubeMesh::Create());
-	Add_Prototype(L"TriangleMesh", CTriangleMesh::Create());
+	//Add_Prototype(L"CubeMesh", CCubeMesh::Create());
+	//Add_Prototype(L"TriangleMesh", CTriangleMesh::Create());
 	// CShader
 	{
 		SHADER_INIT_DESC* pShader_desc = new SHADER_INIT_DESC[2]{};
@@ -26,24 +28,17 @@ HRESULT CComponentManager::Initialize()
 		pShader_desc[1].entrypoint = "PS";
 		pShader_desc[1].target = "ps_5_0";
 		Add_Prototype(L"Shader_Default", CShader::Create(pShader_desc, 2));
-		Safe_Delete_Array(pShader_desc);		
+
+		pShader_desc[0].filename = L"..\\Bin\\Shader\\simpleShader.hlsl";
+		Add_Prototype(L"Shader_Simple", CShader::Create(pShader_desc, 2));
+		Safe_Delete_Array(pShader_desc);
 	}
 
 	Add_Prototype(L"Renderer", CRenderer::Create());
+	CGraphic_Device::Get_Instance()->Close_CmdList();
+	CGraphic_Device::Get_Instance()->Execute_CmdList();
 #pragma endregion Init_Basic_Components
 	
-
-	D3D12_INPUT_ELEMENT_DESC input_layout_desc[2]
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
-	};
-	CPipelineManager* pPipelineManager = CPipelineManager::Get_Instance();
-	for (auto& iter : input_layout_desc)
-	{
-		//pPipelineManager->Push_NewInputLayout(iter, CPipelineManager::InputLayout_DEFAULT);;
-		pPipelineManager->Push_NewInputLayout(L"Default", iter);
-	}
 
 	return S_OK;
 }

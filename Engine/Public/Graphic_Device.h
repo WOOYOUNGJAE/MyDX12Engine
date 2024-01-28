@@ -26,6 +26,9 @@ public: // LifeCycle
 	virtual HRESULT Free() override;
 public:
 	HRESULT On_Resize();
+	HRESULT Reset_CmdList();
+	HRESULT Close_CmdList();
+	void Execute_CmdList();
 public: // Getter
 	ComPtr<ID3D12Device> Get_Device() { return m_pDevice.Get(); }
 	ComPtr<ID3D12GraphicsCommandList>  Get_CommandList() { return m_pCommandList.Get(); }
@@ -66,7 +69,7 @@ private: // From Client
 	_uint m_iClientWinCX = 0;
 	_uint m_iClientWinCY = 0;
 private: // Current
-	UINT64 m_iCurrFence = 0;
+	UINT64 m_iCurFence = 0;
 	_uint m_iCurrBackBuffer = 0;
 };
 

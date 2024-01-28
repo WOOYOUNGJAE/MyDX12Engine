@@ -211,6 +211,15 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />
+    <FxCompile Include="..\Bin\Shader\color0.hlsl">
+      <Filter>0.Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\color1.hlsl">
+      <Filter>0.Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\simpleShader.hlsl">
+      <Filter>0.Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

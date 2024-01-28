@@ -31,6 +31,7 @@ public:
 public: // RootSig and PSO
 	// TODO : Build PSO Overrides
 	HRESULT Build_PSO(const D3D12_GRAPHICS_PIPELINE_STATE_DESC& pipeline_desc, Pipeline::ENUM_PSO psoIndex);
+	HRESULT Build_PSO(const wstring& strKey, const D3D12_GRAPHICS_PIPELINE_STATE_DESC& pipeline_desc);
 	void Push_NewInputLayout(D3D12_INPUT_ELEMENT_DESC desc, ENUM_InputLayout eEnum)
 	{
 		m_vecInputLayout[eEnum].push_back(desc);
@@ -47,8 +48,6 @@ public: // RootSig and PSO
 	ID3D12PipelineState* Get_PSO(const wstring& strKey);
 
 	void Update_ObjPipelineLayer(CGameObject* pObject, Pipeline::ENUM_PSO ePsoEnum);
-private:
-	HRESULT Init_RootSignature();
 	
 
 private: // Graphic Device
@@ -58,10 +57,10 @@ private: // Root Signature
 	vector<D3D12_INPUT_ELEMENT_DESC> m_vecInputLayout[InputLayout_END];
 	map<wstring, vector<D3D12_INPUT_ELEMENT_DESC>> m_mapVecInputLayout;
 	
-	map<wstring, ComPtr<ID3D12RootSignature>> m_mapRootSig;
+	map<wstring, ID3D12RootSignature*> m_mapRootSig;
 private: // PSO
 	ComPtr<ID3D12PipelineState> m_PSOArr[Pipeline::PSO_END];
-	map<wstring, ComPtr<ID3D12PipelineState>> m_mapPSO;
+	map<wstring, ID3D12PipelineState*> m_mapPSO;
 	PipelineLayer m_vecPipelineLayerArr[Pipeline::PSO_END]; // 게임 오브젝트의 Pipeline_Tick을 대신해 돌려주는 함수
 private: // Pointer
 	class CComponentManager* m_pComponentManager = nullptr;

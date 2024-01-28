@@ -30,11 +30,11 @@ HRESULT CGraphic_Device::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 
 #ifdef _DEBUG // DirectX Debug Layer
 
-	/*ComPtr<ID3D12Debug> debugController;
+	ComPtr<ID3D12Debug> debugController;
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController))))
 	{
 		debugController->EnableDebugLayer();
-	}*/
+	}
 #endif
 
 	// Only Hardware Adapter, No Wrap Adapter
@@ -239,8 +239,26 @@ HRESULT CGraphic_Device::Init_RenderTargetView()
 
 HRESULT CGraphic_Device::Flush_CommandQueue()
 {
+	HRESULT hr = S_OK;
+
 	// Fence Point 업데이트
-	++m_iCurrFence;
+	++m_iCurFence;
+
+	hr = m_pCommandQueue->Signal(m_pFence.Get(), m_iCurFence);
+	if (FAILED(hr)) { return E_FAIL; }
+
+	// Wait until the GPU has completed commands up to this fence point.
+	UINT64 a = m_pFence->GetCompletedValue();
+	if (m_pFence->GetCompletedValue() < m_iCurFence)
+	{
+
+		// Fire event when GPU hits current fence.  
+		hr = m_pFence->SetEventOnCompletion(m_iCurFence, m_fenceEvent);
+		if (FAILED(hr)) { return E_FAIL; }
+
+		// Wait until the GPU hits current fence event is fired.
+		WaitForSingleObject(m_fenceEvent, INFINITE);
+	}
 
 	return S_OK;
 }
@@ -391,6 +409,27 @@ HRESULT CGraphic_Device::On_Resize()
 	m_ScissorRect = { 0, 0, static_cast<LONG>(m_iClientWinCX), static_cast<LONG>(m_iClientWinCY) };
 
 	return S_OK;
+}
+
+HRESULT CGraphic_Device::Reset_CmdList()
+{
+	//m_pCmdAllocator->Reset();
+	return m_pCommandList->Reset(m_pCmdAllocator.Get(), nullptr);
+}
+
+HRESULT CGraphic_Device::Close_CmdList()
+{
+	return m_pCommandList->Close();
+}
+
+void CGraphic_Device::Execute_CmdList()
+{
+	// Resize Command
+	ID3D12CommandList* cmdsLists[] = { m_pCommandList.Get() };
+	// 명령 목록을 GPU 명령 대기열에 추가
+	m_pCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
+
+	Flush_CommandQueue();
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE CGraphic_Device::CurrentBackBufferView() const

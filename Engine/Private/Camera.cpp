@@ -42,9 +42,9 @@ void CCamera::Late_Tick(_float fDeltaTime)
 
 void CCamera::Update_PipelineView()
 {
-	m_pPipelineManager->Update_Matrix(m_pTransformCom->WorldMatrix_Inverse(), CPipelineManager::VIEW_MAT);
+	// m_pPipelineManager->Update_Matrix(m_pTransformCom->WorldMatrix_Inverse(), CPipelineManager::VIEW_MAT);
 
-	m_pPipelineManager->Update_Matrix(XMMatrixPerspectiveFovLH(m_fFovy, m_fAspect, m_fNear, m_fFar), CPipelineManager::PROJ_MAT);
+	// m_pPipelineManager->Update_Matrix(XMMatrixPerspectiveFovLH(m_fFovy, m_fAspect, m_fNear, m_fFar), CPipelineManager::PROJ_MAT);
 }
 
 _float3 CCamera::Get_Pos()
