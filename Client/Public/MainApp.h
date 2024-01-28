@@ -3,6 +3,7 @@
 #include "Client_Defines.h"
 NAMESPACE_(Engine)
 class CGameInstance;
+class CRenderer;
 _NAMESPACE
 
 NAMESPACE_(Client)
@@ -15,14 +16,13 @@ private:
 public:
 	static CMainApp* Create();
 	HRESULT Initialize();
-	void Tick(_float fDeltaTime);
-	void Late_Tick(_float fDeltaTime);
-	void Render();
+	void Tick_Render(_float fDeltaTime);
 	virtual HRESULT Free() override;
 
 private:
 	ID3D12Device* m_pDevice = nullptr;
 	CGameInstance* m_pGameInstance = nullptr;
+	CRenderer* m_pRenderer = nullptr;
 };
 
 _NAMESPACE

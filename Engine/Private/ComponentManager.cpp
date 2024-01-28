@@ -43,7 +43,7 @@ HRESULT CComponentManager::Initialize()
 	return S_OK;
 }
 
-CComponent* CComponentManager::Find_Prototype(const wstring& strTag)
+CComponent* CComponentManager::FindandGet_Prototype(const wstring& strTag)
 {
 	auto iter = m_mapComPrototypes.find(strTag);
 
@@ -59,7 +59,7 @@ CComponent* CComponentManager::Find_Prototype(const wstring& strTag)
 HRESULT CComponentManager::Add_Prototype(const wstring& strTag, CComponent* pComInstance)
 {
 	// 이미 존재한다면
-	if (Find_Prototype(strTag))
+	if (FindandGet_Prototype(strTag))
 	{
 		MSG_BOX("ComponentManager: Protype Already Exists");
 		return E_FAIL;
@@ -72,7 +72,7 @@ HRESULT CComponentManager::Add_Prototype(const wstring& strTag, CComponent* pCom
 
 CComponent* CComponentManager::Clone_Component(const wstring& strTag, void* pArg)
 {
-	CComponent* pInstance = Find_Prototype(strTag);
+	CComponent* pInstance = FindandGet_Prototype(strTag);
 
 	if (pInstance == nullptr)
 	{	
@@ -80,6 +80,14 @@ CComponent* CComponentManager::Clone_Component(const wstring& strTag, void* pArg
 	}
 
 	return pInstance->Clone(pArg);
+}
+
+CRenderer* CComponentManager::Get_Renderer()
+{
+	CRenderer* pInstance = static_cast<CRenderer*>(FindandGet_Prototype(L"Renderer"));
+	Safe_AddRef(pInstance);
+
+	return pInstance;
 }
 
 HRESULT CComponentManager::Free()

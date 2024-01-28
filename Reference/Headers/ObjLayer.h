@@ -13,6 +13,7 @@ public:
 	static CObjLayer* Create() { return new CObjLayer; }
 	void Tick(_float fDeltaTime);
 	HRESULT Late_Tick(_float fDeltaTime);
+	virtual void Render_Tick();
 	HRESULT Free() override;
 public:
 	HRESULT Add_GameObject(CGameObject* pInstance);

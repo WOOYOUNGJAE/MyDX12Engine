@@ -19,6 +19,14 @@ HRESULT CObjLayer::Late_Tick(_float fDeltaTime)
 	return S_OK;
 }
 
+void CObjLayer::Render_Tick()
+{
+	for (const auto& iter : m_GameObjList)
+	{
+		iter->Render_Tick();
+	}
+}
+
 HRESULT CObjLayer::Free()
 {
 	for (auto& iter : m_GameObjList)

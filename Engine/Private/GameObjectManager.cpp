@@ -49,7 +49,15 @@ HRESULT CGameObjectManager::Late_Tick(_float fDeltaTime)
 	return S_OK;
 }
 
-CGameObject* CGameObjectManager::Find_Prototype(const wstring& strTag)
+void CGameObjectManager::Render_Tick()
+{
+	for (const auto& pair : m_mapLayer)
+	{
+		pair.second->Render_Tick();
+	}
+}
+
+CGameObject* CGameObjectManager::FindandGet_Prototype(const wstring& strTag)
 {
 	auto pair = m_mapObjPrototypes.find(strTag);
 
@@ -76,7 +84,7 @@ CObjLayer* CGameObjectManager::Find_Layer(const wstring& strTag)
 HRESULT CGameObjectManager::Add_Prototype(const wstring& strTag, CGameObject* pInstance)
 {
 	// 이미 존재할 때
-	if (Find_Prototype(strTag))
+	if (FindandGet_Prototype(strTag))
 	{
 		MSG_BOX("GameObj Manager : Prototype Already Exists");
 		return E_FAIL;
@@ -89,7 +97,7 @@ HRESULT CGameObjectManager::Add_Prototype(const wstring& strTag, CGameObject* pI
 
 CGameObject* CGameObjectManager::Clone_GameObject(const wstring& strTag, void* pArg)
 {
-	CGameObject* pPrototype = Find_Prototype(strTag);
+	CGameObject* pPrototype = FindandGet_Prototype(strTag);
 
 	// 존재하지 않을 떄
 	if (pPrototype == nullptr)

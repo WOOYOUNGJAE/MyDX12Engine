@@ -24,12 +24,60 @@ CComponent* CRenderer::Clone(void* pArg)
 HRESULT CRenderer::Initialize_Prototype()
 {
 	m_pGraphic_Device = CGraphic_Device::Get_Instance();
-	m_pCommandAllocator = m_pGraphic_Device->m_pCmdAllocator.Get();
+	m_pPipelineManager = CPipelineManager::Get_Instance();
+	/*m_pCommandAllocator = m_pGraphic_Device->m_pCmdAllocator.Get();
 	m_pCommandList = m_pGraphic_Device->m_pCommandList.Get();
-	m_pCommandQueue = m_pGraphic_Device->m_pCommandQueue.Get();
+	m_pCommandQueue = m_pGraphic_Device->m_pCommandQueue.Get();*/
 	m_pRtvHeap = m_pGraphic_Device->m_pRtvHeap.Get();
 	m_pRenderTargetArr = m_pGraphic_Device->m_pRenderTargets->GetAddressOf();
-	m_pFence = m_pGraphic_Device->m_pFence.Get();
+	//m_pFence = m_pGraphic_Device->m_pFence.Get();
+
+	ID3D12Device* pDevice = m_pGraphic_Device->m_pDevice.Get();
+
+	// Init Fence
+	if (FAILED(pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_pFence))))
+	{
+		MSG_BOX("Failed To Create Fence");
+		return E_FAIL;
+	}
+	// Fence Event
+	m_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+
+
+	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
+	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
+	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+	if (FAILED(pDevice->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_pCommandQueue))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(pDevice->CreateCommandAllocator(
+		D3D12_COMMAND_LIST_TYPE_DIRECT,
+		IID_PPV_ARGS(&m_pCommandAllocator))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(pDevice->CreateCommandList(
+		0,
+		D3D12_COMMAND_LIST_TYPE_DIRECT, // 나중에 Bundle 사용할 수도
+		m_pCommandAllocator, // Associated command allocator
+		nullptr,                   // Initial PipelineStateObject
+		IID_PPV_ARGS(&m_pCommandList))))
+	{
+		return E_FAIL;
+	}
+
+	// 닫힌 상태로 시작
+	m_pCommandList->Close();
+
+	m_queue_flush_queue = {
+		&m_iFenceValue,
+		m_pCommandQueue,
+		m_pFence,
+		&m_fenceEvent
+	};
 
 	return S_OK;
 }
@@ -64,20 +112,45 @@ void CRenderer::MainRender()
 	//		innerIter->Render();
 	//		Safe_Release(innerIter);
 	//	}
-
+	//	
 	//	iter.clear(); // 그룹 내 렌더 끝나면 비우기
 	//}
 
-	m_pCommandList->SetGraphicsRootSignature(m_pCurRootSig);
-	m_pCommandList->SetPipelineState(m_pCurPSO);
-	m_pCommandList->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//m_pCommandList->IASetVertexBuffers() // In Iter
-	m_pCommandList->DrawIndexedInstanced(
-		1/*TODO, 그리는 개수만큼 추가*/,
-		1,
-		0,
-		0,
-		0);
+	for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
+	{
+		for (UINT eBlendModeEnum = 0; eBlendModeEnum < RENDER_BLENDMODE_END; ++eBlendModeEnum)
+		{
+			for (UINT eRootsigEnum = 0; eRootsigEnum < RENDER_ROOTSIGTYPE_END; ++eRootsigEnum)
+			{
+				m_pCommandList->SetGraphicsRootSignature(m_pPipelineManager->Get_RootSig(eRootsigEnum));
+				for (UINT eShaderTypeEnum = 0; eShaderTypeEnum < RENDER_SHADERTYPE_END; ++eShaderTypeEnum)
+				{
+					ID3D12PipelineState* pPSO = m_pPipelineManager->Get_PSO(IsFirst, eBlendModeEnum, eRootsigEnum, eShaderTypeEnum);
+					if (pPSO == nullptr)
+					{
+						continue;
+					}
+					m_pCommandList->SetPipelineState(pPSO);
+
+					for (auto& iter : m_RenderGroup[IsFirst][eBlendModeEnum][eRootsigEnum][eShaderTypeEnum])
+					{
+						m_pCommandList->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+						//m_pCommandList->IASetVertexBuffers() // In Iter
+						m_pCommandList->DrawIndexedInstanced(
+							1/*TODO, 그리는 개수만큼 추가*/,
+							1,
+							0,
+							0,
+							0);
+						//Safe_Release(iter);
+					}
+					m_RenderGroup[IsFirst][eBlendModeEnum][eRootsigEnum][eShaderTypeEnum].clear();
+				}
+
+			}
+		}
+	}
+
 }
 
 void CRenderer::EndRender()
@@ -99,29 +172,27 @@ void CRenderer::Present()
 	m_pGraphic_Device->m_iCurrBackBuffer = (m_pGraphic_Device->m_iCurrBackBuffer + 1) % m_pGraphic_Device->m_iSwapChainBufferCount;
 	
 #pragma region Fence and Wait
-	// Fence
-	++m_iFenceValue;
-	m_pCommandQueue->Signal(m_pFence, m_iFenceValue);
-	// Wait
-	const UINT64 iExpectedFenceValue = m_iFenceValue;
-	if (m_pFence->GetCompletedValue() < iExpectedFenceValue)
-	{
-		m_pFence->SetEventOnCompletion(iExpectedFenceValue, m_fenceEvent);
-		WaitForSingleObject(m_fenceEvent, INFINITE);
-	}
+	CGraphic_Device::Get_Instance()->Flush_CommandQueue(&m_queue_flush_queue);
 #pragma endregion
 }
 
 HRESULT CRenderer::Free()
-{	
-	for (auto& iter : m_RenderGroup)
+{
+	CloseHandle(m_fenceEvent);
+
+	Safe_Release(m_pCommandList);
+	Safe_Release(m_pCommandAllocator);
+	Safe_Release(m_pCommandQueue);
+	Safe_Release(m_pFence);
+
+	/*for (auto& iter : m_RenderGroup)
 	{
 		for (auto& innerIter : iter)
 		{
 			Safe_Release(innerIter);
 		}
 		iter.clear();
-	}
+	}*/
 
 	return CComponent::Free();
 }
@@ -133,7 +204,13 @@ void CRenderer::AddTo_RenderGroup(RENDERGROUP eRenderGroup, CGameObject* pGameOb
 		MSG_BOX("Invalid RenderGroup");
 	}
 	
-	m_RenderGroup[eRenderGroup].push_back(pGameObject);
+	//m_RenderGroup[eRenderGroup].push_back(pGameObject);
 
 	Safe_AddRef(pGameObject);
+}
+
+void CRenderer::AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eRootsigEnum, UINT eShaderTypeEnum,
+	CGameObject* pGameObject)
+{
+	m_RenderGroup[IsFirst][eBlendModeEnum][eRootsigEnum][eShaderTypeEnum].push_back(pGameObject);
 }

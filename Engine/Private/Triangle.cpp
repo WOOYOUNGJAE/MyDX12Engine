@@ -64,16 +64,9 @@ void CTriangle::Late_Tick(_float fDeltaTime)
 	int a = 0;
 }
 
-void CTriangle::Pipeline_Tick()
-{
-	int a = 0;
-
-}
-
-void CTriangle::Render()
-{
-	int a = 0;
-	m_pRendererCom->AddTo_RenderGroup(CRenderer::NOBLEND, this);
+void CTriangle::Render_Tick()
+{	
+	m_pRendererCom->AddTo_RenderGroup(RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE, ROOTSIG_DEFAULT, this);
 }
 
 HRESULT CTriangle::Free()

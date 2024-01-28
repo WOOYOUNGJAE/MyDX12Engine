@@ -25,27 +25,27 @@ public: // typedef
 
 public:
 	HRESULT Initialize();
-	void Pipeline_Tick(_float fDeltaTime);
-	void Render();
 	HRESULT Free() override;
 public: // RootSig and PSO
 	// TODO : Build PSO Overrides
-	HRESULT Build_PSO(const D3D12_GRAPHICS_PIPELINE_STATE_DESC& pipeline_desc, Pipeline::ENUM_PSO psoIndex);
 	HRESULT Build_PSO(const wstring& strKey, const D3D12_GRAPHICS_PIPELINE_STATE_DESC& pipeline_desc);
-	void Push_NewInputLayout(D3D12_INPUT_ELEMENT_DESC desc, ENUM_InputLayout eEnum)
+	void Register_NewInputLayout(D3D12_INPUT_ELEMENT_DESC desc, ENUM_InputLayout eEnum)
 	{
 		m_vecInputLayout[eEnum].push_back(desc);
 	}
 	BOOL InputLayout_Exist(const wstring& strKey) { return m_mapVecInputLayout.find(strKey) != m_mapVecInputLayout.end(); }	
-	void Push_NewInputLayout(const wstring& strKey, D3D12_INPUT_ELEMENT_DESC desc);
+	void Register_NewInputLayout(const wstring& strKey, D3D12_INPUT_ELEMENT_DESC desc);
 	BOOL RootSig_Exist(const wstring& strKey) { return m_mapRootSig.find(strKey) != m_mapRootSig.end(); }
 	void Add_NewRootSig(const wstring& strKey, ID3D12RootSignature* pRootsig) { m_mapRootSig.emplace(strKey, pRootsig); }
+	void Add_NewRootSig(RENDER_ROOTSIGTYPE eRootSigType, ID3D12RootSignature* pRootsig) { m_rootSigArr[eRootSigType] = pRootsig; }
 	BOOL PSO_Exist(const wstring& strKey) { return m_mapPSO.find(strKey) != m_mapPSO.end(); }
 	void Add_NewPSO(const wstring& strKey, ID3D12PipelineState* pPSO) { m_mapPSO.emplace(strKey, pPSO); }
 
 	// getter
 	ID3D12RootSignature* Get_RootSig(const wstring& strKey);
+	ID3D12RootSignature* Get_RootSig(UINT eRootSigType);
 	ID3D12PipelineState* Get_PSO(const wstring& strKey);
+	ID3D12PipelineState* Get_PSO(UINT IsFirst, UINT eBlendModeEnum, UINT eRootsigEnum, UINT eShaderTypeEnum);
 
 	void Update_ObjPipelineLayer(CGameObject* pObject, Pipeline::ENUM_PSO ePsoEnum);
 	
@@ -58,8 +58,9 @@ private: // Root Signature
 	map<wstring, vector<D3D12_INPUT_ELEMENT_DESC>> m_mapVecInputLayout;
 	
 	map<wstring, ID3D12RootSignature*> m_mapRootSig;
+	ID3D12RootSignature* m_rootSigArr[RENDER_ROOTSIGTYPE_END];
 private: // PSO
-	ComPtr<ID3D12PipelineState> m_PSOArr[Pipeline::PSO_END];
+	ID3D12PipelineState* m_PSOsArr[RENDER_PRIORITY_END][RENDER_BLENDMODE_END][RENDER_ROOTSIGTYPE_END][RENDER_SHADERTYPE_END];
 	map<wstring, ID3D12PipelineState*> m_mapPSO;
 	PipelineLayer m_vecPipelineLayerArr[Pipeline::PSO_END]; // 게임 오브젝트의 Pipeline_Tick을 대신해 돌려주는 함수
 private: // Pointer

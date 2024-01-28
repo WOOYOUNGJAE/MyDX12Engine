@@ -15,8 +15,7 @@ public: // LifeCycle
 	virtual CGameObject* Clone(void* pArg = nullptr) = 0;
 	virtual void Tick(_float fDeltaTime) = 0;
 	virtual void Late_Tick(_float fDeltaTime) = 0;
-	virtual void Pipeline_Tick(){};
-	virtual void Render(){};
+	virtual void Render_Tick(){};
 	HRESULT Free() override;
 public: // getter setter
 	virtual int& Get_NumFrameDirtyRef() { int a = -1; return a; };

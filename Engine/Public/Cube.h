@@ -17,8 +17,7 @@ public: // LifeCycle
 	HRESULT Initialize(void* pArg) override;
 	void Tick(_float fDeltaTime) override;
 	void Late_Tick(_float fDeltaTime) override;
-	void Pipeline_Tick() override;
-	void Render() override;
+	void Render_Tick() override;
 	HRESULT Free() override;
 public: // getter setter 
 	int& Get_NumFrameDirtyRef() override;

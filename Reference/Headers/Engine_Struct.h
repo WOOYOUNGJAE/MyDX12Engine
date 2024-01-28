@@ -51,6 +51,14 @@ namespace Engine
 		_float4x4 WorldViewProj;
 	};
 
+	struct QUEUE_FLUSH_DESC
+	{
+		UINT64* pCurFenceVal;
+		ID3D12CommandQueue* pCommandQueue;
+		ID3D12Fence* pFence;
+		HANDLE* pFenceEvent;
+	};
+
 	struct MyVector
 	{
 		MyVector(float _x, float _y, float _z)

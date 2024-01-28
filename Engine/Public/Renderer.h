@@ -1,10 +1,13 @@
 #pragma once
-#include "Component.h"
-// 렌더링을 직접 수행, 게임오브젝트에 컴포넌트로 부착될 때는 클론되는 것이 아닌 참조만
+#include <unordered_map>
 
+#include "Component.h"
 NAMESPACE_(Engine)
 
-class CRenderer final : public CComponent
+// 렌더링을 직접 수행, 게임오브젝트에 컴포넌트로 부착될 때는 클론되는 것이 아닌 참조만
+// 컴포넌트 형식인 의도 : 자기 자신을 쉽게 특정 렌더 그룹에 넣기 위해
+using namespace std;
+class ENGINE_DLL CRenderer final : public CComponent
 {
 private:
 	CRenderer() = default;
@@ -24,9 +27,10 @@ public:
 	HRESULT Free() override;
 public:
 	void AddTo_RenderGroup(RENDERGROUP eRenderGroup, class CGameObject* pGameObject);
-
+	void AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eRootsigEnum, UINT eShaderTypeEnum, class CGameObject* pGameObject);
 private:
-	std::list<CGameObject*> m_RenderGroup[RENDERGROUP_END];
+	// n차원 배열
+	list<CGameObject*> m_RenderGroup[RENDER_PRIORITY_END][RENDER_BLENDMODE_END][RENDER_ROOTSIGTYPE_END][RENDER_SHADERTYPE_END];
 private: // pointer
 	class CGraphic_Device* m_pGraphic_Device = nullptr;
 	class CPipelineManager* m_pPipelineManager = nullptr;
@@ -41,9 +45,10 @@ private:
 	ID3D12PipelineState* m_pCurPSO = nullptr;
 private:
 	UINT m_iFrameIndex = 0;
-private: // Fence
+private: //Fence
 	ID3D12Fence* m_pFence = nullptr;
 	UINT64 m_iFenceValue = 0;
 	HANDLE m_fenceEvent;
+	QUEUE_FLUSH_DESC m_queue_flush_queue{};
 };
 _NAMESPACE

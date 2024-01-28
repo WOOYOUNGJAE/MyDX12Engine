@@ -64,17 +64,12 @@ void CCube::Late_Tick(_float fDeltaTime)
 	int a = 0;
 }
 
-void CCube::Pipeline_Tick()
+void CCube::Render_Tick()
 {
 	int a = 0;
 
 }
 
-void CCube::Render()
-{
-	int a = 0;
-	m_pRendererCom->AddTo_RenderGroup(CRenderer::NOBLEND, this);
-}
 
 HRESULT CCube::Free()
 {

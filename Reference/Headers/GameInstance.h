@@ -17,8 +17,10 @@ public:
 
 public:
 	HRESULT Init_Engine(const GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Device** ppDevice);
+	void Engine_Tick(FLOAT fDeltaTime);
 	void Tick(_float fDeltaTime);
 	void Late_Tick(_float fDeltaTime);
+	void Render_Tick();
 	static void Release_Engine();
 public: // Manager Function Offer
 	// ComponentManager
@@ -31,6 +33,8 @@ public: // Manager Function Offer
 	HRESULT Add_GameObject_InScene(const wstring& strPrototypeTag, const wstring& strLayerTag, CGameObject** pOutObj , void* pArg = nullptr);
 	// Pipeline manager
 	void Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum);
+public:
+	class CRenderer* Get_Renderer();
 private:
 	class CGraphic_Device* m_pGraphic_Device = nullptr;
 	class CComponentManager* m_pComponentManager = nullptr;

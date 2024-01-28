@@ -15,10 +15,12 @@ public:
 	HRESULT Initialize();
 	HRESULT Free() override;
 public:
-	class CComponent* Find_Prototype(const wstring& strTag);
+	class CComponent* FindandGet_Prototype(const wstring& strTag);
 	HRESULT Add_Prototype(const wstring& strTag, CComponent* pComInstance);
 	CComponent* Clone_Component(const wstring& strTag, void* pArg = nullptr);
-	
+
+public:
+	class CRenderer* Get_Renderer();
 
 private:
 	map<wstring, CComponent*> m_mapComPrototypes;

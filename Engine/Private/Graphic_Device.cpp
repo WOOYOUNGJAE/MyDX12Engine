@@ -237,23 +237,54 @@ HRESULT CGraphic_Device::Init_RenderTargetView()
 	return S_OK;
 }
 
+HRESULT CGraphic_Device::Flush_CommandQueue(const QUEUE_FLUSH_DESC* queue_flush_desc)
+{
+	UINT64& refCurFenceVal = *queue_flush_desc->pCurFenceVal;
+	ID3D12CommandQueue* pCommandQueue = queue_flush_desc->pCommandQueue;
+	ID3D12Fence* pFence = queue_flush_desc->pFence;
+	HANDLE* pEvent = queue_flush_desc->pFenceEvent;
+
+	HRESULT hr = S_OK;
+
+	// Fence Point 업데이트
+	++refCurFenceVal;
+
+	hr = m_pCommandQueue->Signal(pFence, refCurFenceVal);
+	if (FAILED(hr)) { return E_FAIL; }
+
+	// Wait until the GPU has completed commands up to this fence point.
+	UINT64 a = pFence->GetCompletedValue();
+	if (pFence->GetCompletedValue() < refCurFenceVal)
+	{
+
+		// Fire event when GPU hits current fence.  
+		hr = pFence->SetEventOnCompletion(refCurFenceVal, *pEvent);
+		if (FAILED(hr)) { return E_FAIL; }
+
+		// Wait until the GPU hits current fence event is fired.
+		WaitForSingleObject(*pEvent, INFINITE);
+	}
+
+	return S_OK;
+}
+
 HRESULT CGraphic_Device::Flush_CommandQueue()
 {
 	HRESULT hr = S_OK;
 
 	// Fence Point 업데이트
-	++m_iCurFence;
+	++m_iCurFenceVal;
 
-	hr = m_pCommandQueue->Signal(m_pFence.Get(), m_iCurFence);
+	hr = m_pCommandQueue->Signal(m_pFence.Get(), m_iCurFenceVal);
 	if (FAILED(hr)) { return E_FAIL; }
 
 	// Wait until the GPU has completed commands up to this fence point.
 	UINT64 a = m_pFence->GetCompletedValue();
-	if (m_pFence->GetCompletedValue() < m_iCurFence)
+	if (m_pFence->GetCompletedValue() < m_iCurFenceVal)
 	{
 
 		// Fire event when GPU hits current fence.  
-		hr = m_pFence->SetEventOnCompletion(m_iCurFence, m_fenceEvent);
+		hr = m_pFence->SetEventOnCompletion(m_iCurFenceVal, m_fenceEvent);
 		if (FAILED(hr)) { return E_FAIL; }
 
 		// Wait until the GPU hits current fence event is fired.

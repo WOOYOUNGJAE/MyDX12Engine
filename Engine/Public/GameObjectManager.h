@@ -20,10 +20,11 @@ public:
 	HRESULT Free() override;
 	HRESULT Tick(_float fDeltaTime);
 	HRESULT Late_Tick(_float fDeltaTime);
+	void Render_Tick();
 public: // getter
 	const map<wstring, CGameObject*>& Get_ObjPrototypeMap() { return m_mapObjPrototypes; }
 public:
-	CGameObject* Find_Prototype(const wstring& strTag);
+	CGameObject* FindandGet_Prototype(const wstring& strTag);
 	CObjLayer* Find_Layer(const wstring& strTag);
 	HRESULT Add_Prototype(const wstring& strTag, CGameObject* pInstance);
 	// GameObj내부의 Clone기능을 대신 해주는 매개체 역할 함수 (interface 역할)

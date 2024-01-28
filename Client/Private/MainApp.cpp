@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "MainApp.h"
-
+#include "Renderer.h"
 #include "Client_Defines.h"
 #include "GameInstance.h"
 #include "Camera_Free.h"
@@ -47,26 +47,33 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(hr)) { return hr; }*/
 	m_pGameInstance->Update_ObjPipelineLayer(pObjectControlling, Pipeline::ENUM_PSO::PSO_DEFAULT);
 #pragma endregion InLevel
+
+	// Renderer
+	m_pRenderer = m_pGameInstance->Get_Instance()->Get_Renderer();
+
+	if (m_pRenderer == nullptr)
+	{
+		MSG_BOX("MainApp: Renderer is nullptr");
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 
-void CMainApp::Tick(_float fDeltaTime)
+void CMainApp::Tick_Render(_float fDeltaTime)
 {
-	m_pGameInstance->Tick(fDeltaTime);
-}
+	m_pRenderer->BeginRender();
 
-void CMainApp::Late_Tick(_float fDeltaTime)
-{
-	m_pGameInstance->Late_Tick(fDeltaTime);
-}
+	m_pGameInstance->Engine_Tick(fDeltaTime);
 
-void CMainApp::Render()
-{
-
+	m_pRenderer->MainRender();
+	m_pRenderer->EndRender();
+	m_pRenderer->Present();
 }
 
 HRESULT CMainApp::Free()
 {
+	Safe_Release(m_pRenderer);
 	Safe_Release(m_pGameInstance);
 
 	CGameInstance::Release_Engine();

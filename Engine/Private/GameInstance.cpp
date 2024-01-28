@@ -6,7 +6,7 @@
 #include "GameObject.h"
 #include "Component.h"
 #include "CubeMesh.h"
-#include "PipelineManager.h"  
+#include "PipelineManager.h"
 #pragma endregion
 
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -60,8 +60,18 @@ void CGameInstance::Tick(_float fDeltaTime)
 void CGameInstance::Late_Tick(_float fDeltaTime)
 {
 	m_pGameObjectManager->Late_Tick(fDeltaTime);
-	m_pPipelineManager->Pipeline_Tick(fDeltaTime);
-	m_pPipelineManager->Render();
+}
+
+void CGameInstance::Render_Tick()
+{
+	m_pGameObjectManager->Render_Tick();
+}
+
+void CGameInstance::Engine_Tick(FLOAT fDeltaTime)
+{
+	Tick(fDeltaTime);
+	Late_Tick(fDeltaTime);
+	Render_Tick();
 }
 
 void CGameInstance::Release_Engine()
@@ -129,4 +139,9 @@ void CGameInstance::Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum
 		return;
 	}
 	m_pPipelineManager->Update_ObjPipelineLayer(pObject, (ENUM_PSO)ePsoEnum);
+}
+
+CRenderer* CGameInstance::Get_Renderer()
+{
+	return m_pComponentManager->Get_Instance()->Get_Renderer();
 }

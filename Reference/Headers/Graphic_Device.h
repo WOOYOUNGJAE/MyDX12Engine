@@ -22,6 +22,7 @@ public: // Init
 	HRESULT Init_RenderTargetView();
 
 public: // LifeCycle
+	HRESULT Flush_CommandQueue(const QUEUE_FLUSH_DESC* queue_flush_desc);
 	HRESULT Flush_CommandQueue();
 	virtual HRESULT Free() override;
 public:
@@ -69,7 +70,7 @@ private: // From Client
 	_uint m_iClientWinCX = 0;
 	_uint m_iClientWinCY = 0;
 private: // Current
-	UINT64 m_iCurFence = 0;
+	UINT64 m_iCurFenceVal = 0;
 	_uint m_iCurrBackBuffer = 0;
 };
 
