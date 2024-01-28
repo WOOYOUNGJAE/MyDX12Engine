@@ -61,6 +61,9 @@
     <Filter Include="Utility\PipleLine\PSO">
       <UniqueIdentifier>{41b3bb80-a7e6-4cc6-9896-3640acc0ba3c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System\Interface">
+      <UniqueIdentifier>{6e76f977-ace3-49c8-830b-95b293c017cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -148,6 +151,12 @@
     <ClInclude Include="..\Public\TriangleMesh.h">
       <Filter>Utility\Components\GeometryMesh\2D</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Triangle.h">
+      <Filter>Utility\GameObjects\DefaultGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ObjMonobehaviour.h">
+      <Filter>System\Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -207,6 +216,12 @@
     <ClCompile Include="C:\Users\azn2w\Git\MyDX12Engine\Engine\Private\P_ManagerLegacy.cpp" />
     <ClCompile Include="..\Private\TriangleMesh.cpp">
       <Filter>Utility\Components\GeometryMesh\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Triangle.cpp">
+      <Filter>Utility\GameObjects\DefaultGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ObjMonobehaviour.cpp">
+      <Filter>System\Interface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

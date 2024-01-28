@@ -3,15 +3,15 @@
 
 NAMESPACE_(Engine)
 
-class ENGINE_DLL CCube : public CGameObject
+class CTriangle : public CGameObject
 {
 protected:
-	CCube() = default;
-	CCube(const CCube& rhs): CGameObject(rhs){}
-	~CCube() override = default;
+	CTriangle() = default;
+	CTriangle(const CTriangle& rhs) : CGameObject(rhs) {}
+	~CTriangle() override = default;
 
 public: // LifeCycle
-	static CCube* Create();
+	static CTriangle* Create();
 	CGameObject* Clone(void* pArg) override;
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override;
@@ -30,9 +30,10 @@ public: // getter setter
 
 protected:
 	class CTransform* m_pTransformCom = nullptr;
-	class CCubeMesh* m_pTriangleMeshCom = nullptr;
+	class CTriangleMesh* m_pTriangleMeshCom = nullptr;
 	class CShader* m_pShaderCom = nullptr;
 	class CRenderer* m_pRendererCom = nullptr;
+
 };
 
 _NAMESPACE

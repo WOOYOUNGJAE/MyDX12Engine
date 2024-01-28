@@ -14,8 +14,8 @@ HRESULT CComponentManager::Initialize()
 #pragma region Init_Basic_Components
 	CGraphic_Device::Get_Instance()->Reset_CmdList();
 	Add_Prototype(L"Transform", CTransform::Create());
-	//Add_Prototype(L"CubeMesh", CCubeMesh::Create());
-	//Add_Prototype(L"TriangleMesh", CTriangleMesh::Create());
+	Add_Prototype(L"CubeMesh", CCubeMesh::Create());
+	Add_Prototype(L"TriangleMesh", CTriangleMesh::Create());
 	// CShader
 	{
 		SHADER_INIT_DESC* pShader_desc = new SHADER_INIT_DESC[2]{};

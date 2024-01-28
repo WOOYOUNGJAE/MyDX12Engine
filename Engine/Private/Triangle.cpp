@@ -1,12 +1,12 @@
-#include "Cube.h"
-#include "CubeMesh.h"
+#include "Triangle.h"
+#include "TriangleMesh.h"
 #include "Transform.h"
 #include "Renderer.h"
 #include "Shader.h"
 
-CCube* CCube::Create()
+CTriangle* CTriangle::Create()
 {
-	CCube* pInstance = new CCube;
+	CTriangle* pInstance = new CTriangle;
 
 	if (pInstance)
 	{
@@ -16,9 +16,9 @@ CCube* CCube::Create()
 	return pInstance;
 }
 
-CGameObject* CCube::Clone(void* pArg)
+CGameObject* CTriangle::Clone(void* pArg)
 {
-	CCube* pInstance = new CCube(*this);
+	CTriangle* pInstance = new CTriangle(*this);
 
 	if (pInstance)
 	{
@@ -32,51 +32,51 @@ CGameObject* CCube::Clone(void* pArg)
 	return pInstance;
 }
 
-HRESULT CCube::Initialize_Prototype()
+HRESULT CTriangle::Initialize_Prototype()
 {
 
 	return S_OK;
 }
 
-HRESULT CCube::Initialize(void* pArg)
+HRESULT CTriangle::Initialize(void* pArg)
 {
 	HRESULT hr = S_OK;
 	// ±âº» ÄÄÆ÷³ÍÆ® ºÎÂø
 	hr = Add_Component(L"Transform", reinterpret_cast<CComponent**>(&m_pTransformCom));
 	if (FAILED(hr)) return hr;
-	hr = Add_Component(L"CubeMesh", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
+	hr = Add_Component(L"TriangleMesh", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));
 	if (FAILED(hr)) return hr;
-	hr = Add_Component(L"Shader_Default", reinterpret_cast<CComponent**>(&m_pShaderCom));
+	hr = Add_Component(L"Shader_Simple", reinterpret_cast<CComponent**>(&m_pShaderCom));
 	if (FAILED(hr)) return hr;
 
 	return hr;
 }
 
-void CCube::Tick(_float fDeltaTime)
+void CTriangle::Tick(_float fDeltaTime)
 {
 	int a = 0;
 }
 
-void CCube::Late_Tick(_float fDeltaTime)
+void CTriangle::Late_Tick(_float fDeltaTime)
 {
 	int a = 0;
 }
 
-void CCube::Pipeline_Tick()
+void CTriangle::Pipeline_Tick()
 {
 	int a = 0;
 
 }
 
-void CCube::Render()
+void CTriangle::Render()
 {
 	int a = 0;
 	m_pRendererCom->AddTo_RenderGroup(CRenderer::NOBLEND, this);
 }
 
-HRESULT CCube::Free()
+HRESULT CTriangle::Free()
 {
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);
@@ -86,32 +86,32 @@ HRESULT CCube::Free()
 	return CGameObject::Free();
 }
 
-int& CCube::Get_NumFrameDirtyRef()
+int& CTriangle::Get_NumFrameDirtyRef()
 {
 	return m_pShaderCom->Get_NumDirtyRef();
 }
 
-_matrix CCube::Get_WorldMatrix()
+_matrix CTriangle::Get_WorldMatrix()
 {
 	return m_pTransformCom->WorldMatrix();
 }
 
-_float3 CCube::Get_Pos()
+_float3 CTriangle::Get_Pos()
 {
 	return m_pTransformCom->Position();
 }
 
-D3D12_VERTEX_BUFFER_VIEW CCube::VertexBufferView()
+D3D12_VERTEX_BUFFER_VIEW CTriangle::VertexBufferView()
 {
-	return m_pTriangleMeshCom->VertexBufferView();
+	return D3D12_VERTEX_BUFFER_VIEW();
 }
 
-D3D12_INDEX_BUFFER_VIEW CCube::IndexBufferView() const
+D3D12_INDEX_BUFFER_VIEW CTriangle::IndexBufferView() const
 {
-	return m_pTriangleMeshCom->IndexBufferView();
+	return D3D12_INDEX_BUFFER_VIEW();
 }
 
-_uint CCube::Num_Indices()
+_uint CTriangle::Num_Indices()
 {
-	return m_pTriangleMeshCom->Num_Indices();
+	return 0;
 }

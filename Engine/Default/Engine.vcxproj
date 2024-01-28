@@ -145,7 +145,8 @@
       <AdditionalIncludeDirectories>.\Engine\Bin\Shader\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </FxCompile>
     <PostBuildEvent>
-      <Command>start ..\..\UpdateLib.bat</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -196,11 +197,13 @@
     <ClInclude Include="..\Public\Graphic_Device.h" />
     <ClInclude Include="..\Public\MeshGeometry.h" />
     <ClInclude Include="..\Public\ObjLayer.h" />
+    <ClInclude Include="..\Public\ObjMonobehaviour.h" />
     <ClInclude Include="..\Public\PipelineManager.h" />
     <ClInclude Include="..\Public\PSO.h" />
     <ClInclude Include="..\Public\Renderer.h" />
     <ClInclude Include="..\Public\Shader.h" />
     <ClInclude Include="..\Public\Transform.h" />
+    <ClInclude Include="..\Public\Triangle.h" />
     <ClInclude Include="..\Public\TriangleMesh.h" />
     <ClInclude Include="..\Public\UploadBuffer.h" />
     <ClInclude Include="C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\P_ManagerLegacy.h">
@@ -221,11 +224,13 @@
     <ClCompile Include="..\Private\Graphic_Device.cpp" />
     <ClCompile Include="..\Private\MeshGeometry.cpp" />
     <ClCompile Include="..\Private\ObjLayer.cpp" />
+    <ClCompile Include="..\Private\ObjMonobehaviour.cpp" />
     <ClCompile Include="..\Private\PipelineManager.cpp" />
     <ClCompile Include="..\Private\PSO.cpp" />
     <ClCompile Include="..\Private\Renderer.cpp" />
     <ClCompile Include="..\Private\Shader.cpp" />
     <ClCompile Include="..\Private\Transform.cpp" />
+    <ClCompile Include="..\Private\Triangle.cpp" />
     <ClCompile Include="..\Private\TriangleMesh.cpp" />
     <ClCompile Include="C:\Users\azn2w\Git\MyDX12Engine\Engine\Private\P_ManagerLegacy.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

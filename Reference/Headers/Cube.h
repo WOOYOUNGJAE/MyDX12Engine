@@ -30,9 +30,9 @@ public: // getter setter
 
 protected:
 	class CTransform* m_pTransformCom = nullptr;
-	class CCubeMesh* m_pCubeMeshCom = nullptr;
+	class CCubeMesh* m_pTriangleMeshCom = nullptr;
 	class CShader* m_pShaderCom = nullptr;
-	class CRenderer* m_pRendererCom = nullptr; // TODO : Pipeline이 대체할 가능성
+	class CRenderer* m_pRendererCom = nullptr;
 };
 
 _NAMESPACE
