@@ -134,15 +134,17 @@ void CRenderer::MainRender()
 
 					for (auto& iter : m_RenderGroup[IsFirst][eBlendModeEnum][eRootsigEnum][eShaderTypeEnum])
 					{
-						m_pCommandList->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+						m_pCommandList->IASetPrimitiveTopology(iter->PrimitiveType());
 						//m_pCommandList->IASetVertexBuffers() // In Iter
+						m_pCommandList->IASetVertexBuffers(0, 1, &iter->VertexBufferView());
+						m_pCommandList->IASetIndexBuffer(&iter->IndexBufferView());
 						m_pCommandList->DrawIndexedInstanced(
 							1/*TODO, 그리는 개수만큼 추가*/,
 							1,
 							0,
 							0,
 							0);
-						//Safe_Release(iter);
+						Safe_Release(iter);
 					}
 					m_RenderGroup[IsFirst][eBlendModeEnum][eRootsigEnum][eShaderTypeEnum].clear();
 				}
@@ -213,4 +215,5 @@ void CRenderer::AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eRoots
 	CGameObject* pGameObject)
 {
 	m_RenderGroup[IsFirst][eBlendModeEnum][eRootsigEnum][eShaderTypeEnum].push_back(pGameObject);
+	Safe_AddRef(pGameObject);
 }

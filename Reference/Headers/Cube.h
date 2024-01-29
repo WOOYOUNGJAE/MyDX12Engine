@@ -29,7 +29,7 @@ public: // getter setter
 
 protected:
 	class CTransform* m_pTransformCom = nullptr;
-	class CCubeMesh* m_pTriangleMeshCom = nullptr;
+	class CCubeMesh* m_pCubeMeshCom = nullptr;
 	class CShader* m_pShaderCom = nullptr;
 	class CRenderer* m_pRendererCom = nullptr;
 };

@@ -44,7 +44,7 @@ HRESULT CCube::Initialize(void* pArg)
 	// ±âº» ÄÄÆ÷³ÍÆ® ºÎÂø
 	hr = Add_Component(L"Transform", reinterpret_cast<CComponent**>(&m_pTransformCom));
 	if (FAILED(hr)) return hr;
-	hr = Add_Component(L"CubeMesh", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
+	hr = Add_Component(L"CubeMesh", reinterpret_cast<CComponent**>(&m_pCubeMeshCom));
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));
 	if (FAILED(hr)) return hr;
@@ -75,7 +75,7 @@ HRESULT CCube::Free()
 {
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);
-	Safe_Release(m_pTriangleMeshCom);
+	Safe_Release(m_pCubeMeshCom);
 	Safe_Release(m_pTransformCom);
 
 	return CGameObject::Free();
@@ -98,15 +98,15 @@ _float3 CCube::Get_Pos()
 
 D3D12_VERTEX_BUFFER_VIEW CCube::VertexBufferView()
 {
-	return m_pTriangleMeshCom->VertexBufferView();
+	return m_pCubeMeshCom->VertexBufferView();
 }
 
 D3D12_INDEX_BUFFER_VIEW CCube::IndexBufferView() const
 {
-	return m_pTriangleMeshCom->IndexBufferView();
+	return m_pCubeMeshCom->IndexBufferView();
 }
 
 _uint CCube::Num_Indices()
 {
-	return m_pTriangleMeshCom->Num_Indices();
+	return m_pCubeMeshCom->Num_Indices();
 }

@@ -96,12 +96,12 @@ _float3 CTriangle::Get_Pos()
 
 D3D12_VERTEX_BUFFER_VIEW CTriangle::VertexBufferView()
 {
-	return D3D12_VERTEX_BUFFER_VIEW();
+	return m_pTriangleMeshCom->VertexBufferView();
 }
 
 D3D12_INDEX_BUFFER_VIEW CTriangle::IndexBufferView() const
 {
-	return D3D12_INDEX_BUFFER_VIEW();
+	return m_pTriangleMeshCom->IndexBufferView();
 }
 
 _uint CTriangle::Num_Indices()
