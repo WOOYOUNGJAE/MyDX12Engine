@@ -3,8 +3,7 @@
 #include "Renderer.h"
 #include "Client_Defines.h"
 #include "GameInstance.h"
-#include "Camera_Free.h"
-
+#include "Camera_Free.h"	
 
 CMainApp::CMainApp() : m_pGameInstance{ CGameInstance::Get_Instance()}
 {

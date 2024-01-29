@@ -25,7 +25,7 @@ HRESULT CGraphic_Device::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 	m_screenViewport.MaxDepth = 1.0f;
 
 	m_ScissorRect = { 0, 0, static_cast<LONG>(m_iClientWinCX), static_cast<LONG>(m_iClientWinCY )};
-
+	
 	CreateDXGIFactory1(IID_PPV_ARGS(&m_pDxgi_Factory));
 
 #ifdef _DEBUG // DirectX Debug Layer
