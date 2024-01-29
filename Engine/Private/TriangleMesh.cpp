@@ -1,6 +1,7 @@
 #include "TriangleMesh.h"
 
 #include "Device_Utils.h"
+#include "Graphic_Device.h"
 
 CTriangleMesh::CTriangleMesh()
 {
@@ -65,9 +66,9 @@ HRESULT CTriangleMesh::Initialize_Prototype()
 	m_vertexData = new MY_VERTEX[m_iNumVertex]
 	{
 		// TODO : Color TEMP
-		MY_VERTEX({ _float3(0.f, 0.25f, 0.f), _float4(Colors::Red) }),
-		MY_VERTEX({ _float3(0.25f, -0.25f, 0.0f), _float4(Colors::Green) }),
-		MY_VERTEX({ _float3(-0.25f, -0.25f, 0.0f), _float4(Colors::Blue) }),
+		MY_VERTEX({ _float3(0.f, 0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio, 0.25f), _float4(1.0f, 0.0f, 0.0f, 1.0f) }),
+		MY_VERTEX({ _float3(0.25f, -0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio, 0.25f), _float4(0.0f, 1.0f, 0.0f, 1.0f) }),
+		MY_VERTEX({ _float3(-0.25f, -0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio, 0.25f), _float4(0.0f, 0.0f, 1.0f, 1.0f) }),
 	};
 
 	_ushort indexData[3]
@@ -77,6 +78,26 @@ HRESULT CTriangleMesh::Initialize_Prototype()
 
 	const _uint iVertexBufferSize = sizeof(MY_VERTEX) * 3;
 	const _uint iIndexBufferSize = sizeof(_ushort) * 3;
+
+
+#pragma region TEMPTEMP
+	//hr = (m_pDevice->CreateCommittedResource(
+	//	&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+	//	D3D12_HEAP_FLAG_NONE,
+	//	&CD3DX12_RESOURCE_DESC::Buffer(iVertexBufferSize),
+	//	D3D12_RESOURCE_STATE_GENERIC_READ,
+	//	nullptr,
+	//	IID_PPV_ARGS(&m_vertexBufferGPU)));
+
+	//// Copy the triangle data to the vertex buffer.
+	//UINT8* pVertexDataBegin;
+	//CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
+	//hr = (m_vertexBufferGPU->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)));
+	//memcpy(pVertexDataBegin, m_vertexData, sizeof(m_vertexData));
+	//m_vertexBufferGPU	->Unmap(0, nullptr);
+#pragma endregion
+
+
 
 	hr = D3DCreateBlob(iVertexBufferSize, &m_vertexBufferCPU);
 	if (FAILED(hr))

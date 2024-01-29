@@ -15,7 +15,7 @@ HRESULT CGraphic_Device::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 
 	m_iClientWinCX = iWinCX;
 	m_iClientWinCY = iWinCY;
-
+	m_fAspectRatio = static_cast<float>(m_iClientWinCX)/ static_cast<float>(m_iClientWinCY);
 	// viewport
 	m_screenViewport.TopLeftX = 0;
 	m_screenViewport.TopLeftY = 0;
@@ -131,31 +131,30 @@ HRESULT CGraphic_Device::Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode)
 	/* 스왑체인을 생성한다. = 텍스쳐를 생성하는 행위 + 스왑하는 형태  */
 	m_pSwapChain.Reset();
 #pragma region SwapChainDesc
-	DXGI_SWAP_CHAIN_DESC		SwapChainDesc;
-	ZeroMemory(&SwapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
+	//DXGI_SWAP_CHAIN_DESC		SwapChainDesc;
+	//ZeroMemory(&SwapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
 
-	/*텍스쳐(백버퍼)를 생성하는 행위*/
-	SwapChainDesc.BufferDesc.Width = m_iClientWinCX;
-	SwapChainDesc.BufferDesc.Height = m_iClientWinCY;
+	///*텍스쳐(백버퍼)를 생성하는 행위*/
+	//SwapChainDesc.BufferDesc.Width = m_iClientWinCX;
+	//SwapChainDesc.BufferDesc.Height = m_iClientWinCY;
 
 
-	SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	SwapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	SwapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	SwapChainDesc.BufferCount = m_iSwapChainBufferCount;
+	//SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	//SwapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	//SwapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	//SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	//SwapChainDesc.BufferCount = m_iSwapChainBufferCount;
 
-	/*스왑하는 형태*/
-	SwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
-	SwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-	SwapChainDesc.SampleDesc.Quality = 0;
-	SwapChainDesc.SampleDesc.Count = 1;
+	///*스왑하는 형태*/
+	//SwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+	//SwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+	//SwapChainDesc.SampleDesc.Quality = 0;
+	//SwapChainDesc.SampleDesc.Count = 1;
 
-	SwapChainDesc.OutputWindow = m_hWnd;
-	SwapChainDesc.Windowed = eWinMode;
-	SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // DX11d은 그냥 Discard
-	SwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-#pragma endregion SwapChainDesc
+	//SwapChainDesc.OutputWindow = m_hWnd;
+	//SwapChainDesc.Windowed = eWinMode;
+	//SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // DX11d은 그냥 Discard
+	//SwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	// Describe and create the swap chain.
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
@@ -166,6 +165,7 @@ HRESULT CGraphic_Device::Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode)
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	swapChainDesc.SampleDesc.Count = 1;
+#pragma endregion SwapChainDesc
 
 	ComPtr<IDXGISwapChain1> swapChain;
 	hr = m_pDxgi_Factory->CreateSwapChainForHwnd(

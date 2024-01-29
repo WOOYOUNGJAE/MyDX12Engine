@@ -82,7 +82,9 @@ HRESULT CPipelineManager::Initialize()
 #pragma region Build PSO
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pso_desc{};
 	pso_desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	pso_desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	pso_desc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+	pso_desc.DepthStencilState.DepthEnable = FALSE;
+	pso_desc.DepthStencilState.StencilEnable = FALSE;
 	pso_desc.SampleMask = UINT_MAX; // 그 어떤 표본도 비활성화 하지 않음
 	pso_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	pso_desc.NumRenderTargets = 1;

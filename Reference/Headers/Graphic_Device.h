@@ -69,6 +69,8 @@ private: // From Client
 	HWND m_hWnd = nullptr;
 	_uint m_iClientWinCX = 0;
 	_uint m_iClientWinCY = 0;
+public:
+	FLOAT m_fAspectRatio = 0.f;
 private: // Current
 	UINT64 m_iCurFenceVal = 0;
 	_uint m_iCurrBackBuffer = 0;

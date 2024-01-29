@@ -45,10 +45,11 @@ private:
 	ID3D12PipelineState* m_pCurPSO = nullptr;
 private:
 	UINT m_iFrameIndex = 0;
+
 private: //Fence
 	ID3D12Fence* m_pFence = nullptr;
 	UINT64 m_iFenceValue = 0;
 	HANDLE m_fenceEvent;
-	QUEUE_FLUSH_DESC m_queue_flush_queue{};
+	QUEUE_FLUSH_DESC m_queue_flush_desc{};
 };
 _NAMESPACE

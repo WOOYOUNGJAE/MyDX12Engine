@@ -18,10 +18,10 @@ CMainApp::~CMainApp()
 HRESULT CMainApp::Initialize()
 {
 #ifdef _DEBUG
-	AllocConsole();
+	/*AllocConsole();
 	freopen("CONIN$", "r", stdin);
 	freopen("CONOUT$", "w", stdout);
-	freopen("CONOUT$", "w", stderr);
+	freopen("CONOUT$", "w", stderr);*/
 #endif // _DEBUG
 
 
@@ -45,7 +45,7 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(hr)) { return hr; }
 	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", L"Layer0", &pObjectControlling);
 	if (FAILED(hr)) { return hr; }*/
-	m_pGameInstance->Update_ObjPipelineLayer(pObjectControlling, Pipeline::ENUM_PSO::PSO_DEFAULT);
+	// m_pGameInstance->Update_ObjPipelineLayer(pObjectControlling, Pipeline::ENUM_PSO::PSO_DEFAULT);
 #pragma endregion InLevel
 
 	// Renderer
@@ -77,7 +77,7 @@ HRESULT CMainApp::Free()
 	Safe_Release(m_pGameInstance);
 
 	CGameInstance::Release_Engine();
-	FreeConsole();
+	//FreeConsole();
 	return S_OK;
 }
 
