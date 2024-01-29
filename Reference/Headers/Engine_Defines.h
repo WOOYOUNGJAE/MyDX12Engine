@@ -2,8 +2,17 @@
 
 #include <Windows.h>
 
-#include <string>
+// XTK12
+#include "DDSTextureLoader.h"
+#include "WICTextureLoader.h"
+#include "ScreenGrab.h"
+#include "PrimitiveBatch.h"
+#include "VertexTypes.h"
+#include "Effects.h"
+#include "SpriteBatch.h"
+#include "SpriteFont.h"
 
+#include <string>
 #include <array>
 #include <vector>
 #include <list>

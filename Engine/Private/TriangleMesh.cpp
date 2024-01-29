@@ -7,7 +7,7 @@ CTriangleMesh::CTriangleMesh()
 {
 	m_iNumVertex = 3;
 	m_iNumIndices = 3;
-	m_iVertexByteStride = sizeof(MY_VERTEX);
+	m_iVertexByteStride = sizeof(VertexPositionColor);
 	m_iVertexBufferByteSize = m_iNumVertex * m_iVertexByteStride;
 	IndexFormat = DXGI_FORMAT_R16_UINT;
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(_ushort);
@@ -63,12 +63,12 @@ HRESULT CTriangleMesh::Initialize_Prototype()
 	hr = CMeshGeometry::Initialize_Prototype();
 	if (FAILED(hr)) { return E_FAIL; }
 
-	m_vertexData = new MY_VERTEX[m_iNumVertex]
+	m_vertexData = new VertexPositionColor[m_iNumVertex]
 	{
 		// TODO : Color TEMP
-		MY_VERTEX({ _float3(0.f, 0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio, 0.25f), _float4(1.0f, 0.0f, 0.0f, 1.0f) }),
-		MY_VERTEX({ _float3(0.25f, -0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio, 0.25f), _float4(0.0f, 1.0f, 0.0f, 1.0f) }),
-		MY_VERTEX({ _float3(-0.25f, -0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio, 0.25f), _float4(0.0f, 0.0f, 1.0f, 1.0f) }),
+		VertexPositionColor({ _float3(0.f, 0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio, 0.25f), _float4(1.0f, 0.0f, 0.0f, 1.0f) }),
+		VertexPositionColor({ _float3(0.25f, -0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio, 0.25f), _float4(0.0f, 1.0f, 0.0f, 1.0f) }),
+		VertexPositionColor({ _float3(-0.25f, -0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio, 0.25f), _float4(0.0f, 0.0f, 1.0f, 1.0f) }),
 	};
 
 	_ushort indexData[3]
@@ -76,7 +76,7 @@ HRESULT CTriangleMesh::Initialize_Prototype()
 		0, 1, 2,
 	};
 
-	const _uint iVertexBufferSize = sizeof(MY_VERTEX) * 3;
+	const _uint iVertexBufferSize = sizeof(VertexPositionColor) * 3;
 	const _uint iIndexBufferSize = sizeof(_ushort) * 3;
 
 

@@ -5,7 +5,7 @@ CCubeMesh::CCubeMesh()
 {
 	m_iNumVertex = 8;
 	m_iNumIndices = 6 * 6;
-	m_iVertexByteStride = sizeof(MY_VERTEX);
+	m_iVertexByteStride = sizeof(VertexPositionColor);
 	m_iVertexBufferByteSize = m_iNumVertex * m_iVertexByteStride;
 	IndexFormat = DXGI_FORMAT_R16_UINT;
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(_ushort);
@@ -61,17 +61,17 @@ HRESULT CCubeMesh::Initialize_Prototype()
 	hr = CMeshGeometry::Initialize_Prototype();
 	if (FAILED(hr)) { return E_FAIL; }
 
-	m_vertexData = new MY_VERTEX[8]
+	m_vertexData = new VertexPositionColor[8]
 	{
 		// TODO : Color TEMP
-		MY_VERTEX({ _float3(-1.0f, -1.0f, -1.0f), _float4(Colors::White) }),
-		MY_VERTEX({ _float3(-1.0f, +1.0f, -1.0f), _float4(Colors::Black) }),
-		MY_VERTEX({ _float3(+1.0f, +1.0f, -1.0f), _float4(Colors::Red) }),
-		MY_VERTEX({ _float3(+1.0f, -1.0f, -1.0f), _float4(Colors::Green) }),
-		MY_VERTEX({ _float3(-1.0f, -1.0f, +1.0f), _float4(Colors::Blue) }),
-		MY_VERTEX({ _float3(-1.0f, +1.0f, +1.0f), _float4(Colors::Yellow) }),
-		MY_VERTEX({ _float3(+1.0f, +1.0f, +1.0f), _float4(Colors::Cyan) }),
-		MY_VERTEX({ _float3(+1.0f, -1.0f, +1.0f), _float4(Colors::Magenta) })
+		VertexPositionColor({ _float3(-1.0f, -1.0f, -1.0f), _float4(Colors::White) }),
+		VertexPositionColor({ _float3(-1.0f, +1.0f, -1.0f), _float4(Colors::Black) }),
+		VertexPositionColor({ _float3(+1.0f, +1.0f, -1.0f), _float4(Colors::Red) }),
+		VertexPositionColor({ _float3(+1.0f, -1.0f, -1.0f), _float4(Colors::Green) }),
+		VertexPositionColor({ _float3(-1.0f, -1.0f, +1.0f), _float4(Colors::Blue) }),
+		VertexPositionColor({ _float3(-1.0f, +1.0f, +1.0f), _float4(Colors::Yellow) }),
+		VertexPositionColor({ _float3(+1.0f, +1.0f, +1.0f), _float4(Colors::Cyan) }),
+		VertexPositionColor({ _float3(+1.0f, -1.0f, +1.0f), _float4(Colors::Magenta) })
 	};
 
 	_ushort indexData[36]
@@ -101,7 +101,7 @@ HRESULT CCubeMesh::Initialize_Prototype()
 		4, 3, 7
 	};
 
-	const _uint iVertexBufferSize = sizeof(MY_VERTEX) * 8;
+	const _uint iVertexBufferSize = sizeof(VertexPositionColor) * 8;
 	const _uint iIndexBufferSize = sizeof(_ushort) * 8;
 
 	hr = D3DCreateBlob(iVertexBufferSize, &m_vertexBufferCPU);

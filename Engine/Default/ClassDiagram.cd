@@ -560,7 +560,7 @@
       <FileName>C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\Engine_Struct.h</FileName>
     </TypeIdentifier>
   </Struct>
-  <Struct Name="Engine::MY_VERTEX" Collapsed="true">
+  <Struct Name="Engine::VertexPositionColor" Collapsed="true">
     <Position X="45" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAACAAAAAAAAAAAA=</HashCode>
