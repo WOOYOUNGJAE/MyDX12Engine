@@ -110,24 +110,24 @@ void CRenderer::MainRender()
 	{
 		for (UINT eBlendModeEnum = 0; eBlendModeEnum < RENDER_BLENDMODE_END; ++eBlendModeEnum)
 		{
-			for (UINT eRootsigEnum = 0; eRootsigEnum < RENDER_ROOTSIGTYPE_END; ++eRootsigEnum)
+			for (UINT eShaderTypeEnum = 0; eShaderTypeEnum < RENDER_SHADERTYPE_END; ++eShaderTypeEnum)
 			{
-				m_pCommandList->SetGraphicsRootSignature(m_pPipelineManager->Get_RootSig(eRootsigEnum));
-				for (UINT eShaderTypeEnum = 0; eShaderTypeEnum < RENDER_SHADERTYPE_END; ++eShaderTypeEnum)
+				for (UINT eParamComboType = 0; eParamComboType < RENDER_PARAMCOMBO_END; ++eParamComboType)
 				{
-					if (m_RenderGroup[IsFirst][eBlendModeEnum][eRootsigEnum][eShaderTypeEnum].empty())
+					if (m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eParamComboType].empty())
 					{
 						continue;
 					}
 
-					ID3D12PipelineState* pPSO = m_pPipelineManager->Get_PSO(IsFirst, eBlendModeEnum, eRootsigEnum, eShaderTypeEnum);
+					ID3D12PipelineState* pPSO = m_pPipelineManager->Get_PSO(IsFirst, eBlendModeEnum, eParamComboType, eShaderTypeEnum);
 					if (pPSO == nullptr)
 					{
 						continue;
 					}
+					m_pCommandList->SetGraphicsRootSignature(m_pPipelineManager->Get_RootSig(eParamComboType));
 					m_pCommandList->SetPipelineState(pPSO);
 
-					for (auto& iter : m_RenderGroup[IsFirst][eBlendModeEnum][eRootsigEnum][eShaderTypeEnum])
+					for (auto& iter : m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eParamComboType])
 					{
 						m_pCommandList->IASetPrimitiveTopology(iter->PrimitiveType());
 						m_pCommandList->IASetVertexBuffers(0, 1, &iter->VertexBufferView());
@@ -142,7 +142,7 @@ void CRenderer::MainRender()
 							0);*/
 						Safe_Release(iter);
 					}
-					m_RenderGroup[IsFirst][eBlendModeEnum][eRootsigEnum][eShaderTypeEnum].clear();
+					m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eParamComboType].clear();
 				}
 			}
 		}
@@ -180,20 +180,21 @@ HRESULT CRenderer::Free()
 	Safe_Release(m_pCommandAllocator);
 	Safe_Release(m_pFence);
 
-	for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
+	for (auto& iter0 : m_RenderGroup)
 	{
-		for (UINT eBlendModeEnum = 0; eBlendModeEnum < RENDER_BLENDMODE_END; ++eBlendModeEnum)
+		for (auto& iter1 : iter0)
 		{
-			for (UINT eRootsigEnum = 0; eRootsigEnum < RENDER_ROOTSIGTYPE_END; ++eRootsigEnum)
+			for (auto& iter2 : iter1)
 			{
-				for (UINT eShaderTypeEnum = 0; eShaderTypeEnum < RENDER_SHADERTYPE_END; ++eShaderTypeEnum)
+				for (auto& iter3 : iter2)
 				{
-					for (auto& iter : m_RenderGroup[IsFirst][eBlendModeEnum][eRootsigEnum][eShaderTypeEnum])
+					for (auto& iter4 : iter3)
 					{
-						Safe_Release(iter);
+						Safe_Release(iter4);						
 					}
-					m_RenderGroup[IsFirst][eBlendModeEnum][eRootsigEnum][eShaderTypeEnum].clear();
+					iter3.clear();
 				}
+				
 			}
 		}
 	}

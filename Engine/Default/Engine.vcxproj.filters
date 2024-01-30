@@ -64,6 +64,9 @@
     <Filter Include="System\Interface">
       <UniqueIdentifier>{6e76f977-ace3-49c8-830b-95b293c017cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\Components\Texture">
+      <UniqueIdentifier>{88dd2c26-0265-4f76-a7a4-36e78875358f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -157,6 +160,9 @@
     <ClInclude Include="..\Public\ObjMonobehaviour.h">
       <Filter>System\Interface</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Texture.h">
+      <Filter>Utility\Components\Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -222,6 +228,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\ObjMonobehaviour.cpp">
       <Filter>System\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Texture.cpp">
+      <Filter>Utility\Components\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Bin\Shader\simpleShader2.hlsl">
+      <Filter>0.Shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

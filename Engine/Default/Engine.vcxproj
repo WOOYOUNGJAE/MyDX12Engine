@@ -205,6 +205,7 @@
     <ClInclude Include="..\Public\PSO.h" />
     <ClInclude Include="..\Public\Renderer.h" />
     <ClInclude Include="..\Public\Shader.h" />
+    <ClInclude Include="..\Public\Texture.h" />
     <ClInclude Include="..\Public\Transform.h" />
     <ClInclude Include="..\Public\Triangle.h" />
     <ClInclude Include="..\Public\TriangleMesh.h" />
@@ -214,6 +215,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Bin\Shader\simpleShader2.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Private\Base.cpp" />
     <ClCompile Include="..\Private\Camera.cpp" />
     <ClCompile Include="..\Private\Component.cpp" />
@@ -232,6 +237,7 @@
     <ClCompile Include="..\Private\PSO.cpp" />
     <ClCompile Include="..\Private\Renderer.cpp" />
     <ClCompile Include="..\Private\Shader.cpp" />
+    <ClCompile Include="..\Private\Texture.cpp" />
     <ClCompile Include="..\Private\Transform.cpp" />
     <ClCompile Include="..\Private\Triangle.cpp" />
     <ClCompile Include="..\Private\TriangleMesh.cpp" />

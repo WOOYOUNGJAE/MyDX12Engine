@@ -18,8 +18,7 @@ public: // Init
 	HRESULT Init_CommandObjects();
 	HRESULT Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode);
 	// RenderTargetView, DepthStencilView
-	HRESULT Create_RTV_DSV_DescriptorHeap();
-	HRESULT Init_RenderTargetView();
+	HRESULT Create_DescriptorHeap();
 
 public: // LifeCycle
 	HRESULT Flush_CommandQueue(const QUEUE_FLUSH_DESC* queue_flush_desc);
@@ -50,13 +49,14 @@ private: // Fence
 	ComPtr<ID3D12Fence> m_pFence = nullptr;
 	HANDLE m_fenceEvent = nullptr;
 	UINT64 m_iFenceValue = 0;
-private: // Descriptor Desc
+private: // Descriptor
 	UINT m_iRtvDescriptorSize = 0;
 	UINT m_iDsvDescriptorSize = 0;
 	UINT m_iCbvSrvUavDescriptorSize = 0;
 private: // Descriptor Heap
 	static const int m_iSwapChainBufferCount = 2; // 더블 버퍼링때문에 2로 초기화
 	ComPtr<ID3D12DescriptorHeap> m_pRtvHeap = nullptr;
+	ComPtr<ID3D12DescriptorHeap> m_pSrvHeap = nullptr;
 	ComPtr<ID3D12DescriptorHeap> m_pDsvHeap = nullptr;
 	ComPtr<ID3D12Resource> m_pRenderTargets[m_iSwapChainBufferCount]{};
 	ComPtr<ID3D12Resource> m_pDepthStencilBuffer = nullptr;

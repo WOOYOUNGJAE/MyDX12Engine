@@ -30,7 +30,11 @@ HRESULT CComponentManager::Initialize()
 		Add_Prototype(L"Shader_Default", CShader::Create(pShader_desc, 2));
 
 		pShader_desc[0].filename = L"..\\Bin\\Shader\\simpleShader.hlsl";
+		pShader_desc[1].filename = L"..\\Bin\\Shader\\simpleShader.hlsl";
 		Add_Prototype(L"Shader_Simple", CShader::Create(pShader_desc, 2));
+		pShader_desc[0].filename = L"..\\Bin\\Shader\\simpleShader2.hlsl";
+		pShader_desc[1].filename = L"..\\Bin\\Shader\\simpleShader2.hlsl";
+		Add_Prototype(L"Shader_Simple2", CShader::Create(pShader_desc, 2));
 		Safe_Delete_Array(pShader_desc);
 	}
 

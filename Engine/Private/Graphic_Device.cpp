@@ -77,7 +77,7 @@ HRESULT CGraphic_Device::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 		return E_FAIL;
 	}
 
-	if (FAILED(Create_RTV_DSV_DescriptorHeap()))
+	if (FAILED(Create_DescriptorHeap()))
 	{
 		MSG_BOX("Failed to Create Descriptor Heap");
 		return E_FAIL;
@@ -195,8 +195,9 @@ HRESULT CGraphic_Device::Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode)
 	return S_OK;
 }
 
-HRESULT CGraphic_Device::Create_RTV_DSV_DescriptorHeap()
+HRESULT CGraphic_Device::Create_DescriptorHeap()
 {
+	HRESULT hr = S_OK;
 	// Descriptor의 관리를 위한 D-Heap생성
 	// SwapChainBufferCount개 (스왑체인 버퍼)서술자를 담는 RTV힙
 	// (뎁스스텐실버퍼)서술자를 담는 DSV힙 하나 생성
@@ -206,13 +207,20 @@ HRESULT CGraphic_Device::Create_RTV_DSV_DescriptorHeap()
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	rtvHeapDesc.NodeMask = 0;
-	if (FAILED(m_pDevice->CreateDescriptorHeap(
-		&rtvHeapDesc, IID_PPV_ARGS(m_pRtvHeap.GetAddressOf()))))
-	{
-		return E_FAIL;
-	}
+	hr = m_pDevice->CreateDescriptorHeap(
+		&rtvHeapDesc, IID_PPV_ARGS(m_pRtvHeap.GetAddressOf()));
+	if (FAILED(hr)) { return E_FAIL; }
 
+	// Shader Resource View
+	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
+	srvHeapDesc.NumDescriptors = 1;
+	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 
+	hr = m_pDevice->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_pSrvHeap));
+	if (FAILED(hr)) { return E_FAIL; }
+
+	// Depth Stencil View
 	D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc;
 	dsvHeapDesc.NumDescriptors = 1;
 	dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
@@ -230,12 +238,6 @@ HRESULT CGraphic_Device::Create_RTV_DSV_DescriptorHeap()
 	return S_OK;
 }
 
-HRESULT CGraphic_Device::Init_RenderTargetView()
-{
-
-
-	return S_OK;
-}
 
 HRESULT CGraphic_Device::Flush_CommandQueue(const QUEUE_FLUSH_DESC* queue_flush_desc)
 {

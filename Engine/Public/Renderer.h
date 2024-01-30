@@ -30,7 +30,7 @@ public:
 	void AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eRootsigEnum, UINT eShaderTypeEnum, class CGameObject* pGameObject);
 private:
 	// n차원 배열
-	list<CGameObject*> m_RenderGroup[RENDER_PRIORITY_END][RENDER_BLENDMODE_END][RENDER_ROOTSIGTYPE_END][RENDER_SHADERTYPE_END];
+	list<CGameObject*> m_RenderGroup[RENDER_PRIORITY_END][RENDER_BLENDMODE_END][RENDER_SHADERTYPE_END][RENDER_PARAMCOMBO_END];
 private: // pointer
 	class CGraphic_Device* m_pGraphic_Device = nullptr;
 	class CPipelineManager* m_pPipelineManager = nullptr;

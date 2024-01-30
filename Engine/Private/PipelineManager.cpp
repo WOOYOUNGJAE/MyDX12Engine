@@ -29,7 +29,8 @@ HRESULT CPipelineManager::Initialize()
 
 	HRESULT hr = S_OK;
 #pragma region Build Root Signature
-	// RootSig - Triangle Sample
+
+#pragma region _RootSig_Simple
 	CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc;
 	rootSigDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
@@ -46,35 +47,94 @@ HRESULT CPipelineManager::Initialize()
 		::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
 	}
 
-
-
-	/*if (RootSig_Exist(L"Triangle") == false)
-	{
-		Add_NewRootSig(L"Triangle", nullptr);
-	}*/
-
 	hr = m_pDevice->CreateRootSignature(
 		0,
 		serializedRootSig->GetBufferPointer(),
 		serializedRootSig->GetBufferSize(),
-		IID_PPV_ARGS(&m_rootSigArr[ROOTSIG_DEFAULT]));
+		IID_PPV_ARGS(&m_rootSigArr[PARAM_SIMPLE]));
+	if (FAILED(hr)) { return hr; }
+#pragma endregion
+
+#pragma region _Rootsig_TextureSampler
+	D3D12_FEATURE_DATA_ROOT_SIGNATURE RSFeatureData = {};
+
+	// This is the highest version the sample supports. If CheckFeatureSupport succeeds, the HighestVersion returned will not be greater than this.
+	RSFeatureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
+
+	hr = m_pDevice->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &RSFeatureData, sizeof(RSFeatureData));
+	if (FAILED(hr)) // 1_1 버전 지원하는지
+	{
+		RSFeatureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
+	}
+
+	CD3DX12_DESCRIPTOR_RANGE1 ranges[1]; // DescriptorTable, RootDescriptor, RootConstant 가 될 수 있음(InitAs..)
+	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+
+	CD3DX12_ROOT_PARAMETER1 rootParameters[1];
+	rootParameters[0].InitAsDescriptorTable(1, &ranges[0], D3D12_SHADER_VISIBILITY_PIXEL);
+
+	D3D12_STATIC_SAMPLER_DESC sampler = {};
+	sampler.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
+	sampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	sampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	sampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	sampler.MipLODBias = 0;
+	sampler.MaxAnisotropy = 0;
+	sampler.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+	sampler.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+	sampler.MinLOD = 0.0f;
+	sampler.MaxLOD = D3D12_FLOAT32_MAX;
+	sampler.ShaderRegister = 0;
+	sampler.RegisterSpace = 0;
+	sampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
+	rootSignatureDesc.Init_1_1(_countof(rootParameters), rootParameters, 1, &sampler, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+	ComPtr<ID3DBlob> signature;
+	ComPtr<ID3DBlob> error;
+
+	hr = D3DX12SerializeVersionedRootSignature(
+		&rootSignatureDesc,
+		RSFeatureData.HighestVersion,
+		&signature,
+		&error);
+	if (FAILED(hr)) { return hr; }
+
+	hr = m_pDevice->CreateRootSignature(
+		0,
+		signature->GetBufferPointer(),
+		signature->GetBufferSize(),
+		IID_PPV_ARGS(&m_rootSigArr[PARAM_SAMPLER]));
 	if (FAILED(hr)) { return hr; }
 
 #pragma endregion
 
 
+#pragma endregion
+
+
 #pragma region Make InputLayout
-	D3D12_INPUT_ELEMENT_DESC input_layout_desc[2]
+	D3D12_INPUT_ELEMENT_DESC input_layout_desc[RENDER_PARAMCOMBO_END][2] // POS, COL
 	{
+	 {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+		},
+	 {
+		 { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+	 }
 	};
-	
-	for (auto& iter : input_layout_desc)
+	for (UINT iInputLayoutType = 0; iInputLayoutType < RENDER_PARAMCOMBO_END; ++iInputLayoutType)
 	{
-		//pPipelineManager->Register_NewInputLayout(iter, CPipelineManager::InputLayout_DEFAULT);;
-		Register_NewInputLayout(L"Default", iter);
+		for (auto& iter : input_layout_desc[iInputLayoutType])
+		{
+			m_vecInputLayoutArr[iInputLayoutType].push_back(iter);
+		}
 	}
+
+
 #pragma endregion
 
 
@@ -92,67 +152,64 @@ HRESULT CPipelineManager::Initialize()
 	pso_desc.SampleDesc.Count = 1;
 	pso_desc.SampleDesc.Quality = 0;
 	pso_desc.DSVFormat = m_pGraphic_Device->m_DepthStencilFormat;
-	pso_desc.InputLayout = { m_mapVecInputLayout[L"Default"].data(), (UINT)m_mapVecInputLayout[L"Default"].size() };
 
 	for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
 	{
 		for (UINT eBlendModeEnum = 0; eBlendModeEnum < RENDER_BLENDMODE_END; ++eBlendModeEnum)
 		{
-			for (UINT eRootsigEnum = 0; eRootsigEnum < RENDER_ROOTSIGTYPE_END; ++eRootsigEnum)
+			for (UINT eShaderTypeEnum = 0; eShaderTypeEnum < RENDER_SHADERTYPE_END; ++eShaderTypeEnum)
 			{
-				pso_desc.pRootSignature = m_rootSigArr[eRootsigEnum];
-
-				for (UINT eShaderTypeEnum = 0; eShaderTypeEnum < RENDER_SHADERTYPE_END; ++eShaderTypeEnum)
+				wstring strKey = L"";
+				switch (eShaderTypeEnum)
 				{
-					wstring strKey = L"";
-					switch (eShaderTypeEnum)
+				case SHADERTYPE_SIMPLE:
+					strKey = L"Shader_Simple";
+					break;
+				case SHADERTYPE_SIMPLE2:
+					strKey = L"Shader_Simple2";
+					break;
+				default: // 에러 피하기 위해 임시로 만들어놓기
+					strKey = L"Shader_Simple";
+				}
+
+				// VertexShader ByteCode
+				CShader* pShader = dynamic_cast<CShader*>(m_pComponentManager->FindandGet_Prototype(strKey));
+				ComPtr<ID3DBlob>  byteCode = pShader->Get_ByteCode(CShader::TYPE_VERTEX);
+				pso_desc.VS =
+				{
+					reinterpret_cast<BYTE*>(byteCode->GetBufferPointer()),
+					byteCode->GetBufferSize()
+				};
+				byteCode = pShader->Get_ByteCode(CShader::TYPE_PIXEL);
+				pso_desc.PS =
+				{
+					reinterpret_cast<BYTE*>(byteCode->GetBufferPointer()),
+					byteCode->GetBufferSize()
+				};
+
+				for (UINT eParamComboType = 0; eParamComboType < RENDER_PARAMCOMBO_END; ++eParamComboType)
+				{
+					if (eShaderTypeEnum != eParamComboType) // TODO: 루트시그니처, 쉐이더 종류 다양해지면 체계화
 					{
-					case SHADERTYPE_SIMPLE:
-						strKey = L"Shader_Simple";
-						break;
-					default: // 에러 피하기 위해 임시로 만들어놓기
-						strKey = L"Shader_Simple";
+						continue;
 					}
 
-					// VertexShader ByteCode
-					CShader* pShader = dynamic_cast<CShader*>(m_pComponentManager->FindandGet_Prototype(strKey));
-					ComPtr<ID3DBlob>  byteCode = pShader->Get_ByteCode(CShader::TYPE_VERTEX);
-					pso_desc.VS =
-					{
-						reinterpret_cast<BYTE*>(byteCode->GetBufferPointer()),
-						byteCode->GetBufferSize()
-					};
-					byteCode = pShader->Get_ByteCode(CShader::TYPE_PIXEL);
-					pso_desc.PS =
-					{
-						reinterpret_cast<BYTE*>(byteCode->GetBufferPointer()),
-						byteCode->GetBufferSize()
-					};
-
-					hr = m_pDevice->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(&m_PSOsArr[IsFirst][eBlendModeEnum][eRootsigEnum][eShaderTypeEnum]));
+					pso_desc.pRootSignature = m_rootSigArr[eParamComboType];
+					pso_desc.InputLayout = { m_vecInputLayoutArr[eParamComboType].data(), (UINT)m_vecInputLayoutArr[eParamComboType].size() };
+					hr = m_pDevice->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(&m_PSOsArr[IsFirst][eBlendModeEnum][eShaderTypeEnum][eParamComboType]));
 					if (FAILED(hr))
 					{
 						MSG_BOX("Failed to Create PSO");
 						return hr;
 					}
+					
 				}
 			}
 		}
 	}
 
+
 	
-
-	/*if (PSO_Exist(L"Triangle") == false)
-	{
-		Add_NewPSO(L"Triangle", nullptr);
-	}*/
-
-	/*hr = Build_PSO(L"Triangle", pso_desc);
-	if (FAILED(hr))
-	{
-		MSG_BOX("Pipeline : Build PSO Failed ");
-		return hr;
-	}*/
 #pragma endregion
 
 
@@ -161,15 +218,16 @@ HRESULT CPipelineManager::Initialize()
 
 HRESULT CPipelineManager::Free()
 {
-	for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
+
+	for (auto& iter0 : m_PSOsArr)
 	{
-		for (UINT eBlendModeEnum = 0; eBlendModeEnum < RENDER_BLENDMODE_END; ++eBlendModeEnum)
+		for (auto& iter1 : iter0)
 		{
-			for (UINT eRootsigEnum = 0; eRootsigEnum < RENDER_ROOTSIGTYPE_END; ++eRootsigEnum)
+			for (auto& iter2 : iter1)
 			{
-				for (UINT eShaderTypeEnum = 0; eShaderTypeEnum < RENDER_SHADERTYPE_END; ++eShaderTypeEnum)
+				for (auto& iter3 : iter2)
 				{
-					Safe_Release(m_PSOsArr[IsFirst][eBlendModeEnum][eRootsigEnum][eShaderTypeEnum]);					
+					Safe_Release(iter3);
 				}
 			}
 		}
@@ -201,17 +259,6 @@ HRESULT CPipelineManager::Build_PSO(const wstring& strKey, const D3D12_GRAPHICS_
 	return hr;
 }
 
-void CPipelineManager::Register_NewInputLayout(const wstring& strKey, D3D12_INPUT_ELEMENT_DESC desc)
-{
-	// 새로 만들어야 할 때
-	if (m_mapVecInputLayout.find(strKey) == m_mapVecInputLayout.end())
-	{
-		m_mapVecInputLayout.emplace(strKey, vector<D3D12_INPUT_ELEMENT_DESC>());
-	}
-
-	m_mapVecInputLayout[strKey].push_back(desc);
-}
-
 
 ID3D12RootSignature* CPipelineManager::Get_RootSig(const wstring& strKey)
 {
@@ -227,7 +274,7 @@ ID3D12RootSignature* CPipelineManager::Get_RootSig(const wstring& strKey)
 
 ID3D12RootSignature* CPipelineManager::Get_RootSig(UINT eRootSigType)
 {
-	if (eRootSigType < 0 || eRootSigType >= RENDER_ROOTSIGTYPE_END)
+	if (eRootSigType < 0 || eRootSigType >= RENDER_PARAMCOMBO_END)
 	{
 		return nullptr;
 	}
@@ -247,9 +294,9 @@ ID3D12PipelineState* CPipelineManager::Get_PSO(const wstring& strKey)
 	}
 }
 
-ID3D12PipelineState* CPipelineManager::Get_PSO(UINT IsFirst, UINT eBlendModeEnum, UINT eRootsigEnum, UINT eShaderTypeEnum)
+ID3D12PipelineState* CPipelineManager::Get_PSO(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eParamTypeEnum)
 {
-	return m_PSOsArr[IsFirst][eBlendModeEnum][eRootsigEnum][eShaderTypeEnum];
+	return m_PSOsArr[IsFirst][eBlendModeEnum][eShaderTypeEnum][eParamTypeEnum];
 }
 
 void CPipelineManager::Update_ObjPipelineLayer(CGameObject* pObject, ENUM_PSO ePsoEnum)

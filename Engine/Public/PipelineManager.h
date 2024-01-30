@@ -7,7 +7,7 @@
 NAMESPACE_(Engine)
 using namespace std;
 using namespace Pipeline;
-// 파이프라인 중 공유해야 하는 자원 관리
+// Manage RootSig, PSO
 // CGraphic_Device's Friend
 class CPipelineManager : public CBase
 {
@@ -33,11 +33,9 @@ public: // RootSig and PSO
 	{
 		m_vecInputLayout[eEnum].push_back(desc);
 	}
-	BOOL InputLayout_Exist(const wstring& strKey) { return m_mapVecInputLayout.find(strKey) != m_mapVecInputLayout.end(); }	
-	void Register_NewInputLayout(const wstring& strKey, D3D12_INPUT_ELEMENT_DESC desc);
 	BOOL RootSig_Exist(const wstring& strKey) { return m_mapRootSig.find(strKey) != m_mapRootSig.end(); }
 	void Add_NewRootSig(const wstring& strKey, ID3D12RootSignature* pRootsig) { m_mapRootSig.emplace(strKey, pRootsig); }
-	void Add_NewRootSig(RENDER_ROOTSIGTYPE eRootSigType, ID3D12RootSignature* pRootsig) { m_rootSigArr[eRootSigType] = pRootsig; }
+	void Add_NewRootSig(RENDER_PARAMCOMBO eRootSigType, ID3D12RootSignature* pRootsig) { m_rootSigArr[eRootSigType] = pRootsig; }
 	BOOL PSO_Exist(const wstring& strKey) { return m_mapPSO.find(strKey) != m_mapPSO.end(); }
 	void Add_NewPSO(const wstring& strKey, ID3D12PipelineState* pPSO) { m_mapPSO.emplace(strKey, pPSO); }
 
@@ -45,7 +43,7 @@ public: // RootSig and PSO
 	ID3D12RootSignature* Get_RootSig(const wstring& strKey);
 	ID3D12RootSignature* Get_RootSig(UINT eRootSigType);
 	ID3D12PipelineState* Get_PSO(const wstring& strKey);
-	ID3D12PipelineState* Get_PSO(UINT IsFirst, UINT eBlendModeEnum, UINT eRootsigEnum, UINT eShaderTypeEnum);
+	ID3D12PipelineState* Get_PSO(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eParamTypeEnum);
 
 	void Update_ObjPipelineLayer(CGameObject* pObject, Pipeline::ENUM_PSO ePsoEnum);
 	
@@ -55,12 +53,12 @@ private: // Graphic Device
 	ComPtr<ID3D12Device> m_pDevice = nullptr; // Real Device
 private: // Root Signature
 	vector<D3D12_INPUT_ELEMENT_DESC> m_vecInputLayout[InputLayout_END];
-	map<wstring, vector<D3D12_INPUT_ELEMENT_DESC>> m_mapVecInputLayout;
+	vector<D3D12_INPUT_ELEMENT_DESC> m_vecInputLayoutArr[RENDER_PARAMCOMBO_END];
 	
 	map<wstring, ID3D12RootSignature*> m_mapRootSig;
-	ID3D12RootSignature* m_rootSigArr[RENDER_ROOTSIGTYPE_END];
+	ID3D12RootSignature* m_rootSigArr[RENDER_PARAMCOMBO_END];
 private: // PSO
-	ID3D12PipelineState* m_PSOsArr[RENDER_PRIORITY_END][RENDER_BLENDMODE_END][RENDER_ROOTSIGTYPE_END][RENDER_SHADERTYPE_END];
+	ID3D12PipelineState* m_PSOsArr[RENDER_PRIORITY_END][RENDER_BLENDMODE_END][RENDER_SHADERTYPE_END][RENDER_PARAMCOMBO_END];
 	map<wstring, ID3D12PipelineState*> m_mapPSO;
 	PipelineLayer m_vecPipelineLayerArr[Pipeline::PSO_END]; // 게임 오브젝트의 Pipeline_Tick을 대신해 돌려주는 함수
 private: // Pointer
