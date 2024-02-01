@@ -163,6 +163,7 @@
     <ClInclude Include="..\Public\Texture.h">
       <Filter>Utility\Components\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\TriangleMesh_PT.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -235,6 +236,7 @@
     <ClCompile Include="..\Bin\Shader\simpleShader2.hlsl">
       <Filter>0.Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\TriangleMesh_PT.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />

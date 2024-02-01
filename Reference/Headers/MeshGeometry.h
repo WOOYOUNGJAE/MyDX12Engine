@@ -22,7 +22,7 @@ public: // getter setter
 protected:
 	ComPtr<ID3D12Device> m_pDevice = nullptr;
 	ComPtr<ID3D12GraphicsCommandList> m_pCommandList = nullptr;
-	VertexPositionColor* m_vertexData = nullptr; // Array
+	
 	_float3* m_vertexPosArr = nullptr;
 	//ComPtr<ID3D12Resource> m_pResource = nullptr;
 	// 임시 저장공간

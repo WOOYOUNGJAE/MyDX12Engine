@@ -11,7 +11,6 @@ CMeshGeometry::CMeshGeometry() :
 CMeshGeometry::CMeshGeometry(const CMeshGeometry& rhs) : CComponent(rhs),
 m_pDevice(rhs.m_pDevice),
 m_pCommandList(rhs.m_pCommandList),
-m_vertexData(rhs.m_vertexData),
 m_vertexPosArr(rhs.m_vertexPosArr),
 //m_pResource(rhs.m_pResource.Get()),
 m_vertexBufferCPU(rhs.m_vertexBufferCPU.Get()),
@@ -38,10 +37,7 @@ HRESULT CMeshGeometry::Free()
 {
 	/*Safe_Delete_Array(m_vertexData);
 	Safe_Delete_Array(m_vertexPosArr);*/
-	if (m_bIsCloned == false)
-	{
-		Safe_Delete_Array(m_vertexData); // Prototype 경우에만 해제
-	}
+	
 
 	if (FAILED(CComponent::Free()))
 	{

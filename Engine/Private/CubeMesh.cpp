@@ -11,7 +11,8 @@ CCubeMesh::CCubeMesh()
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(_ushort);
 }
 
-CCubeMesh::CCubeMesh(const CCubeMesh& rhs) : CMeshGeometry(rhs)
+CCubeMesh::CCubeMesh(const CCubeMesh& rhs) : CMeshGeometry(rhs),
+m_vertexData(rhs.m_vertexData)
 {
 	m_iNumVertex = rhs.m_iNumVertex;
 	m_iNumIndices = rhs.m_iNumIndices;
@@ -147,7 +148,10 @@ HRESULT CCubeMesh::Initialize(void* pArg)
 
 HRESULT CCubeMesh::Free()
 {
-
+	if (m_bIsCloned == false)
+	{
+		Safe_Delete_Array(m_vertexData); // Prototype 경우에만 해제
+	}
 	if (FAILED(CMeshGeometry::Free()))
 	{
 		return E_FAIL;

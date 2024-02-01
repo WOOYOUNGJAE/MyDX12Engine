@@ -17,6 +17,9 @@ public:
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override; // Do Nothing (InitÀº Copy¿ë)
 	HRESULT Free() override;
+
+private:
+	VertexPositionColor* m_vertexData = nullptr; // Array
 };
 
 _NAMESPACE
