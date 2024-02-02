@@ -66,9 +66,9 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 
 	m_vertexData = new VertexPositionTexture[]
 	{
-		{ _float3(0.0f, 0.25f , 0.0f), _float2(0.5f, 0.0f)},
-		{ _float3(0.25f, -0.25f, 0.0f), _float2(1.0f, 1.0f)},
-		{_float3(-0.25f, -0.25f , 0.0f), _float2(0.0f, 1.0f)}
+		{ _float3(0.0f, 0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio , 0.0f), _float2(0.5f, 0.0f)},
+		{ _float3(0.25f, -0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio, 0.0f), _float2(1.0f, 1.0f)},
+		{_float3(-0.25f, -0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio , 0.0f), _float2(0.0f, 1.0f)}
 	};
 
 	_ushort indexData[3]

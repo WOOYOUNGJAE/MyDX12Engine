@@ -1,5 +1,6 @@
 #include "Triangle.h"
 #include "TriangleMesh.h"
+#include "TriangleMesh_PT.h"
 #include "Transform.h"
 #include "Renderer.h"
 #include "Shader.h"
@@ -44,7 +45,9 @@ HRESULT CTriangle::Initialize(void* pArg)
 	// ±âº» ÄÄÆ÷³ÍÆ® ºÎÂø
 	hr = Add_Component(L"Transform", reinterpret_cast<CComponent**>(&m_pTransformCom));
 	if (FAILED(hr)) return hr;
-	hr = Add_Component(L"TriangleMesh", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
+	/*hr = Add_Component(L"TriangleMesh", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
+	if (FAILED(hr)) return hr;*/
+	hr = Add_Component(L"TriangleMesh_PT", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));
 	if (FAILED(hr)) return hr;

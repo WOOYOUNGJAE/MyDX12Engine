@@ -82,4 +82,11 @@ namespace Engine
 		XMVECTOR vector;
 	};
 
+	struct TEXTURE_INIT_DESC
+	{
+		bool bIsCubeMap;
+		ID3D12Device* pDevice;
+		ResourceUploadBatch* pResourceUpload;
+		std::wstring strPath;
+	};
 }

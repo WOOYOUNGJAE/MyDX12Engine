@@ -17,7 +17,7 @@ public: // Init
 		_uint iWinCX, _uint iWinCY, _Inout_ ID3D12Device** ppDevice);
 	HRESULT Init_CommandObjects();
 	HRESULT Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode);
-	// RenderTargetView, DepthStencilView
+	// RenderTargetView, Get_DepthStencilViewHeapStart
 	HRESULT Create_DescriptorHeap();
 
 public: // LifeCycle
@@ -32,10 +32,13 @@ public:
 public: // Getter
 	ComPtr<ID3D12Device> Get_Device() { return m_pDevice.Get(); }
 	ComPtr<ID3D12GraphicsCommandList>  Get_CommandList() { return m_pCommandList.Get(); }
-	D3D12_CPU_DESCRIPTOR_HANDLE Get_DepthStenciView() { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); }
+	ComPtr < ID3D12CommandQueue> Get_CommandQueue() { return m_pCommandQueue.Get(); }
 	ID3D12Resource* CurrentBackBuffer() { return m_pRenderTargets[m_iCurrBackBuffer].Get(); }
+	D3D12_CPU_DESCRIPTOR_HANDLE Get_DepthStenciViewHeapStart() { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView() const;
-	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView()const { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); };
+	D3D12_CPU_DESCRIPTOR_HANDLE Get_DepthStencilViewHeapStart()const { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); };
+	D3D12_CPU_DESCRIPTOR_HANDLE Get_SRVHeapStart() { return m_pSrvHeap->GetCPUDescriptorHandleForHeapStart(); }
+	ID3D12DescriptorHeap* Get_SRVHeap() { return m_pSrvHeap.Get(); }
 private: // ComPtr
 	ComPtr<IDXGIFactory4> m_pDxgi_Factory = nullptr;
 	ComPtr<ID3D12Device> m_pDevice = nullptr;

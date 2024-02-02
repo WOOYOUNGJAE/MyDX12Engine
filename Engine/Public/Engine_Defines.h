@@ -5,6 +5,7 @@
 // XTK12
 #include "DDSTextureLoader.h"
 #include "VertexTypes.h"
+#include "ResourceUploadBatch.h"
 
 #include <string>
 #include <array>
@@ -58,5 +59,6 @@ using namespace Microsoft::WRL;
 using namespace Engine;
 using namespace Engine::MyMath;
 
+using std::wstring;
 // extern
 extern _uint g_iNumFrameResource;
