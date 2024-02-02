@@ -69,7 +69,7 @@ void CTriangle::Late_Tick(_float fDeltaTime)
 
 void CTriangle::Render_Tick()
 {	
-	m_pRendererCom->AddTo_RenderGroup(RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE, PARAM_SIMPLE, this);
+	m_pRendererCom->AddTo_RenderGroup(RENDER_AFTER, NOBLEND, PARAM_SAMPLER, SHADERTYPE_SIMPLE2, this);
 }
 
 HRESULT CTriangle::Free()

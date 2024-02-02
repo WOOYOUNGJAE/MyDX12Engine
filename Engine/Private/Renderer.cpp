@@ -223,9 +223,9 @@ void CRenderer::AddTo_RenderGroup(RENDERGROUP eRenderGroup, CGameObject* pGameOb
 	Safe_AddRef(pGameObject);
 }
 
-void CRenderer::AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eRootsigEnum, UINT eShaderTypeEnum,
-	CGameObject* pGameObject)
+void CRenderer::AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eParamComboEnum,
+                                  CGameObject* pGameObject)
 {
-	m_RenderGroup[IsFirst][eBlendModeEnum][eRootsigEnum][eShaderTypeEnum].push_back(pGameObject);
+	m_RenderGroup[IsFirst][eBlendModeEnum][eParamComboEnum][eShaderTypeEnum].push_back(pGameObject);
 	Safe_AddRef(pGameObject);
 }
