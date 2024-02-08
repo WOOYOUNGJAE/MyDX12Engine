@@ -17,13 +17,6 @@ CMainApp::~CMainApp()
 
 HRESULT CMainApp::Initialize()
 {
-#ifdef _DEBUG
-	AllocConsole();
-	freopen("CONIN$", "r", stdin);
-	freopen("CONOUT$", "w", stdout);
-	freopen("CONOUT$", "w", stderr);
-#endif // _DEBUG
-
 	GRAPHIC_DESC graphic_desc{};
 	graphic_desc.hWnd = g_hwnd;
 	graphic_desc.iSizeX = g_iWinSizeX;
@@ -78,9 +71,6 @@ HRESULT CMainApp::Free()
 
 	CGameInstance::Release_Engine();
 
-#ifdef _DEBUG
-	FreeConsole();
-#endif
 
 	
 	return S_OK;

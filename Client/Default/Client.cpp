@@ -27,6 +27,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 {
 #ifdef _DEBUG
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    AllocConsole();
+    freopen("CONIN$", "r", stdin);
+    freopen("CONOUT$", "w", stdout);
+    freopen("CONOUT$", "w", stderr);
 #endif
 
     UNREFERENCED_PARAMETER(hPrevInstance);
@@ -185,7 +189,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
     case WM_DESTROY:
-        PostQuitMessage(0);
+	    {
+#ifdef _DEBUG
+    		FreeConsole();
+#endif
+			PostQuitMessage(0);
+	    }
         break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);

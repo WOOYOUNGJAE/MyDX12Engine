@@ -202,7 +202,6 @@
     <ClInclude Include="..\Public\ObjLayer.h" />
     <ClInclude Include="..\Public\ObjMonobehaviour.h" />
     <ClInclude Include="..\Public\PipelineManager.h" />
-    <ClInclude Include="..\Public\PSO.h" />
     <ClInclude Include="..\Public\Renderer.h" />
     <ClInclude Include="..\Public\Shader.h" />
     <ClInclude Include="..\Public\Texture.h" />
@@ -232,7 +231,6 @@
     <ClCompile Include="..\Private\ObjLayer.cpp" />
     <ClCompile Include="..\Private\ObjMonobehaviour.cpp" />
     <ClCompile Include="..\Private\PipelineManager.cpp" />
-    <ClCompile Include="..\Private\PSO.cpp" />
     <ClCompile Include="..\Private\Renderer.cpp" />
     <ClCompile Include="..\Private\Shader.cpp" />
     <ClCompile Include="..\Private\Texture.cpp" />

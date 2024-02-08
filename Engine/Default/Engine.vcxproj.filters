@@ -40,9 +40,6 @@
     <Filter Include="Utility\GameObjects\DefaultGeometry">
       <UniqueIdentifier>{bf6fbe13-91ac-468b-8cd8-26f76d6f2db5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\PipleLine">
-      <UniqueIdentifier>{2a2d9e89-7411-42c6-8e73-e246818c33bb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility\Components\Shader">
       <UniqueIdentifier>{288c46b5-b6e7-47e4-b1b7-f19de8a39648}</UniqueIdentifier>
     </Filter>
@@ -58,14 +55,14 @@
     <Filter Include="Utility\Components\Renderer">
       <UniqueIdentifier>{8f25aa8b-c0b4-4cdf-b681-c5aaf42a16e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\PipleLine\PSO">
-      <UniqueIdentifier>{41b3bb80-a7e6-4cc6-9896-3640acc0ba3c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="System\Interface">
       <UniqueIdentifier>{6e76f977-ace3-49c8-830b-95b293c017cf}</UniqueIdentifier>
     </Filter>
     <Filter Include="Utility\Components\Texture">
       <UniqueIdentifier>{88dd2c26-0265-4f76-a7a4-36e78875358f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\D3D Graphics">
+      <UniqueIdentifier>{2a2d9e89-7411-42c6-8e73-e246818c33bb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -92,9 +89,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Engine_Struct.h">
       <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Graphic_Device.h">
-      <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Component.h">
       <Filter>Utility\Components</Filter>
@@ -130,7 +124,7 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\PipelineManager.h">
-      <Filter>Utility\PipleLine</Filter>
+      <Filter>System\D3D Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Engine_Enums.h">
       <Filter>Headers</Filter>
@@ -147,9 +141,6 @@
     <ClInclude Include="..\Public\Renderer.h">
       <Filter>Utility\Components\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\PSO.h">
-      <Filter>Utility\PipleLine\PSO</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\TriangleMesh.h">
       <Filter>Utility\Components\GeometryMesh\2D</Filter>
     </ClInclude>
@@ -163,6 +154,9 @@
       <Filter>Utility\Components\Texture</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\TriangleMesh_PT.h" />
+    <ClInclude Include="..\Public\Graphic_Device.h">
+      <Filter>System\D3D Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -170,9 +164,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\GameInstance.cpp">
       <Filter>Utility\GameInstance</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Graphic_Device.cpp">
-      <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Component.cpp">
       <Filter>Utility\Components</Filter>
@@ -202,7 +193,7 @@
       <Filter>Utility\GameObjects\DefaultGeometry</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PipelineManager.cpp">
-      <Filter>Utility\PipleLine</Filter>
+      <Filter>System\D3D Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Shader.cpp">
       <Filter>Utility\Components\Shader</Filter>
@@ -215,9 +206,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\Renderer.cpp">
       <Filter>Utility\Components\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\PSO.cpp">
-      <Filter>Utility\PipleLine\PSO</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TriangleMesh.cpp">
       <Filter>Utility\Components\GeometryMesh\2D</Filter>
@@ -235,6 +223,9 @@
       <Filter>0.Shaders</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TriangleMesh_PT.cpp" />
+    <ClCompile Include="..\Private\Graphic_Device.cpp">
+      <Filter>System\D3D Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />
