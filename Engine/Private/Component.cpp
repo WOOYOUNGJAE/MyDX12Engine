@@ -3,9 +3,7 @@
 
 
 CComponent::CComponent()
-
 {
-	//ID3D12Device가 Comptr라 AddRef 안함
 }
 
 HRESULT CComponent::Initialize_Prototype()

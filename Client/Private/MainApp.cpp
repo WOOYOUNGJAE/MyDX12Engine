@@ -35,6 +35,8 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(hr)) { return hr; }
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", L"Layer0", &pObjectControlling);
 	if (FAILED(hr)) { return hr; }
+	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", L"Layer0", &pObjectControlling);
+	if (FAILED(hr)) { return hr; }*/
 	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", L"Layer0", &pObjectControlling);
 	if (FAILED(hr)) { return hr; }*/
 	// m_pGameInstance->Update_ObjPipelineLayer(pObjectControlling, Pipeline::ENUM_PSO::PSO_DEFAULT);

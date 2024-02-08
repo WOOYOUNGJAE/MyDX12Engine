@@ -128,7 +128,7 @@ void CRenderer::MainRender()
 
 					if (eParamComboType != PARAM_SIMPLE)
 					{
-						ID3D12DescriptorHeap* pSrvHeap = m_pGraphic_Device->Get_SRVHeap();
+						ID3D12DescriptorHeap* pSrvHeap = m_pGraphic_Device->Get_CbvSrvUavHeap();
 						ID3D12DescriptorHeap* ppHeaps[] = { pSrvHeap };
 						m_pCommandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 						m_pCommandList->SetGraphicsRootDescriptorTable(0, pSrvHeap->GetGPUDescriptorHandleForHeapStart()); // 세팅된 RootSig의 어디?

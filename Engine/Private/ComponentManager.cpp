@@ -16,7 +16,6 @@ HRESULT CComponentManager::Initialize()
 #pragma region Init_Basic_Components
 	ID3D12Device* pDevice = CGraphic_Device::Get_Instance()->Get_Device().Get();
 	CGraphic_Device::Get_Instance()->Reset_CmdList();
-	Add_Prototype(L"Transform", CTransform::Create());
 	Add_Prototype(L"CubeMesh", CCubeMesh::Create());
 	Add_Prototype(L"TriangleMesh", CTriangleMesh::Create());
 	Add_Prototype(L"TriangleMesh_PT", CTriangleMesh_PT::Create());
@@ -45,6 +44,8 @@ HRESULT CComponentManager::Initialize()
 	Add_Prototype(L"Renderer", CRenderer::Create());
 
 
+#pragma region Component with Descriptor
+	Add_Prototype(L"Transform", CTransform::Create());
 	//Texture
 	{
 		ResourceUploadBatch resourceUpload(pDevice);
@@ -60,6 +61,8 @@ HRESULT CComponentManager::Initialize()
 		auto finish = resourceUpload.End(CGraphic_Device::Get_Instance()->Get_CommandQueue().Get());
 		finish.wait();
 	}
+#pragma endregion
+
 
 	CGraphic_Device::Get_Instance()->Close_CmdList();
 	CGraphic_Device::Get_Instance()->Execute_CmdList();

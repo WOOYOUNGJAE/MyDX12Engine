@@ -18,6 +18,7 @@ public: // LifeCycle
 	virtual void Render_Tick(){};
 	HRESULT Free() override;
 public: // getter setter
+	ID3D12RootSignature* Get_RootSig() { return m_pRootSig; }
 	virtual int& Get_NumFrameDirtyRef() { int a = -1; return a; };
 	virtual _matrix Get_WorldMatrix() { return _matrix(); };
 	virtual _float3 Get_Pos() { return _float3(); }
@@ -32,7 +33,7 @@ public:
 
 protected:
 	map<wstring, CComponent*> m_mapComponents;
-	_uint m_eENUM_PSO = 0; // PSO_DEFAULT
+	ID3D12RootSignature* m_pRootSig = nullptr;
 };
 
 _NAMESPACE

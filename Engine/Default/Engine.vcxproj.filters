@@ -64,6 +64,12 @@
     <Filter Include="System\D3D Graphics">
       <UniqueIdentifier>{2a2d9e89-7411-42c6-8e73-e246818c33bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System\D3D Graphics\Graphic_Device">
+      <UniqueIdentifier>{1b2545aa-66db-4b8a-bb1d-f325853d2128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\D3D Graphics\Pipeline">
+      <UniqueIdentifier>{c6534910-263d-48f7-81d2-381c19c0815f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -123,9 +129,6 @@
     <ClInclude Include="..\Public\UploadBuffer.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\PipelineManager.h">
-      <Filter>System\D3D Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Engine_Enums.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -155,7 +158,10 @@
     </ClInclude>
     <ClInclude Include="..\Public\TriangleMesh_PT.h" />
     <ClInclude Include="..\Public\Graphic_Device.h">
-      <Filter>System\D3D Graphics</Filter>
+      <Filter>System\D3D Graphics\Graphic_Device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\PipelineManager.h">
+      <Filter>System\D3D Graphics\Pipeline</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -192,9 +198,6 @@
     <ClCompile Include="..\Private\Cube.cpp">
       <Filter>Utility\GameObjects\DefaultGeometry</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\PipelineManager.cpp">
-      <Filter>System\D3D Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Shader.cpp">
       <Filter>Utility\Components\Shader</Filter>
     </ClCompile>
@@ -224,7 +227,10 @@
     </ClCompile>
     <ClCompile Include="..\Private\TriangleMesh_PT.cpp" />
     <ClCompile Include="..\Private\Graphic_Device.cpp">
-      <Filter>System\D3D Graphics</Filter>
+      <Filter>System\D3D Graphics\Graphic_Device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\PipelineManager.cpp">
+      <Filter>System\D3D Graphics\Pipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

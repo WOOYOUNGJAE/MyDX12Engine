@@ -54,7 +54,7 @@ HRESULT CTexture::Initialize_Prototype(TEXTURE_INIT_DESC* pInitDesc)
 	pInitDesc->pDevice->CreateShaderResourceView(
 		m_pTextureData,
 		&srvDesc,
-		CGraphic_Device::Get_Instance()->Get_SRVHeapStart());
+		CGraphic_Device::Get_Instance()->Get_CbvSrvUavHeapStart());
 
 	return hr;
 }

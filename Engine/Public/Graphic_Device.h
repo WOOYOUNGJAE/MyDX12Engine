@@ -19,7 +19,7 @@ public: // Init
 	HRESULT Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode);
 	// RenderTargetView, Get_DepthStencilViewHeapStart
 	HRESULT Create_DescriptorHeap();
-
+	HRESULT Create_CbvSrvUavDescriptorHeap(UINT iNumDescriptors);
 public: // LifeCycle
 	HRESULT Flush_CommandQueue(const QUEUE_FLUSH_DESC* queue_flush_desc);
 	HRESULT Flush_CommandQueue();

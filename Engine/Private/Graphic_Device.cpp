@@ -211,13 +211,13 @@ HRESULT CGraphic_Device::Create_DescriptorHeap()
 		&rtvHeapDesc, IID_PPV_ARGS(m_pRtvHeap.GetAddressOf()));
 	if (FAILED(hr)) { return E_FAIL; }
 
-	// Shader Resource View
-	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-	srvHeapDesc.NumDescriptors = 1;
-	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	// CBV SRV UAV Heap
+	D3D12_DESCRIPTOR_HEAP_DESC cbvsrvuavHeapDesc = {};
+	cbvsrvuavHeapDesc.NumDescriptors = 1;
+	cbvsrvuavHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	cbvsrvuavHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 
-	hr = m_pDevice->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_pSrvHeap));
+	hr = m_pDevice->CreateDescriptorHeap(&cbvsrvuavHeapDesc, IID_PPV_ARGS(&m_pCbvSrvUavHeap));
 	if (FAILED(hr)) { return E_FAIL; }
 
 	// Depth Stencil View
@@ -236,6 +236,21 @@ HRESULT CGraphic_Device::Create_DescriptorHeap()
 	
 
 	return S_OK;
+}
+
+HRESULT CGraphic_Device::Create_CbvSrvUavDescriptorHeap(UINT iNumDescriptors)
+{
+	HRESULT hr = S_OK;
+
+	D3D12_DESCRIPTOR_HEAP_DESC cbvsrvuavHeapDesc = {};
+	cbvsrvuavHeapDesc.NumDescriptors = iNumDescriptors;
+	cbvsrvuavHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	cbvsrvuavHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+
+	hr = m_pDevice->CreateDescriptorHeap(&cbvsrvuavHeapDesc, IID_PPV_ARGS(&m_pCbvSrvUavHeap));
+	if (FAILED(hr)) { return E_FAIL; }
+
+	return hr;
 }
 
 

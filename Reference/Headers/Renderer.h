@@ -40,9 +40,7 @@ private: // DX Resource
 	ID3D12CommandQueue* m_pCommandQueue = nullptr;
 	ID3D12DescriptorHeap* m_pRtvHeap = nullptr;
 	ID3D12Resource** m_pRenderTargetArr = nullptr;
-private:
-	ID3D12RootSignature* m_pCurRootSig = nullptr;
-	ID3D12PipelineState* m_pCurPSO = nullptr;
+
 private:
 	UINT m_iFrameIndex = 0;
 

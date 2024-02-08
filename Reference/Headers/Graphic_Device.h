@@ -19,7 +19,7 @@ public: // Init
 	HRESULT Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode);
 	// RenderTargetView, Get_DepthStencilViewHeapStart
 	HRESULT Create_DescriptorHeap();
-
+	HRESULT Create_CbvSrvUavDescriptorHeap(UINT iNumDescriptors);
 public: // LifeCycle
 	HRESULT Flush_CommandQueue(const QUEUE_FLUSH_DESC* queue_flush_desc);
 	HRESULT Flush_CommandQueue();
@@ -37,8 +37,8 @@ public: // Getter
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_DepthStenciViewHeapStart() { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView() const;
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_DepthStencilViewHeapStart()const { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); };
-	D3D12_CPU_DESCRIPTOR_HANDLE Get_SRVHeapStart() { return m_pSrvHeap->GetCPUDescriptorHandleForHeapStart(); }
-	ID3D12DescriptorHeap* Get_SRVHeap() { return m_pSrvHeap.Get(); }
+	D3D12_CPU_DESCRIPTOR_HANDLE Get_CbvSrvUavHeapStart() { return m_pCbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(); }
+	ID3D12DescriptorHeap* Get_CbvSrvUavHeap() { return m_pCbvSrvUavHeap.Get(); }
 private: // ComPtr
 	ComPtr<IDXGIFactory4> m_pDxgi_Factory = nullptr;
 	ComPtr<ID3D12Device> m_pDevice = nullptr;
@@ -59,7 +59,7 @@ private: // Descriptor
 private: // Descriptor Heap
 	static const int m_iSwapChainBufferCount = 2; // 더블 버퍼링때문에 2로 초기화
 	ComPtr<ID3D12DescriptorHeap> m_pRtvHeap = nullptr;
-	ComPtr<ID3D12DescriptorHeap> m_pSrvHeap = nullptr;
+	ComPtr<ID3D12DescriptorHeap> m_pCbvSrvUavHeap = nullptr;
 	ComPtr<ID3D12DescriptorHeap> m_pDsvHeap = nullptr;
 	ComPtr<ID3D12Resource> m_pRenderTargets[m_iSwapChainBufferCount]{};
 	ComPtr<ID3D12Resource> m_pDepthStencilBuffer = nullptr;

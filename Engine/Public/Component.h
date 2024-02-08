@@ -15,6 +15,11 @@ public:
 	virtual CComponent* Clone(void* pArg = nullptr) = 0;
 	virtual HRESULT Free() override;
 
+public:
+	UINT Get_DescriptorCount() const { return m_iDescriptorCount; }
+
+protected:
+	UINT m_iDescriptorCount = 0;
 };
 
 _NAMESPACE
