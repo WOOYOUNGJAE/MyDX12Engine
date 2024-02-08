@@ -35,6 +35,7 @@ public: // Manager Function Offer
 	void Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum);
 public:
 	class CRenderer* Get_Renderer();
+
 private:
 	class CGraphic_Device* m_pGraphic_Device = nullptr;
 	class CComponentManager* m_pComponentManager = nullptr;

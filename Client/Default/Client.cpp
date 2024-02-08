@@ -73,7 +73,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             }
         }
 
-        pMainApp->Tick_Render(0.2f);
+        pMainApp->Tick(0.2f);
     }
 
     //pGameInstance->Destroy_Instance(); // TODO : MainApp 내에서 일괄적으로 하도록

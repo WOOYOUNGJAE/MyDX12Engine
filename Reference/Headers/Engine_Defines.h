@@ -7,6 +7,7 @@
 #include "VertexTypes.h"
 #include "ResourceUploadBatch.h"
 
+#include <iostream>
 #include <string>
 #include <array>
 #include <vector>
@@ -58,7 +59,6 @@ using namespace Microsoft::WRL;
 // namespace
 using namespace Engine;
 using namespace Engine::MyMath;
-
 using std::wstring;
 // extern
 extern _uint g_iNumFrameResource;

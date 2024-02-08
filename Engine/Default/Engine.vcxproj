@@ -211,9 +211,6 @@
     <ClInclude Include="..\Public\TriangleMesh.h" />
     <ClInclude Include="..\Public\TriangleMesh_PT.h" />
     <ClInclude Include="..\Public\UploadBuffer.h" />
-    <ClInclude Include="C:\Users\azn2w\Git\MyDX12Engine\Engine\Public\P_ManagerLegacy.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Bin\Shader\simpleShader2.hlsl">
@@ -243,9 +240,6 @@
     <ClCompile Include="..\Private\Triangle.cpp" />
     <ClCompile Include="..\Private\TriangleMesh.cpp" />
     <ClCompile Include="..\Private\TriangleMesh_PT.cpp" />
-    <ClCompile Include="C:\Users\azn2w\Git\MyDX12Engine\Engine\Private\P_ManagerLegacy.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\color0.hlsl">

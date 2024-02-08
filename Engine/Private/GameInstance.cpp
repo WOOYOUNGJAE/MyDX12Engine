@@ -8,7 +8,6 @@
 #include "CubeMesh.h"
 #include "PipelineManager.h"
 #pragma endregion
-
 IMPLEMENT_SINGLETON(CGameInstance)
 
 CGameInstance::CGameInstance() :

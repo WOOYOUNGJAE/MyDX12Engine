@@ -175,17 +175,19 @@ HRESULT CPipelineManager::Initialize()
 				// VertexShader ByteCode
 				CShader* pShader = dynamic_cast<CShader*>(m_pComponentManager->FindandGet_Prototype(strKey));
 				ComPtr<ID3DBlob>  byteCode = pShader->Get_ByteCode(CShader::TYPE_VERTEX);
-				pso_desc.VS =
+				pso_desc.VS = CD3DX12_SHADER_BYTECODE(byteCode.Get());
+				/*pso_desc.VS =
 				{
 					reinterpret_cast<BYTE*>(byteCode->GetBufferPointer()),
 					byteCode->GetBufferSize()
-				};
+				};*/
 				byteCode = pShader->Get_ByteCode(CShader::TYPE_PIXEL);
-				pso_desc.PS =
+				pso_desc.PS = CD3DX12_SHADER_BYTECODE(byteCode.Get());
+				/*pso_desc.PS =
 				{
 					reinterpret_cast<BYTE*>(byteCode->GetBufferPointer()),
 					byteCode->GetBufferSize()
-				};
+				};*/
 
 				for (UINT eParamComboType = 0; eParamComboType < RENDER_PARAMCOMBO_END; ++eParamComboType)
 				{

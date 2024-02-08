@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "MainApp.h"
+
 #include "Renderer.h"
 #include "Client_Defines.h"
 #include "GameInstance.h"
-#include "Camera_Free.h"	
+#include "Camera_Free.h"
 
 CMainApp::CMainApp() : m_pGameInstance{ CGameInstance::Get_Instance()}
 {
@@ -17,12 +18,11 @@ CMainApp::~CMainApp()
 HRESULT CMainApp::Initialize()
 {
 #ifdef _DEBUG
-	/*AllocConsole();
+	AllocConsole();
 	freopen("CONIN$", "r", stdin);
 	freopen("CONOUT$", "w", stdout);
-	freopen("CONOUT$", "w", stderr);*/
+	freopen("CONOUT$", "w", stderr);
 #endif // _DEBUG
-
 
 	GRAPHIC_DESC graphic_desc{};
 	graphic_desc.hWnd = g_hwnd;
@@ -56,10 +56,11 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 	}
 
+
+
 	return S_OK;
 }
-
-void CMainApp::Tick_Render(_float fDeltaTime)
+void CMainApp::Tick(_float fDeltaTime)
 {
 	m_pRenderer->BeginRender();
 
@@ -76,7 +77,12 @@ HRESULT CMainApp::Free()
 	Safe_Release(m_pGameInstance);
 
 	CGameInstance::Release_Engine();
-	//FreeConsole();
+
+#ifdef _DEBUG
+	FreeConsole();
+#endif
+
+	
 	return S_OK;
 }
 
