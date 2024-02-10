@@ -89,4 +89,10 @@ namespace Engine
 		ResourceUploadBatch* pResourceUpload;
 		std::wstring strPath;
 	};
+
+	struct TEXTURE_LOAD_DESC // for Client
+	{
+		bool bIsCubeMap;
+		std::wstring strPath;
+	};
 }

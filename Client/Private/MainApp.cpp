@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "MainApp.h"
-
 #include "Renderer.h"
 #include "Client_Defines.h"
 #include "GameInstance.h"
 #include "Camera_Free.h"
+#include "ClientLoader.h"
 CMainApp::CMainApp() : m_pGameInstance{ CGameInstance::Get_Instance()}
 {
 	Safe_AddRef(m_pGameInstance);
@@ -28,7 +28,12 @@ HRESULT CMainApp::Initialize()
 	m_pGameInstance->Init_Engine(graphic_desc, &m_pDevice);
 	if (FAILED(hr)) { return hr; }
 
-	
+	// Loader
+	CClientLoader* pLoader = CClientLoader::Create();
+	pLoader->Load();
+	Safe_Release(pLoader);
+
+
 
 #pragma region InLevel
 	hr = m_pGameInstance->Add_GameObjPrototype(L"Camera_Free", CCamera_Free::Create());

@@ -3,9 +3,7 @@
 #include "Client_Defines.h"
 
 NAMESPACE_(Engine)
-class CComponentManager;
-class CComponent;
-class CTexture;
+class CLoadHelper;
 _NAMESPACE
 
 
@@ -19,12 +17,12 @@ private:
 
 public:
 	static CClientLoader* Create();
-	void Load(ID3D12Device* pDevice);
+	void Load();
 	void Load_Textures();
 	HRESULT Free() override;
+
 private:
-	ID3D12Device* m_pDevice;
-	CComponentManager* m_pCompoManager;
+	CLoadHelper* m_pHelper = nullptr;
 };
 
 _NAMESPACE

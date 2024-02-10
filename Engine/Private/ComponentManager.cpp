@@ -47,7 +47,7 @@ HRESULT CComponentManager::Initialize()
 #pragma region Component with Descriptor
 	Add_Prototype(L"Transform", CTransform::Create());
 	//Texture
-	{
+	/*{
 		ResourceUploadBatch resourceUpload(pDevice);
 		resourceUpload.Begin();
 
@@ -60,7 +60,7 @@ HRESULT CComponentManager::Initialize()
 		Add_Prototype(L"Texture_Checkboard", CTexture::Create(&texture_init_desc));
 		auto finish = resourceUpload.End(CGraphic_Device::Get_Instance()->Get_CommandQueue().Get());
 		finish.wait();
-	}
+	}*/
 #pragma endregion
 
 

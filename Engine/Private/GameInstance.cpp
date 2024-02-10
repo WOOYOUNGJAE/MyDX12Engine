@@ -3,10 +3,10 @@
 #include "Graphic_Device.h"
 #include "ComponentManager.h"
 #include "GameObjectManager.h"
-#include "GameObject.h"
 #include "Component.h"
 #include "CubeMesh.h"
 #include "PipelineManager.h"
+#include "LoadHelper.h"
 #pragma endregion
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -14,7 +14,8 @@ CGameInstance::CGameInstance() :
 m_pGraphic_Device(CGraphic_Device::Get_Instance()),
 m_pComponentManager(CComponentManager::Get_Instance()),
 m_pGameObjectManager(CGameObjectManager::Get_Instance()),
-m_pPipelineManager(CPipelineManager::Get_Instance())
+m_pPipelineManager(CPipelineManager::Get_Instance()),
+m_pLoadHelper(CLoadHelper::Get_Instance())
 {
 	Safe_AddRef(m_pGraphic_Device);
 	Safe_AddRef(m_pComponentManager);
@@ -24,6 +25,7 @@ m_pPipelineManager(CPipelineManager::Get_Instance())
 
 HRESULT CGameInstance::Free()
 {
+	Safe_Release(m_pLoadHelper);
 	Safe_Release(m_pPipelineManager);
 	Safe_Release(m_pGameObjectManager);
 	Safe_Release(m_pComponentManager);
@@ -48,7 +50,7 @@ HRESULT CGameInstance::Init_Engine(const GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D
 		return E_FAIL;
 	}
 
-
+	m_pLoadHelper->Initialize();
 
 	return S_OK;
 }
@@ -82,6 +84,7 @@ void CGameInstance::Release_Engine()
 	CComponentManager::Destroy_Instance();
 	CGameObjectManager::Destroy_Instance();
 	CGraphic_Device::Destroy_Instance();
+	CLoadHelper::Destroy_Instance();
 	CGameInstance::Get_Instance()->Destroy_Instance();
 }
 

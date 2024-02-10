@@ -42,7 +42,7 @@
     <ClInclude Include="..\Public\Camera_Free.h">
       <Filter>GameObject\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Loader_Client.h" />
+    <ClInclude Include="..\Public\ClientLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -57,7 +57,7 @@
     <ClCompile Include="..\Private\Camera_Free.cpp">
       <Filter>GameObject\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Loader_Client.cpp" />
+    <ClCompile Include="..\Private\ClientLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -71,8 +71,5 @@
     <ResourceCompile Include="Client.rc">
       <Filter>Default</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

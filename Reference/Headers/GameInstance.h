@@ -25,7 +25,7 @@ public:
 public: // Manager Function Offer
 	// ComponentManager
 	HRESULT Add_ComPrototype(const wstring& strTag, class CComponent* pComInstance);
-	CComponent* Clone_ComPrototye(const wstring& strTag, void* pArg = nullptr);
+	CComponent* Clone_ComPrototype(const wstring& strTag, void* pArg = nullptr);
 	// GameObjManager
 	HRESULT Add_GameObjPrototype(const wstring& strTag, class CGameObject* pInstance);
 	CGameObject* Clone_GameObject(const wstring& strPrototypeTag, void* pArg = nullptr);
@@ -41,6 +41,7 @@ private:
 	class CComponentManager* m_pComponentManager = nullptr;
 	class CGameObjectManager* m_pGameObjectManager = nullptr;
 	class CPipelineManager* m_pPipelineManager = nullptr;
+	class CLoadHelper* m_pLoadHelper = nullptr;
 };
 
 _NAMESPACE
