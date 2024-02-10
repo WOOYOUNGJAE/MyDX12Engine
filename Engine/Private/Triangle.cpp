@@ -45,10 +45,10 @@ HRESULT CTriangle::Initialize(void* pArg)
 	// ±âº» ÄÄÆ÷³ÍÆ® ºÎÂø
 	hr = Add_Component(L"Transform", reinterpret_cast<CComponent**>(&m_pTransformCom));
 	if (FAILED(hr)) return hr;
-	/*hr = Add_Component(L"TriangleMesh", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
-	if (FAILED(hr)) return hr;*/
-	hr = Add_Component(L"TriangleMesh_PT", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
+	hr = Add_Component(L"TriangleMesh", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
 	if (FAILED(hr)) return hr;
+	/*hr = Add_Component(L"TriangleMesh_PT", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
+	if (FAILED(hr)) return hr;*/
 	hr = Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Shader_Simple", reinterpret_cast<CComponent**>(&m_pShaderCom));
@@ -69,7 +69,7 @@ void CTriangle::Late_Tick(_float fDeltaTime)
 
 void CTriangle::Render_Tick()
 {	
-	m_pRendererCom->AddTo_RenderGroup(RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE2, ROOTSIG_DEFAULT, this);
+	m_pRendererCom->AddTo_RenderGroup(RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE, ROOTSIG_DEFAULT, this);
 }
 
 HRESULT CTriangle::Free()
