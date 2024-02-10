@@ -156,12 +156,14 @@
     <ClInclude Include="..\Public\Texture.h">
       <Filter>Utility\Components\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\TriangleMesh_PT.h" />
     <ClInclude Include="..\Public\Graphic_Device.h">
       <Filter>System\D3D Graphics\Graphic_Device</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\PipelineManager.h">
       <Filter>System\D3D Graphics\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TriangleMesh_PT.h">
+      <Filter>Utility\Components\GeometryMesh\2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -225,12 +227,14 @@
     <ClCompile Include="..\Bin\Shader\simpleShader2.hlsl">
       <Filter>0.Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\TriangleMesh_PT.cpp" />
     <ClCompile Include="..\Private\Graphic_Device.cpp">
       <Filter>System\D3D Graphics\Graphic_Device</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PipelineManager.cpp">
       <Filter>System\D3D Graphics\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TriangleMesh_PT.cpp">
+      <Filter>Utility\Components\GeometryMesh\2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

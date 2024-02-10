@@ -31,31 +31,32 @@ HRESULT CPipelineManager::Initialize()
 #pragma region Build Root Signature
 
 #pragma region _RootSig_Simple
-	CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc;
-	rootSigDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+	//CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc;
+	//rootSigDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
-	// 상수 버퍼 하나로 구성된 서술자 구간을 가리키는, 슬롯하나로 이루어진 루트 시그니쳐 생성
-	ComPtr<ID3DBlob> serializedRootSig;
-	ComPtr<ID3DBlob> errorBlob;
+	//// 상수 버퍼 하나로 구성된 서술자 구간을 가리키는, 슬롯하나로 이루어진 루트 시그니쳐 생성
+	//ComPtr<ID3DBlob> serializedRootSig;
+	//ComPtr<ID3DBlob> errorBlob;
 
-	hr = D3D12SerializeRootSignature(&rootSigDesc, D3D_ROOT_SIGNATURE_VERSION_1,
-		serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf());
-	if (FAILED(hr)) { return hr; }
+	//hr = D3D12SerializeRootSignature(&rootSigDesc, D3D_ROOT_SIGNATURE_VERSION_1,
+	//	serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf());
+	//if (FAILED(hr)) { return hr; }
 
-	if (errorBlob)
-	{
-		::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
-	}
+	//if (errorBlob)
+	//{
+	//	::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+	//}
 
-	hr = m_pDevice->CreateRootSignature(
-		0,
-		serializedRootSig->GetBufferPointer(),
-		serializedRootSig->GetBufferSize(),
-		IID_PPV_ARGS(&m_rootSigArr[PARAM_SIMPLE]));
-	if (FAILED(hr)) { return hr; }
+	//hr = m_pDevice->CreateRootSignature(
+	//	0,
+	//	serializedRootSig->GetBufferPointer(),
+	//	serializedRootSig->GetBufferSize(),
+	//	IID_PPV_ARGS(&m_rootSigArr[ROOTSIG_DEFAULT]));
+	//if (FAILED(hr)) { return hr; }
 #pragma endregion
 
 #pragma region _Rootsig_TextureSampler
+	// [][]
 	D3D12_FEATURE_DATA_ROOT_SIGNATURE RSFeatureData = {};
 
 	// This is the highest version the sample supports. If CheckFeatureSupport succeeds, the HighestVersion returned will not be greater than this.
@@ -105,7 +106,7 @@ HRESULT CPipelineManager::Initialize()
 		0,
 		signature->GetBufferPointer(),
 		signature->GetBufferSize(),
-		IID_PPV_ARGS(&m_rootSigArr[PARAM_SAMPLER]));
+		IID_PPV_ARGS(&m_rootSigArr[ROOTSIG_DEFAULT]));
 	if (FAILED(hr)) { return hr; }
 
 #pragma endregion
@@ -115,24 +116,48 @@ HRESULT CPipelineManager::Initialize()
 
 
 #pragma region Make InputLayout
-	D3D12_INPUT_ELEMENT_DESC input_layout_desc[RENDER_PARAMCOMBO_END][2] // POS, COL
+	D3D12_INPUT_ELEMENT_DESC inputLayoutDesc_single[1][1]
+	{ "POSITION",		0,		DXGI_FORMAT_R32G32B32_FLOAT,		0,		0,		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,		0 };
+
+	D3D12_INPUT_ELEMENT_DESC inputLayoutDesc_Double[2][2]
 	{
-	 {
+		{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
 		},
 	 {
 		 { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
-	 }
-	};
-	for (UINT iInputLayoutType = 0; iInputLayoutType < RENDER_PARAMCOMBO_END; ++iInputLayoutType)
-	{
-		for (auto& iter : input_layout_desc[iInputLayoutType])
-		{
-			m_vecInputLayoutArr[iInputLayoutType].push_back(iter);
 		}
+	};
+	UINT iInputLayoutIndex = 0;
+	// Vertex Type Single
+	// m_vecInputLayoutArr[SHADERTYPE_SIMPLE].push_back(inputLayoutDesc_single[1][1]);
+
+	// Vertex Type Double
+	for (auto& iterDesc : inputLayoutDesc_Double[0])
+	{
+		m_vecInputLayoutArr[SHADERTYPE_SIMPLE].push_back(iterDesc);
 	}
+	for (auto& iterDesc : inputLayoutDesc_Double[1])
+	{
+		m_vecInputLayoutArr[SHADERTYPE_SIMPLE2].push_back(iterDesc);
+	}
+
+	//for (UINT iDoubleTypeIndex = 0; iDoubleTypeIndex < 2; ++iDoubleTypeIndex)
+	//{
+	//	for (auto& iterInputLayout : inputLayoutDesc_Double[iDoubleTypeIndex])
+	//	{
+	//		m_vecInputLayoutArr
+	//	}
+	//}
+	//for (UINT iInputLayoutType/*VertexTypes*/ = 0; iInputLayoutType < RENDER_PARAMCOMBO_END; ++iInputLayoutType)
+	//{
+	//	for (auto& iter : input_layout_desc[iInputLayoutType])
+	//	{
+	//		m_vecInputLayoutArr[iInputLayoutType].push_back(iter);
+	//	}
+	//}
 
 
 #pragma endregion
@@ -159,6 +184,8 @@ HRESULT CPipelineManager::Initialize()
 		{
 			for (UINT eShaderTypeEnum = 0; eShaderTypeEnum < RENDER_SHADERTYPE_END; ++eShaderTypeEnum)
 			{
+				/* 일단 shader type과 input layout 타입 일치시킴, 변경 가능성 */
+				pso_desc.InputLayout = { m_vecInputLayoutArr[eShaderTypeEnum].data(), (UINT)m_vecInputLayoutArr[eShaderTypeEnum].size() };
 				wstring strKey = L"";
 				switch (eShaderTypeEnum)
 				{
@@ -183,29 +210,34 @@ HRESULT CPipelineManager::Initialize()
 				};*/
 				byteCode = pShader->Get_ByteCode(CShader::TYPE_PIXEL);
 				pso_desc.PS = CD3DX12_SHADER_BYTECODE(byteCode.Get());
-				/*pso_desc.PS =
-				{
-					reinterpret_cast<BYTE*>(byteCode->GetBufferPointer()),
-					byteCode->GetBufferSize()
-				};*/
 
-				for (UINT eParamComboType = 0; eParamComboType < RENDER_PARAMCOMBO_END; ++eParamComboType)
+				for (UINT eRootSigType = 0; eRootSigType < ROOTSIG_TYPE_END; ++eRootSigType)
 				{
-					if (eShaderTypeEnum != eParamComboType) // TODO: 루트시그니처, 쉐이더 종류 다양해지면 체계화
-					{
-						continue;
-					}
-
-					pso_desc.pRootSignature = m_rootSigArr[eParamComboType];
-					pso_desc.InputLayout = { m_vecInputLayoutArr[eParamComboType].data(), (UINT)m_vecInputLayoutArr[eParamComboType].size() };
-					hr = m_pDevice->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(&m_PSOsArr[IsFirst][eBlendModeEnum][eShaderTypeEnum][eParamComboType]));
+					pso_desc.pRootSignature = m_rootSigArr[eRootSigType];
+					hr = m_pDevice->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(&m_PSOsArr[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootSigType]));
 					if (FAILED(hr))
 					{
 						MSG_BOX("Failed to Create PSO");
 						return hr;
 					}
-					
 				}
+
+				//for (UINT eParamComboType = 0; eParamComboType < RENDER_PARAMCOMBO_END; ++eParamComboType)
+				//{
+				//	if (eShaderTypeEnum != eParamComboType) // TODO: 루트시그니처, 쉐이더 종류 다양해지면 체계화
+				//	{
+				//		continue;
+				//	}
+
+				//	pso_desc.pRootSignature = m_rootSigArr[eParamComboType];
+				//	hr = m_pDevice->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(&m_PSOsArr[IsFirst][eBlendModeEnum][eShaderTypeEnum][eParamComboType]));
+				//	if (FAILED(hr))
+				//	{
+				//		MSG_BOX("Failed to Create PSO");
+				//		return hr;
+				//	}
+				//	
+				//}
 			}
 		}
 	}
@@ -247,36 +279,9 @@ HRESULT CPipelineManager::Free()
 }
 
 
-HRESULT CPipelineManager::Build_PSO(const wstring& strKey, const D3D12_GRAPHICS_PIPELINE_STATE_DESC& pipeline_desc)
-{
-	HRESULT hr = S_OK;
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC pso_desc = pipeline_desc;
-	hr = m_pDevice->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(&(m_mapPSO[strKey])));
-	if (FAILED(hr))
-	{
-		MSG_BOX("Failed to Create PSO");
-		return hr;
-	}
-
-	return hr;
-}
-
-
-ID3D12RootSignature* CPipelineManager::Get_RootSig(const wstring& strKey)
-{
-	if (RootSig_Exist(strKey))
-	{
-		return m_mapRootSig[strKey];
-	}
-	else
-	{
-		return nullptr;
-	}
-}
-
 ID3D12RootSignature* CPipelineManager::Get_RootSig(UINT eRootSigType)
 {
-	if (eRootSigType < 0 || eRootSigType >= RENDER_PARAMCOMBO_END)
+	if (eRootSigType < 0 || eRootSigType >= ROOTSIG_TYPE_END)
 	{
 		return nullptr;
 	}

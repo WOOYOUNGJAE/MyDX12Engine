@@ -27,15 +27,6 @@ public:
 	HRESULT Initialize();
 	HRESULT Free() override;
 public: // RootSig and PSO
-	// TODO : Build PSO Overrides
-	HRESULT Build_PSO(const wstring& strKey, const D3D12_GRAPHICS_PIPELINE_STATE_DESC& pipeline_desc);
-	void Register_NewInputLayout(D3D12_INPUT_ELEMENT_DESC desc, ENUM_InputLayout eEnum)
-	{
-		m_vecInputLayout[eEnum].push_back(desc);
-	}
-	BOOL RootSig_Exist(const wstring& strKey) { return m_mapRootSig.find(strKey) != m_mapRootSig.end(); }
-	void Add_NewRootSig(const wstring& strKey, ID3D12RootSignature* pRootsig) { m_mapRootSig.emplace(strKey, pRootsig); }
-	void Add_NewRootSig(RENDER_PARAMCOMBO eRootSigType, ID3D12RootSignature* pRootsig) { m_rootSigArr[eRootSigType] = pRootsig; }
 	BOOL PSO_Exist(const wstring& strKey) { return m_mapPSO.find(strKey) != m_mapPSO.end(); }
 	void Add_NewPSO(const wstring& strKey, ID3D12PipelineState* pPSO) { m_mapPSO.emplace(strKey, pPSO); }
 
@@ -52,13 +43,12 @@ private: // Graphic Device
 	class CGraphic_Device* m_pGraphic_Device = nullptr; // Singleton Class
 	ComPtr<ID3D12Device> m_pDevice = nullptr; // Real Device
 private: // Root Signature
-	vector<D3D12_INPUT_ELEMENT_DESC> m_vecInputLayout[InputLayout_END];
-	vector<D3D12_INPUT_ELEMENT_DESC> m_vecInputLayoutArr[RENDER_PARAMCOMBO_END];
 	
-	map<wstring, ID3D12RootSignature*> m_mapRootSig;
-	ID3D12RootSignature* m_rootSigArr[RENDER_PARAMCOMBO_END];
+	vector<D3D12_INPUT_ELEMENT_DESC> m_vecInputLayoutArr[RENDER_SHADERTYPE_END];
+	
+	ID3D12RootSignature* m_rootSigArr[ROOTSIG_TYPE_END];
 private: // PSO
-	ID3D12PipelineState* m_PSOsArr[RENDER_PRIORITY_END][RENDER_BLENDMODE_END][RENDER_SHADERTYPE_END][RENDER_PARAMCOMBO_END];
+	ID3D12PipelineState* m_PSOsArr[RENDER_PRIORITY_END][RENDER_BLENDMODE_END][RENDER_SHADERTYPE_END][ROOTSIG_TYPE_END];
 	map<wstring, ID3D12PipelineState*> m_mapPSO;
 	PipelineLayer m_vecPipelineLayerArr[Pipeline::PSO_END]; // 게임 오브젝트의 Pipeline_Tick을 대신해 돌려주는 함수
 private: // Pointer
