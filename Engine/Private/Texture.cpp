@@ -14,7 +14,7 @@ CTexture* CTexture::Create(void* pArg)
 {
 	CTexture* pInstance = new CTexture();
 
-	pInstance->Initialize_Prototype(static_cast<TEXTURE_INIT_DESC*>(pArg));
+	//pInstance->Initialize_Prototype(static_cast<TEXTURE_INIT_DESC*>(pArg), TODO);
 
 	return pInstance;
 }
@@ -29,7 +29,7 @@ HRESULT CTexture::Initialize_Prototype()
 	return CComponent::Initialize_Prototype();
 }
 
-HRESULT CTexture::Initialize_Prototype(TEXTURE_INIT_DESC* pInitDesc)
+HRESULT CTexture::Initialize_Prototype(TEXTURE_INIT_DESC* pInitDesc, UINT* pOutNextOffset)
 {
 	HRESULT hr = S_OK;
 
@@ -41,6 +41,13 @@ HRESULT CTexture::Initialize_Prototype(TEXTURE_INIT_DESC* pInitDesc)
 		pInitDesc->strPath.c_str(),
 		&m_pTextureData, false, 0, nullptr,
 		&pInitDesc->bIsCubeMap);
+	if(FAILED(hr))
+	{
+		MSG_BOX("Create DDS Failed");
+		return E_FAIL;
+	}
+
+	m_iRtvHeapOffset = *pOutNextOffset;
 
 	m_bIsCubeMap = pInitDesc->bIsCubeMap;
 
@@ -55,6 +62,9 @@ HRESULT CTexture::Initialize_Prototype(TEXTURE_INIT_DESC* pInitDesc)
 		m_pTextureData,
 		&srvDesc,
 		CGraphic_Device::Get_Instance()->Get_CbvSrvUavHeapStart());
+
+	// Update Next Offset
+	*pOutNextOffset += CGraphic_Device::Get_Instance()->Get_RtvDescriptorSize();
 
 	return hr;
 }

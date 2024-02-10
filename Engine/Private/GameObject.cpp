@@ -29,7 +29,7 @@ HRESULT CGameObject::Add_Component(const wstring& strComTag, CComponent** ppOutC
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	CComponent* pComponent = pGameInstance->Clone_ComPrototye(strComTag, pArg);
+	CComponent* pComponent = pGameInstance->Clone_ComPrototype(strComTag, pArg);
 	if (pComponent == nullptr)
 	{
 		return E_FAIL;

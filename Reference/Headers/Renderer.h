@@ -25,9 +25,10 @@ public:
 	void EndRender();
 	void Present();
 	HRESULT Free() override;
-public:
-	void AddTo_RenderGroup(RENDERGROUP eRenderGroup, class CGameObject* pGameObject);
+public: // Component Functions for GameObject
 	void AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigTypeEnum, class CGameObject* pGameObject);
+	void Set_DescriptorTable(UINT64 iOffset, ID3D12GraphicsCommandList* pCommandList, UINT iTableTypeIndex, CD3DX12_GPU_DESCRIPTOR_HANDLE
+	                         * pHeapHandle);
 private:
 	// n차원 배열
 	list<CGameObject*> m_RenderGroup[RENDER_PRIORITY_END][RENDER_BLENDMODE_END][RENDER_SHADERTYPE_END][ROOTSIG_TYPE_END];

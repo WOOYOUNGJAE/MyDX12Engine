@@ -106,22 +106,25 @@ void CRenderer::BeginRender()
 
 void CRenderer::MainRender()
 {
+	UINT iTableTypeIndex = 0;
 	for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
 	{
 		for (UINT eBlendModeEnum = 0; eBlendModeEnum < RENDER_BLENDMODE_END; ++eBlendModeEnum)
 		{
 			for (UINT eShaderTypeEnum = 0; eShaderTypeEnum < RENDER_SHADERTYPE_END; ++eShaderTypeEnum)
 			{
+				iTableTypeIndex = eShaderTypeEnum; // shaderType과 RootSigParamType 일관하다고 가정 시, 가능성
 				for (UINT eRootsigType = 0; eRootsigType < ROOTSIG_TYPE_END; ++eRootsigType)
 				{
+
 					if (m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType].empty())
 					{
 						continue;
 					}
 
-					ID3D12PipelineState* pPSO = m_pPipelineManager->Get_PSO(IsFirst, eBlendModeEnum, eRootsigType, eShaderTypeEnum);
-
+					ID3D12PipelineState* pPSO = m_pPipelineManager->Get_PSO(IsFirst, eBlendModeEnum, eShaderTypeEnum, eRootsigType);
 					if (pPSO == nullptr) { continue; }
+
 
 					m_pCommandList->SetGraphicsRootSignature(m_pPipelineManager->Get_RootSig(eRootsigType)); // RoogSig객체 세팅
 					if (eShaderTypeEnum != SHADERTYPE_SIMPLE)
@@ -129,7 +132,7 @@ void CRenderer::MainRender()
 						ID3D12DescriptorHeap* pSrvHeap = m_pGraphic_Device->Get_CbvSrvUavHeap();
 						ID3D12DescriptorHeap* ppHeaps[] = { pSrvHeap };
 						m_pCommandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-						m_pCommandList->SetGraphicsRootDescriptorTable(0, pSrvHeap->GetGPUDescriptorHandleForHeapStart()); // 세팅된 RootSig의 어디?
+						m_pCommandList->SetGraphicsRootDescriptorTable(0/**/, pSrvHeap->GetGPUDescriptorHandleForHeapStart()); // 세팅된 RootSig의 어디?
 					}
 
 					m_pCommandList->SetPipelineState(pPSO);
@@ -209,21 +212,17 @@ HRESULT CRenderer::Free()
 	return CComponent::Free();
 }
 
-void CRenderer::AddTo_RenderGroup(RENDERGROUP eRenderGroup, CGameObject* pGameObject)
-{
-	if (eRenderGroup >= RENDERGROUP_END)
-	{
-		MSG_BOX("Invalid RenderGroup");
-	}
-	
-	//m_RenderGroup[eRenderGroup].push_back(pGameObject);
-
-	Safe_AddRef(pGameObject);
-}
 
 void CRenderer::AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigTypeEnum,
                                   CGameObject* pGameObject)
 {
 	m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigTypeEnum].push_back(pGameObject);
 	Safe_AddRef(pGameObject);
+}
+
+void CRenderer::Set_DescriptorTable(UINT64 iOffset, ID3D12GraphicsCommandList* pCommandList, UINT iTableTypeIndex, CD3DX12_GPU_DESCRIPTOR_HANDLE
+                                    * pHeapHandle)
+{
+	pHeapHandle->Offset(iOffset);
+	pCommandList->SetGraphicsRootDescriptorTable(iTableTypeIndex, *pHeapHandle); // 세팅된 RootSig의 어디?
 }

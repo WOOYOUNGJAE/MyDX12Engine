@@ -4,7 +4,7 @@
 NAMESPACE_(Engine)
 using namespace std;
 //typedef map<wstring, class CComponent*> COM_PROTOTYPE;
-class CComponentManager : public CBase
+class ENGINE_DLL CComponentManager : public CBase
 {
 	DECLARE_SINGLETON(CComponentManager)
 protected:

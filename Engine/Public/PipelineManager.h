@@ -31,10 +31,8 @@ public: // RootSig and PSO
 	void Add_NewPSO(const wstring& strKey, ID3D12PipelineState* pPSO) { m_mapPSO.emplace(strKey, pPSO); }
 
 	// getter
-	ID3D12RootSignature* Get_RootSig(const wstring& strKey);
 	ID3D12RootSignature* Get_RootSig(UINT eRootSigType);
-	ID3D12PipelineState* Get_PSO(const wstring& strKey);
-	ID3D12PipelineState* Get_PSO(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eParamTypeEnum);
+	ID3D12PipelineState* Get_PSO(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigType);
 
 	void Update_ObjPipelineLayer(CGameObject* pObject, Pipeline::ENUM_PSO ePsoEnum);
 	

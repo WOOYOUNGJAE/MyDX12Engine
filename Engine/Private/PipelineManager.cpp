@@ -68,11 +68,16 @@ HRESULT CPipelineManager::Initialize()
 		RSFeatureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
 	}
 
-	CD3DX12_DESCRIPTOR_RANGE1 ranges[1]; // DescriptorTable, RootDescriptor, RootConstant 가 될 수 있음(InitAs..)
-	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+	CD3DX12_DESCRIPTOR_RANGE1 ranges0[1]; // Only Texture
+	ranges0[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 
-	CD3DX12_ROOT_PARAMETER1 rootParameters[1];
-	rootParameters[0].InitAsDescriptorTable(1, &ranges[0], D3D12_SHADER_VISIBILITY_PIXEL);
+	CD3DX12_DESCRIPTOR_RANGE1 ranges1[2]; // Texture, Constant Buffer
+	ranges1[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+	ranges1[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+
+	CD3DX12_ROOT_PARAMETER1 rootParameters[TABLE_TYPE_END];
+	rootParameters[TEX].InitAsDescriptorTable(_countof(ranges0), ranges0, D3D12_SHADER_VISIBILITY_ALL);
+	rootParameters[TEX_CB].InitAsDescriptorTable(_countof(ranges1), ranges1, D3D12_SHADER_VISIBILITY_ALL);
 
 	D3D12_STATIC_SAMPLER_DESC sampler = {};
 	sampler.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
@@ -289,21 +294,10 @@ ID3D12RootSignature* CPipelineManager::Get_RootSig(UINT eRootSigType)
 	return m_rootSigArr[eRootSigType];
 }
 
-ID3D12PipelineState* CPipelineManager::Get_PSO(const wstring& strKey)
-{
-	if (PSO_Exist(strKey))
-	{
-		return m_mapPSO[strKey];
-	}
-	else
-	{
-		return nullptr;
-	}
-}
 
-ID3D12PipelineState* CPipelineManager::Get_PSO(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eParamTypeEnum)
+ID3D12PipelineState* CPipelineManager::Get_PSO(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigType)
 {
-	return m_PSOsArr[IsFirst][eBlendModeEnum][eShaderTypeEnum][eParamTypeEnum];
+	return m_PSOsArr[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType];
 }
 
 void CPipelineManager::Update_ObjPipelineLayer(CGameObject* pObject, ENUM_PSO ePsoEnum)

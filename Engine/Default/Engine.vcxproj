@@ -198,6 +198,7 @@
     <ClInclude Include="..\Public\GameObject.h" />
     <ClInclude Include="..\Public\GameObjectManager.h" />
     <ClInclude Include="..\Public\Graphic_Device.h" />
+    <ClInclude Include="..\Public\LoadHelper.h" />
     <ClInclude Include="..\Public\MeshGeometry.h" />
     <ClInclude Include="..\Public\ObjLayer.h" />
     <ClInclude Include="..\Public\ObjMonobehaviour.h" />
@@ -227,6 +228,7 @@
     <ClCompile Include="..\Private\GameObject.cpp" />
     <ClCompile Include="..\Private\GameObjectManager.cpp" />
     <ClCompile Include="..\Private\Graphic_Device.cpp" />
+    <ClCompile Include="..\Private\LoadHelper.cpp" />
     <ClCompile Include="..\Private\MeshGeometry.cpp" />
     <ClCompile Include="..\Private\ObjLayer.cpp" />
     <ClCompile Include="..\Private\ObjMonobehaviour.cpp" />
@@ -255,7 +257,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

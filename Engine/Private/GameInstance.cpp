@@ -97,7 +97,7 @@ HRESULT CGameInstance::Add_ComPrototype(const wstring& strTag, CComponent* pComI
 	return S_OK;
 }
 
-CComponent* CGameInstance::Clone_ComPrototye(const wstring& strTag, void* pArg)
+CComponent* CGameInstance::Clone_ComPrototype(const wstring& strTag, void* pArg)
 {
 	CComponent* pInstnace = m_pComponentManager->Clone_Component(strTag, pArg);
 

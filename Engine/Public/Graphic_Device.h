@@ -39,6 +39,7 @@ public: // Getter
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_DepthStencilViewHeapStart()const { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); };
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_CbvSrvUavHeapStart() { return m_pCbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(); }
 	ID3D12DescriptorHeap* Get_CbvSrvUavHeap() { return m_pCbvSrvUavHeap.Get(); }
+	UINT Get_RtvDescriptorSize() const { return m_iRtvDescriptorSize; }
 private: // ComPtr
 	ComPtr<IDXGIFactory4> m_pDxgi_Factory = nullptr;
 	ComPtr<ID3D12Device> m_pDevice = nullptr;

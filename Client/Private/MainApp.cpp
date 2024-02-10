@@ -5,7 +5,6 @@
 #include "Client_Defines.h"
 #include "GameInstance.h"
 #include "Camera_Free.h"
-
 CMainApp::CMainApp() : m_pGameInstance{ CGameInstance::Get_Instance()}
 {
 	Safe_AddRef(m_pGameInstance);
@@ -28,6 +27,9 @@ HRESULT CMainApp::Initialize()
 	HRESULT hr = 
 	m_pGameInstance->Init_Engine(graphic_desc, &m_pDevice);
 	if (FAILED(hr)) { return hr; }
+
+	
+
 #pragma region InLevel
 	hr = m_pGameInstance->Add_GameObjPrototype(L"Camera_Free", CCamera_Free::Create());
 	if (FAILED(hr)) { return hr; }
