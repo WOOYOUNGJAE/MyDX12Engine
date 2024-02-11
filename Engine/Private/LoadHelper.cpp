@@ -24,6 +24,8 @@ HRESULT CLoadHelper::Initialize()
 	m_texture_init_desc.pDevice = m_pDevice;
 	m_texture_init_desc.pResourceUpload = m_pResourceUpload;
 
+	m_iCbvSrvUavDescriptorSize = CGraphic_Device::Get_Instance()->Get_CbvSrvUavDescriptorSize();
+
 	return S_OK;
 }
 
@@ -36,7 +38,7 @@ HRESULT CLoadHelper::Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc,
 {
 	m_texture_init_desc.bIsCubeMap = refTexture_load_desc.bIsCubeMap;
 	m_texture_init_desc.strPath = refTexture_load_desc.strPath;
-	
+	m_texture_init_desc.iCbvSrvUavHeapOffset = m_iCbvSrvUavDescriptorSize;
 	/*TEXTURE_INIT_DESC texture_init_desc{};
 	texture_init_desc.bIsCubeMap = false;
 	texture_init_desc.strPath = L"..\\..\\Resources\\Textures\\checkboard.dds";*/
@@ -44,6 +46,8 @@ HRESULT CLoadHelper::Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc,
 	m_pComponentManager->Add_Prototype(strPrototypeTag, CTexture::Create(&m_texture_init_desc));
 	auto finish = m_pResourceUpload->End(CGraphic_Device::Get_Instance()->Get_CommandQueue().Get());
 	finish.wait();
+
+	m_iNextCbvSrvUavHeapOffset += m_iCbvSrvUavDescriptorSize;
 
 	return S_OK;
 }

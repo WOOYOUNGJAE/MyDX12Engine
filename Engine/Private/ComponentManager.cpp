@@ -57,7 +57,7 @@ HRESULT CComponentManager::Initialize()
 		texture_init_desc.pResourceUpload = &resourceUpload;
 		texture_init_desc.strPath = L"..\\..\\Resources\\Textures\\checkboard.dds";
 
-		Add_Prototype(L"Texture_Checkboard", CTexture::Create(&texture_init_desc));
+		HRESULT hr = Add_Prototype(L"Texture_Checkboard", CTexture::Create(&texture_init_desc));
 		auto finish = resourceUpload.End(CGraphic_Device::Get_Instance()->Get_CommandQueue().Get());
 		finish.wait();
 	}*/

@@ -24,6 +24,8 @@ private:
 	std::future<void> m_future;
 private: // Textures
 	TEXTURE_INIT_DESC m_texture_init_desc{};
+	UINT m_iNextCbvSrvUavHeapOffset = 0;
+	UINT m_iCbvSrvUavDescriptorSize = 0;
 };
 
 _NAMESPACE

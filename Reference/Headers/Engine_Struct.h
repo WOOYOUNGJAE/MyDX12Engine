@@ -88,6 +88,7 @@ namespace Engine
 		ID3D12Device* pDevice;
 		ResourceUploadBatch* pResourceUpload;
 		std::wstring strPath;
+		UINT iCbvSrvUavHeapOffset;
 	};
 
 	struct TEXTURE_LOAD_DESC // for Client

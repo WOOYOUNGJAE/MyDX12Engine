@@ -40,6 +40,7 @@ public: // Getter
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_CbvSrvUavHeapStart() { return m_pCbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(); }
 	ID3D12DescriptorHeap* Get_CbvSrvUavHeap() { return m_pCbvSrvUavHeap.Get(); }
 	UINT Get_RtvDescriptorSize() const { return m_iRtvDescriptorSize; }
+	UINT Get_CbvSrvUavDescriptorSize() const { return m_iCbvSrvUavDescriptorSize; }
 private: // ComPtr
 	ComPtr<IDXGIFactory4> m_pDxgi_Factory = nullptr;
 	ComPtr<ID3D12Device> m_pDevice = nullptr;
