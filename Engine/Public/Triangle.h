@@ -26,7 +26,7 @@ public: // getter setter
 	D3D12_VERTEX_BUFFER_VIEW VertexBufferView() override;
 	D3D12_INDEX_BUFFER_VIEW IndexBufferView() const override;
 	_uint Num_Indices() override;
-
+	UINT64 Get_CbvSrvUavHeapOffset_Texture() override;
 protected:
 	class CTransform* m_pTransformCom = nullptr;
 	//class CTriangleMesh* m_pTriangleMeshCom = nullptr;

@@ -117,3 +117,8 @@ _uint CTriangle::Num_Indices()
 {
 	return 0;
 }
+
+UINT64 CTriangle::Get_CbvSrvUavHeapOffset_Texture()
+{
+	return m_pTextureCom->m_iCbvSrvUavHeapOffset;
+}

@@ -24,6 +24,7 @@ void CClientLoader::Load_Textures()
 	m_pHelper->LoadTextures_Begin();
 	load_Desc.strPath = L"..\\..\\Resources\\Textures\\checkboard.dds";
 	m_pHelper->Load_Texture(load_Desc, L"Texture_Checkboard");
+
 	/*ResourceUploadBatch resourceUpload(m_pDevice);
 	resourceUpload.Begin();
 

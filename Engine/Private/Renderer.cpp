@@ -107,6 +107,9 @@ void CRenderer::BeginRender()
 void CRenderer::MainRender()
 {
 	UINT iTableTypeIndex = 0;
+	ID3D12DescriptorHeap* pSrvHeap = m_pGraphic_Device->Get_CbvSrvUavHeap();
+	ID3D12DescriptorHeap* ppHeaps[] = { pSrvHeap };
+	CD3DX12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle;
 	for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
 	{
 		for (UINT eBlendModeEnum = 0; eBlendModeEnum < RENDER_BLENDMODE_END; ++eBlendModeEnum)
@@ -116,7 +119,6 @@ void CRenderer::MainRender()
 				iTableTypeIndex = eShaderTypeEnum; // shaderType과 RootSigParamType 일관하다고 가정 시, 가능성
 				for (UINT eRootsigType = 0; eRootsigType < ROOTSIG_TYPE_END; ++eRootsigType)
 				{
-
 					if (m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType].empty())
 					{
 						continue;
@@ -125,20 +127,20 @@ void CRenderer::MainRender()
 					ID3D12PipelineState* pPSO = m_pPipelineManager->Get_PSO(IsFirst, eBlendModeEnum, eShaderTypeEnum, eRootsigType);
 					if (pPSO == nullptr) { continue; }
 
-
+					cbvSrvUavHandle.InitOffsetted(pSrvHeap->GetGPUDescriptorHandleForHeapStart(), 0);
 					m_pCommandList->SetGraphicsRootSignature(m_pPipelineManager->Get_RootSig(eRootsigType)); // RoogSig객체 세팅
 					if (eShaderTypeEnum != SHADERTYPE_SIMPLE)
 					{
-						ID3D12DescriptorHeap* pSrvHeap = m_pGraphic_Device->Get_CbvSrvUavHeap();
-						ID3D12DescriptorHeap* ppHeaps[] = { pSrvHeap };
+						pSrvHeap = m_pGraphic_Device->Get_CbvSrvUavHeap();
 						m_pCommandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-						m_pCommandList->SetGraphicsRootDescriptorTable(0/**/, pSrvHeap->GetGPUDescriptorHandleForHeapStart()); // 세팅된 RootSig의 어디?
 					}
 
 					m_pCommandList->SetPipelineState(pPSO);
 
 					for (auto& iter : m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType])
 					{
+						cbvSrvUavHandle.Offset(iter->Get_CbvSrvUavHeapOffset_Texture());
+						m_pCommandList->SetGraphicsRootDescriptorTable(0/**/, cbvSrvUavHandle); // 세팅된 RootSig의 어디?
 						m_pCommandList->IASetPrimitiveTopology(iter->PrimitiveType());
 						m_pCommandList->IASetVertexBuffers(0, 1, &iter->VertexBufferView());
 						//m_pCommandList->IASetIndexBuffer(&iter->IndexBufferView());

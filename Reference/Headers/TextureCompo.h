@@ -7,7 +7,6 @@ class ENGINE_DLL CTextureCompo : public CComponent
 {
 private:
 	CTextureCompo();
-	//CTextureCompo(const CTextureCompo& rhs);
 	~CTextureCompo() override = default;
 
 public:

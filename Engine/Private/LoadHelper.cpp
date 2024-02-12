@@ -39,9 +39,6 @@ HRESULT CLoadHelper::Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc,
 	m_texture_init_desc.bIsCubeMap = refTexture_load_desc.bIsCubeMap;
 	m_texture_init_desc.strPath = refTexture_load_desc.strPath;
 	m_texture_init_desc.iCbvSrvUavHeapOffset = m_iCbvSrvUavDescriptorSize;
-	/*TEXTURE_INIT_DESC texture_init_desc{};
-	texture_init_desc.bIsCubeMap = false;
-	texture_init_desc.strPath = L"..\\..\\Resources\\Textures\\checkboard.dds";*/
 
 	m_pAssetManager->Add_Texture(strAssetName, CTexture::Create(&m_texture_init_desc));
 	auto finish = m_pResourceUpload->End(CGraphic_Device::Get_Instance()->Get_CommandQueue().Get());
