@@ -41,6 +41,7 @@ private:
 	class CComponentManager* m_pComponentManager = nullptr;
 	class CGameObjectManager* m_pGameObjectManager = nullptr;
 	class CPipelineManager* m_pPipelineManager = nullptr;
+	class CAssetManager* m_pAssetManager = nullptr;
 	class CLoadHelper* m_pLoadHelper = nullptr;
 };
 

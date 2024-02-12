@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "Renderer.h"
 #include "Shader.h"
+#include "Texture.h"
 
 CTriangle* CTriangle::Create()
 {
@@ -53,6 +54,9 @@ HRESULT CTriangle::Initialize(void* pArg)
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Shader_Simple", reinterpret_cast<CComponent**>(&m_pShaderCom));
 	if (FAILED(hr)) return hr;
+	hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_Checkboard"));
+	if (FAILED(hr)) return hr;
+
 
 	return hr;
 }
@@ -75,6 +79,7 @@ void CTriangle::Render_Tick()
 
 HRESULT CTriangle::Free()
 {
+	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTriangleMeshCom);

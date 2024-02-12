@@ -6,7 +6,7 @@
 #include "Graphic_Device.h"
 #include "Shader.h"
 #include "Renderer.h"
-#include "Texture.h"
+#include "TextureCompo.h"
 #include "TriangleMesh.h"
 #include "TriangleMesh_PT.h"
 IMPLEMENT_SINGLETON(CComponentManager)
@@ -46,23 +46,10 @@ HRESULT CComponentManager::Initialize()
 
 #pragma region Component with Descriptor
 	Add_Prototype(L"Transform", CTransform::Create());
-	//Texture
-	/*{
-		ResourceUploadBatch resourceUpload(pDevice);
-		resourceUpload.Begin();
-
-		TEXTURE_INIT_DESC texture_init_desc{};
-		texture_init_desc.bIsCubeMap = false;
-		texture_init_desc.pDevice = pDevice;
-		texture_init_desc.pResourceUpload = &resourceUpload;
-		texture_init_desc.strPath = L"..\\..\\Resources\\Textures\\checkboard.dds";
-
-		HRESULT hr = Add_Prototype(L"Texture_Checkboard", CTexture::Create(&texture_init_desc));
-		auto finish = resourceUpload.End(CGraphic_Device::Get_Instance()->Get_CommandQueue().Get());
-		finish.wait();
-	}*/
 #pragma endregion
-
+	
+	//Texture
+	Add_Prototype(L"Texture", CTextureCompo::Create());
 
 	CGraphic_Device::Get_Instance()->Close_CmdList();
 	CGraphic_Device::Get_Instance()->Execute_CmdList();

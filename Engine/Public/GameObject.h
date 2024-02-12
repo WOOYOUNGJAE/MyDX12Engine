@@ -17,8 +17,7 @@ public: // LifeCycle
 	virtual void Late_Tick(_float fDeltaTime) = 0;
 	virtual void Render_Tick(){};
 	HRESULT Free() override;
-public: // getter setter
-	ID3D12RootSignature* Get_RootSig() { return m_pRootSig; }
+public: // getter setter, abstract
 	virtual int& Get_NumFrameDirtyRef() { int a = -1; return a; };
 	virtual _matrix Get_WorldMatrix() { return _matrix(); };
 	virtual _float3 Get_Pos() { return _float3(); }
@@ -26,6 +25,7 @@ public: // getter setter
 	virtual D3D12_INDEX_BUFFER_VIEW IndexBufferView()const {return D3D12_INDEX_BUFFER_VIEW();}
 	virtual D3D12_PRIMITIVE_TOPOLOGY PrimitiveType()const {	return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;} // Default;
 	virtual _uint Num_Indices() { return 0; }
+	virtual UINT64 Get_CbvSrvUavHeapOffset_Texture() { return ULONGLONG_MAX; }
 public:
 	virtual _bool Com_Already_Owned(const wstring& strComTag);
 	// 이미 있는지, 컴포넌트 생성, 맵에 넣기, 
@@ -33,7 +33,7 @@ public:
 
 protected:
 	map<wstring, CComponent*> m_mapComponents;
-	ID3D12RootSignature* m_pRootSig = nullptr;
+	UINT64 m_iCbvSrvUavOffset = ULONGLONG_MAX; // 일단 오브젝트당 텍스처 1개 가정
 };
 
 _NAMESPACE

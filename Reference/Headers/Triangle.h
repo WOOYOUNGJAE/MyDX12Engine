@@ -33,7 +33,7 @@ protected:
 	class CTriangleMesh_PT* m_pTriangleMeshCom = nullptr;
 	class CShader* m_pShaderCom = nullptr;
 	class CRenderer* m_pRendererCom = nullptr;
-
+	class CTexture* m_pTextureCom = nullptr;
 };
 
 _NAMESPACE

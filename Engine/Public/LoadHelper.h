@@ -14,12 +14,12 @@ public:
 public:
 	HRESULT Initialize();
 	void LoadTextures_Begin();
-	HRESULT Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc, const wstring& strPrototypeTag);
+	HRESULT Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc, const wstring& strAssetName);
 	HRESULT Free() override;
 
 private:
 	ID3D12Device* m_pDevice = nullptr;
-	class CComponentManager* m_pComponentManager = nullptr;
+	class CAssetManager* m_pAssetManager = nullptr;
 	class ResourceUploadBatch* m_pResourceUpload = nullptr;
 	std::future<void> m_future;
 private: // Textures

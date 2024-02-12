@@ -6,6 +6,7 @@
 #include "Component.h"
 #include "CubeMesh.h"
 #include "PipelineManager.h"
+#include "AssetManager.h"
 #include "LoadHelper.h"
 #pragma endregion
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -15,17 +16,20 @@ m_pGraphic_Device(CGraphic_Device::Get_Instance()),
 m_pComponentManager(CComponentManager::Get_Instance()),
 m_pGameObjectManager(CGameObjectManager::Get_Instance()),
 m_pPipelineManager(CPipelineManager::Get_Instance()),
+m_pAssetManager(CAssetManager::Get_Instance()),
 m_pLoadHelper(CLoadHelper::Get_Instance())
 {
 	Safe_AddRef(m_pGraphic_Device);
 	Safe_AddRef(m_pComponentManager);
 	Safe_AddRef(m_pGameObjectManager);
 	Safe_AddRef(m_pPipelineManager);
+	Safe_AddRef(m_pAssetManager);
 }
 
 HRESULT CGameInstance::Free()
 {
 	Safe_Release(m_pLoadHelper);
+	Safe_Release(m_pAssetManager);
 	Safe_Release(m_pPipelineManager);
 	Safe_Release(m_pGameObjectManager);
 	Safe_Release(m_pComponentManager);
@@ -80,6 +84,7 @@ void CGameInstance::Engine_Tick(FLOAT fDeltaTime)
 void CGameInstance::Release_Engine()
 {
 	// Destroy Managers or Singletons, 최종 삭제
+	CAssetManager::Destroy_Instance();
 	CPipelineManager::Destroy_Instance();
 	CComponentManager::Destroy_Instance();
 	CGameObjectManager::Destroy_Instance();
