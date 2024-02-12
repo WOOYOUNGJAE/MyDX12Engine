@@ -13,7 +13,6 @@ public:
 
 public:
 	HRESULT Initialize();
-	void LoadTextures_Begin();
 	HRESULT Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc, const wstring& strAssetName);
 	HRESULT Free() override;
 

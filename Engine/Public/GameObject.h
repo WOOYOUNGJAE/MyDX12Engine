@@ -25,7 +25,7 @@ public: // getter setter, abstract
 	virtual D3D12_INDEX_BUFFER_VIEW IndexBufferView()const {return D3D12_INDEX_BUFFER_VIEW();}
 	virtual D3D12_PRIMITIVE_TOPOLOGY PrimitiveType()const {	return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;} // Default;
 	virtual _uint Num_Indices() { return 0; }
-	virtual UINT64 Get_CbvSrvUavHeapOffset_Texture() { return ULONGLONG_MAX; }
+	virtual UINT64 Get_CbvSrvUavHeapOffset_Texture() { return m_iCbvSrvUavOffset; }
 public:
 	virtual _bool Com_Already_Owned(const wstring& strComTag);
 	// 이미 있는지, 컴포넌트 생성, 맵에 넣기, 

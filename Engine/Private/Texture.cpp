@@ -40,10 +40,14 @@ HRESULT CTexture::Initialize(void* pArg)
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
 
+	CD3DX12_CPU_DESCRIPTOR_HANDLE handle(CGraphic_Device::Get_Instance()->Get_CbvSrvUavHeapStart_CPU());
+	handle.Offset(1, m_iCbvSrvUavHeapOffset);
+
 	pInitDesc->pDevice->CreateShaderResourceView(
 		m_pAssetData,
 		&srvDesc,
-		CGraphic_Device::Get_Instance()->Get_CbvSrvUavHeapStart());
+		handle
+		);
 
 	return hr;
 }

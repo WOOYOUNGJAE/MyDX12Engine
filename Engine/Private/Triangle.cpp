@@ -4,7 +4,7 @@
 #include "Transform.h"
 #include "Renderer.h"
 #include "Shader.h"
-#include "Texture.h"
+#include "TextureCompo.h"
 
 CTriangle* CTriangle::Create()
 {
@@ -55,8 +55,10 @@ HRESULT CTriangle::Initialize(void* pArg)
 	hr = Add_Component(L"Shader_Simple", reinterpret_cast<CComponent**>(&m_pShaderCom));
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_Checkboard"));
+	//hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_ice"));
 	if (FAILED(hr)) return hr;
 
+	m_iCbvSrvUavOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
 
 	return hr;
 }
@@ -116,9 +118,4 @@ D3D12_INDEX_BUFFER_VIEW CTriangle::IndexBufferView() const
 _uint CTriangle::Num_Indices()
 {
 	return 0;
-}
-
-UINT64 CTriangle::Get_CbvSrvUavHeapOffset_Texture()
-{
-	return m_pTextureCom->m_iCbvSrvUavHeapOffset;
 }

@@ -37,7 +37,8 @@ public: // Getter
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_DepthStenciViewHeapStart() { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView() const;
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_DepthStencilViewHeapStart()const { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); };
-	D3D12_CPU_DESCRIPTOR_HANDLE Get_CbvSrvUavHeapStart() { return m_pCbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(); }
+	D3D12_GPU_DESCRIPTOR_HANDLE Get_CbvSrvUavHeapStart_GPU() { return m_pCbvSrvUavHeap.Get()->GetGPUDescriptorHandleForHeapStart(); }
+	D3D12_CPU_DESCRIPTOR_HANDLE Get_CbvSrvUavHeapStart_CPU() { return m_pCbvSrvUavHeap.Get()->GetCPUDescriptorHandleForHeapStart(); }
 	ID3D12DescriptorHeap* Get_CbvSrvUavHeap() { return m_pCbvSrvUavHeap.Get(); }
 	UINT Get_RtvDescriptorSize() const { return m_iRtvDescriptorSize; }
 	UINT Get_CbvSrvUavDescriptorSize() const { return m_iCbvSrvUavDescriptorSize; }

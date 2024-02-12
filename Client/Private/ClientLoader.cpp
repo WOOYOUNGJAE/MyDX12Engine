@@ -21,24 +21,12 @@ void CClientLoader::Load_Textures()
 {
 	TEXTURE_LOAD_DESC load_Desc{};
 
-	m_pHelper->LoadTextures_Begin();
 	load_Desc.strPath = L"..\\..\\Resources\\Textures\\checkboard.dds";
 	m_pHelper->Load_Texture(load_Desc, L"Texture_Checkboard");
 
-	/*ResourceUploadBatch resourceUpload(m_pDevice);
-	resourceUpload.Begin();
+	load_Desc.strPath = L"..\\..\\Resources\\Textures\\ice.dds";
+	m_pHelper->Load_Texture(load_Desc, L"Texture_ice");
 
-	TEXTURE_INIT_DESC texture_init_desc{};
-	texture_init_desc.bIsCubeMap = false;
-	texture_init_desc.pDevice = m_pDevice;
-	texture_init_desc.pResourceUpload = &resourceUpload;
-
-	texture_init_desc.strPath = L"..\\..\\Resources\\Textures\\checkboard.dds";
-
-	m_pCompoManager->Add_Prototype(L"Texture_Checkboard", CTexture::Create(&texture_init_desc));
-
-	auto finish = resourceUpload.End(CGraphic_Device::Get_Instance()->Get_CommandQueue().Get());
-	finish.wait();*/
 }
 
 HRESULT CClientLoader::Free()

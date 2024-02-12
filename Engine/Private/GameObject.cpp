@@ -35,7 +35,6 @@ HRESULT CGameObject::Add_Component(const wstring& strComTag, CComponent** ppOutC
 		return E_FAIL;
 	}
 
-	// TODO: SafeAdd Component?
 
 	m_mapComponents.emplace(strComTag, pComponent);
 
