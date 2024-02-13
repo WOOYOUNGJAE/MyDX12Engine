@@ -1,5 +1,6 @@
 #include "Texture.h"
 #include "Graphic_Device.h"
+#include "D3DResourceManager.h"
 
 CTexture* CTexture::Create(void* pArg)
 {
@@ -48,6 +49,8 @@ HRESULT CTexture::Initialize(void* pArg)
 		&srvDesc,
 		handle
 		);
+
+	CD3DResourceManager::Get_Instance()->Register_Resource(MANAGED_RESOURCE_TEX, &m_pAssetData);
 
 	return hr;
 }

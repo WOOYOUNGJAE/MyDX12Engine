@@ -35,9 +35,9 @@ protected:
 protected: // Data about the buffers.
 	UINT m_iNumVertex = 0;
 	UINT m_iNumIndices = 0;
-	UINT m_iVertexByteStride = 0;
+	UINT m_iVertexByteStride = 0; 
 	UINT m_iVertexBufferByteSize = 0;
-	DXGI_FORMAT IndexFormat = DXGI_FORMAT_R16_UINT;
+	DXGI_FORMAT IndexFormat = DXGI_FORMAT_R16_UINT; 
 	UINT m_iIndexBufferByteSize = 0;
 	D3D12_PRIMITIVE_TOPOLOGY PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 };

@@ -183,6 +183,7 @@
     <ClInclude Include="..\Public\ComponentManager.h" />
     <ClInclude Include="..\Public\Cube.h" />
     <ClInclude Include="..\Public\CubeMesh.h" />
+    <ClInclude Include="..\Public\D3DResourceManager.h" />
     <ClInclude Include="..\Public\d3dx12.h" />
     <ClInclude Include="..\Public\Device_Utils.h" />
     <ClInclude Include="..\Public\DX12Test.h">
@@ -228,6 +229,7 @@
     <ClCompile Include="..\Private\ComponentManager.cpp" />
     <ClCompile Include="..\Private\Cube.cpp" />
     <ClCompile Include="..\Private\CubeMesh.cpp" />
+    <ClCompile Include="..\Private\D3DResourceManager.cpp" />
     <ClCompile Include="..\Private\Device_Utils.cpp" />
     <ClCompile Include="..\Private\GameInstance.cpp" />
     <ClCompile Include="..\Private\GameObject.cpp" />
@@ -246,6 +248,7 @@
     <ClCompile Include="..\Private\Triangle.cpp" />
     <ClCompile Include="..\Private\TriangleMesh.cpp" />
     <ClCompile Include="..\Private\TriangleMesh_PT.cpp" />
+    <ClCompile Include="..\Private\UploadBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\color0.hlsl">

@@ -16,9 +16,6 @@
     <Filter Include="System">
       <UniqueIdentifier>{87b1b1b4-ef55-4dd3-a6cc-722f371c8b61}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\Components">
-      <UniqueIdentifier>{e023286e-84c5-4a47-9a9e-3f35db58f842}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility\GameInstance\Managers">
       <UniqueIdentifier>{6c74e53b-2698-468c-8702-b8616bcff5b7}</UniqueIdentifier>
     </Filter>
@@ -28,32 +25,14 @@
     <Filter Include="Utility\GameObjects\Layer">
       <UniqueIdentifier>{e5814d4f-af50-4c15-89d4-ef9b8164ae12}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\Components\GeometryMesh">
-      <UniqueIdentifier>{a3610940-af9a-4b7f-a11a-ef859fa938ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\Components\GeometryMesh\2D">
-      <UniqueIdentifier>{e4a31efb-9c63-4db6-ae25-3f886bf97e03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\Components\GeometryMesh\3D">
-      <UniqueIdentifier>{c3999142-e124-405e-89ae-177a31cfb480}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility\GameObjects\DefaultGeometry">
       <UniqueIdentifier>{bf6fbe13-91ac-468b-8cd8-26f76d6f2db5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\Components\Shader">
-      <UniqueIdentifier>{288c46b5-b6e7-47e4-b1b7-f19de8a39648}</UniqueIdentifier>
     </Filter>
     <Filter Include="0.Shaders">
       <UniqueIdentifier>{78eb3ad9-c6c8-4308-be57-35e2ca5c0ed0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\Components\Transform">
-      <UniqueIdentifier>{b500aa2c-f20d-441d-9ecc-22b6baa991ac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility\GameObjects\Camera">
       <UniqueIdentifier>{2bdad7d6-89e6-4cde-84be-b60495e3375e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\Components\Renderer">
-      <UniqueIdentifier>{8f25aa8b-c0b4-4cdf-b681-c5aaf42a16e6}</UniqueIdentifier>
     </Filter>
     <Filter Include="System\Interface">
       <UniqueIdentifier>{6e76f977-ace3-49c8-830b-95b293c017cf}</UniqueIdentifier>
@@ -73,9 +52,6 @@
     <Filter Include="Utility\Asset\Texture">
       <UniqueIdentifier>{cc54fdd3-30b0-4a6e-b651-ae384cfaf247}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\Components\TextureCompo">
-      <UniqueIdentifier>{88dd2c26-0265-4f76-a7a4-36e78875358f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility\GameInstance\Managers\Component">
       <UniqueIdentifier>{894754f8-e751-4901-9754-cd5d51de4054}</UniqueIdentifier>
     </Filter>
@@ -84,6 +60,39 @@
     </Filter>
     <Filter Include="Utility\GameInstance\Managers\Asset">
       <UniqueIdentifier>{ec86ba5a-8a59-4842-808a-b9231c1b067d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components">
+      <UniqueIdentifier>{e023286e-84c5-4a47-9a9e-3f35db58f842}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\GeometryMesh">
+      <UniqueIdentifier>{a3610940-af9a-4b7f-a11a-ef859fa938ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\GeometryMesh\2D">
+      <UniqueIdentifier>{e4a31efb-9c63-4db6-ae25-3f886bf97e03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\GeometryMesh\3D">
+      <UniqueIdentifier>{c3999142-e124-405e-89ae-177a31cfb480}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\Shader">
+      <UniqueIdentifier>{288c46b5-b6e7-47e4-b1b7-f19de8a39648}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\Transform">
+      <UniqueIdentifier>{b500aa2c-f20d-441d-9ecc-22b6baa991ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\Renderer">
+      <UniqueIdentifier>{8f25aa8b-c0b4-4cdf-b681-c5aaf42a16e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\TextureCompo">
+      <UniqueIdentifier>{88dd2c26-0265-4f76-a7a4-36e78875358f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\D3D Graphics\LoadHelper">
+      <UniqueIdentifier>{6e81e932-5452-4e1c-b3f2-3e45b073ca32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\D3D Graphics\UploadBuffer">
+      <UniqueIdentifier>{6cefeac1-41d7-4d7e-894b-4ed9b212690d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\D3D Graphics\D3DResourceManager">
+      <UniqueIdentifier>{51bd34df-1d64-42ee-87f7-bea9a76c6176}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -135,9 +144,6 @@
     <ClInclude Include="..\Public\Cube.h">
       <Filter>Utility\GameObjects\DefaultGeometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UploadBuffer.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Engine_Enums.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -174,18 +180,28 @@
     <ClInclude Include="..\Public\TriangleMesh_PT.h">
       <Filter>Utility\Components\GeometryMesh\2D</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\LoadHelper.h" />
     <ClInclude Include="..\Public\Asset.h">
       <Filter>Utility\Asset</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Texture.h" />
     <ClInclude Include="..\Public\ComponentManager.h">
       <Filter>Utility\GameInstance\Managers\Component</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\GameObjectManager.h">
       <Filter>Utility\GameInstance\Managers\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\AssetManager.h" />
+    <ClInclude Include="..\Public\Texture.h">
+      <Filter>Utility\Asset\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AssetManager.h">
+      <Filter>Utility\GameInstance\Managers\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\LoadHelper.h">
+      <Filter>System\D3D Graphics\LoadHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UploadBuffer.h">
+      <Filter>System\D3D Graphics\UploadBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\D3DResourceManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -251,18 +267,28 @@
     <ClCompile Include="..\Private\TriangleMesh_PT.cpp">
       <Filter>Utility\Components\GeometryMesh\2D</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\LoadHelper.cpp" />
     <ClCompile Include="..\Private\Asset.cpp">
       <Filter>Utility\Asset</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Texture.cpp" />
     <ClCompile Include="..\Private\ComponentManager.cpp">
       <Filter>Utility\GameInstance\Managers\Component</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\GameObjectManager.cpp">
       <Filter>Utility\GameInstance\Managers\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\AssetManager.cpp" />
+    <ClCompile Include="..\Private\Texture.cpp">
+      <Filter>Utility\Asset\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AssetManager.cpp">
+      <Filter>Utility\GameInstance\Managers\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LoadHelper.cpp">
+      <Filter>System\D3D Graphics\LoadHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UploadBuffer.cpp">
+      <Filter>System\D3D Graphics\UploadBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\D3DResourceManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />

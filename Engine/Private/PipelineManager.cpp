@@ -82,7 +82,7 @@ HRESULT CPipelineManager::Initialize()
 	//ranges1[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 
 	//CD3DX12_ROOT_PARAMETER1 rootParameters[TABLE_TYPE_END];
-	//rootParameters[TEX].InitAsDescriptorTable(_countof(ranges0), ranges0, D3D12_SHADER_VISIBILITY_ALL);
+	//rootParameters[MANAGED_RESOURCE_TEX].InitAsDescriptorTable(_countof(ranges0), ranges0, D3D12_SHADER_VISIBILITY_ALL);
 	//rootParameters[TEX_CB].InitAsDescriptorTable(_countof(ranges1), ranges1, D3D12_SHADER_VISIBILITY_ALL);
 
 	D3D12_STATIC_SAMPLER_DESC sampler = {};
