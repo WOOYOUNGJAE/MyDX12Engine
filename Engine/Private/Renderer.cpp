@@ -99,6 +99,28 @@ HRESULT CRenderer::Initialize_Prototype()
 #pragma endregion
 
 
+	
+
+	m_queue_flush_desc = {
+		&m_iFenceValue,
+		m_pCommandQueue,
+		m_pFence,
+		&m_fenceEvent
+	};
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Initialize(void* pArg)
+{
+	return CComponent::Initialize(pArg);
+}
+
+HRESULT CRenderer::Build_FrameResource()
+{
+	HRESULT hr = S_OK;
+
+	ID3D12Device* pDevice = m_pGraphic_Device->m_pDevice.Get();
 	// FrameResource
 	for (UINT i = 0; i < g_iNumFrameResource; ++i)
 	{
@@ -138,20 +160,7 @@ HRESULT CRenderer::Initialize_Prototype()
 			handle.Offset(heapIndex, iCbvSrvUavDescriptorSize);
 		}
 	}
-
-	m_queue_flush_desc = {
-		&m_iFenceValue,
-		m_pCommandQueue,
-		m_pFence,
-		&m_fenceEvent
-	};
-
-	return S_OK;
-}
-
-HRESULT CRenderer::Initialize(void* pArg)
-{
-	return CComponent::Initialize(pArg);
+	return hr;
 }
 
 void CRenderer::Update_ObjCB(CGameObject* pGameObj)
@@ -222,7 +231,7 @@ void CRenderer::MainRender()
 
 						// Texture
 						cbvSrvUavHandle.Offset(iter->Get_CbvSrvUavHeapOffset_Texture());
-						m_pCommandList->SetGraphicsRootDescriptorTable(1, cbvSrvUavHandle);
+						m_pCommandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHandle);
 
 						// ObjCB
 						cbvSrvUavHandle.Offset(m_iCBVHeapStartOffset);

@@ -27,6 +27,7 @@ void CClientLoader::Load_Textures()
 	load_Desc.strPath = L"..\\..\\Resources\\Textures\\ice.dds";
 	m_pHelper->Load_Texture(load_Desc, L"Texture_ice");
 
+	m_pHelper->EndSign_Texture();
 }
 
 HRESULT CClientLoader::Free()

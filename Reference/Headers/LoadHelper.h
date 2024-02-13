@@ -14,6 +14,7 @@ public:
 public:
 	HRESULT Initialize();
 	HRESULT Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc, const wstring& strAssetName);
+	void EndSign_Texture(); // Srv 생성 후의 오프셋부터 CBV 생성하도록
 	HRESULT Free() override;
 
 private:

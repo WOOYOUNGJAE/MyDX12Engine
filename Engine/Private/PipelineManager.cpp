@@ -68,22 +68,22 @@ HRESULT CPipelineManager::Initialize()
 		RSFeatureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
 	}
 
-	CD3DX12_DESCRIPTOR_RANGE1 ranges[1]; // DescriptorTable, RootDescriptor, RootConstant 가 될 수 있음(InitAs..)
-	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+	//CD3DX12_DESCRIPTOR_RANGE1 ranges[1]; // DescriptorTable, RootDescriptor, RootConstant 가 될 수 있음(InitAs..)
+	//ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 
-	CD3DX12_ROOT_PARAMETER1 rootParameters[1];
-	rootParameters[0].InitAsDescriptorTable(1, &ranges[0], D3D12_SHADER_VISIBILITY_PIXEL);
+	//CD3DX12_ROOT_PARAMETER1 rootParameters[1];
+	//rootParameters[0].InitAsDescriptorTable(1, &ranges[0], D3D12_SHADER_VISIBILITY_PIXEL);
 
-	//CD3DX12_DESCRIPTOR_RANGE1 ranges0[1]; // Only Texture
-	//ranges0[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+	CD3DX12_DESCRIPTOR_RANGE1 ranges0[1]; // Only Texture
+	ranges0[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 
-	//CD3DX12_DESCRIPTOR_RANGE1 ranges1[2]; // Texture, Constant Buffer
-	//ranges1[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-	//ranges1[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+	CD3DX12_DESCRIPTOR_RANGE1 ranges1[2]; // Texture, Constant Buffer
+	ranges1[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+	ranges1[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 
-	//CD3DX12_ROOT_PARAMETER1 rootParameters[TABLE_TYPE_END];
-	//rootParameters[MANAGED_RESOURCE_TEX].InitAsDescriptorTable(_countof(ranges0), ranges0, D3D12_SHADER_VISIBILITY_ALL);
-	//rootParameters[TEX_CB].InitAsDescriptorTable(_countof(ranges1), ranges1, D3D12_SHADER_VISIBILITY_ALL);
+	CD3DX12_ROOT_PARAMETER1 rootParameters[TABLE_TYPE_END];
+	rootParameters[MANAGED_RESOURCE_TEX].InitAsDescriptorTable(_countof(ranges0), ranges0, D3D12_SHADER_VISIBILITY_ALL);
+	rootParameters[TEX_CB].InitAsDescriptorTable(_countof(ranges1), ranges1, D3D12_SHADER_VISIBILITY_ALL);
 
 	D3D12_STATIC_SAMPLER_DESC sampler = {};
 	sampler.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;

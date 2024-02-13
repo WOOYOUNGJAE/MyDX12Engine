@@ -2,6 +2,8 @@
 #include "Graphic_Device.h"
 #include "ResourceUploadBatch.h"
 #include "AssetManager.h"
+#include "ComponentManager.h"
+#include "Renderer.h"
 #include "Texture.h"
 
 IMPLEMENT_SINGLETON(CLoadHelper)
@@ -46,6 +48,11 @@ HRESULT CLoadHelper::Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc,
 	(*m_pNextCbvSrvUavHeapOffset) += m_iCbvSrvUavDescriptorSize;
 
 	return S_OK;
+}
+
+void CLoadHelper::EndSign_Texture()
+{
+	dynamic_cast<CRenderer*>(CComponentManager::Get_Instance()->FindandGet_Prototype(L"Renderer"))->Build_FrameResource();
 }
 
 HRESULT CLoadHelper::Free()
