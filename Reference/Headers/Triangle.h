@@ -7,7 +7,7 @@ class CTriangle : public CGameObject
 {
 protected:
 	CTriangle() = default;
-	CTriangle(const CTriangle& rhs) : CGameObject(rhs) {}
+	CTriangle(CTriangle& rhs) : CGameObject(rhs) {}
 	~CTriangle() override = default;
 
 public: // LifeCycle
@@ -21,7 +21,7 @@ public: // LifeCycle
 	HRESULT Free() override;
 public: // getter setter 
 	int& Get_NumFrameDirtyRef() override;
-	_matrix Get_WorldMatrix() override;
+	XMFLOAT4X4 Get_WorldMatrix() override;
 	_float3 Get_Pos() override;
 	D3D12_VERTEX_BUFFER_VIEW VertexBufferView() override;
 	D3D12_INDEX_BUFFER_VIEW IndexBufferView() const override;

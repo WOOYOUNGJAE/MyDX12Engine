@@ -98,7 +98,7 @@ int& CTriangle::Get_NumFrameDirtyRef()
 	return m_pShaderCom->Get_NumDirtyRef();
 }
 
-_matrix CTriangle::Get_WorldMatrix()
+XMFLOAT4X4 CTriangle::Get_WorldMatrix()
 {
 	return m_pTransformCom->WorldMatrix();
 }

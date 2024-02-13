@@ -7,7 +7,7 @@ class ENGINE_DLL CCamera abstract: public CGameObject
 {
 protected:
 	CCamera();
-	CCamera(const CCamera& rhs);
+	CCamera(CCamera& rhs);
 	~CCamera() override = default;
 
 public: // typedef

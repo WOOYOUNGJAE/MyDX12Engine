@@ -7,7 +7,7 @@ class ENGINE_DLL CCubeMesh final: public CMeshGeometry
 {
 private:
 	CCubeMesh();
-	CCubeMesh(const CCubeMesh& rhs);
+	CCubeMesh(CCubeMesh& rhs);
 	~CCubeMesh() override = default;
 
 public:

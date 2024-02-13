@@ -7,6 +7,7 @@ class ENGINE_DLL CComponent abstract: public CBase
 {
 protected:
 	CComponent();
+	CComponent(CComponent& rhs) : CBase(rhs){}
 	virtual ~CComponent() override = default;
 
 public:

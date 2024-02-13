@@ -20,7 +20,7 @@ public:
 	HRESULT Initialize(void* pArg) override;
 	HRESULT Free() override;
 public: // getter setter
-	_matrix WorldMatrix() { return XMLoadFloat4x4(&m_WorldMatrix); }
+	const XMFLOAT4X4& WorldMatrix() { return m_WorldMatrix; }
 	_matrix WorldMatrix_Inverse() { return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)); }
 	_float3 Position() { return m_Position; }
 	_float3 Right() { return m_Right; }

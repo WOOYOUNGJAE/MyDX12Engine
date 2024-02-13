@@ -7,6 +7,7 @@ class ENGINE_DLL CGameObject abstract : public CBase
 {
 protected:
 	CGameObject() = default;
+	CGameObject(CGameObject& rhs) : CBase(rhs) {};
 	~CGameObject() override = default;
 
 public: // LifeCycle
@@ -19,7 +20,7 @@ public: // LifeCycle
 	HRESULT Free() override;
 public: // getter setter, abstract
 	virtual int& Get_NumFrameDirtyRef() { int a = -1; return a; };
-	virtual _matrix Get_WorldMatrix() { return _matrix(); };
+	virtual XMFLOAT4X4 Get_WorldMatrix() = 0;// { return XMFLOAT4X4(); };
 	virtual _float3 Get_Pos() { return _float3(); }
 	virtual D3D12_VERTEX_BUFFER_VIEW VertexBufferView() { return D3D12_VERTEX_BUFFER_VIEW(); }
 	virtual D3D12_INDEX_BUFFER_VIEW IndexBufferView()const {return D3D12_INDEX_BUFFER_VIEW();}

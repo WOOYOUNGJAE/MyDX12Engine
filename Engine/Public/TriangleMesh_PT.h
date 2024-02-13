@@ -8,7 +8,7 @@ class CTriangleMesh_PT : public CMeshGeometry
 {
 private:
 	CTriangleMesh_PT();
-	CTriangleMesh_PT(const CTriangleMesh_PT& rhs);
+	CTriangleMesh_PT(CTriangleMesh_PT& rhs);
 	~CTriangleMesh_PT() override = default;
 
 public:

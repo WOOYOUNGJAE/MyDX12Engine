@@ -8,7 +8,7 @@ class CMeshGeometry abstract: public CComponent
 {
 protected:
 	CMeshGeometry();
-	CMeshGeometry(const CMeshGeometry& rhs);
+	CMeshGeometry(CMeshGeometry& rhs);
 	~CMeshGeometry() override = default;
 
 public:

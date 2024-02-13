@@ -98,6 +98,7 @@ HRESULT CRenderer::Initialize_Prototype()
 	//memcpy(m_pCbvDataBegin, &m_constantBufferData, sizeof(m_constantBufferData));
 #pragma endregion
 
+
 	// FrameResource
 	for (UINT i = 0; i < g_iNumFrameResource; ++i)
 	{
@@ -107,9 +108,14 @@ HRESULT CRenderer::Initialize_Prototype()
 			0/**/)
 		);
 	}
+	m_pCurFrameResource = m_vecFrameResource[0]; // TODO FrameResource 2이상되면 수정
 	// Build Obj Constant Buffer
 	UINT objCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(OBJ_CONSTANT_BUFFER));
 	UINT objCount = 1; //
+	UINT iCbvSrvUavDescriptorSize = m_pGraphic_Device->m_iCbvSrvUavDescriptorSize;
+	auto handle = CD3DX12_CPU_DESCRIPTOR_HANDLE(m_pGraphic_Device->Get_CbvSrvUavHeapStart_CPU());
+	m_iCBVHeapStartOffset = *m_pGraphic_Device->Get_NextCbvSrvUavHeapOffsetPtr();
+	handle.Offset((INT)m_iCBVHeapStartOffset); // SRV 생성 후 Cbv 힙 시작 오프셋
 	for (UINT iFrameIndex = 0; iFrameIndex < g_iNumFrameResource; ++iFrameIndex)
 	{
 		ID3D12Resource* pObjCB = m_vecFrameResource[iFrameIndex]->pObjectCB->Get_UploadBuffer();
@@ -121,15 +127,15 @@ HRESULT CRenderer::Initialize_Prototype()
 			cbAddress += i * objCBByteSize;
 
 			// 서술자 힙에서 i번째 물체별 상수 버퍼의 오프셋
-			int heapIndex = iFrameIndex * objCount + i;
-			auto handle = CD3DX12_CPU_DESCRIPTOR_HANDLE(m_pGraphic_Device->Get_CbvSrvUavHeapStart_CPU());
-			handle.Offset(heapIndex, m_pGraphic_Device->m_iCbvSrvUavDescriptorSize);
 
 			D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
 			cbvDesc.BufferLocation = cbAddress;
 			cbvDesc.SizeInBytes = objCBByteSize;
 
 			pDevice->CreateConstantBufferView(&cbvDesc, handle);
+
+			int heapIndex = iFrameIndex * objCount + i;
+			handle.Offset(heapIndex, iCbvSrvUavDescriptorSize);
 		}
 	}
 
@@ -146,6 +152,16 @@ HRESULT CRenderer::Initialize_Prototype()
 HRESULT CRenderer::Initialize(void* pArg)
 {
 	return CComponent::Initialize(pArg);
+}
+
+void CRenderer::Update_ObjCB(CGameObject* pGameObj)
+{
+	XMMATRIX matWorld = XMLoadFloat4x4(&pGameObj->Get_WorldMatrix());
+	
+	OBJ_CONSTANT_BUFFER objConstants;
+	XMStoreFloat4x4(&objConstants.WorldViewProj, XMMatrixTranspose(matWorld));
+
+	m_pCurFrameResource->pObjectCB->CopyData(pGameObj->Get_ClonedNum(), objConstants);
 }
 
 void CRenderer::BeginRender()
@@ -204,8 +220,16 @@ void CRenderer::MainRender()
 						m_pCommandList->IASetVertexBuffers(0, 1, &iter->VertexBufferView());
 						//m_pCommandList->IASetIndexBuffer(&iter->IndexBufferView());
 
+						// Texture
 						cbvSrvUavHandle.Offset(iter->Get_CbvSrvUavHeapOffset_Texture());
-						m_pCommandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHandle); // 세팅된 RootSig의 어디?
+						m_pCommandList->SetGraphicsRootDescriptorTable(1, cbvSrvUavHandle);
+
+						// ObjCB
+						cbvSrvUavHandle.Offset(m_iCBVHeapStartOffset);
+						m_pCommandList->SetGraphicsRootDescriptorTable(1, cbvSrvUavHandle);
+						Update_ObjCB(iter);
+
+
 
 						m_pCommandList->DrawInstanced(3, 1, 0, 0);
 						/*m_pCommandList->DrawIndexedInstanced(

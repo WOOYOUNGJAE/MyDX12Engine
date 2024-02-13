@@ -8,7 +8,7 @@ class CTriangleMesh : public CMeshGeometry
 
 private:
 	CTriangleMesh();
-	CTriangleMesh(const CTriangleMesh& rhs);
+	CTriangleMesh(CTriangleMesh& rhs);
 	~CTriangleMesh() override = default;
 
 public:

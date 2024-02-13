@@ -20,6 +20,7 @@ public:
 	CComponent* Clone(void* pArg) override; // return this
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override;
+	void Update_ObjCB(class CGameObject* pGameObj);
 	void BeginRender();
 	void MainRender();
 	void EndRender();
@@ -49,7 +50,7 @@ private: // DX Resource
 	ID3D12Resource** m_pRenderTargetArr = nullptr;
 private:
 	UINT m_iFrameIndex = 0;
-
+	UINT m_iCBVHeapStartOffset = 0;
 private: //Fence
 	ID3D12Fence* m_pFence = nullptr;
 	UINT64 m_iFenceValue = 0;

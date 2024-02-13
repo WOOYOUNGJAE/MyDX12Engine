@@ -11,7 +11,7 @@ CCubeMesh::CCubeMesh()
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(_ushort);
 }
 
-CCubeMesh::CCubeMesh(const CCubeMesh& rhs) : CMeshGeometry(rhs),
+CCubeMesh::CCubeMesh(CCubeMesh& rhs) : CMeshGeometry(rhs),
 m_vertexData(rhs.m_vertexData)
 {
 	m_iNumVertex = rhs.m_iNumVertex;

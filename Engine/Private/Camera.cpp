@@ -6,7 +6,7 @@ CCamera::CCamera() : m_pPipelineManager(CPipelineManager::Get_Instance())
 {
 	Safe_AddRef(m_pPipelineManager);
 }
-CCamera::CCamera(const CCamera& rhs) : CGameObject(rhs),
+CCamera::CCamera(CCamera& rhs) : CGameObject(rhs),
 m_pPipelineManager(rhs.m_pPipelineManager)
 {
 	Safe_AddRef(m_pPipelineManager);

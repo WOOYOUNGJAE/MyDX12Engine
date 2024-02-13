@@ -13,7 +13,7 @@ CTriangleMesh::CTriangleMesh()
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(_ushort);
 }
 
-CTriangleMesh::CTriangleMesh(const CTriangleMesh& rhs) : CMeshGeometry(rhs),
+CTriangleMesh::CTriangleMesh(CTriangleMesh& rhs) : CMeshGeometry(rhs),
 m_vertexData(rhs.m_vertexData)
 {
 	m_iNumVertex = rhs.m_iNumVertex;

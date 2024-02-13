@@ -86,7 +86,7 @@ int& CCube::Get_NumFrameDirtyRef()
 	return m_pShaderCom->Get_NumDirtyRef();
 }
 
-_matrix CCube::Get_WorldMatrix()
+XMFLOAT4X4 CCube::Get_WorldMatrix()
 {
 	return m_pTransformCom->WorldMatrix();
 }

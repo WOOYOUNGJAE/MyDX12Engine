@@ -8,7 +8,7 @@ CMeshGeometry::CMeshGeometry() :
 {
 }
 
-CMeshGeometry::CMeshGeometry(const CMeshGeometry& rhs) : CComponent(rhs),
+CMeshGeometry::CMeshGeometry(CMeshGeometry& rhs) : CComponent(rhs),
 m_pDevice(rhs.m_pDevice),
 m_pCommandList(rhs.m_pCommandList),
 m_vertexPosArr(rhs.m_vertexPosArr),
