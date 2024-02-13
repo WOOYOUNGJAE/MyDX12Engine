@@ -42,6 +42,7 @@ private:
 	class CGameObjectManager* m_pGameObjectManager = nullptr;
 	class CPipelineManager* m_pPipelineManager = nullptr;
 	class CAssetManager* m_pAssetManager = nullptr;
+	class CD3DResourceManager* m_pD3DResourceManager = nullptr;
 	class CLoadHelper* m_pLoadHelper = nullptr;
 };
 

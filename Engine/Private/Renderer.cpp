@@ -84,20 +84,54 @@ HRESULT CRenderer::Initialize_Prototype()
 	if (FAILED(hr)) { return E_FAIL; }
 
 	// Describe and create a constant buffer view.
-	UINT& refNextCbvSrvUavHeapOffset = CGraphic_Device::Get_Instance()->m_iNextCbvSrvUavHeapOffset;
+	/*UINT& refNextCbvSrvUavHeapOffset = CGraphic_Device::Get_Instance()->m_iNextCbvSrvUavHeapOffset;
 	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
 	cbvDesc.BufferLocation = m_pObjConstantsResource->GetGPUVirtualAddress();
 	cbvDesc.SizeInBytes = iObjConstantBufSize;
 	CD3DX12_CPU_DESCRIPTOR_HANDLE handle(CGraphic_Device::Get_Instance()->Get_CbvSrvUavHeapStart_CPU());
 	handle.Offset(1, refNextCbvSrvUavHeapOffset);
 	refNextCbvSrvUavHeapOffset += CGraphic_Device::Get_Instance()->m_iCbvSrvUavDescriptorSize;
-	pDevice->CreateConstantBufferView(&cbvDesc, handle);
+	pDevice->CreateConstantBufferView(&cbvDesc, handle);*/
 
 	//CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
 	//hr = (m_pObjConstantsResource->Map(0, &readRange, reinterpret_cast<void**>(&m_pCbvDataBegin)));
 	//memcpy(m_pCbvDataBegin, &m_constantBufferData, sizeof(m_constantBufferData));
 #pragma endregion
 
+	// FrameResource
+	for (UINT i = 0; i < g_iNumFrameResource; ++i)
+	{
+		m_vecFrameResource.push_back(new FrameResource(
+			pDevice,
+			1/**/,
+			0/**/)
+		);
+	}
+	// Build Obj Constant Buffer
+	UINT objCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(OBJ_CONSTANT_BUFFER));
+	UINT objCount = 1; //
+	for (UINT iFrameIndex = 0; iFrameIndex < g_iNumFrameResource; ++iFrameIndex)
+	{
+		ID3D12Resource* pObjCB = m_vecFrameResource[iFrameIndex]->pObjectCB->Get_UploadBuffer();
+		for (UINT i = 0; i < objCount; ++i)
+		{
+			D3D12_GPU_VIRTUAL_ADDRESS cbAddress = pObjCB->GetGPUVirtualAddress();
+
+			// 현재 버퍼에서 i번째 물체별 상수 버퍼의 오프셋
+			cbAddress += i * objCBByteSize;
+
+			// 서술자 힙에서 i번째 물체별 상수 버퍼의 오프셋
+			int heapIndex = iFrameIndex * objCount + i;
+			auto handle = CD3DX12_CPU_DESCRIPTOR_HANDLE(m_pGraphic_Device->Get_CbvSrvUavHeapStart_CPU());
+			handle.Offset(heapIndex, m_pGraphic_Device->m_iCbvSrvUavDescriptorSize);
+
+			D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
+			cbvDesc.BufferLocation = cbAddress;
+			cbvDesc.SizeInBytes = objCBByteSize;
+
+			pDevice->CreateConstantBufferView(&cbvDesc, handle);
+		}
+	}
 
 	m_queue_flush_desc = {
 		&m_iFenceValue,
@@ -221,6 +255,13 @@ HRESULT CRenderer::Free()
 	Safe_Release(m_pCommandAllocator);
 	Safe_Release(m_pFence);
 
+	// FrameResource
+	for (auto& iter : m_vecFrameResource)
+	{
+		Safe_Delete(iter);
+	}
+	m_vecFrameResource.clear();
+
 	for (auto& iter0 : m_RenderGroup)
 	{
 		for (auto& iter1 : iter0)
@@ -243,10 +284,27 @@ HRESULT CRenderer::Free()
 	return CComponent::Free();
 }
 
-
 void CRenderer::AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigTypeEnum,
                                   CGameObject* pGameObject)
 {
 	m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigTypeEnum].push_back(pGameObject);
 	Safe_AddRef(pGameObject);
+}
+
+//--------------------------------------------------------------------------------------
+
+FrameResource::FrameResource(ID3D12Device * pDevice, UINT iObjectCount, UINT iPassCount)
+{
+	pDevice->CreateCommandAllocator(
+		D3D12_COMMAND_LIST_TYPE_DIRECT,
+		IID_PPV_ARGS(&pCmdListAlloc));
+
+	//PassCB = std::make_unique<UploadBuffer<PassConstants>>(device, passCount, true);
+	pObjectCB = CUploadBuffer<OBJ_CONSTANT_BUFFER>::Create(pDevice, iObjectCount, true);
+}
+
+FrameResource::~FrameResource()
+{
+	Safe_Release(pObjectCB);
+	Safe_Release(pCmdListAlloc);
 }

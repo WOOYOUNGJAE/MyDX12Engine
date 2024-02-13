@@ -10,19 +10,6 @@ namespace Engine
 		WINMODE			eWinMode;
 	};
 
-	struct MY_VERTEX
-	{
-		enum VERTEX_ELEM
-		{
-			POS,
-			COLOR,
-			NORMAL,
-		};
-		_float3 pos;
-		_float4 color;
-		// TODO ..추가 예정
-	};
-
 	struct SHADER_INIT_DESC
 	{
 		std::wstring filename; // 경로
@@ -31,22 +18,12 @@ namespace Engine
 		std::string target; // 쉐이더 종류와 버전
 	};
 
-	struct VERTEX_INPUT_ELEMENT_DESC_BUILT_IN
-	{
-		VERTEX_INPUT_ELEMENT_DESC_BUILT_IN()
-		{
-			Default_Position = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-			Default_Color = { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-		}
-		D3D12_INPUT_ELEMENT_DESC Default_Position;
-		D3D12_INPUT_ELEMENT_DESC Default_Color;
-	};
-
 	struct OBJ_CONSTANT_BUFFER
 	{
 		OBJ_CONSTANT_BUFFER()
 		{
 			XMStoreFloat4x4(&WorldViewProj, XMMatrixIdentity());
+			ZeroMemory(padding, sizeof(FLOAT) * 48);
 		}
 		_float4x4 WorldViewProj;
 		FLOAT padding[48];
@@ -60,28 +37,6 @@ namespace Engine
 		HANDLE* pFenceEvent;
 	};
 
-	struct MyVector
-	{
-		MyVector(float _x, float _y, float _z)
-		{
-			x = _x; y = _y; z = _z;
-			XMFLOAT3 tempFloat3(x, y, z);
-			vector = XMLoadFloat3(&tempFloat3);
-		}
-
-		MyVector operator+(const MyVector& rhs)
-		{
-			XMVECTOR tempVector = XMVectorAdd(vector, rhs.vector);
-			XMFLOAT3 tempFloat3{};
-			XMStoreFloat3(&tempFloat3, tempVector);
-			return MyVector(tempFloat3.x, tempFloat3.y, tempFloat3.z);
-		}
-
-		float x;
-		float y;
-		float z;
-		XMVECTOR vector;
-	};
 
 	struct TEXTURE_INIT_DESC
 	{
@@ -97,4 +52,5 @@ namespace Engine
 		bool bIsCubeMap;
 		std::wstring strPath;
 	};
+
 }

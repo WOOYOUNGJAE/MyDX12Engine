@@ -9,7 +9,7 @@
 #include "Camera.h"
 IMPLEMENT_SINGLETON(CPipelineManager)
 
-_uint g_iNumFrameResource = 3; // extern frame resource num;
+_uint g_iNumFrameResource = 1; // extern frame resource num;
 CPipelineManager::CPipelineManager() :
 m_pComponentManager(CComponentManager::Get_Instance()),
 m_pGameObjectManager(CGameObjectManager::Get_Instance())

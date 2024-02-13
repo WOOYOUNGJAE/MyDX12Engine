@@ -59,6 +59,8 @@ public:
 		if (m_pUploadBuffer != nullptr)
 			m_pUploadBuffer->Unmap(0, nullptr);
 
+		Safe_Release(m_pUploadBuffer);
+
 		m_byMappedDataArr = nullptr;
 
 		return S_OK;
