@@ -23,6 +23,7 @@ CComponent* CRenderer::Clone(void* pArg)
 
 HRESULT CRenderer::Initialize_Prototype()
 {
+	HRESULT hr = S_OK;
 	m_pGraphic_Device = CGraphic_Device::Get_Instance();
 	m_pPipelineManager = CPipelineManager::Get_Instance();
 	/*m_pCommandAllocator = m_pGraphic_Device->m_pCmdAllocator.Get();
@@ -35,7 +36,8 @@ HRESULT CRenderer::Initialize_Prototype()
 	ID3D12Device* pDevice = m_pGraphic_Device->m_pDevice.Get();
 
 	// Init Fence
-	if (FAILED(pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_pFence))))
+	hr = pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_pFence));
+	if (FAILED(hr))
 	{
 		MSG_BOX("Failed To Create Fence");
 		return E_FAIL;
@@ -52,25 +54,50 @@ HRESULT CRenderer::Initialize_Prototype()
 		return E_FAIL;
 	}*/
 
-	if (FAILED(pDevice->CreateCommandAllocator(
+	hr = pDevice->CreateCommandAllocator(
 		D3D12_COMMAND_LIST_TYPE_DIRECT,
-		IID_PPV_ARGS(&m_pCommandAllocator))))
-	{
-		return E_FAIL;
-	}
+		IID_PPV_ARGS(&m_pCommandAllocator));
+	if (FAILED(hr)) { return E_FAIL; }
 
-	if (FAILED(pDevice->CreateCommandList(
+	hr = pDevice->CreateCommandList(
 		0,
 		D3D12_COMMAND_LIST_TYPE_DIRECT, // 나중에 Bundle 사용할 수도
 		m_pCommandAllocator, // Associated command allocator
 		nullptr,                   // Initial PipelineStateObject
-		IID_PPV_ARGS(&m_pCommandList))))
-	{
-		return E_FAIL;
-	}
+		IID_PPV_ARGS(&m_pCommandList));
+	if (FAILED(hr)) { return E_FAIL; }
 
 	// 닫힌 상태로 시작
 	m_pCommandList->Close();
+
+#pragma region ConstantBuffer
+	// ObjConstantResource
+	const UINT iObjConstantBufSize = sizeof(OBJ_CONSTANT_BUFFER);
+
+	hr = pDevice->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(iObjConstantBufSize),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&m_pObjConstantsResource));
+	if (FAILED(hr)) { return E_FAIL; }
+
+	// Describe and create a constant buffer view.
+	UINT& refNextCbvSrvUavHeapOffset = CGraphic_Device::Get_Instance()->m_iNextCbvSrvUavHeapOffset;
+	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
+	cbvDesc.BufferLocation = m_pObjConstantsResource->GetGPUVirtualAddress();
+	cbvDesc.SizeInBytes = iObjConstantBufSize;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE handle(CGraphic_Device::Get_Instance()->Get_CbvSrvUavHeapStart_CPU());
+	handle.Offset(1, refNextCbvSrvUavHeapOffset);
+	refNextCbvSrvUavHeapOffset += CGraphic_Device::Get_Instance()->m_iCbvSrvUavDescriptorSize;
+	pDevice->CreateConstantBufferView(&cbvDesc, handle);
+
+	//CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
+	//hr = (m_pObjConstantsResource->Map(0, &readRange, reinterpret_cast<void**>(&m_pCbvDataBegin)));
+	//memcpy(m_pCbvDataBegin, &m_constantBufferData, sizeof(m_constantBufferData));
+#pragma endregion
+
 
 	m_queue_flush_desc = {
 		&m_iFenceValue,
@@ -139,11 +166,12 @@ void CRenderer::MainRender()
 
 					for (auto& iter : m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType])
 					{
-						cbvSrvUavHandle.Offset(iter->Get_CbvSrvUavHeapOffset_Texture());
-						m_pCommandList->SetGraphicsRootDescriptorTable(0/**/, cbvSrvUavHandle); // 세팅된 RootSig의 어디?
 						m_pCommandList->IASetPrimitiveTopology(iter->PrimitiveType());
 						m_pCommandList->IASetVertexBuffers(0, 1, &iter->VertexBufferView());
 						//m_pCommandList->IASetIndexBuffer(&iter->IndexBufferView());
+
+						cbvSrvUavHandle.Offset(iter->Get_CbvSrvUavHeapOffset_Texture());
+						m_pCommandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHandle); // 세팅된 RootSig의 어디?
 
 						m_pCommandList->DrawInstanced(3, 1, 0, 0);
 						/*m_pCommandList->DrawIndexedInstanced(
@@ -188,6 +216,7 @@ HRESULT CRenderer::Free()
 {
 	CloseHandle(m_fenceEvent);
 
+	Safe_Release(m_pObjConstantsResource);
 	Safe_Release(m_pCommandList);
 	Safe_Release(m_pCommandAllocator);
 	Safe_Release(m_pFence);
@@ -220,11 +249,4 @@ void CRenderer::AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eShade
 {
 	m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigTypeEnum].push_back(pGameObject);
 	Safe_AddRef(pGameObject);
-}
-
-void CRenderer::Set_DescriptorTable(UINT64 iOffset, ID3D12GraphicsCommandList* pCommandList, UINT iTableTypeIndex, CD3DX12_GPU_DESCRIPTOR_HANDLE
-                                    * pHeapHandle)
-{
-	pHeapHandle->Offset(iOffset);
-	pCommandList->SetGraphicsRootDescriptorTable(iTableTypeIndex, *pHeapHandle); // 세팅된 RootSig의 어디?
 }

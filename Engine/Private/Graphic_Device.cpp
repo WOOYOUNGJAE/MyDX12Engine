@@ -213,7 +213,7 @@ HRESULT CGraphic_Device::Create_DescriptorHeap()
 
 	// CBV SRV UAV Heap
 	D3D12_DESCRIPTOR_HEAP_DESC cbvsrvuavHeapDesc = {};
-	cbvsrvuavHeapDesc.NumDescriptors = 2;
+	cbvsrvuavHeapDesc.NumDescriptors = 3;
 	cbvsrvuavHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	cbvsrvuavHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 

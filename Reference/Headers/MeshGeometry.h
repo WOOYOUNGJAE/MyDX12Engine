@@ -30,8 +30,8 @@ protected:
 	ComPtr<ID3DBlob> m_indexBufferCPU = nullptr;
 	ComPtr<ID3D12Resource> m_vertexBufferGPU = nullptr;
 	ComPtr<ID3D12Resource> m_indexBufferGPU = nullptr;
-	ComPtr<ID3D12Resource> m_vertexBufferUploader = nullptr;
-	ComPtr<ID3D12Resource> m_indexBufferUploader = nullptr;
+	ComPtr<ID3D12Resource> m_vertexUploadBuffer = nullptr;
+	ComPtr<ID3D12Resource> m_indexUploadBuffer = nullptr;
 protected: // Data about the buffers.
 	UINT m_iNumVertex = 0;
 	UINT m_iNumIndices = 0;

@@ -29,7 +29,6 @@ HRESULT CTexture::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
-	m_iCbvSrvUavHeapOffset = pInitDesc->iCbvSrvUavHeapOffset;
 
 	m_bIsCubeMap = pInitDesc->bIsCubeMap;
 
@@ -41,6 +40,7 @@ HRESULT CTexture::Initialize(void* pArg)
 	srvDesc.Texture2D.MipLevels = 1;
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE handle(CGraphic_Device::Get_Instance()->Get_CbvSrvUavHeapStart_CPU());
+	m_iCbvSrvUavHeapOffset = pInitDesc->iCbvSrvUavHeapOffset;
 	handle.Offset(1, m_iCbvSrvUavHeapOffset);
 
 	pInitDesc->pDevice->CreateShaderResourceView(

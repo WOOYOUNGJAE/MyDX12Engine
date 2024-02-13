@@ -42,13 +42,14 @@ namespace Engine
 		D3D12_INPUT_ELEMENT_DESC Default_Color;
 	};
 
-	struct CONSTANT_BUFFER_DATA
+	struct OBJ_CONSTANT_BUFFER
 	{
-		CONSTANT_BUFFER_DATA()
+		OBJ_CONSTANT_BUFFER()
 		{
 			XMStoreFloat4x4(&WorldViewProj, XMMatrixIdentity());
 		}
 		_float4x4 WorldViewProj;
+		FLOAT padding[48];
 	};
 
 	struct QUEUE_FLUSH_DESC

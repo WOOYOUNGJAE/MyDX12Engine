@@ -97,7 +97,7 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 	memcpy(m_indexBufferCPU->GetBufferPointer(), indexData, iIndexBufferSize);
 
 	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice.Get(), m_pCommandList.Get(),
-		m_vertexData, iVertexBufferSize, m_vertexBufferUploader, m_vertexBufferGPU);
+		m_vertexData, iVertexBufferSize, m_vertexUploadBuffer, m_vertexBufferGPU);
 	if (FAILED(hr))
 	{
 		MSG_BOX("TriangleMesh_PT : Failed to Create Buffer");
@@ -105,7 +105,7 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 	}
 
 	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice.Get(), m_pCommandList.Get(),
-		indexData, iIndexBufferSize, m_indexBufferUploader, m_indexBufferGPU);
+		indexData, iIndexBufferSize, m_indexUploadBuffer, m_indexBufferGPU);
 	if (FAILED(hr))
 	{
 		MSG_BOX("TriangleMesh_PT : Failed to Create Buffer");

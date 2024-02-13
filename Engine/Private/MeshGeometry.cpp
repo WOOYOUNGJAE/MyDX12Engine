@@ -17,8 +17,8 @@ m_vertexBufferCPU(rhs.m_vertexBufferCPU.Get()),
 m_indexBufferCPU(rhs.m_indexBufferCPU.Get()),
 m_vertexBufferGPU(rhs.m_vertexBufferGPU.Get()),
 m_indexBufferGPU(rhs.m_indexBufferGPU.Get()),
-m_vertexBufferUploader(rhs.m_vertexBufferUploader.Get()),
-m_indexBufferUploader(rhs.m_indexBufferUploader.Get())
+m_vertexUploadBuffer(rhs.m_vertexUploadBuffer.Get()),
+m_indexUploadBuffer(rhs.m_indexUploadBuffer.Get())
 {
 }
 

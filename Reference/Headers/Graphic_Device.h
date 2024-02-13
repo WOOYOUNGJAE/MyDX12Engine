@@ -42,6 +42,7 @@ public: // Getter
 	ID3D12DescriptorHeap* Get_CbvSrvUavHeap() { return m_pCbvSrvUavHeap.Get(); }
 	UINT Get_RtvDescriptorSize() const { return m_iRtvDescriptorSize; }
 	UINT Get_CbvSrvUavDescriptorSize() const { return m_iCbvSrvUavDescriptorSize; }
+	UINT* Get_NextCbvSrvUavHeapOffsetPtr() { return &m_iNextCbvSrvUavHeapOffset; }
 private: // ComPtr
 	ComPtr<IDXGIFactory4> m_pDxgi_Factory = nullptr;
 	ComPtr<ID3D12Device> m_pDevice = nullptr;
@@ -59,6 +60,7 @@ private: // Descriptor
 	UINT m_iRtvDescriptorSize = 0;
 	UINT m_iDsvDescriptorSize = 0;
 	UINT m_iCbvSrvUavDescriptorSize = 0;
+	UINT m_iNextCbvSrvUavHeapOffset = 0;
 private: // Descriptor Heap
 	static const int m_iSwapChainBufferCount = 2; // 더블 버퍼링때문에 2로 초기화
 	ComPtr<ID3D12DescriptorHeap> m_pRtvHeap = nullptr;
