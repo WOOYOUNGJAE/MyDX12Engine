@@ -6,7 +6,6 @@
 #include "MainApp.h"
 
 
-
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
@@ -14,6 +13,9 @@ HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
 HWND g_hwnd;
+bool g_bImguiOn = true;
+// Forward declare message handler from imgui_impl_win32.cpp
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -155,8 +157,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+   RECT		rcWindow = { 0, 0, g_iWinSizeX, g_iWinSizeY };
+
+   AdjustWindowRect(&rcWindow, WS_OVERLAPPEDWINDOW, TRUE);
+
+   HWND hWnd = CreateWindowW(szWindowClass, L"MyDx12Engine", WS_OVERLAPPEDWINDOW,
+       CW_USEDEFAULT, 0, rcWindow.right - rcWindow.left, rcWindow.bottom - rcWindow.top, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
    {
@@ -183,6 +189,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+        return true;
+
     switch (message)
     {
     case WM_COMMAND:

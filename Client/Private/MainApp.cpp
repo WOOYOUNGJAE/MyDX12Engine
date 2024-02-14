@@ -71,11 +71,17 @@ void CMainApp::Tick(_float fDeltaTime)
 	m_pGameInstance->Engine_Tick(fDeltaTime);
 
 	m_pRenderer->MainRender();
+
+#ifndef IMGUI_ON
 	m_pRenderer->EndRender();
 	m_pRenderer->Present();
-
+#else
 	m_pClient_Imgui->Imgui_Tick();
-	m_pClient_Imgui->Imgui_Render();
+	m_pClient_Imgui->Imgui_MainRender();
+	m_pClient_Imgui->IMgui_EndRender();
+	m_pClient_Imgui->Imgui_Present();
+#endif
+
 }
 
 

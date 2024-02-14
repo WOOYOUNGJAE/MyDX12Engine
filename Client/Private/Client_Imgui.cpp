@@ -21,6 +21,8 @@ HRESULT CClient_Imgui::Initialize(ID3D12Device* pDevice)
     HRESULT hr = S_OK;
 
     m_pRenderer = reinterpret_cast<CRenderer*>(CComponentManager::Get_Instance()->FindandGet_Prototype(L"Renderer"));
+    Safe_AddRef(m_pRenderer);
+
 
     // Create Srv Heap
     D3D12_DESCRIPTOR_HEAP_DESC desc = {};
@@ -130,18 +132,21 @@ void CClient_Imgui::Imgui_Tick()
     ImGui::Render();
 }
 
-void CClient_Imgui::Imgui_Render()
+void CClient_Imgui::Imgui_MainRender()
 {
-    m_pRenderer->BeginRender();
-
     m_pRenderer->Get_CmdList()->SetDescriptorHeaps(1, &m_pImguiSrvHeap);
     ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), m_pRenderer->Get_CmdList());
 
+}
 
+void CClient_Imgui::IMgui_EndRender()
+{
     m_pRenderer->EndRender();
+}
 
-
-    // Update and Render additional Platform Windows
+void CClient_Imgui::Imgui_Present()
+{
+	// Update and Render additional Platform Windows
     if (m_pIo->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
         ImGui::UpdatePlatformWindows();
@@ -150,7 +155,6 @@ void CClient_Imgui::Imgui_Render()
 
     // Renderer -> Present
     m_pRenderer->Present();
-
 }
 
 HRESULT CClient_Imgui::Free()
@@ -163,7 +167,7 @@ HRESULT CClient_Imgui::Free()
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 
-
+    Safe_Release(m_pRenderer);
 
     return S_OK;
 }
