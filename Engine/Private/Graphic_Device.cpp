@@ -322,6 +322,7 @@ HRESULT CGraphic_Device::Free()
 	}
 
 	CloseHandle(m_fenceEvent);
+
 	return S_OK;
 }
 

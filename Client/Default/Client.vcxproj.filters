@@ -19,6 +19,9 @@
     <Filter Include="Imgui">
       <UniqueIdentifier>{e82cdd63-d307-4506-81fa-08cbbd76b587}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Imgui\Imgui_Client">
+      <UniqueIdentifier>{841513be-a08f-4b94-b5ec-20196d1f0339}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -70,6 +73,9 @@
     <ClInclude Include="..\..\External\imgui-dx12\imstb_truetype.h">
       <Filter>Imgui</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Client_Imgui.h">
+      <Filter>Imgui\Imgui_Client</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -105,6 +111,9 @@
     </ClCompile>
     <ClCompile Include="..\..\External\imgui-dx12\imgui_widgets.cpp">
       <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Client_Imgui.cpp">
+      <Filter>Imgui\Imgui_Client</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

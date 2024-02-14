@@ -235,6 +235,7 @@
     <ClInclude Include="..\Public\Camera_Free.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\ClientLoader.h" />
+    <ClInclude Include="..\Public\Client_Imgui.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
@@ -252,6 +253,7 @@
     <ClCompile Include="..\..\External\imgui-dx12\imgui_widgets.cpp" />
     <ClCompile Include="..\Private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\ClientLoader.cpp" />
+    <ClCompile Include="..\Private\Client_Imgui.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">

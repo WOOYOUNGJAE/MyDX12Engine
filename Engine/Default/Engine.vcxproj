@@ -185,7 +185,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>../Public/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Public/;..\..\External\imgui-dx12\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -212,7 +212,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>../Public/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Public/;..\..\External\imgui-dx12\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -241,7 +241,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>../Public/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Public/;..\..\External\imgui-dx12\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

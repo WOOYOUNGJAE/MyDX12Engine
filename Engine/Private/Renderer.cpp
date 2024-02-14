@@ -325,6 +325,11 @@ void CRenderer::AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eShade
 	Safe_AddRef(pGameObject);
 }
 
+void CRenderer::Flush_CommandQueue()
+{
+	CGraphic_Device::Get_Instance()->Flush_CommandQueue(&m_queue_flush_desc);
+}
+
 //--------------------------------------------------------------------------------------
 
 FrameResource::FrameResource(ID3D12Device * pDevice, UINT iObjectCount, UINT iPassCount)

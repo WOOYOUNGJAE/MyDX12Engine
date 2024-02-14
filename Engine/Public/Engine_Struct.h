@@ -53,4 +53,15 @@ namespace Engine
 		std::wstring strPath;
 	};
 
+	struct RENDERER_BUNDLE
+	{
+		ID3D12Device* pDevice = nullptr;
+		ID3D12CommandAllocator* pCmdAllocator = nullptr;
+		ID3D12CommandQueue* pCommandQueue = nullptr;
+		ID3D12GraphicsCommandList* pCmdList = nullptr;
+		IDXGISwapChain3* pSwapChain = nullptr;
+		ID3D12Resource** pRenderTargetArr = nullptr;
+		UINT iFrameIndex = 0;
+	};
+
 }

@@ -26,6 +26,11 @@
 #include <DirectXPackedVector.h>
 #include <DirectXColors.h>
 
+// Imgui
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx12.h"
+
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 using namespace Microsoft::WRL;

@@ -7,6 +7,7 @@ class CRenderer;
 _NAMESPACE
 
 NAMESPACE_(Client)
+class CClient_Imgui;
 class CMainApp : public CBase
 {
 private:
@@ -18,12 +19,12 @@ public:
 	HRESULT Initialize();
 	void Tick(_float fDeltaTime);
 	virtual HRESULT Free() override;
-private:
-	HRESULT Init_Imgui();
+
 private:
 	ID3D12Device* m_pDevice = nullptr;
 	CGameInstance* m_pGameInstance = nullptr;
 	CRenderer* m_pRenderer = nullptr;
+	CClient_Imgui* m_pClient_Imgui = nullptr;
 };
 
 _NAMESPACE

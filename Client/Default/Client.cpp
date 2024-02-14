@@ -58,20 +58,37 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
+    // IMGUI Show the window
+    ::ShowWindow(g_hwnd, SW_SHOWDEFAULT);
+    ::UpdateWindow(g_hwnd);
+
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CLIENT));
 
-    MSG msg;
-
+    MSG msg = {};
     // 기본 메시지 루프입니다:
     //CGameInstance* pGameInstance = CGameInstance::Get_Instance();
     //Safe_AddRef(pGameInstance);
+    while (WM_QUIT != msg.message)
+    {
+        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+        else
+        {
+            pMainApp->Tick(0.2f);
+        }
+    }
 
-    while (true)
+
+   /* while (true)
     {
         if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         {
             if (WM_QUIT == msg.message)
             {
+                int a = 1;
                 break;
             }
 
@@ -83,7 +100,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
 
         pMainApp->Tick(0.2f);
-    }
+    }*/
 
     //pGameInstance->Destroy_Instance(); // TODO : MainApp 내에서 일괄적으로 하도록
     //Safe_Release(pGameInstance);
