@@ -214,7 +214,7 @@ void CRenderer::MainRender()
 					if (pPSO == nullptr) { continue; }
 
 					cbvSrvUavHandle.InitOffsetted(pSrvHeap->GetGPUDescriptorHandleForHeapStart(), 0);
-					m_pCommandList->SetGraphicsRootSignature(m_pPipelineManager->Get_RootSig(eRootsigType)); // RoogSig按眉 技泼
+					m_pCommandList->SetGraphicsRootSignature(m_pPipelineManager->Get_RootSig(eRootsigType)); // RootSig按眉 技泼
 					if (eShaderTypeEnum != SHADERTYPE_SIMPLE)
 					{
 						pSrvHeap = m_pGraphic_Device->Get_CbvSrvUavHeap();
@@ -234,8 +234,9 @@ void CRenderer::MainRender()
 						m_pCommandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHandle);
 
 						// ObjCB
+						/*cbvSrvUavHandle.InitOffsetted(pSrvHeap->GetGPUDescriptorHandleForHeapStart(), 0);
 						cbvSrvUavHandle.Offset(m_iCBVHeapStartOffset);
-						m_pCommandList->SetGraphicsRootDescriptorTable(1, cbvSrvUavHandle);
+						m_pCommandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHandle);*/
 						Update_ObjCB(iter);
 
 
