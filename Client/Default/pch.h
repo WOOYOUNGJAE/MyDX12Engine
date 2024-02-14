@@ -12,6 +12,12 @@
 #include <windows.h>
 #include <iostream>
 
+
+// Imgui
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx12.h"
+
 // C 런타임 헤더 파일입니다.
 #include <stdlib.h>
 #include <malloc.h>

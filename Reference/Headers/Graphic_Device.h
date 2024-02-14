@@ -82,6 +82,7 @@ public:
 private: // Current
 	UINT64 m_iCurFenceVal = 0;
 	_uint m_iCurrBackBuffer = 0;
+
 };
 
 _NAMESPACE

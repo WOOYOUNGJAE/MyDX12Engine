@@ -7,6 +7,7 @@
 #include "VertexTypes.h"
 #include "ResourceUploadBatch.h"
 
+
 #include <iostream>
 #include <string>
 #include <array>

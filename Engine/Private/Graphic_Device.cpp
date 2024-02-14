@@ -47,6 +47,8 @@ HRESULT CGraphic_Device::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 		MSG_BOX("Failed To Create Device");
 		return E_FAIL;
 	}
+	*ppDevice = m_pDevice.Get();
+
 
 	// Init Fence
 	if (FAILED(m_pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_pFence))))

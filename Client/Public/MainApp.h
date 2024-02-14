@@ -18,7 +18,8 @@ public:
 	HRESULT Initialize();
 	void Tick(_float fDeltaTime);
 	virtual HRESULT Free() override;
-
+private:
+	HRESULT Init_Imgui();
 private:
 	ID3D12Device* m_pDevice = nullptr;
 	CGameInstance* m_pGameInstance = nullptr;

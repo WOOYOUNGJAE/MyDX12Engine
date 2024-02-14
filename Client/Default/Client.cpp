@@ -1,10 +1,11 @@
 ﻿// Client.cpp : 애플리케이션에 대한 진입점을 정의합니다.
-//
 #include "pch.h"
 #include "framework.h"
 #include "Client.h"
 #include "GameInstance.h"
 #include "MainApp.h"
+
+
 
 #define MAX_LOADSTRING 100
 
@@ -19,7 +20,7 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
-
+ID3D12DescriptorHeap* g_ImguiSrvDescHeap = nullptr;
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
@@ -37,8 +38,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // TODO: 여기에 코드를 입력합니다.
-
     // 전역 문자열을 초기화합니다.
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_CLIENT, szWindowClass, MAX_LOADSTRING);
@@ -49,6 +48,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     {
         return FALSE;
     }
+
+
+
 
     CMainApp* pMainApp = CMainApp::Create();
     if (pMainApp == nullptr)

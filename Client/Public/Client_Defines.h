@@ -5,6 +5,8 @@ const unsigned int	g_iWinSizeY = 720;
 
 extern HWND			g_hwnd;
 
+extern ID3D12DescriptorHeap* g_ImguiSrvDescHeap;
+
 namespace Client
 {
 	
