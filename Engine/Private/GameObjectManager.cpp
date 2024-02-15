@@ -69,9 +69,17 @@ CGameObject* CGameObjectManager::FindandGet_Prototype(const wstring& strTag)
 	return pair->second;
 }
 
-CObjLayer* CGameObjectManager::Find_Layer(const wstring& strTag)
+CGameObject* CGameObjectManager::FindandGet_Cloned(const wstring& strProtoTag, UINT eLayerEnum, UINT iClonedNum)
 {
-	auto pair = m_mapLayer.find(strTag);
+	CObjLayer* pLayer = Find_Layer(eLayerEnum);
+	if (pLayer == nullptr) { return nullptr; }
+
+	return pLayer->Find_Obj(strProtoTag, iClonedNum);
+}
+
+CObjLayer* CGameObjectManager::Find_Layer(UINT eLayerEnum)
+{
+	auto pair = m_mapLayer.find(eLayerEnum);
 
 	if (pair == m_mapLayer.end())
 	{
@@ -89,6 +97,8 @@ HRESULT CGameObjectManager::Add_Prototype(const wstring& strTag, CGameObject* pI
 		MSG_BOX("GameObj Manager : Prototype Already Exists");
 		return E_FAIL;
 	}
+
+	pInstance->Set_PrototypeTag(strTag);
 
 	m_mapObjPrototypes.emplace(strTag, pInstance);
 
@@ -109,8 +119,8 @@ CGameObject* CGameObjectManager::Clone_GameObject(const wstring& strTag, void* p
 	return pPrototype->Clone(pArg);
 }
 
-HRESULT CGameObjectManager::Add_GameObject_InScene(const wstring& strPrototypeTag, const wstring& strLayerTag,
-	void* pArg)
+HRESULT CGameObjectManager::Add_GameObject_InScene(const wstring& strPrototypeTag, UINT eLayerEnum,
+                                                   void* pArg)
 {
 	auto prototypePair = m_mapObjPrototypes.find(strPrototypeTag);
 
@@ -123,14 +133,14 @@ HRESULT CGameObjectManager::Add_GameObject_InScene(const wstring& strPrototypeTa
 
 	CGameObject* pGameObject = prototypePair->second->Clone(pArg);
 
-	CObjLayer* pLayer = Find_Layer(strLayerTag);
+	CObjLayer* pLayer = Find_Layer(eLayerEnum);
 
 	// 처음 보는 레이어라면 추가
 	if (pLayer == nullptr)
 	{
 		pLayer = CObjLayer::Create();
 		pLayer->Add_GameObject(pGameObject); // 레이어에 넣고
-		m_mapLayer.emplace(strLayerTag, pLayer); // 레이어 자체를 추가
+		m_mapLayer.emplace(eLayerEnum, pLayer); // 레이어 자체를 추가
 
 		return S_OK;
 	}
@@ -141,8 +151,8 @@ HRESULT CGameObjectManager::Add_GameObject_InScene(const wstring& strPrototypeTa
 	return S_OK;
 }
 
-HRESULT CGameObjectManager::Add_GameObject_InScene(const wstring& strPrototypeTag, const wstring& strLayerTag,
-	CGameObject** pOutObj, void* pArg)
+HRESULT CGameObjectManager::Add_GameObject_InScene(const wstring& strPrototypeTag, UINT eLayerEnum,
+                                                   CGameObject** pOutObj, void* pArg)
 {
 	auto prototypePair = m_mapObjPrototypes.find(strPrototypeTag);
 
@@ -155,14 +165,14 @@ HRESULT CGameObjectManager::Add_GameObject_InScene(const wstring& strPrototypeTa
 
 	CGameObject* pGameObject = prototypePair->second->Clone(pArg);
 
-	CObjLayer* pLayer = Find_Layer(strLayerTag);
+	CObjLayer* pLayer = Find_Layer(eLayerEnum);
 
 	// 처음 보는 레이어라면 추가
 	if (pLayer == nullptr)
 	{
 		pLayer = CObjLayer::Create();
 		pLayer->Add_GameObject(pGameObject); // 레이어에 넣고
-		m_mapLayer.emplace(strLayerTag, pLayer); // 레이어 자체를 추가
+		m_mapLayer.emplace(eLayerEnum, pLayer); // 레이어 자체를 추가
 
 		*pOutObj = pGameObject;
 

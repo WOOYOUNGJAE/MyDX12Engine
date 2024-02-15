@@ -39,9 +39,9 @@ HRESULT CMainApp::Initialize()
 #pragma region InLevel
 	hr = m_pGameInstance->Add_GameObjPrototype(L"Camera_Free", CCamera_Free::Create());
 	if (FAILED(hr)) { return hr; }
-	hr = m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", L"Default");
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", OBJ_LAYER_DEFAULT);
 	if (FAILED(hr)) { return hr; }
-	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", L"Layer0", &pObjectControlling);
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling);
 	if (FAILED(hr)) { return hr; }
 	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", L"Layer0", &pObjectControlling);
 	if (FAILED(hr)) { return hr; }*/
@@ -59,9 +59,11 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 	}
 
-	// IMGUI
+#ifdef IMGUI_ON
 	m_pClient_Imgui = CClient_Imgui::Create(m_pDevice);
-	
+#endif
+
+
 	return S_OK;
 }
 void CMainApp::Tick(_float fDeltaTime)
@@ -87,7 +89,10 @@ void CMainApp::Tick(_float fDeltaTime)
 
 HRESULT CMainApp::Free()
 {
+#ifdef IMGUI_ON
 	Safe_Release(m_pClient_Imgui);
+#endif
+
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pGameInstance);
 

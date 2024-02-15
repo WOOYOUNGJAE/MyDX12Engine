@@ -2,6 +2,9 @@
 
 namespace Engine
 {
+	// OBJ_LAYER
+	enum OBJ_LAYER { OBJ_LAYER_DEFAULT, OBJ_LAYER_0, OBJ_LAYER_END};
+
 	namespace Pipeline
 	{
 		enum ENUM_PSO { PSO_DEFAULT, PSO_END };

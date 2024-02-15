@@ -133,16 +133,21 @@ CGameObject* CGameInstance::Clone_GameObject(const wstring& strPrototypeTag, voi
 	return m_pGameObjectManager->Clone_GameObject(strPrototypeTag, pArg);
 }
 
-HRESULT CGameInstance::Add_GameObject_InScene(const wstring& strPrototypeTag, const wstring& strLayerTag, void* pArg)
+HRESULT CGameInstance::Add_GameObject_InScene(const wstring& strPrototypeTag, UINT eLayerEnum, void* pArg)
 {
-	return m_pGameObjectManager->Add_GameObject_InScene(strPrototypeTag, strLayerTag, pArg);
+	return m_pGameObjectManager->Add_GameObject_InScene(strPrototypeTag, eLayerEnum, pArg);
 }
 
-HRESULT CGameInstance::Add_GameObject_InScene(const wstring& strPrototypeTag, const wstring& strLayerTag,
-	CGameObject** pOutObj, void* pArg)
+HRESULT CGameInstance::Add_GameObject_InScene(const wstring& strPrototypeTag, UINT eLayerEnum,
+                                              CGameObject** pOutObj, void* pArg)
 {
-	HRESULT hr = m_pGameObjectManager->Add_GameObject_InScene(strPrototypeTag, strLayerTag, pOutObj, pArg);
+	HRESULT hr = m_pGameObjectManager->Add_GameObject_InScene(strPrototypeTag, eLayerEnum, pOutObj, pArg);
 	return hr;
+}
+
+CGameObject* CGameInstance::FindandGet_GameObj_Cloned(const wstring& strPrototypeTag, UINT eLayerEnum, UINT iClonedNum)
+{
+	return m_pGameObjectManager->FindandGet_Cloned(strPrototypeTag, eLayerEnum, iClonedNum);
 }
 
 void CGameInstance::Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum)

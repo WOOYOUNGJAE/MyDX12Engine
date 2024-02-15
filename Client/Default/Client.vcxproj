@@ -236,6 +236,7 @@
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\ClientLoader.h" />
     <ClInclude Include="..\Public\Client_Imgui.h" />
+    <ClInclude Include="..\Public\Imgui_Struct.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
@@ -254,6 +255,7 @@
     <ClCompile Include="..\Private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\ClientLoader.cpp" />
     <ClCompile Include="..\Private\Client_Imgui.cpp" />
+    <ClCompile Include="..\Private\Imgui_Struct.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">

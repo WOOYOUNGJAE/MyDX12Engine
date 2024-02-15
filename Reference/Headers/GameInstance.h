@@ -29,8 +29,9 @@ public: // Manager Function Offer
 	// GameObjManager
 	HRESULT Add_GameObjPrototype(const wstring& strTag, class CGameObject* pInstance);
 	CGameObject* Clone_GameObject(const wstring& strPrototypeTag, void* pArg = nullptr);
-	HRESULT Add_GameObject_InScene(const wstring& strPrototypeTag, const wstring& strLayerTag, void* pArg = nullptr);
-	HRESULT Add_GameObject_InScene(const wstring& strPrototypeTag, const wstring& strLayerTag, CGameObject** pOutObj , void* pArg = nullptr);
+	HRESULT Add_GameObject_InScene(const wstring& strPrototypeTag, UINT eLayerEnum, void* pArg = nullptr);
+	HRESULT Add_GameObject_InScene(const wstring& strPrototypeTag, UINT eLayerEnum, CGameObject** pOutObj, void* pArg = nullptr);
+	CGameObject* FindandGet_GameObj_Cloned(const wstring& strPrototypeTag, UINT eLayerEnum = OBJ_LAYER_0, UINT iClonedNum = 1);
 	// Pipeline manager
 	void Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum);
 public:

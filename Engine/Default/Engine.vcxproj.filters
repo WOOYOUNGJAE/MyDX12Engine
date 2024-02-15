@@ -201,7 +201,9 @@
     <ClInclude Include="..\Public\UploadBuffer.h">
       <Filter>System\D3D Graphics\UploadBuffer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\D3DResourceManager.h" />
+    <ClInclude Include="..\Public\D3DResourceManager.h">
+      <Filter>System\D3D Graphics\D3DResourceManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -288,7 +290,9 @@
     <ClCompile Include="..\Private\UploadBuffer.cpp">
       <Filter>System\D3D Graphics\UploadBuffer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\D3DResourceManager.cpp" />
+    <ClCompile Include="..\Private\D3DResourceManager.cpp">
+      <Filter>System\D3D Graphics\D3DResourceManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />

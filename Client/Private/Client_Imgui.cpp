@@ -1,7 +1,10 @@
 #include "pch.h"
 #include "Client_Imgui.h"
+
+#include "GameInstance.h"
 #include "Renderer.h"
 #include "ComponentManager.h"
+#include "Imgui_Struct.h"
 
 CClient_Imgui* CClient_Imgui::Create(ID3D12Device* pDevice)
 {
@@ -48,6 +51,7 @@ HRESULT CClient_Imgui::Initialize(ID3D12Device* pDevice)
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
     //ImGui::StyleColorsLight();
+    //ImGui::StyleColorsClassic();
 
 	// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
     ImGuiStyle& style = ImGui::GetStyle();
@@ -80,7 +84,15 @@ HRESULT CClient_Imgui::Initialize(ID3D12Device* pDevice)
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != nullptr);
 
+    // ObjCustomizer
+    CGameInstance* pG_Instance = CGameInstance::Get_Instance();
+    Safe_AddRef(pG_Instance);
 
+    CGameObject* pTargetObj = nullptr;
+    pTargetObj = pG_Instance->FindandGet_GameObj_Cloned(L"Triangle");
+    m_vecObjCustomizer.push_back(OBJ_CUSTOMIZER::Create(pTargetObj));
+
+    Safe_Release(pG_Instance);
     return hr;
 }
 
@@ -128,6 +140,11 @@ void CClient_Imgui::Imgui_Tick()
         ImGui::End();
     }
 
+    for (auto& iter : m_vecObjCustomizer)
+    {
+        iter->Imgui_Tick();
+    }
+
     // Rendering
     ImGui::Render();
 }
@@ -160,6 +177,11 @@ void CClient_Imgui::Imgui_Present()
 HRESULT CClient_Imgui::Free()
 {
     m_pRenderer->Flush_CommandQueue();
+
+    for (auto& iter : m_vecObjCustomizer)
+    {
+        Safe_Delete(iter);
+    }
 
     // Release Imgui
     Safe_Release(m_pImguiSrvHeap);

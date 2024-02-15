@@ -22,6 +22,12 @@
     <Filter Include="Imgui\Imgui_Client">
       <UniqueIdentifier>{841513be-a08f-4b94-b5ec-20196d1f0339}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Imgui\External">
+      <UniqueIdentifier>{c29301e4-5490-4c30-a835-16df3cde8ab3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Imgui\Imgui_Struct">
+      <UniqueIdentifier>{f47add37-1923-407c-80d6-517a1a175c80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -52,29 +58,32 @@
     <ClInclude Include="..\..\External\imgui-dx12\imconfig.h">
       <Filter>Imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\External\imgui-dx12\imgui.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\External\imgui-dx12\imgui_impl_dx12.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\External\imgui-dx12\imgui_impl_win32.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\External\imgui-dx12\imgui_internal.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\External\imgui-dx12\imstb_rectpack.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\External\imgui-dx12\imstb_textedit.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\External\imgui-dx12\imstb_truetype.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Client_Imgui.h">
       <Filter>Imgui\Imgui_Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\imgui-dx12\imgui.h">
+      <Filter>Imgui\External</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\imgui-dx12\imgui_impl_dx12.h">
+      <Filter>Imgui\External</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\imgui-dx12\imgui_impl_win32.h">
+      <Filter>Imgui\External</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\imgui-dx12\imgui_internal.h">
+      <Filter>Imgui\External</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\imgui-dx12\imstb_rectpack.h">
+      <Filter>Imgui\External</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\imgui-dx12\imstb_textedit.h">
+      <Filter>Imgui\External</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\imgui-dx12\imstb_truetype.h">
+      <Filter>Imgui\External</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Imgui_Struct.h">
+      <Filter>Imgui\Imgui_Struct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -91,29 +100,32 @@
       <Filter>GameObject\Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ClientLoader.cpp" />
-    <ClCompile Include="..\..\External\imgui-dx12\imgui.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\External\imgui-dx12\imgui_demo.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\External\imgui-dx12\imgui_draw.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\External\imgui-dx12\imgui_impl_dx12.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\External\imgui-dx12\imgui_impl_win32.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\External\imgui-dx12\imgui_tables.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\External\imgui-dx12\imgui_widgets.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Client_Imgui.cpp">
       <Filter>Imgui\Imgui_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\External\imgui-dx12\imgui.cpp">
+      <Filter>Imgui\External</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\External\imgui-dx12\imgui_demo.cpp">
+      <Filter>Imgui\External</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\External\imgui-dx12\imgui_draw.cpp">
+      <Filter>Imgui\External</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\External\imgui-dx12\imgui_impl_dx12.cpp">
+      <Filter>Imgui\External</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\External\imgui-dx12\imgui_impl_win32.cpp">
+      <Filter>Imgui\External</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\External\imgui-dx12\imgui_tables.cpp">
+      <Filter>Imgui\External</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\External\imgui-dx12\imgui_widgets.cpp">
+      <Filter>Imgui\External</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Imgui_Struct.cpp">
+      <Filter>Imgui\Imgui_Struct</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

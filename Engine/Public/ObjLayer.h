@@ -1,8 +1,10 @@
 #pragma once
 #include "Base.h"
-// Layer 오브젝트, 리스트 형태
 NAMESPACE_(Engine)
 class CGameObject;
+// Layer 오브젝트, 리스트 형태
+// 레이어 는 오브젝트 여러종류 가질 수 있음
+// 오브젝트는 단 하나의 레이어에만
 class CObjLayer : public CBase
 {
 protected:
@@ -17,7 +19,7 @@ public:
 	HRESULT Free() override;
 public:
 	HRESULT Add_GameObject(CGameObject* pInstance);
-
+	CGameObject* Find_Obj(const wstring& strPrototypeTag, UINT iClonedNum = 1);
 public:
 	std::list<CGameObject*> m_GameObjList;
 

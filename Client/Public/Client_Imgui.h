@@ -6,6 +6,11 @@ NAMESPACE_(Engine)
 class CRenderer;
 _NAMESPACE
 
+NAMESPACE_(IMGUI_CUSTOM)
+struct OBJ_CUSTOMIZER;
+_NAMESPACE
+using namespace IMGUI_CUSTOM;
+
 NAMESPACE_(Client)
 
 class CClient_Imgui : public CBase
@@ -31,6 +36,8 @@ private:
 	ID3D12DescriptorHeap* m_pImguiSrvHeap = nullptr;
 	ImGuiIO* m_pIo = nullptr;
 	ImVec4 m_clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+private: // My Imgui
+	std::vector<OBJ_CUSTOMIZER*> m_vecObjCustomizer;
 };
 
 _NAMESPACE

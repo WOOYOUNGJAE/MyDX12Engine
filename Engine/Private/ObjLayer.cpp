@@ -52,3 +52,16 @@ HRESULT CObjLayer::Add_GameObject(CGameObject* pInstance)
 
 	return S_OK;
 }
+
+CGameObject* CObjLayer::Find_Obj(const wstring& strPrototypeTag, UINT iClonedNum)
+{
+	for (auto& iter : m_GameObjList)
+	{
+		if (iter->Get_ClonedNum() == iClonedNum)
+		{
+			return iter;
+		}
+	}
+
+	return nullptr;
+}
