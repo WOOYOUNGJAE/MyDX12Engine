@@ -29,15 +29,9 @@ void IMGUI_CUSTOM::OBJ_CUSTOMIZER::Imgui_Tick()
 	Begin("Object Customizer");
 
 	Text("Object Tag : %ls [%d]", pTarget->Get_PrototypeTag().c_str(), pTarget->Get_ClonedNum());
+	NewLine();
 
-
-	//ImVec2 rect = ImGui::GetItemRectSize();
-	ImVec2 rect =
-
-	ImGui::GetWindowContentRegionMax() * 0.5f;
-	//pController->Draw_ImguiImage(*pTargetCbvSrvUavOffset, rect);
-	Text("Texture");
-	SameLine();
+	Text("Texture"); SameLine();
 	if (Button("Prev"))
 	{
 		if (*pTargetCbvSrvUavOffset >= iCbvSrvUavDescriptorSize)
@@ -52,6 +46,12 @@ void IMGUI_CUSTOM::OBJ_CUSTOMIZER::Imgui_Tick()
 		{
 			*pTargetCbvSrvUavOffset += iCbvSrvUavDescriptorSize;
 		}
+	}
+
+	Text("Position (x, y, z)");
+	if (InputFloat3(" ", fPosArr) == false)
+	{
+		pTarget->Set_Position(Vector3(fPosArr[0], fPosArr[1], fPosArr[2]));
 	}
 
 	End();

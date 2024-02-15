@@ -6,6 +6,7 @@
 #include "Camera_Free.h"
 #include "ClientLoader.h"
 #include "Client_Imgui.h"
+#define IMGUI_ON
 CMainApp::CMainApp() : m_pGameInstance{ CGameInstance::Get_Instance()}
 {
 	Safe_AddRef(m_pGameInstance);
@@ -74,14 +75,14 @@ void CMainApp::Tick(_float fDeltaTime)
 
 	m_pRenderer->MainRender();
 
-#ifndef IMGUI_ON
-	m_pRenderer->EndRender();
-	m_pRenderer->Present();
-#else
+#ifdef IMGUI_ON
 	m_pClient_Imgui->Imgui_Tick();
 	m_pClient_Imgui->Imgui_MainRender();
 	m_pClient_Imgui->IMgui_EndRender();
 	m_pClient_Imgui->Imgui_Present();
+#else
+	m_pRenderer->EndRender();
+	m_pRenderer->Present();
 #endif
 
 }
