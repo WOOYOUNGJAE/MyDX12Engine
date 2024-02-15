@@ -65,7 +65,7 @@ HRESULT CTriangle::Initialize(void* pArg)
 
 void CTriangle::Tick(_float fDeltaTime)
 {
-	int a = 0;
+	//m_pTransformCom->
 }
 
 void CTriangle::Late_Tick(_float fDeltaTime)

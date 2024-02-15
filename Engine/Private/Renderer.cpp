@@ -170,7 +170,7 @@ void CRenderer::Update_ObjCB(CGameObject* pGameObj)
 	OBJ_CONSTANT_BUFFER objConstants;
 	XMStoreFloat4x4(&objConstants.WorldViewProj, XMMatrixTranspose(matWorld));
 
-	m_pCurFrameResource->pObjectCB->CopyData(pGameObj->Get_ClonedNum(), objConstants);
+	m_pCurFrameResource->pObjectCB->CopyData(pGameObj->Get_ClonedNum() - 1, objConstants);
 }
 
 void CRenderer::BeginRender()

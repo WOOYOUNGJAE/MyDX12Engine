@@ -257,9 +257,6 @@
     <ClCompile Include="..\Private\TextureCompo.cpp">
       <Filter>Utility\Components\TextureCompo</Filter>
     </ClCompile>
-    <ClCompile Include="..\Bin\Shader\simpleShader2.hlsl">
-      <Filter>0.Shaders</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Graphic_Device.cpp">
       <Filter>System\D3D Graphics\Graphic_Device</Filter>
     </ClCompile>
@@ -303,6 +300,9 @@
       <Filter>0.Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\simpleShader.hlsl">
+      <Filter>0.Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\simpleShader2.hlsl">
       <Filter>0.Shaders</Filter>
     </FxCompile>
   </ItemGroup>
