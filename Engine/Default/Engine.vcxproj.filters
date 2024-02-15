@@ -204,6 +204,9 @@
     <ClInclude Include="..\Public\D3DResourceManager.h">
       <Filter>System\D3D Graphics\D3DResourceManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\MyMath.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">

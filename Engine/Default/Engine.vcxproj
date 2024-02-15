@@ -282,6 +282,7 @@
     <ClInclude Include="..\Public\Graphic_Device.h" />
     <ClInclude Include="..\Public\LoadHelper.h" />
     <ClInclude Include="..\Public\MeshGeometry.h" />
+    <ClInclude Include="..\Public\MyMath.h" />
     <ClInclude Include="..\Public\ObjLayer.h" />
     <ClInclude Include="..\Public\ObjMonobehaviour.h" />
     <ClInclude Include="..\Public\PipelineManager.h" />

@@ -23,6 +23,7 @@
 //#include <dxgi.h>
 #include <dxgi1_4.h>
 #include <DirectXMath.h>
+#include "SimpleMath.h"
 #include <DirectXPackedVector.h>
 #include <DirectXColors.h>
 
@@ -34,7 +35,7 @@
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 using namespace Microsoft::WRL;
-
+using namespace DirectX::SimpleMath;
 // libs
 #pragma comment(lib, "d3d12")
 #pragma comment(lib, "dxgi")
@@ -62,6 +63,7 @@ using namespace Microsoft::WRL;
 #include "Engine_Macros.h"
 #include "Engine_Struct.h"
 #include "Engine_Enums.h"
+#include "MyMath.h"
 // namespace
 using namespace Engine;
 using namespace Engine::MyMath;

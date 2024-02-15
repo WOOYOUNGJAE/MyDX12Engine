@@ -65,7 +65,9 @@ HRESULT CTriangle::Initialize(void* pArg)
 
 void CTriangle::Tick(_float fDeltaTime)
 {
-	//m_pTransformCom->
+	m_pTransformCom->m_Position += Vector3(0.001f, 0.f, 0.f);
+	auto r = m_pTransformCom->Position();
+	m_pTransformCom->Refresh_WorldMatrix(CTransform::POSITION);
 }
 
 void CTriangle::Late_Tick(_float fDeltaTime)

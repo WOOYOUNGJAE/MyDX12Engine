@@ -32,7 +32,6 @@ HRESULT CTransform::Initialize_Prototype()
 	{
 		return E_FAIL;
 	}
-
 	Matrix_Identity(m_WorldMatrix);
 	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
 
@@ -74,8 +73,8 @@ void CTransform::Refresh_WorldMatrix(TRANSFORM_ENUM eEnum)
 		_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
 		_vector	vUp = XMVector3Cross(vLook, vRight);
 
-		_float3 ScaleLength = Get_ScaleXYZ(); // 기존 스케일 저장
-
+		Vector3 ScaleLength = Get_ScaleXYZ(); // 기존 스케일 저장
+		
 		Set_WorldMatrix(MAT_RIGHT, vRight);
 		Set_WorldMatrix(MAT_UP, vUp);
 		Set_WorldMatrix(MAT_LOOK, vLook);
@@ -84,7 +83,7 @@ void CTransform::Refresh_WorldMatrix(TRANSFORM_ENUM eEnum)
 		}
 		break;
 	case POSITION:
-		Set_WorldMatrix(MAT_POSITION, XMLoadFloat3(&m_Position));
+		memcpy(&m_WorldMatrix.m[MAT_POSITION], &m_Position, sizeof(Vector3));
 		break;
 	case SCALE:
 		Refresh_MatrixScaled(m_Scale);
@@ -97,7 +96,7 @@ void CTransform::Refresh_WorldMatrix(TRANSFORM_ENUM eEnum)
 		_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
 		_vector	vUp = XMVector3Cross(vLook, vRight);
 
-		_float3 ScaleLength = Get_ScaleXYZ(); // 기존 스케일 저장
+		Vector3 ScaleLength = Get_ScaleXYZ(); // 기존 스케일 저장
 
 		Set_WorldMatrix(MAT_RIGHT, vRight);
 		Set_WorldMatrix(MAT_UP, vUp);
@@ -116,16 +115,16 @@ _vector CTransform::Get_MatrixRow(MATRIX_ENUM eEnum)
 	return WorldMatrix.r[eEnum];
 }
 
-_float3 CTransform::Get_ScaleXYZ()
+Vector3 CTransform::Get_ScaleXYZ()
 {
-	return _float3(
+	return Vector3(
 		 XMVectorGetX(XMVector3Length(Get_MatrixRow(MAT_RIGHT))) ,
 		 XMVectorGetX(XMVector3Length(Get_MatrixRow(MAT_UP))) ,
 		 XMVectorGetX(XMVector3Length(Get_MatrixRow(MAT_LOOK)))
 	);
 }
 
-void CTransform::Refresh_MatrixScaled(const _float3& scale)
+void CTransform::Refresh_MatrixScaled(const Vector3& scale)
 {
 	Set_WorldMatrix(MAT_RIGHT, XMVector3Normalize(Get_MatrixRow(MAT_RIGHT) * scale.x));
 	Set_WorldMatrix(MAT_UP, XMVector3Normalize(Get_MatrixRow(MAT_UP) * scale.y));
