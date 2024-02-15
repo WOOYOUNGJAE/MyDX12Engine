@@ -29,6 +29,8 @@ public:
 	HRESULT Free() override;
 public: // getter
 	ID3D12GraphicsCommandList* Get_CmdList() { return m_pCommandList; }
+	D3D12_GPU_DESCRIPTOR_HANDLE Get_CbvSrvUavStart_GPU();
+	D3D12_CPU_DESCRIPTOR_HANDLE Get_CbvSrvUavStart_CPU();
 public: // Component Functions for GameObject
 	void AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigTypeEnum, class CGameObject* pGameObject);
 	void Flush_CommandQueue();

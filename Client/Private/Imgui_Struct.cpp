@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "Imgui_Struct.h"
 #include "Client_Imgui.h"
+#include "GameInstance.h"
 #include "GameObject.h"
+#include "D3DResourceManager.h"
 
 using namespace ImGui;
 
@@ -9,20 +11,48 @@ IMGUI_CUSTOM::OBJ_CUSTOMIZER::~OBJ_CUSTOMIZER()
 {
 }
 
-IMGUI_CUSTOM::OBJ_CUSTOMIZER* IMGUI_CUSTOM::OBJ_CUSTOMIZER::Create(CGameObject* pGameObject)
+IMGUI_CUSTOM::OBJ_CUSTOMIZER* IMGUI_CUSTOM::OBJ_CUSTOMIZER::Create(CGameObject* pGameObject, CClient_Imgui* pInController)
 {
-	OBJ_CUSTOMIZER* pInstance = new OBJ_CUSTOMIZER(pGameObject);
+	OBJ_CUSTOMIZER* pInstance = new OBJ_CUSTOMIZER(pGameObject, pInController);
 
 	pInstance->pTargetCbvSrvUavOffset = pInstance->pTarget->Get_CbvSrvUavOffsetPtr();
+	pInstance->iCbvSrvUavDescriptorSize = CGameInstance::Get_Instance()->Get_CbvSrvUavDescriptorSize();
+	pInstance->pController = pInController;
 
 	return pInstance;
 }
 
 void IMGUI_CUSTOM::OBJ_CUSTOMIZER::Imgui_Tick()
 {
+	CD3DResourceManager* pResourceManager = CD3DResourceManager::Get_Instance();
+
 	Begin("Object Customizer");
 
-    Text("Object Tag : %ls[%d]", pTarget->Get_PrototypeTag().c_str(), pTarget->Get_ClonedNum());
+	Text("Object Tag : %ls [%d]", pTarget->Get_PrototypeTag().c_str(), pTarget->Get_ClonedNum());
+
+
+	//ImVec2 rect = ImGui::GetItemRectSize();
+	ImVec2 rect =
+
+	ImGui::GetWindowContentRegionMax() * 0.5f;
+	//pController->Draw_ImguiImage(*pTargetCbvSrvUavOffset, rect);
+	Text("Texture");
+	SameLine();
+	if (Button("Prev"))
+	{
+		if (*pTargetCbvSrvUavOffset >= iCbvSrvUavDescriptorSize)
+		{
+			*pTargetCbvSrvUavOffset -= iCbvSrvUavDescriptorSize;
+		}
+	}
+	SameLine();
+	if (Button("Next"))
+	{
+		if (*pTargetCbvSrvUavOffset + iCbvSrvUavDescriptorSize <= pResourceManager->Get_LastSrvOffset())
+		{
+			*pTargetCbvSrvUavOffset += iCbvSrvUavDescriptorSize;
+		}
+	}
 
 	End();
 }

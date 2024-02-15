@@ -30,11 +30,20 @@ HRESULT CClient_Imgui::Initialize(ID3D12Device* pDevice)
     // Create Srv Heap
     D3D12_DESCRIPTOR_HEAP_DESC desc = {};
     desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-    desc.NumDescriptors = 1;
+    desc.NumDescriptors = 2;
     desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
     hr = pDevice->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&m_pImguiSrvHeap));
     if (FAILED(hr)) { return E_FAIL; }
 
+    
+
+    pDevice->CopyDescriptorsSimple(
+        2,
+        D3D12_CPU_DESCRIPTOR_HANDLE(m_pImguiSrvHeap->GetCPUDescriptorHandleForHeapStart()),
+            m_pRenderer->Get_CbvSrvUavStart_CPU(),
+            D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+    m_CbvSrvUavHeapStart = m_pRenderer->Get_CbvSrvUavStart_GPU();
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -90,7 +99,7 @@ HRESULT CClient_Imgui::Initialize(ID3D12Device* pDevice)
 
     CGameObject* pTargetObj = nullptr;
     pTargetObj = pG_Instance->FindandGet_GameObj_Cloned(L"Triangle");
-    m_vecObjCustomizer.push_back(OBJ_CUSTOMIZER::Create(pTargetObj));
+    m_vecObjCustomizer.push_back(OBJ_CUSTOMIZER::Create(pTargetObj, this));
 
     Safe_Release(pG_Instance);
     return hr;
@@ -192,4 +201,11 @@ HRESULT CClient_Imgui::Free()
     Safe_Release(m_pRenderer);
 
     return S_OK;
+}
+
+void CClient_Imgui::Draw_ImguiImage(UINT64 const iOffset, ImVec2 imVec2)
+{
+    m_CbvSrvUavHeapStart.Offset(iOffset);
+    m_CbvSrvUavHeapStart = m_pRenderer->Get_CbvSrvUavStart_GPU();
+    ImGui::Image((ImTextureID)m_CbvSrvUavHeapStart.ptr, imVec2);
 }

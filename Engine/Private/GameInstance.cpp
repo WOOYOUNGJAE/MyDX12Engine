@@ -57,7 +57,7 @@ HRESULT CGameInstance::Init_Engine(const GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D
 	{
 		return E_FAIL;
 	}
-
+	m_pD3DResourceManager->Initialize();
 	m_pLoadHelper->Initialize();
 
 	return S_OK;
@@ -96,6 +96,11 @@ void CGameInstance::Release_Engine()
 	CGraphic_Device::Destroy_Instance();
 	CLoadHelper::Destroy_Instance();
 	CGameInstance::Get_Instance()->Destroy_Instance();
+}
+
+UINT CGameInstance::Get_CbvSrvUavDescriptorSize() const
+{
+	return m_pGraphic_Device->Get_CbvSrvUavDescriptorSize();
 }
 
 HRESULT CGameInstance::Add_ComPrototype(const wstring& strTag, CComponent* pComInstance)

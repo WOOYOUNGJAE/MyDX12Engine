@@ -318,6 +318,16 @@ HRESULT CRenderer::Free()
 	return CComponent::Free();
 }
 
+D3D12_GPU_DESCRIPTOR_HANDLE CRenderer::Get_CbvSrvUavStart_GPU()
+{
+	return m_pGraphic_Device->Get_CbvSrvUavHeapStart_GPU();
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE CRenderer::Get_CbvSrvUavStart_CPU()
+{
+	return m_pGraphic_Device->Get_CbvSrvUavHeapStart_CPU();
+}
+
 void CRenderer::AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigTypeEnum,
                                   CGameObject* pGameObject)
 {

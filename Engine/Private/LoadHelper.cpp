@@ -5,6 +5,7 @@
 #include "ComponentManager.h"
 #include "Renderer.h"
 #include "Texture.h"
+#include "D3DResourceManager.h"
 
 IMPLEMENT_SINGLETON(CLoadHelper)
 
@@ -33,6 +34,11 @@ HRESULT CLoadHelper::Initialize()
 	return S_OK;
 }
 
+void CLoadHelper::StartSign_Texture()
+{
+	CD3DResourceManager::Get_Instance()->Set_SrvOffsetStart((*m_pNextCbvSrvUavHeapOffset));
+}
+
 HRESULT CLoadHelper::Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc, const wstring& strAssetName)
 {
 	m_pResourceUpload->Begin();
@@ -53,6 +59,7 @@ HRESULT CLoadHelper::Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc,
 void CLoadHelper::EndSign_Texture()
 {
 	dynamic_cast<CRenderer*>(CComponentManager::Get_Instance()->FindandGet_Prototype(L"Renderer"))->Build_FrameResource();
+	CD3DResourceManager::Get_Instance()->Set_SrvOffsetEnd((*m_pNextCbvSrvUavHeapOffset));
 }
 
 HRESULT CLoadHelper::Free()

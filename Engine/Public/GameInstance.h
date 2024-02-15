@@ -23,6 +23,8 @@ public:
 	void Render_Tick();
 	static void Release_Engine();
 public: // Manager Function Offer
+	// GraphicDevice
+	UINT Get_CbvSrvUavDescriptorSize() const;
 	// ComponentManager
 	HRESULT Add_ComPrototype(const wstring& strTag, class CComponent* pComInstance);
 	CComponent* Clone_ComPrototype(const wstring& strTag, void* pArg = nullptr);
