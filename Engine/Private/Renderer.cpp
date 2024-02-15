@@ -234,9 +234,9 @@ void CRenderer::MainRender()
 						m_pCommandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHandle);
 
 						// ObjCB
-						/*cbvSrvUavHandle.InitOffsetted(pSrvHeap->GetGPUDescriptorHandleForHeapStart(), 0);
+						cbvSrvUavHandle.InitOffsetted(pSrvHeap->GetGPUDescriptorHandleForHeapStart(), 0);
 						cbvSrvUavHandle.Offset(m_iCBVHeapStartOffset);
-						m_pCommandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHandle);*/
+						m_pCommandList->SetGraphicsRootDescriptorTable(1, cbvSrvUavHandle);
 						Update_ObjCB(iter);
 
 
@@ -261,7 +261,7 @@ void CRenderer::EndRender()
 {
 	m_pCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_pRenderTargetArr[m_iFrameIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 	m_pCommandList->Close(); // 기록 중단
-
+	
 	ID3D12CommandList* pCommandListArr[] = {m_pCommandList, };
 	m_pCommandQueue->ExecuteCommandLists(_countof(pCommandListArr), pCommandListArr);
 }

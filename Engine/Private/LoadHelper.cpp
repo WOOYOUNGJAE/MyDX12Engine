@@ -37,6 +37,7 @@ HRESULT CLoadHelper::Initialize()
 void CLoadHelper::StartSign_Texture()
 {
 	CD3DResourceManager::Get_Instance()->Set_SrvOffsetStart((*m_pNextCbvSrvUavHeapOffset));
+	CGraphic_Device::Get_Instance()->Reset_CmdList();
 }
 
 HRESULT CLoadHelper::Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc, const wstring& strAssetName)
@@ -58,6 +59,7 @@ HRESULT CLoadHelper::Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc,
 
 void CLoadHelper::EndSign_Texture()
 {
+	CGraphic_Device::Get_Instance()->Close_CmdList();
 	dynamic_cast<CRenderer*>(CComponentManager::Get_Instance()->FindandGet_Prototype(L"Renderer"))->Build_FrameResource();
 	CD3DResourceManager::Get_Instance()->Set_SrvOffsetEnd((*m_pNextCbvSrvUavHeapOffset));
 }
