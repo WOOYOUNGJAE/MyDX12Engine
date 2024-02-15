@@ -30,6 +30,7 @@ public: // getter setter, abstract
 	UINT64* Get_CbvSrvUavOffsetPtr() { return &m_iCbvSrvUavOffset; }
 	wstring Get_PrototypeTag() { return m_strPrototypeTag; }
 	void Set_PrototypeTag(const wstring& strTag) { m_strPrototypeTag = strTag; }
+	virtual void Set_Position(const Vector3& vPos) {};
 public:
 	virtual _bool Com_Already_Owned(const wstring& strComTag);
 	// 이미 있는지, 컴포넌트 생성, 맵에 넣기, 

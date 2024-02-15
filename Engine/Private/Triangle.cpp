@@ -65,9 +65,8 @@ HRESULT CTriangle::Initialize(void* pArg)
 
 void CTriangle::Tick(_float fDeltaTime)
 {
-	m_pTransformCom->m_Position += Vector3(0.001f, 0.f, 0.f);
-	auto r = m_pTransformCom->Position();
-	m_pTransformCom->Refresh_WorldMatrix(CTransform::POSITION);
+	/*m_pTransformCom->m_Position += Vector3(0.001f, 0.f, 0.f);
+	m_pTransformCom->Refresh_WorldMatrix(CTransform::POSITION);*/
 }
 
 void CTriangle::Late_Tick(_float fDeltaTime)
@@ -123,4 +122,9 @@ D3D12_INDEX_BUFFER_VIEW CTriangle::IndexBufferView() const
 _uint CTriangle::Num_Indices()
 {
 	return 0;
+}
+
+void CTriangle::Set_Position(const Vector3& vPos)
+{
+	m_pTransformCom->Set_Position(vPos);
 }

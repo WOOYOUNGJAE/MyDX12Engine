@@ -36,6 +36,9 @@ struct OBJ_CUSTOMIZER
 	UINT64* pTargetCbvSrvUavOffset = nullptr;
 	UINT iCbvSrvUavDescriptorSize = 0;
 	CClient_Imgui* pController = nullptr;
+
+	// for Imgui
+	FLOAT fPosArr[3]{};
 };
 	
 _NAMESPACE
