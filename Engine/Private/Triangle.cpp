@@ -30,7 +30,6 @@ CGameObject* CTriangle::Clone(void* pArg)
 			return pInstance;
 		}
 	}
-	pInstance->m_bIsCloned = true;
 	return pInstance;
 }
 
@@ -65,7 +64,7 @@ HRESULT CTriangle::Initialize(void* pArg)
 
 void CTriangle::Tick(_float fDeltaTime)
 {
-	/*m_pTransformCom->m_Position += Vector3(0.001f, 0.f, 0.f);
+	/*m_pTransformCom->m_vPosition += Vector3(0.001f, 0.f, 0.f);
 	m_pTransformCom->Refresh_WorldMatrix(CTransform::POSITION);*/
 }
 
@@ -97,12 +96,12 @@ int& CTriangle::Get_NumFrameDirtyRef()
 	return m_pShaderCom->Get_NumDirtyRef();
 }
 
-XMFLOAT4X4 CTriangle::Get_WorldMatrix()
+Matrix CTriangle::Get_WorldMatrix()
 {
 	return m_pTransformCom->WorldMatrix();
 }
 
-_float3 CTriangle::Get_Pos()
+Vector3 CTriangle::Get_Pos()
 {
 	return m_pTransformCom->Position();
 }

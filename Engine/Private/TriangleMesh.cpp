@@ -48,7 +48,6 @@ CComponent* CTriangleMesh::Clone(void* pArg)
 		MSG_BOX("TriangleMesh : Failed to Clone");
 		return nullptr;
 	}
-	pInstance->m_bIsCloned = true;
 	return pInstance;
 }
 
@@ -123,7 +122,7 @@ HRESULT CTriangleMesh::Initialize(void* pArg)
 
 HRESULT CTriangleMesh::Free()
 {
-	if (m_bIsCloned == false)
+	if (m_iClonedNum == 0)
 	{
 		Safe_Delete_Array(m_vertexData); // Prototype 경우에만 해제
 	}

@@ -26,7 +26,8 @@ public:
 	void Late_Tick(_float fDeltaTime) override;
 public:
 	virtual void Update_PipelineView();
-	_float3 Get_Pos() override;
+	Vector3 Get_Pos() override;
+	Matrix Get_WorldMatrix() override;
 protected: // pointer
 	class CPipelineManager* m_pPipelineManager = nullptr;
 	class CTransform* m_pTransformCom = nullptr;

@@ -36,6 +36,8 @@ public: // Manager Function Offer
 	CGameObject* FindandGet_GameObj_Cloned(const wstring& strPrototypeTag, UINT eLayerEnum = OBJ_LAYER_0, UINT iClonedNum = 1);
 	// Pipeline manager
 	void Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum);
+	// CameraManger
+	void Set_MainCam(wstring strName);
 public:
 	class CRenderer* Get_Renderer();
 
@@ -48,7 +50,8 @@ private:
 	class CPipelineManager* m_pPipelineManager = nullptr;
 	class CAssetManager* m_pAssetManager = nullptr;
 	class CD3DResourceManager* m_pD3DResourceManager = nullptr;
-	class CInputManager* m_pKeyboardManager = nullptr;
+	class CInputManager* m_pInputManager = nullptr;
+	class CCameraManager* m_pCameraManager = nullptr;
 	class CLoadHelper* m_pLoadHelper = nullptr;
 };
 

@@ -21,16 +21,16 @@ public:
 	HRESULT Initialize(void* pArg) override;
 	HRESULT Free() override;
 public: // getter setter
-	const Matrix& WorldMatrix() { return m_WorldMatrix; }
-	XMMATRIX WorldMatrix_Inverse() { return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)); }
-	Vector3 Position() { return m_Position; }
-	Vector3 Right() { return m_Right; }
-	Vector3 Up() { return m_Up; }
-	Vector3 Look() { return m_Look; }
-	void Set_Look(const Vector3& look) { m_Look = look; Refresh_WorldMatrix(LOOK); }
-	void Set_Scale(const Vector3& scale) { m_Scale = scale; Refresh_WorldMatrix(SCALE);	}
-	void Set_Position(const Vector3& pos) { m_Position = pos; Refresh_WorldMatrix(POSITION); }
-	void Set_WorldMatrix(const Matrix& matrix) { m_WorldMatrix = matrix; }
+	const Matrix& WorldMatrix() { return m_mWorldMatrix; }
+	XMMATRIX WorldMatrix_Inverse() { return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_mWorldMatrix)); }
+	Vector3 Position() { return m_vPosition; }
+	Vector3 Right() { return m_vRight; }
+	Vector3 Up() { return m_vUp; }
+	Vector3 Look() { return m_vLook; }
+	void Set_Look(const Vector3& look) { m_vLook = look; Refresh_WorldMatrix(LOOK); }
+	void Set_Scale(const Vector3& scale) { m_vScale = scale; Refresh_WorldMatrix(SCALE);	}
+	void Set_Position(const Vector3& pos) { m_vPosition = pos; Refresh_WorldMatrix(POSITION); }
+	void Set_WorldMatrix(const Matrix& matrix) { m_mWorldMatrix = matrix; }
 	void Set_WorldMatrix(MATRIX_ENUM eEnum, _fvector vVec);
 
 public:
@@ -40,12 +40,12 @@ public:
 	void Refresh_MatrixScaled(const Vector3& scale);
 
 public:
-	Matrix m_WorldMatrix;
-	Vector3 m_Scale;
-	Vector3 m_Right;
-	Vector3 m_Up;
-	Vector3 m_Look;
-	Vector3 m_Position;
+	Matrix m_mWorldMatrix;
+	Vector3 m_vScale;
+	Vector3 m_vRight;
+	Vector3 m_vUp;
+	Vector3 m_vLook;
+	Vector3 m_vPosition;
 
 };
 

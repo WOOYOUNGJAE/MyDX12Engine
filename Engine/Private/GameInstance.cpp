@@ -7,35 +7,41 @@
 #include "CubeMesh.h"
 #include "PipelineManager.h"
 #include "AssetManager.h"
-#include "..\Public\InputManager.h"
+#include "InputManager.h"
 #include "LoadHelper.h"
 #include "D3DResourceManager.h"
+#include "CameraManager.h"
 #pragma endregion
 IMPLEMENT_SINGLETON(CGameInstance)
 
 CGameInstance::CGameInstance() :
-m_pGraphic_Device(CGraphic_Device::Get_Instance()),
-m_pComponentManager(CComponentManager::Get_Instance()),
-m_pGameObjectManager(CGameObjectManager::Get_Instance()),
-m_pPipelineManager(CPipelineManager::Get_Instance()),
-m_pAssetManager(CAssetManager::Get_Instance()),
-m_pD3DResourceManager(CD3DResourceManager::Get_Instance()),
-m_pKeyboardManager(CInputManager::Get_Instance()),
-m_pLoadHelper(CLoadHelper::Get_Instance())
+#pragma region Allocate Managers
+	m_pGraphic_Device(CGraphic_Device::Get_Instance()),
+	m_pComponentManager(CComponentManager::Get_Instance()),
+	m_pGameObjectManager(CGameObjectManager::Get_Instance()),
+	m_pPipelineManager(CPipelineManager::Get_Instance()),
+	m_pAssetManager(CAssetManager::Get_Instance()),
+	m_pD3DResourceManager(CD3DResourceManager::Get_Instance()),
+	m_pInputManager(CInputManager::Get_Instance()),
+	m_pCameraManager(CCameraManager::Get_Instance()),
+	m_pLoadHelper(CLoadHelper::Get_Instance())
+#pragma endregion
 {
 	Safe_AddRef(m_pGraphic_Device);
 	Safe_AddRef(m_pComponentManager);
 	Safe_AddRef(m_pGameObjectManager);
 	Safe_AddRef(m_pPipelineManager);
 	Safe_AddRef(m_pD3DResourceManager);
-	Safe_AddRef(m_pKeyboardManager);
+	Safe_AddRef(m_pInputManager);
+	Safe_AddRef(m_pCameraManager);
 	Safe_AddRef(m_pAssetManager);
 }
 
 HRESULT CGameInstance::Free()
 {
 	Safe_Release(m_pLoadHelper);
-	Safe_Release(m_pKeyboardManager);
+	Safe_Release(m_pCameraManager);
+	Safe_Release(m_pInputManager);
 	Safe_Release(m_pD3DResourceManager);
 	Safe_Release(m_pAssetManager);
 	Safe_Release(m_pPipelineManager);
@@ -71,7 +77,7 @@ HRESULT CGameInstance::Init_Engine(GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Devi
 
 void CGameInstance::Tick(_float fDeltaTime)
 {
-	m_pKeyboardManager->Tick(m_pHwndClient);
+	m_pInputManager->Tick(m_pHwndClient);
 	m_pGameObjectManager->Tick(fDeltaTime);
 }
 
@@ -96,6 +102,7 @@ void CGameInstance::Release_Engine()
 {
 	// Destroy Managers or Singletons, 최종 삭제
 	CAssetManager::Destroy_Instance();
+	CCameraManager::Destroy_Instance();
 	CInputManager::Destroy_Instance();
 	CD3DResourceManager::Destroy_Instance();
 	CPipelineManager::Destroy_Instance();
@@ -171,6 +178,11 @@ void CGameInstance::Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum
 		return;
 	}
 	m_pPipelineManager->Update_ObjPipelineLayer(pObject, (ENUM_PSO)ePsoEnum);
+}
+
+void CGameInstance::Set_MainCam(wstring strName)
+{
+	m_pCameraManager->Set_MainCam(strName);
 }
 
 CRenderer* CGameInstance::Get_Renderer()

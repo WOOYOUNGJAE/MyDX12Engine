@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Camera_Free.h"
+#include "Transform.h"
 
 CCamera_Free::CCamera_Free(CCamera_Free& rhs) : CCamera(rhs)
 {
@@ -26,8 +27,6 @@ CGameObject* CCamera_Free::Clone(void* pArg)
 		MSG_BOX("CameraFree: Failed to Clone CameraFree");
 	}
 
-	pInstance->m_bIsCloned = true;
-
 	return pInstance;
 }
 
@@ -43,7 +42,22 @@ HRESULT CCamera_Free::Initialize(void* pArg)
 
 void CCamera_Free::Tick(_float fDeltaTime)
 {
-	CCamera::Tick(fDeltaTime);
+	if (g_Input->Key_Pressing(VK_UP))
+	{
+		m_pTransformCom->Set_Position(Vector3(m_pTransformCom->m_vPosition.x, m_pTransformCom->m_vPosition.y + 0.1f, m_pTransformCom->m_vPosition.z));
+	}
+	if (g_Input->Key_Pressing(VK_RIGHT))
+	{
+		m_pTransformCom->Set_Position(Vector3(m_pTransformCom->m_vPosition.x + 0.1f, m_pTransformCom->m_vPosition.y, m_pTransformCom->m_vPosition.z));
+	}
+	if (g_Input->Key_Pressing(VK_DOWN))
+	{
+		m_pTransformCom->Set_Position(Vector3(m_pTransformCom->m_vPosition.x, m_pTransformCom->m_vPosition.y - 0.1f, m_pTransformCom->m_vPosition.z));
+	}
+	if (g_Input->Key_Pressing(VK_LEFT))
+	{
+		m_pTransformCom->Set_Position(Vector3(m_pTransformCom->m_vPosition.x - 0.1f, m_pTransformCom->m_vPosition.y, m_pTransformCom->m_vPosition.z));
+	}
 }
 
 void CCamera_Free::Late_Tick(_float fDeltaTime)

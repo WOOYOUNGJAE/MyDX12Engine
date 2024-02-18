@@ -28,7 +28,6 @@ CGameObject* CCube::Clone(void* pArg)
 			return pInstance;
 		}
 	}
-	pInstance->m_bIsCloned = true;
 	return pInstance;
 }
 
@@ -86,12 +85,12 @@ int& CCube::Get_NumFrameDirtyRef()
 	return m_pShaderCom->Get_NumDirtyRef();
 }
 
-XMFLOAT4X4 CCube::Get_WorldMatrix()
+Matrix CCube::Get_WorldMatrix()
 {
 	return m_pTransformCom->WorldMatrix();
 }
 
-_float3 CCube::Get_Pos()
+Vector3 CCube::Get_Pos()
 {
 	return m_pTransformCom->Position();
 }

@@ -22,7 +22,6 @@ CComponent* CTransform::Clone(void* pArg)
 		MSG_BOX("Transform: Failed to Clone Transform");
 		Safe_Release(pInstance);
 	}
-	pInstance->m_bIsCloned = true;
 	return pInstance;
 }
 
@@ -32,8 +31,8 @@ HRESULT CTransform::Initialize_Prototype()
 	{
 		return E_FAIL;
 	}
-	Matrix_Identity(m_WorldMatrix);
-	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
+	Matrix_Identity(m_mWorldMatrix);
+	//XMStoreFloat4x4(&m_mWorldMatrix, XMMatrixIdentity());
 
 	return S_OK;
 }
@@ -51,11 +50,11 @@ HRESULT CTransform::Free()
 
 void CTransform::Set_WorldMatrix(MATRIX_ENUM eEnum, _fvector vVec)
 {
-	_matrix		WorldMatrix = XMLoadFloat4x4(&m_WorldMatrix);
+	_matrix		WorldMatrix = XMLoadFloat4x4(&m_mWorldMatrix);
 
 	WorldMatrix.r[eEnum] = vVec;
 
-	XMStoreFloat4x4(&m_WorldMatrix, WorldMatrix);
+	XMStoreFloat4x4(&m_mWorldMatrix, WorldMatrix);
 }
 
 //void CTransform::Bind_ShaderResource(const std::string& strConstantName, CShader* pShader)
@@ -69,7 +68,7 @@ void CTransform::Refresh_WorldMatrix(TRANSFORM_ENUM eEnum)
 	{
 	case LOOK:
 		{
-		_vector vLook = XMLoadFloat3(&m_Look);
+		_vector vLook = XMLoadFloat3(&m_vLook);
 		_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
 		_vector	vUp = XMVector3Cross(vLook, vRight);
 
@@ -83,16 +82,16 @@ void CTransform::Refresh_WorldMatrix(TRANSFORM_ENUM eEnum)
 		}
 		break;
 	case POSITION:
-		memcpy(&m_WorldMatrix.m[MAT_POSITION], &m_Position, sizeof(Vector3));
+		memcpy(&m_mWorldMatrix.m[MAT_POSITION], &m_vPosition, sizeof(Vector3));
 		break;
 	case SCALE:
-		Refresh_MatrixScaled(m_Scale);
+		Refresh_MatrixScaled(m_vScale);
 		break;
-	default: // Scale Look Position 모두 업데이트
+	default: // Scale Look PositionVal 모두 업데이트
 		{
-		Refresh_MatrixScaled(m_Scale);
+		Refresh_MatrixScaled(m_vScale);
 
-		_vector vLook = XMLoadFloat3(&m_Look);
+		_vector vLook = XMLoadFloat3(&m_vLook);
 		_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
 		_vector	vUp = XMVector3Cross(vLook, vRight);
 
@@ -103,14 +102,14 @@ void CTransform::Refresh_WorldMatrix(TRANSFORM_ENUM eEnum)
 		Set_WorldMatrix(MAT_LOOK, vLook);
 
 		Refresh_MatrixScaled(ScaleLength); // 변형된 스케일 정상화
-		Set_WorldMatrix(MAT_POSITION, XMLoadFloat3(&m_Position));
+		Set_WorldMatrix(MAT_POSITION, XMLoadFloat3(&m_vPosition));
 		}
 		break;
 	}
 }
 _vector CTransform::Get_MatrixRow(MATRIX_ENUM eEnum)
 {
-	_matrix WorldMatrix = XMLoadFloat4x4(&m_WorldMatrix);
+	_matrix WorldMatrix = XMLoadFloat4x4(&m_mWorldMatrix);
 
 	return WorldMatrix.r[eEnum];
 }

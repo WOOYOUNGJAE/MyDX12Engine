@@ -3,7 +3,7 @@
 #include "MeshGeometry.h"
 
 NAMESPACE_(Engine)
-// TriangleMesh with Position, Texture Typed Vertex
+// TriangleMesh with PositionVal, Texture Typed Vertex
 class CTriangleMesh_PT : public CMeshGeometry
 {
 private:

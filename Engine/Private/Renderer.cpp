@@ -1,4 +1,7 @@
 #include "Renderer.h"
+
+#include "Camera.h"
+#include "CameraManager.h"
 #include "Graphic_Device.h"
 #include "PipelineManager.h"
 #include "GameObject.h"
@@ -188,11 +191,19 @@ HRESULT CRenderer::Build_FrameResource()
 	return hr;
 }
 
+void CRenderer::Update_PassCB()
+{
+	Matrix mainCamMatInClient = CCameraManager::Get_Instance()->Get_MainCam()->Get_WorldMatrix();
+	PASS_CONSTANT_BUFFER passConstants;
+	passConstants.viewMat = mainCamMatInClient.Invert().Transpose();
+	passConstants.viewInvMat = mainCamMatInClient.Transpose();
+	m_pCurFrameResource->pPassCB->CopyData(0, passConstants);
+}
+
 void CRenderer::Update_ObjCB(CGameObject* pGameObj)
 {
 	OBJ_CONSTANT_BUFFER objConstants;
-	XMMATRIX matWorld = XMLoadFloat4x4(&pGameObj->Get_WorldMatrix());
-	XMStoreFloat4x4(&objConstants.WorldViewProj, XMMatrixTranspose(matWorld));
+	objConstants.WorldViewProj = pGameObj->Get_WorldMatrix().Transpose();
 	m_pCurFrameResource->pObjectCB->CopyData(pGameObj->Get_ClonedNum() - 1, objConstants);
 }
 
@@ -221,11 +232,11 @@ void CRenderer::MainRender()
 	CD3DX12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle;
 
 	// Update PassConstant
-	PASS_CONSTANT_BUFFER passConstants;
-	XMMATRIX matView = XMMatrixIdentity();
+	Update_PassCB();
+	
+	/*XMMATRIX matView = XMMatrixIdentity();
 	XMStoreFloat4x4(&passConstants.viewMat, XMMatrixTranspose(matView));
-	XMStoreFloat4x4(&passConstants.viewInvMat, XMMatrixTranspose(matView));
-	m_pCurFrameResource->pPassCB->CopyData(0, passConstants);
+	XMStoreFloat4x4(&passConstants.viewInvMat, XMMatrixTranspose(matView));*/
 
 	for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
 	{

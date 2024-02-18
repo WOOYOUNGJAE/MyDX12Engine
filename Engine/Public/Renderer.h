@@ -21,6 +21,7 @@ public:
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override;
 	HRESULT Build_FrameResource(); // Build FrameResource, Build CBV inside
+	void Update_PassCB();
 	void Update_ObjCB(class CGameObject* pGameObj);
 	void BeginRender();
 	void MainRender();

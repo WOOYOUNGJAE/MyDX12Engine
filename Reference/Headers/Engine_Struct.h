@@ -26,12 +26,14 @@ namespace Engine
 			ZeroMemory(padding, sizeof(FLOAT) * 48);
 		}
 		Matrix WorldViewProj;
+	private:
 		FLOAT padding[48];
 	};
 	struct PASS_CONSTANT_BUFFER
 	{
 		Matrix viewMat;
 		Matrix viewInvMat;
+	private:
 		FLOAT padding[32];
 	};
 

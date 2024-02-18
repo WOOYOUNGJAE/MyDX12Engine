@@ -46,7 +46,6 @@ CComponent* CCubeMesh::Clone(void* pArg)
 		MSG_BOX("CubeMesh : Failed to Clone");
 		return nullptr;
 	}
-	pInstance->m_bIsCloned = true;
 	return pInstance;
 }
 
@@ -148,7 +147,7 @@ HRESULT CCubeMesh::Initialize(void* pArg)
 
 HRESULT CCubeMesh::Free()
 {
-	if (m_bIsCloned == false)
+	if (m_iClonedNum == 0)
 	{
 		Safe_Delete_Array(m_vertexData); // Prototype 경우에만 해제
 	}

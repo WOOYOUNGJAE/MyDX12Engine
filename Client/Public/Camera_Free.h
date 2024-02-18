@@ -19,7 +19,6 @@ public:
 	void Tick(_float fDeltaTime) override;
 	void Late_Tick(_float fDeltaTime) override;
 	HRESULT Free() override;
-	XMFLOAT4X4 Get_WorldMatrix() override { return XMFLOAT4X4(); };
 };
 
 _NAMESPACE

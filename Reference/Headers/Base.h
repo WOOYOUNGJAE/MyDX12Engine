@@ -30,7 +30,5 @@ protected:
 	UINT m_iClonedNum = 0; // Prototype은 0, Clone은 1부터 증가
 private:
 	_ulong m_dwRefCnt = 0;
-protected:
-	_bool m_bIsCloned = false;
 };
 _NAMESPACE

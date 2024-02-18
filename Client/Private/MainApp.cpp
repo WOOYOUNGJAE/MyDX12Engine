@@ -29,8 +29,6 @@ HRESULT CMainApp::Initialize()
 	graphic_desc.iSizeY = g_iWinSizeY;
 	graphic_desc.eWinMode = GRAPHIC_DESC::WINMODE_WIN;
 
-	CGameObject* pObjectControlling = nullptr;
-
 	HRESULT hr = 
 	m_pGameInstance->Init_Engine(graphic_desc, &m_pDevice);
 	if (FAILED(hr)) { return hr; }
@@ -45,10 +43,16 @@ HRESULT CMainApp::Initialize()
 
 
 #pragma region InLevel
+	wstring strTag;
+	CGameObject* pObjectControlling = nullptr;
 	hr = m_pGameInstance->Add_GameObjPrototype(L"Camera_Free", CCamera_Free::Create());
 	if (FAILED(hr)) { return hr; }
-	hr = m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", OBJ_LAYER_DEFAULT);
+	strTag = L"Camera_Free";
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", OBJ_LAYER_DEFAULT,	&strTag);
 	if (FAILED(hr)) { return hr; }
+
+	m_pGameInstance->Set_MainCam(strTag);
+
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling);
 	if (FAILED(hr)) { return hr; }
 	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", L"Layer0", &pObjectControlling);

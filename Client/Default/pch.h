@@ -17,7 +17,7 @@
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx12.h"
-//#define IMGUI_ON
+#define IMGUI_ON
 
 // C 런타임 헤더 파일입니다.
 #include <stdlib.h>

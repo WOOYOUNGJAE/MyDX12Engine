@@ -1,6 +1,7 @@
 #include "Camera.h"
 #include "PipelineManager.h"
 #include "Transform.h"
+#include "CameraManager.h"
 
 CCamera::CCamera() : m_pPipelineManager(CPipelineManager::Get_Instance())
 {
@@ -21,6 +22,9 @@ HRESULT CCamera::Initialize_Prototype()
 HRESULT CCamera::Initialize(void* pArg)
 {
 	HRESULT hr = Add_Component(L"Transform", reinterpret_cast<CComponent**>(&m_pTransformCom));
+
+	CCameraManager::Get_Instance()->Register(*reinterpret_cast<wstring*>(pArg), this);
+
 	return hr;
 }
 
@@ -47,7 +51,12 @@ void CCamera::Update_PipelineView()
 	// m_pPipelineManager->Update_Matrix(XMMatrixPerspectiveFovLH(m_fFovy, m_fAspect, m_fNear, m_fFar), CPipelineManager::PROJ_MAT);
 }
 
-_float3 CCamera::Get_Pos()
+Vector3 CCamera::Get_Pos()
 {
 	return m_pTransformCom->Position();
+}
+
+Matrix CCamera::Get_WorldMatrix()
+{
+	return m_pTransformCom->m_mWorldMatrix;
 }
