@@ -16,7 +16,7 @@ public:
 	HRESULT Free() override;
 
 public:
-	HRESULT Init_Engine(const GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Device** ppDevice);
+	HRESULT Init_Engine(GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Device** ppDevice);
 	void Engine_Tick(FLOAT fDeltaTime);
 	void Tick(_float fDeltaTime);
 	void Late_Tick(_float fDeltaTime);
@@ -40,12 +40,15 @@ public:
 	class CRenderer* Get_Renderer();
 
 private:
+	HWND* m_pHwndClient  = nullptr;
+private:
 	class CGraphic_Device* m_pGraphic_Device = nullptr;
 	class CComponentManager* m_pComponentManager = nullptr;
 	class CGameObjectManager* m_pGameObjectManager = nullptr;
 	class CPipelineManager* m_pPipelineManager = nullptr;
 	class CAssetManager* m_pAssetManager = nullptr;
 	class CD3DResourceManager* m_pD3DResourceManager = nullptr;
+	class CInputManager* m_pKeyboardManager = nullptr;
 	class CLoadHelper* m_pLoadHelper = nullptr;
 };
 

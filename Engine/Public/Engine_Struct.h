@@ -25,8 +25,14 @@ namespace Engine
 			XMStoreFloat4x4(&WorldViewProj, XMMatrixIdentity());
 			ZeroMemory(padding, sizeof(FLOAT) * 48);
 		}
-		_float4x4 WorldViewProj;
+		Matrix WorldViewProj;
 		FLOAT padding[48];
+	};
+	struct PASS_CONSTANT_BUFFER
+	{
+		Matrix viewMat;
+		Matrix viewInvMat;
+		FLOAT padding[32];
 	};
 
 	struct QUEUE_FLUSH_DESC

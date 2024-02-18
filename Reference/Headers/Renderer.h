@@ -55,7 +55,8 @@ private: // DX Resource
 	ID3D12Resource** m_pRenderTargetArr = nullptr;
 private:
 	UINT m_iFrameIndex = 0;
-	UINT m_iCBVHeapStartOffset = 0;
+	UINT m_iObjCBVHeapStartOffset = 0;
+	UINT m_iPassCBVHeapStartOffset = 0;
 private: //Fence
 	ID3D12Fence* m_pFence = nullptr;
 	UINT64 m_iFenceValue = 0;
@@ -74,6 +75,7 @@ struct FrameResource
 
 	// 상수 버퍼는 GPU가 명령 다 처리한 후 갱신해야 해서 매 프레임 새로운 상수버퍼 필요
 	CUploadBuffer<OBJ_CONSTANT_BUFFER>* pObjectCB = nullptr;
+	CUploadBuffer<PASS_CONSTANT_BUFFER>* pPassCB = nullptr;
 	//std::unique_ptr<UploadBuffer<PassConstants>> PassCB = nullptr;
 
 	// Command 어디까지 해야 있는지 체크

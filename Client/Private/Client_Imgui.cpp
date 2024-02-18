@@ -37,11 +37,11 @@ HRESULT CClient_Imgui::Initialize(ID3D12Device* pDevice)
 
     
 
-    pDevice->CopyDescriptorsSimple(
+    /*pDevice->CopyDescriptorsSimple(
         2,
         D3D12_CPU_DESCRIPTOR_HANDLE(m_pImguiSrvHeap->GetCPUDescriptorHandleForHeapStart()),
             m_pRenderer->Get_CbvSrvUavStart_CPU(),
-            D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+            D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);*/
 
     m_CbvSrvUavHeapStart = m_pRenderer->Get_CbvSrvUavStart_GPU();
 

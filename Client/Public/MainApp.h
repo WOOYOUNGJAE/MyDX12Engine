@@ -24,7 +24,11 @@ private:
 	ID3D12Device* m_pDevice = nullptr;
 	CGameInstance* m_pGameInstance = nullptr;
 	CRenderer* m_pRenderer = nullptr;
+
+#ifdef IMGUI_ON
 	CClient_Imgui* m_pClient_Imgui = nullptr;
+#endif
+
 };
 
 _NAMESPACE

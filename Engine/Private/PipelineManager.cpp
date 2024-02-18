@@ -97,12 +97,13 @@ HRESULT CPipelineManager::Initialize()
 	CD3DX12_DESCRIPTOR_RANGE1 range0;
 	range0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 	
-	CD3DX12_DESCRIPTOR_RANGE1 range1;
-	range1.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+	CD3DX12_DESCRIPTOR_RANGE1 range1[2];
+	range1[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+	range1[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 
 	CD3DX12_ROOT_PARAMETER1 rootParameters[2];
 	rootParameters[0].InitAsDescriptorTable(1, &range0, D3D12_SHADER_VISIBILITY_PIXEL);
-	rootParameters[1].InitAsDescriptorTable(1, &range1, D3D12_SHADER_VISIBILITY_ALL);
+	rootParameters[1].InitAsDescriptorTable(_countof(range1), range1, D3D12_SHADER_VISIBILITY_ALL);
 
 
 	D3D12_STATIC_SAMPLER_DESC sampler = {};
@@ -252,23 +253,6 @@ HRESULT CPipelineManager::Initialize()
 						return hr;
 					}
 				}
-
-				//for (UINT eParamComboType = 0; eParamComboType < RENDER_PARAMCOMBO_END; ++eParamComboType)
-				//{
-				//	if (eShaderTypeEnum != eParamComboType) // TODO: 루트시그니처, 쉐이더 종류 다양해지면 체계화
-				//	{
-				//		continue;
-				//	}
-
-				//	pso_desc.pRootSignature = m_rootSigArr[eParamComboType];
-				//	hr = m_pDevice->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(&m_PSOsArr[IsFirst][eBlendModeEnum][eShaderTypeEnum][eParamComboType]));
-				//	if (FAILED(hr))
-				//	{
-				//		MSG_BOX("Failed to Create PSO");
-				//		return hr;
-				//	}
-				//	
-				//}
 			}
 		}
 	}
@@ -283,7 +267,6 @@ HRESULT CPipelineManager::Initialize()
 
 HRESULT CPipelineManager::Free()
 {
-
 	for (auto& iter0 : m_PSOsArr)
 	{
 		for (auto& iter1 : iter0)

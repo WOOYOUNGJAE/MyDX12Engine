@@ -16,9 +16,6 @@
     <Filter Include="System">
       <UniqueIdentifier>{87b1b1b4-ef55-4dd3-a6cc-722f371c8b61}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\GameInstance\Managers">
-      <UniqueIdentifier>{6c74e53b-2698-468c-8702-b8616bcff5b7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility\GameObjects">
       <UniqueIdentifier>{b648ccc0-ad02-49e2-8643-24c88c47df4b}</UniqueIdentifier>
     </Filter>
@@ -52,15 +49,6 @@
     <Filter Include="Utility\Asset\Texture">
       <UniqueIdentifier>{cc54fdd3-30b0-4a6e-b651-ae384cfaf247}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\GameInstance\Managers\Component">
-      <UniqueIdentifier>{894754f8-e751-4901-9754-cd5d51de4054}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\GameInstance\Managers\GameObject">
-      <UniqueIdentifier>{82e0a515-af5a-446b-95e0-d8821749f5aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\GameInstance\Managers\Asset">
-      <UniqueIdentifier>{ec86ba5a-8a59-4842-808a-b9231c1b067d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility\Components">
       <UniqueIdentifier>{e023286e-84c5-4a47-9a9e-3f35db58f842}</UniqueIdentifier>
     </Filter>
@@ -93,6 +81,21 @@
     </Filter>
     <Filter Include="System\D3D Graphics\D3DResourceManager">
       <UniqueIdentifier>{51bd34df-1d64-42ee-87f7-bea9a76c6176}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Managers">
+      <UniqueIdentifier>{6c74e53b-2698-468c-8702-b8616bcff5b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Managers\Component">
+      <UniqueIdentifier>{894754f8-e751-4901-9754-cd5d51de4054}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Managers\GameObject">
+      <UniqueIdentifier>{82e0a515-af5a-446b-95e0-d8821749f5aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Managers\Asset">
+      <UniqueIdentifier>{ec86ba5a-8a59-4842-808a-b9231c1b067d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Managers\Keyboard">
+      <UniqueIdentifier>{9829af75-c212-4739-8744-30ae02a6143f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -184,16 +187,16 @@
       <Filter>Utility\Asset</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ComponentManager.h">
-      <Filter>Utility\GameInstance\Managers\Component</Filter>
+      <Filter>Utility\Managers\Component</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\GameObjectManager.h">
-      <Filter>Utility\GameInstance\Managers\GameObject</Filter>
+      <Filter>Utility\Managers\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Texture.h">
       <Filter>Utility\Asset\Texture</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AssetManager.h">
-      <Filter>Utility\GameInstance\Managers\Asset</Filter>
+      <Filter>Utility\Managers\Asset</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\LoadHelper.h">
       <Filter>System\D3D Graphics\LoadHelper</Filter>
@@ -207,6 +210,8 @@
     <ClInclude Include="..\Public\MyMath.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\InputManager.h" />
+    <ClInclude Include="..\Public\CameraManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -273,16 +278,16 @@
       <Filter>Utility\Asset</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ComponentManager.cpp">
-      <Filter>Utility\GameInstance\Managers\Component</Filter>
+      <Filter>Utility\Managers\Component</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\GameObjectManager.cpp">
-      <Filter>Utility\GameInstance\Managers\GameObject</Filter>
+      <Filter>Utility\Managers\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Texture.cpp">
       <Filter>Utility\Asset\Texture</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AssetManager.cpp">
-      <Filter>Utility\GameInstance\Managers\Asset</Filter>
+      <Filter>Utility\Managers\Asset</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\LoadHelper.cpp">
       <Filter>System\D3D Graphics\LoadHelper</Filter>
@@ -293,6 +298,8 @@
     <ClCompile Include="..\Private\D3DResourceManager.cpp">
       <Filter>System\D3D Graphics\D3DResourceManager</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\InputManager.cpp" />
+    <ClCompile Include="..\Private\CameraManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />

@@ -5,8 +5,13 @@
 #include "GameInstance.h"
 #include "Camera_Free.h"
 #include "ClientLoader.h"
+
+#ifdef IMGUI_ON
 #include "Client_Imgui.h"
-#define IMGUI_ON
+#endif
+
+CInputManager* g_Input = nullptr;
+
 CMainApp::CMainApp() : m_pGameInstance{ CGameInstance::Get_Instance()}
 {
 	Safe_AddRef(m_pGameInstance);
@@ -29,6 +34,8 @@ HRESULT CMainApp::Initialize()
 	HRESULT hr = 
 	m_pGameInstance->Init_Engine(graphic_desc, &m_pDevice);
 	if (FAILED(hr)) { return hr; }
+
+	g_Input = CInputManager::Get_Instance();
 
 	// Loader
 	CClientLoader* pLoader = CClientLoader::Create();

@@ -1,4 +1,5 @@
 #pragma once
+#include "InputManager.h"
 
 extern bool g_bImguiOn;
 
@@ -11,7 +12,9 @@ extern ID3D12DescriptorHeap* g_ImguiSrvDescHeap;
 
 namespace Client
 {
-	
 }
+
+using Engine::CInputManager;
+extern CInputManager* g_Input;	
 
 using namespace Client;

@@ -256,6 +256,7 @@
     <ClInclude Include="..\Public\AssetManager.h" />
     <ClInclude Include="..\Public\Base.h" />
     <ClInclude Include="..\Public\Camera.h" />
+    <ClInclude Include="..\Public\CameraManager.h" />
     <ClInclude Include="..\Public\Component.h" />
     <ClInclude Include="..\Public\ComponentManager.h" />
     <ClInclude Include="..\Public\Cube.h" />
@@ -280,6 +281,7 @@
     <ClInclude Include="..\Public\GameObject.h" />
     <ClInclude Include="..\Public\GameObjectManager.h" />
     <ClInclude Include="..\Public\Graphic_Device.h" />
+    <ClInclude Include="..\Public\InputManager.h" />
     <ClInclude Include="..\Public\LoadHelper.h" />
     <ClInclude Include="..\Public\MeshGeometry.h" />
     <ClInclude Include="..\Public\MyMath.h" />
@@ -301,6 +303,7 @@
     <ClCompile Include="..\Private\AssetManager.cpp" />
     <ClCompile Include="..\Private\Base.cpp" />
     <ClCompile Include="..\Private\Camera.cpp" />
+    <ClCompile Include="..\Private\CameraManager.cpp" />
     <ClCompile Include="..\Private\Component.cpp" />
     <ClCompile Include="..\Private\ComponentManager.cpp" />
     <ClCompile Include="..\Private\Cube.cpp" />
@@ -311,6 +314,7 @@
     <ClCompile Include="..\Private\GameObject.cpp" />
     <ClCompile Include="..\Private\GameObjectManager.cpp" />
     <ClCompile Include="..\Private\Graphic_Device.cpp" />
+    <ClCompile Include="..\Private\InputManager.cpp" />
     <ClCompile Include="..\Private\LoadHelper.cpp" />
     <ClCompile Include="..\Private\MeshGeometry.cpp" />
     <ClCompile Include="..\Private\ObjLayer.cpp" />

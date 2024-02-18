@@ -77,8 +77,6 @@ void CTriangle::Late_Tick(_float fDeltaTime)
 void CTriangle::Render_Tick()
 {
 	// Bind Resource
-
-
 	//m_pRendererCom->AddTo_RenderGroup(RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE, ROOTSIG_DEFAULT, this);
 	m_pRendererCom->AddTo_RenderGroup(RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE2, ROOTSIG_DEFAULT, this);
 }

@@ -127,17 +127,19 @@ HRESULT CRenderer::Build_FrameResource()
 		m_vecFrameResource.push_back(new FrameResource(
 			pDevice,
 			1/**/,
-			0/**/)
+			1/**/)
 		);
 	}
 	m_pCurFrameResource = m_vecFrameResource[0]; // TODO FrameResource 2이상되면 수정
+
 	// Build Obj Constant Buffer
 	UINT objCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(OBJ_CONSTANT_BUFFER));
 	UINT objCount = 1; //
 	UINT iCbvSrvUavDescriptorSize = m_pGraphic_Device->m_iCbvSrvUavDescriptorSize;
 	auto handle = CD3DX12_CPU_DESCRIPTOR_HANDLE(m_pGraphic_Device->Get_CbvSrvUavHeapStart_CPU());
-	m_iCBVHeapStartOffset = *m_pGraphic_Device->Get_NextCbvSrvUavHeapOffsetPtr();
-	handle.Offset((INT)m_iCBVHeapStartOffset); // SRV 생성 후 Cbv 힙 시작 오프셋
+	m_iObjCBVHeapStartOffset = *m_pGraphic_Device->Get_NextCbvSrvUavHeapOffsetPtr();
+	m_iPassCBVHeapStartOffset = m_iObjCBVHeapStartOffset;
+	handle.Offset((INT)m_iObjCBVHeapStartOffset); // SRV 생성 후 Cbv 힙 시작 오프셋
 	for (UINT iFrameIndex = 0; iFrameIndex < g_iNumFrameResource; ++iFrameIndex)
 	{
 		ID3D12Resource* pObjCB = m_vecFrameResource[iFrameIndex]->pObjectCB->Get_UploadBuffer();
@@ -156,20 +158,41 @@ HRESULT CRenderer::Build_FrameResource()
 
 			pDevice->CreateConstantBufferView(&cbvDesc, handle);
 
-			int heapIndex = iFrameIndex * objCount + i;
+			INT heapIndex = iFrameIndex * objCount + i;
 			handle.Offset(heapIndex, iCbvSrvUavDescriptorSize);
+			m_iPassCBVHeapStartOffset += iCbvSrvUavDescriptorSize; // 마지막 ObjCB 생성될 때까지 업데이트
 		}
 	}
+	
+	UINT passCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(PASS_CONSTANT_BUFFER));
+	handle.InitOffsetted(m_pGraphic_Device->Get_CbvSrvUavHeapStart_CPU(), 0);
+	handle.Offset(m_iPassCBVHeapStartOffset);
+	// 마지막 세 서술자는 FrameResource의 Pass CBV
+	for (INT frameIndex = 0; frameIndex < g_iNumFrameResource; ++frameIndex)
+	{
+		ID3D12Resource* passCB = m_vecFrameResource[frameIndex]->pPassCB->Get_UploadBuffer(); 
+		D3D12_GPU_VIRTUAL_ADDRESS cbAddress = passCB->GetGPUVirtualAddress();
+
+		// Offset to the pass cbv in the descriptor heap.
+		// 서술자 힙 안에서 Pass CBV의 오프셋
+		INT heapIndex = m_iPassCBVHeapStartOffset + frameIndex;
+
+		D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
+		cbvDesc.BufferLocation = cbAddress;
+		cbvDesc.SizeInBytes = passCBByteSize;
+		pDevice->CreateConstantBufferView(&cbvDesc, handle);
+
+		handle.Offset(heapIndex, iCbvSrvUavDescriptorSize);
+	}
+
 	return hr;
 }
 
 void CRenderer::Update_ObjCB(CGameObject* pGameObj)
 {
-	XMMATRIX matWorld = XMLoadFloat4x4(&pGameObj->Get_WorldMatrix());
-	
 	OBJ_CONSTANT_BUFFER objConstants;
+	XMMATRIX matWorld = XMLoadFloat4x4(&pGameObj->Get_WorldMatrix());
 	XMStoreFloat4x4(&objConstants.WorldViewProj, XMMatrixTranspose(matWorld));
-
 	m_pCurFrameResource->pObjectCB->CopyData(pGameObj->Get_ClonedNum() - 1, objConstants);
 }
 
@@ -196,6 +219,14 @@ void CRenderer::MainRender()
 	ID3D12DescriptorHeap* pSrvHeap = m_pGraphic_Device->Get_CbvSrvUavHeap();
 	ID3D12DescriptorHeap* ppHeaps[] = { pSrvHeap };
 	CD3DX12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle;
+
+	// Update PassConstant
+	PASS_CONSTANT_BUFFER passConstants;
+	XMMATRIX matView = XMMatrixIdentity();
+	XMStoreFloat4x4(&passConstants.viewMat, XMMatrixTranspose(matView));
+	XMStoreFloat4x4(&passConstants.viewInvMat, XMMatrixTranspose(matView));
+	m_pCurFrameResource->pPassCB->CopyData(0, passConstants);
+
 	for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
 	{
 		for (UINT eBlendModeEnum = 0; eBlendModeEnum < RENDER_BLENDMODE_END; ++eBlendModeEnum)
@@ -235,7 +266,7 @@ void CRenderer::MainRender()
 
 						// ObjCB
 						cbvSrvUavHandle.InitOffsetted(pSrvHeap->GetGPUDescriptorHandleForHeapStart(), 0);
-						cbvSrvUavHandle.Offset(m_iCBVHeapStartOffset);
+						cbvSrvUavHandle.Offset(m_iObjCBVHeapStartOffset);
 						m_pCommandList->SetGraphicsRootDescriptorTable(1, cbvSrvUavHandle);
 						Update_ObjCB(iter);
 
@@ -350,6 +381,7 @@ FrameResource::FrameResource(ID3D12Device * pDevice, UINT iObjectCount, UINT iPa
 
 	//PassCB = std::make_unique<UploadBuffer<PassConstants>>(device, passCount, true);
 	pObjectCB = CUploadBuffer<OBJ_CONSTANT_BUFFER>::Create(pDevice, iObjectCount, true);
+	pPassCB = CUploadBuffer<PASS_CONSTANT_BUFFER>::Create(pDevice, iPassCount, false);
 }
 
 FrameResource::~FrameResource()

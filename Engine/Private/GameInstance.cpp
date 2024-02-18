@@ -7,6 +7,7 @@
 #include "CubeMesh.h"
 #include "PipelineManager.h"
 #include "AssetManager.h"
+#include "..\Public\InputManager.h"
 #include "LoadHelper.h"
 #include "D3DResourceManager.h"
 #pragma endregion
@@ -19,6 +20,7 @@ m_pGameObjectManager(CGameObjectManager::Get_Instance()),
 m_pPipelineManager(CPipelineManager::Get_Instance()),
 m_pAssetManager(CAssetManager::Get_Instance()),
 m_pD3DResourceManager(CD3DResourceManager::Get_Instance()),
+m_pKeyboardManager(CInputManager::Get_Instance()),
 m_pLoadHelper(CLoadHelper::Get_Instance())
 {
 	Safe_AddRef(m_pGraphic_Device);
@@ -26,12 +28,14 @@ m_pLoadHelper(CLoadHelper::Get_Instance())
 	Safe_AddRef(m_pGameObjectManager);
 	Safe_AddRef(m_pPipelineManager);
 	Safe_AddRef(m_pD3DResourceManager);
+	Safe_AddRef(m_pKeyboardManager);
 	Safe_AddRef(m_pAssetManager);
 }
 
 HRESULT CGameInstance::Free()
 {
 	Safe_Release(m_pLoadHelper);
+	Safe_Release(m_pKeyboardManager);
 	Safe_Release(m_pD3DResourceManager);
 	Safe_Release(m_pAssetManager);
 	Safe_Release(m_pPipelineManager);
@@ -43,12 +47,14 @@ HRESULT CGameInstance::Free()
 	return S_OK;
 }
 
-HRESULT CGameInstance::Init_Engine(const GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Device** ppDevice)
+HRESULT CGameInstance::Init_Engine(GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Device** ppDevice)
 {
 	if (FAILED(m_pGraphic_Device->Init_Graphic_Device(GraphicDesc.hWnd, GraphicDesc.eWinMode, GraphicDesc.iSizeX, GraphicDesc.iSizeY, ppDevice)))
 	{
 		return E_FAIL;
 	}
+
+	m_pHwndClient = &GraphicDesc.hWnd;
 
 	m_pComponentManager->Initialize();
 	m_pGameObjectManager->Initialize();
@@ -65,6 +71,7 @@ HRESULT CGameInstance::Init_Engine(const GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D
 
 void CGameInstance::Tick(_float fDeltaTime)
 {
+	m_pKeyboardManager->Tick(m_pHwndClient);
 	m_pGameObjectManager->Tick(fDeltaTime);
 }
 
@@ -89,6 +96,7 @@ void CGameInstance::Release_Engine()
 {
 	// Destroy Managers or Singletons, 최종 삭제
 	CAssetManager::Destroy_Instance();
+	CInputManager::Destroy_Instance();
 	CD3DResourceManager::Destroy_Instance();
 	CPipelineManager::Destroy_Instance();
 	CComponentManager::Destroy_Instance();
