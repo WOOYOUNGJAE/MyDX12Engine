@@ -2,6 +2,11 @@
 
 IMPLEMENT_SINGLETON(CInputManager)
 
+CInputManager::CInputManager() 
+{
+	ZeroMemory(m_keyState, sizeof(m_keyState));
+}
+
 void CInputManager::Tick(HWND* pHwnd)
 {
 	for (INT keyChecking = 0; keyChecking < VK_MAX; ++keyChecking)
@@ -33,17 +38,12 @@ void CInputManager::Tick(HWND* pHwnd)
 		}
 	}
 
-	if (m_keyState[VK_RBUTTON].first == true)
-	{
-		int a = 1;
-	}
-
 	//Mouse
 	m_prevMousePos = m_curMousePos;
 	GetCursorPos(&m_curMousePos);
 	ScreenToClient(*pHwnd, &m_curMousePos);
-#ifdef DEBUG
-	// std::cout << "x : " << ptMouse.x << " y : " << ptMouse.y << std::endl;
+#ifdef _DEBUG
+	 //std::cout << "x : " << m_curMousePos.x << " y : " << m_curMousePos.y << std::endl;
 #endif // DEBUG
 }
 
@@ -57,9 +57,9 @@ bool CInputManager::Key_Pressing(int inKey)
 	return m_keyState[inKey].second == KEY_PRESSING;
 }
 
-Vector2 CInputManager::Get_MousePosPrevToCur()
+Vector2 CInputManager::Get_MouseDirPrevToCur()
 {
-	return Vector2((m_curMousePos.x - m_prevMousePos.x), (m_curMousePos.x - m_prevMousePos.x));
+	return Vector2((m_curMousePos.x - m_prevMousePos.x), (m_curMousePos.y - m_prevMousePos.y));
 }
 
 bool CInputManager::Key_Down(int inKey)

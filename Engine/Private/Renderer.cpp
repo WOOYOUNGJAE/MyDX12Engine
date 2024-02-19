@@ -336,7 +336,7 @@ D3D12_CPU_DESCRIPTOR_HANDLE CRenderer::Get_CbvSrvUavStart_CPU()
 void CRenderer::Set_ProjMat(const CAMERA_DESC& camDesc)
 {
 	m_fAspectRatio = CGraphic_Device::Get_Instance()->m_fAspectRatio;
-	m_mProj = XMMatrixPerspectiveFovLH(camDesc.fFovy, m_fAspectRatio, camDesc.fNear, camDesc.fFar);
+	m_mProj = XMMatrixPerspectiveFovLH(camDesc.fFovy, camDesc.fAspectRatio, camDesc.fNear, camDesc.fFar);
 }
 
 void CRenderer::AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigTypeEnum,

@@ -18,6 +18,13 @@ namespace Engine
 		std::string target; // 쉐이더 종류와 버전
 	};
 
+	struct GAMEOBJECT_INIT_DESC
+	{
+		Vector3 vStartPos;
+		std::wstring strTag;
+		void* pArg;
+	};
+
 	struct OBJ_CONSTANT_BUFFER
 	{
 		OBJ_CONSTANT_BUFFER()
@@ -40,6 +47,7 @@ namespace Engine
 	struct CAMERA_DESC
 	{
 		FLOAT fFovy;
+		FLOAT fAspectRatio;
 		FLOAT fNear;
 		FLOAT fFar;
 	};

@@ -19,6 +19,10 @@ IMGUI_CUSTOM::OBJ_CUSTOMIZER* IMGUI_CUSTOM::OBJ_CUSTOMIZER::Create(CGameObject* 
 	pInstance->iCbvSrvUavDescriptorSize = CGameInstance::Get_Instance()->Get_CbvSrvUavDescriptorSize();
 	pInstance->pController = pInController;
 
+	pInstance->fPosArr[0] = pGameObject->Get_Pos().x;
+	pInstance->fPosArr[1] = pGameObject->Get_Pos().y;
+	pInstance->fPosArr[2] = pGameObject->Get_Pos().z;
+
 	return pInstance;
 }
 

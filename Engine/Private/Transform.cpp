@@ -129,3 +129,36 @@ void CTransform::Refresh_MatrixScaled(const Vector3& scale)
 	Set_WorldMatrix(MAT_UP, XMVector3Normalize(Get_MatrixRow(MAT_UP) * scale.y));
 	Set_WorldMatrix(MAT_LOOK, XMVector3Normalize(Get_MatrixRow(MAT_LOOK) * scale.z));
 }
+
+void CTransform::Rotate(CTransform::AXIS_ENUM eAxis, FLOAT fRotSpeed)
+{
+	Matrix rotMat; // = Matrix::CreateRotationX()
+
+	switch (eAxis)
+	{
+	case AXIS_X:
+		rotMat = Matrix::CreateRotationX(fRotSpeed);
+		break;
+	case AXIS_Y:
+		rotMat = Matrix::CreateRotationY(fRotSpeed);
+		break;
+	case AXIS_Z:
+		rotMat = Matrix::CreateRotationZ(fRotSpeed);
+		break;
+
+	default:
+		break;
+	}
+
+	m_mWorldMatrix *= rotMat;
+
+	m_mWorldMatrix.Right().Normalize();
+	m_mWorldMatrix.Up().Normalize();
+	m_mWorldMatrix.Forward().Normalize();
+
+	m_vRight = m_mWorldMatrix.Right();
+	m_vUp = m_mWorldMatrix.Up();
+	m_vLook = m_mWorldMatrix.Forward();
+
+	//m_vLook = *(Vector3*)(&m_mWorldMatrix.m[LOOK]); // Update Look Var
+}

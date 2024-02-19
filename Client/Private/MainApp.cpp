@@ -43,17 +43,21 @@ HRESULT CMainApp::Initialize()
 
 
 #pragma region InLevel
-	wstring strTag;
 	CGameObject* pObjectControlling = nullptr;
+	GAMEOBJECT_INIT_DESC objDesc{};
 	hr = m_pGameInstance->Add_GameObjPrototype(L"Camera_Free", CCamera_Free::Create());
 	if (FAILED(hr)) { return hr; }
-	strTag = L"Camera_Free";
-	hr = m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", OBJ_LAYER_DEFAULT,	&strTag);
+
+
+	objDesc.strTag = L"Camera_Free";
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", OBJ_LAYER_DEFAULT,	&objDesc);
 	if (FAILED(hr)) { return hr; }
 
-	m_pGameInstance->Set_MainCam(strTag);
+	m_pGameInstance->Set_MainCam(objDesc.strTag);
 
-	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling);
+	objDesc.strTag = L"";
+	objDesc.vStartPos = Vector3(0, 0, 1);
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
 	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", L"Layer0", &pObjectControlling);
 	if (FAILED(hr)) { return hr; }*/

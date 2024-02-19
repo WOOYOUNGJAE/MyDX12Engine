@@ -12,14 +12,14 @@ class ENGINE_DLL CInputManager : public CBase
 	DECLARE_SINGLETON(CInputManager)
 
 protected:
-	CInputManager(){ ZeroMemory(m_keyState, sizeof(m_keyState)); }
+	CInputManager();
 	~CInputManager() override = default;
 	
 public:
 	void Tick(HWND* pHwnd);
 	HRESULT Free() override;
 public: // Mouse
-	Vector2 Get_MousePosPrevToCur();
+	Vector2 Get_MouseDirPrevToCur();
 public: // Get Key State
 	bool Key_Pressing(int inKey);
 	bool Key_Down(int inKey);

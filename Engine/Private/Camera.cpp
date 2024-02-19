@@ -19,7 +19,7 @@ HRESULT CCamera::Initialize(void* pArg)
 {
 	HRESULT hr = Add_Component(L"Transform", reinterpret_cast<CComponent**>(&m_pTransformCom));
 
-	CCameraManager::Get_Instance()->Register(*reinterpret_cast<wstring*>(pArg), this);
+	CCameraManager::Get_Instance()->Register(reinterpret_cast<GAMEOBJECT_INIT_DESC*>(pArg)->strTag, this);
 
 	return hr;
 }

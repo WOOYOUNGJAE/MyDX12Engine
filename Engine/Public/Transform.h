@@ -9,6 +9,7 @@ class ENGINE_DLL CTransform final : public CComponent
 public: // typedef
 	enum TRANSFORM_ENUM {LOOK, POSITION, SCALE, TRANSFORM_ENUM_END,};
 	enum MATRIX_ENUM { MAT_RIGHT, MAT_UP, MAT_LOOK, MAT_POSITION, MATRIX_ENUM_END };
+	enum AXIS_ENUM { AXIS_X, AXIS_Y, AXIS_Z, AXIS_ENUM_END};
 private:
 	CTransform() = default;
 	CTransform(CTransform& rhs) : CComponent(rhs){}
@@ -22,7 +23,6 @@ public:
 	HRESULT Free() override;
 public: // getter setter
 	const Matrix& WorldMatrix() { return m_mWorldMatrix; }
-	XMMATRIX WorldMatrix_Inverse() { return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_mWorldMatrix)); }
 	Vector3 Position() { return m_vPosition; }
 	Vector3 Right() { return m_vRight; }
 	Vector3 Up() { return m_vUp; }
@@ -38,6 +38,9 @@ public:
 	Vector3 Get_ScaleXYZ();
 	void Refresh_WorldMatrix(TRANSFORM_ENUM eEnum = TRANSFORM_ENUM_END);
 	void Refresh_MatrixScaled(const Vector3& scale);
+
+public: // Move Func
+	void Rotate(AXIS_ENUM eAxis, FLOAT fRotSpeed); // Local space에서 축 회전
 
 public:
 	Matrix m_mWorldMatrix;

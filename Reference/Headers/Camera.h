@@ -24,9 +24,9 @@ protected: // pointer
 	class CTransform* m_pTransformCom = nullptr;
 protected:
 	CAMERA_DESC m_Desc =
-	{ 0.f, 0.f, 0.f};
-	FLOAT m_fMovingSpeed = 0.f;
-	FLOAT m_fRotatingSpeed = 0.f;
+	{ 0.f, 0.f, 0.f, 0.f};
+	FLOAT m_fMoveSpeed = 1.f;
+	FLOAT m_fRotSpeed = 1.f;
 };
 
 _NAMESPACE

@@ -59,6 +59,8 @@ HRESULT CTriangle::Initialize(void* pArg)
 
 	m_iCbvSrvUavOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
 
+	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
+
 	return hr;
 }
 
