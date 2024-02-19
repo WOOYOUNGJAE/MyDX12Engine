@@ -31,23 +31,26 @@ public: // getter setter
 	void Set_Scale(const Vector3& scale) { m_vScale = scale; Refresh_WorldMatrix(SCALE);	}
 	void Set_Position(const Vector3& pos) { m_vPosition = pos; Refresh_WorldMatrix(POSITION); }
 	void Set_WorldMatrix(const Matrix& matrix) { m_mWorldMatrix = matrix; }
-	void Set_WorldMatrix(MATRIX_ENUM eEnum, _fvector vVec);
+	void Set_WorldMatrix(MATRIX_ENUM eEnum, const Vector4& vVec);
+	void Set_WorldMatrix(MATRIX_ENUM eEnum, const Vector3& vVec);
 
 public:
-	_vector Get_MatrixRow(MATRIX_ENUM eEnum);
 	Vector3 Get_ScaleXYZ();
+	// 변형된 벡터 멤버변수 기반으로 행렬 최신화
 	void Refresh_WorldMatrix(TRANSFORM_ENUM eEnum = TRANSFORM_ENUM_END);
 	void Refresh_MatrixScaled(const Vector3& scale);
 
 public: // Move Func
-	void Rotate(AXIS_ENUM eAxis, FLOAT fRotSpeed); // Local space에서 축 회전
-
+	void Rotate(Vector3 vAxis, FLOAT fRotSpeed); // Local space에서 축 회전
+	void Move_Forward(FLOAT fRotSpeed);
+	void Move_Right(FLOAT fRotSpeed);
+	void Move_Up(FLOAT fRotSpeed);
 public:
 	Matrix m_mWorldMatrix;
-	Vector3 m_vScale;
-	Vector3 m_vRight;
-	Vector3 m_vUp;
-	Vector3 m_vLook;
+	Vector3 m_vScale{1,1,1};
+	Vector3 m_vRight{1,0,0};
+	Vector3 m_vUp{ 0,1,0 };
+	Vector3 m_vLook{ 0,0,1 };
 	Vector3 m_vPosition;
 
 };

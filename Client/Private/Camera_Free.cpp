@@ -50,75 +50,53 @@ void CCamera_Free::Tick(_float fDeltaTime)
 
 	if (g_Input->Key_Pressing('W'))
 	{
-		m_pTransformCom->Set_Position(
+		m_pTransformCom->Move_Forward(m_fMoveSpeed * fDeltaTime);
+		/*m_pTransformCom->Set_Position(
 			Vector3(m_pTransformCom->m_vPosition.x,
 				m_pTransformCom->m_vPosition.y + m_fMoveSpeed*fDeltaTime,
-				m_pTransformCom->m_vPosition.z));
+				m_pTransformCom->m_vPosition.z));*/
 	}
 	if (g_Input->Key_Pressing('D'))
 	{
-		m_pTransformCom->Set_Position(Vector3(
+		m_pTransformCom->Move_Right(m_fMoveSpeed * fDeltaTime);
+
+		/*m_pTransformCom->Set_Position(Vector3(
 			m_pTransformCom->m_vPosition.x + m_fMoveSpeed * fDeltaTime,
 			m_pTransformCom->m_vPosition.y,
-			m_pTransformCom->m_vPosition.z));
+			m_pTransformCom->m_vPosition.z));*/
 	}
 	if (g_Input->Key_Pressing('S'))
 	{
-		m_pTransformCom->Set_Position(Vector3(
+		m_pTransformCom->Move_Forward(-m_fMoveSpeed * fDeltaTime);
+
+		/*m_pTransformCom->Set_Position(Vector3(
 			m_pTransformCom->m_vPosition.x,
 			m_pTransformCom->m_vPosition.y - m_fMoveSpeed * fDeltaTime,
-			m_pTransformCom->m_vPosition.z));
+			m_pTransformCom->m_vPosition.z));*/
 	}
 	if (g_Input->Key_Pressing('A'))
 	{
-		m_pTransformCom->Set_Position(Vector3(
+		m_pTransformCom->Move_Right(-m_fMoveSpeed * fDeltaTime);
+
+		/*m_pTransformCom->Set_Position(Vector3(
 			m_pTransformCom->m_vPosition.x - m_fMoveSpeed * fDeltaTime,
 			m_pTransformCom->m_vPosition.y,
-			m_pTransformCom->m_vPosition.z));
+			m_pTransformCom->m_vPosition.z));*/
 	}
 
 	if (g_Input->Key_Pressing(VK_RBUTTON))
 	{
 		const Vector2& vChangedDir = g_Input->Get_MouseDirPrevToCur();
 
-		
-		m_pTransformCom->Rotate(CTransform::AXIS_X, vChangedDir.y * m_fRotSpeed * fDeltaTime);
-		m_pTransformCom->Rotate(CTransform::AXIS_Y, vChangedDir.x * m_fRotSpeed * fDeltaTime);
+		// 먼저 절대적인 y축을 기준으로 회전 해야 함
+		m_pTransformCom->Rotate(Vector3::Up, vChangedDir.x * m_fRotSpeed * fDeltaTime);
+		m_pTransformCom->Rotate(m_pTransformCom->WorldMatrix().Right(), vChangedDir.y * m_fRotSpeed * fDeltaTime);
 
 	}
 
-	if (g_Input->Key_Pressing(VK_UP))
-	{
-		const Vector2& vChangedDir = Vector2(0, 10);
 
 
-		m_pTransformCom->Rotate(CTransform::AXIS_X, -vChangedDir.y * m_fRotSpeed * fDeltaTime);
-	}
-	if (g_Input->Key_Pressing(VK_RIGHT))
-	{
-		const Vector2& vChangedDir = Vector2(10, 0);
-
-
-		m_pTransformCom->Rotate(CTransform::AXIS_Y, vChangedDir.x * m_fRotSpeed * fDeltaTime);
-	}
-	if (g_Input->Key_Pressing(VK_DOWN))
-	{
-		const Vector2& vChangedDir = Vector2(0, -10);
-
-
-		m_pTransformCom->Rotate(CTransform::AXIS_X, -vChangedDir.y * m_fRotSpeed * fDeltaTime);
-	}
-	if (g_Input->Key_Pressing(VK_LEFT))
-	{
-		const Vector2& vChangedDir = Vector2(-10, 0);
-
-
-		m_pTransformCom->Rotate(CTransform::AXIS_Y, vChangedDir.x * m_fRotSpeed * fDeltaTime);
-	}
-
-
-
-	if (g_Input->Key_Down('X'))
+	if (g_Input->Key_Down('X')) // 카메라 회전 되돌리기
 	{
 		m_pTransformCom->Set_Look(Vector3(0.f, 0.f, 1.f));
 	}
