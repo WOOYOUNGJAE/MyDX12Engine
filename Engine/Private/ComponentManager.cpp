@@ -101,7 +101,6 @@ CComponent* CComponentManager::Clone_Component(const wstring& strTag, void* pArg
 CRenderer* CComponentManager::Get_Renderer()
 {
 	CRenderer* pInstance = static_cast<CRenderer*>(FindandGet_Prototype(L"Renderer"));
-	Safe_AddRef(pInstance);
 
 	return pInstance;
 }

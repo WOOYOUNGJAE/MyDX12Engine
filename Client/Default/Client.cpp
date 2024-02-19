@@ -22,6 +22,14 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+// DeltaTime
+void Update_DeltaTime();
+float g_fDeltaTime = 0.f;
+LARGE_INTEGER		g_CurrentTime;
+LARGE_INTEGER		g_OldTime;
+LARGE_INTEGER		g_OriginTime;
+LARGE_INTEGER		g_CpuTick;
+
 ID3D12DescriptorHeap* g_ImguiSrvDescHeap = nullptr;
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -79,7 +87,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
         else
         {
-            pMainApp->Tick(0.2f);
+            Update_DeltaTime();
+            pMainApp->Tick(g_fDeltaTime);
         }
     }
 
@@ -155,26 +164,35 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
+    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
-   RECT		rcWindow = { 0, 0, g_iWinSizeX, g_iWinSizeY };
+    RECT		rcWindow = { 0, 0, g_iWinSizeX, g_iWinSizeY };
 
-   AdjustWindowRect(&rcWindow, WS_OVERLAPPEDWINDOW, TRUE);
+    AdjustWindowRect(&rcWindow, WS_OVERLAPPEDWINDOW, TRUE);
 
-   HWND hWnd = CreateWindowW(szWindowClass, L"MyDx12Engine", WS_OVERLAPPEDWINDOW,
-       CW_USEDEFAULT, 0, rcWindow.right - rcWindow.left, rcWindow.bottom - rcWindow.top, nullptr, nullptr, hInstance, nullptr);
+    HWND hWnd = CreateWindowW(szWindowClass, L"MyDx12Engine", WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, 0, rcWindow.right - rcWindow.left, rcWindow.bottom - rcWindow.top, nullptr, nullptr, hInstance, nullptr);
 
-   if (!hWnd)
-   {
-      return FALSE;
-   }
+    if (!hWnd)
+    {
+        return FALSE;
+    }
 
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
+    ShowWindow(hWnd, nCmdShow);
+    UpdateWindow(hWnd);
 
-   g_hwnd = hWnd;
+    g_hwnd = hWnd;
 
-   return TRUE;
+    // DeltaTime    
+    QueryPerformanceCounter(&g_CurrentTime); // 메인보드가 갖고 있는 고해상도 타이머의 누적값을
+    QueryPerformanceCounter(&g_OldTime);
+    QueryPerformanceCounter(&g_OriginTime);
+
+    // 고해상도 타이머의 주파수(초당)를 얻어오는 함수
+    QueryPerformanceFrequency(&g_CpuTick);
+
+
+    return TRUE;
 }
 
 //
@@ -251,4 +269,21 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     }
     return (INT_PTR)FALSE;
+}
+
+void Update_DeltaTime()
+{
+    QueryPerformanceCounter(&g_CurrentTime);
+
+    // Cpu Tick 업데이트하여 정교화
+    if (g_CurrentTime.QuadPart - g_OriginTime.QuadPart > g_CpuTick.QuadPart)
+    {
+        QueryPerformanceFrequency(&g_CpuTick);
+        g_OriginTime = g_CurrentTime;
+    }
+
+
+    g_fDeltaTime = float(g_CurrentTime.QuadPart - g_OldTime.QuadPart) / g_CpuTick.QuadPart;
+
+    g_OldTime = g_CurrentTime;
 }

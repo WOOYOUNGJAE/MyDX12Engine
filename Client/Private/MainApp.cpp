@@ -64,6 +64,7 @@ HRESULT CMainApp::Initialize()
 
 	// Renderer
 	m_pRenderer = m_pGameInstance->Get_Instance()->Get_Renderer();
+	Safe_AddRef(m_pRenderer);
 
 	if (m_pRenderer == nullptr)
 	{

@@ -1,5 +1,8 @@
 #include "CameraManager.h"
 #include "Camera.h"
+#include "ComponentManager.h"
+#include "Renderer.h"
+
 
 IMPLEMENT_SINGLETON (CCameraManager)
 
@@ -17,6 +20,15 @@ HRESULT CCameraManager::Free()
 void CCameraManager::Set_MainCam(wstring strName)
 {
 	m_pMainCam = FindandGet(strName);
+
+	CRenderer* pRenderer = CComponentManager::Get_Instance()->Get_Renderer();
+
+	if (pRenderer == nullptr)
+	{
+		MSG_BOX("CamManager : SetMainCam Failed, renderer nullptr");
+	}
+
+	pRenderer->Set_ProjMat(m_pMainCam->Get_CamDesc());
 }
 
 CCamera* CCameraManager::FindandGet(wstring strName)

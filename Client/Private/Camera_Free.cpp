@@ -32,32 +32,52 @@ CGameObject* CCamera_Free::Clone(void* pArg)
 
 HRESULT CCamera_Free::Initialize_Prototype()
 {
-	return CCamera::Initialize_Prototype();
+	return __super::Initialize_Prototype();
 }
 
 HRESULT CCamera_Free::Initialize(void* pArg)
 {
+	m_Desc = { XMConvertToRadians(60.f), 0.2f, 300.f };
+
+	m_fMovingSpeed = 1.f;
+	m_fRotatingSpeed = 1.f;
+
 	return CCamera::Initialize(pArg);
 }
 
 void CCamera_Free::Tick(_float fDeltaTime)
 {
-	if (g_Input->Key_Pressing(VK_UP))
+
+	if (g_Input->Key_Pressing('W'))
 	{
-		m_pTransformCom->Set_Position(Vector3(m_pTransformCom->m_vPosition.x, m_pTransformCom->m_vPosition.y + 0.1f, m_pTransformCom->m_vPosition.z));
+		m_pTransformCom->Set_Position(
+			Vector3(m_pTransformCom->m_vPosition.x,
+				m_pTransformCom->m_vPosition.y + m_fMovingSpeed*fDeltaTime,
+				m_pTransformCom->m_vPosition.z));
 	}
-	if (g_Input->Key_Pressing(VK_RIGHT))
+	if (g_Input->Key_Pressing('D'))
 	{
-		m_pTransformCom->Set_Position(Vector3(m_pTransformCom->m_vPosition.x + 0.1f, m_pTransformCom->m_vPosition.y, m_pTransformCom->m_vPosition.z));
+		m_pTransformCom->Set_Position(Vector3(
+			m_pTransformCom->m_vPosition.x + m_fMovingSpeed * fDeltaTime,
+			m_pTransformCom->m_vPosition.y,
+			m_pTransformCom->m_vPosition.z));
 	}
-	if (g_Input->Key_Pressing(VK_DOWN))
+	if (g_Input->Key_Pressing('S'))
 	{
-		m_pTransformCom->Set_Position(Vector3(m_pTransformCom->m_vPosition.x, m_pTransformCom->m_vPosition.y - 0.1f, m_pTransformCom->m_vPosition.z));
+		m_pTransformCom->Set_Position(Vector3(
+			m_pTransformCom->m_vPosition.x,
+			m_pTransformCom->m_vPosition.y - m_fMovingSpeed * fDeltaTime,
+			m_pTransformCom->m_vPosition.z));
 	}
-	if (g_Input->Key_Pressing(VK_LEFT))
+	if (g_Input->Key_Pressing('A'))
 	{
-		m_pTransformCom->Set_Position(Vector3(m_pTransformCom->m_vPosition.x - 0.1f, m_pTransformCom->m_vPosition.y, m_pTransformCom->m_vPosition.z));
+		m_pTransformCom->Set_Position(Vector3(
+			m_pTransformCom->m_vPosition.x - m_fMovingSpeed * fDeltaTime,
+			m_pTransformCom->m_vPosition.y,
+			m_pTransformCom->m_vPosition.z));
 	}
+
+
 }
 
 void CCamera_Free::Late_Tick(_float fDeltaTime)

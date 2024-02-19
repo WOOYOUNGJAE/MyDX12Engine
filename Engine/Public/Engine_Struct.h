@@ -37,6 +37,14 @@ namespace Engine
 		FLOAT padding[32];
 	};
 
+	struct CAMERA_DESC
+	{
+		FLOAT fFovy;
+		FLOAT fNear;
+		FLOAT fFar;
+	};
+
+
 	struct QUEUE_FLUSH_DESC
 	{
 		UINT64* pCurFenceVal;

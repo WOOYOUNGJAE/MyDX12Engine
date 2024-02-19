@@ -28,10 +28,11 @@ public:
 	void EndRender();
 	void Present();
 	HRESULT Free() override;
-public: // getter
+public: // getter setter
 	ID3D12GraphicsCommandList* Get_CmdList() { return m_pCommandList; }
 	D3D12_GPU_DESCRIPTOR_HANDLE Get_CbvSrvUavStart_GPU();
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_CbvSrvUavStart_CPU();
+	void Set_ProjMat(const CAMERA_DESC& camDesc);
 public: // Component Functions for GameObject
 	void AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigTypeEnum, class CGameObject* pGameObject);
 	void Flush_CommandQueue();
@@ -63,10 +64,9 @@ private: //Fence
 	HANDLE m_fenceEvent;
 	QUEUE_FLUSH_DESC m_queue_flush_desc{};
 private: // Pass Info
+	class CCamera* m_pActiveCam = nullptr;
 	Matrix m_mProj;
 	FLOAT m_fAspectRatio = 0.f;
-	FLOAT m_fNear = 1.f;
-	FLOAT m_fFar = 1000.f;
 };
 
 struct FrameResource
