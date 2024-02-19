@@ -51,37 +51,18 @@ void CCamera_Free::Tick(_float fDeltaTime)
 	if (g_Input->Key_Pressing('W'))
 	{
 		m_pTransformCom->Move_Forward(m_fMoveSpeed * fDeltaTime);
-		/*m_pTransformCom->Set_Position(
-			Vector3(m_pTransformCom->m_vPosition.x,
-				m_pTransformCom->m_vPosition.y + m_fMoveSpeed*fDeltaTime,
-				m_pTransformCom->m_vPosition.z));*/
 	}
 	if (g_Input->Key_Pressing('D'))
 	{
 		m_pTransformCom->Move_Right(m_fMoveSpeed * fDeltaTime);
-
-		/*m_pTransformCom->Set_Position(Vector3(
-			m_pTransformCom->m_vPosition.x + m_fMoveSpeed * fDeltaTime,
-			m_pTransformCom->m_vPosition.y,
-			m_pTransformCom->m_vPosition.z));*/
 	}
 	if (g_Input->Key_Pressing('S'))
 	{
 		m_pTransformCom->Move_Forward(-m_fMoveSpeed * fDeltaTime);
-
-		/*m_pTransformCom->Set_Position(Vector3(
-			m_pTransformCom->m_vPosition.x,
-			m_pTransformCom->m_vPosition.y - m_fMoveSpeed * fDeltaTime,
-			m_pTransformCom->m_vPosition.z));*/
 	}
 	if (g_Input->Key_Pressing('A'))
 	{
 		m_pTransformCom->Move_Right(-m_fMoveSpeed * fDeltaTime);
-
-		/*m_pTransformCom->Set_Position(Vector3(
-			m_pTransformCom->m_vPosition.x - m_fMoveSpeed * fDeltaTime,
-			m_pTransformCom->m_vPosition.y,
-			m_pTransformCom->m_vPosition.z));*/
 	}
 
 	if (g_Input->Key_Pressing(VK_RBUTTON))

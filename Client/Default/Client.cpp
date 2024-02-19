@@ -78,6 +78,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     // 기본 메시지 루프입니다:
     //CGameInstance* pGameInstance = CGameInstance::Get_Instance();
     //Safe_AddRef(pGameInstance);
+    FLOAT fFPSAcctime = 0.f;
+    UINT iFrameAccCount = 0;
+    INT iComputedFPS = 0;
+    
     while (WM_QUIT != msg.message)
     {
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -88,6 +92,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         else
         {
             Update_DeltaTime();
+
+            fFPSAcctime += g_fDeltaTime;
+            ++iFrameAccCount;
+            if (fFPSAcctime >= 1.f)
+            {
+                iComputedFPS = iFrameAccCount;
+                iFrameAccCount = 0;
+                fFPSAcctime = 0.f;
+                wstring strTitile = L"MyDx12Engine | fps : " + to_wstring(iComputedFPS);
+                SetWindowTextW(g_hwnd, strTitile.data());
+            }
+
             pMainApp->Tick(g_fDeltaTime);
         }
     }

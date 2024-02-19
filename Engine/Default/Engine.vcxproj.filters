@@ -94,8 +94,11 @@
     <Filter Include="Utility\Managers\Asset">
       <UniqueIdentifier>{ec86ba5a-8a59-4842-808a-b9231c1b067d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\Managers\Keyboard">
+    <Filter Include="Utility\Managers\Input">
       <UniqueIdentifier>{9829af75-c212-4739-8744-30ae02a6143f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Managers\Camera">
+      <UniqueIdentifier>{aac0a365-38b9-45f4-b4b1-2fbf615ac493}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -210,8 +213,12 @@
     <ClInclude Include="..\Public\MyMath.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\InputManager.h" />
-    <ClInclude Include="..\Public\CameraManager.h" />
+    <ClInclude Include="..\Public\InputManager.h">
+      <Filter>Utility\Managers\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CameraManager.h">
+      <Filter>Utility\Managers\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -298,8 +305,12 @@
     <ClCompile Include="..\Private\D3DResourceManager.cpp">
       <Filter>System\D3D Graphics\D3DResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\InputManager.cpp" />
-    <ClCompile Include="..\Private\CameraManager.cpp" />
+    <ClCompile Include="..\Private\InputManager.cpp">
+      <Filter>Utility\Managers\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CameraManager.cpp">
+      <Filter>Utility\Managers\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />
