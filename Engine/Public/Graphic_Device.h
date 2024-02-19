@@ -78,7 +78,7 @@ private: // From Client
 	_uint m_iClientWinCX = 0;
 	_uint m_iClientWinCY = 0;
 public:
-	FLOAT m_fAspectRatio = 0.f;
+	FLOAT m_fAspectRatio = 0.f; // Renderer과 메쉬버텍스 위치에 사용
 private: // Current
 	UINT64 m_iCurFenceVal = 0;
 	_uint m_iCurrBackBuffer = 0;
