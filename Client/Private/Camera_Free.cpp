@@ -64,6 +64,14 @@ void CCamera_Free::Tick(_float fDeltaTime)
 	{
 		m_pTransformCom->Move_Right(-m_fMoveSpeed * fDeltaTime);
 	}
+	if (g_Input->Key_Pressing('Q'))
+	{
+		m_pTransformCom->Move_Up(m_fMoveSpeed * fDeltaTime);
+	}
+	if (g_Input->Key_Pressing('E'))
+	{
+		m_pTransformCom->Move_Up(-m_fMoveSpeed * fDeltaTime);		
+	}
 
 	if (g_Input->Key_Pressing(VK_RBUTTON))
 	{

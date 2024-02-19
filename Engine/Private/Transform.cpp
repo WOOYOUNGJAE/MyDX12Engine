@@ -151,21 +151,6 @@ void CTransform::Rotate(Vector3 vAxis, FLOAT fRotSpeed)
 	Set_WorldMatrix(MAT_RIGHT, Vector4(m_vRight.x, m_vRight.y, m_vRight.z, 0) );
 	Set_WorldMatrix(MAT_UP, Vector4(m_vUp.x, m_vUp.y, m_vUp.z, 0) );
 	Set_WorldMatrix(MAT_LOOK, Vector4(m_vLook.x, m_vLook.y, m_vLook.z, 0) );
-
-
-
-	//Refresh_WorldMatrix(LOOK);
-	////m_mWorldMatrix *= rotMat;
-
-	///*m_mWorldMatrix.Right().Normalize();
-	//m_mWorldMatrix.Up().Normalize();
-	//m_mWorldMatrix.Forward().Normalize();*/
-
-	//m_vRight = m_mWorldMatrix.Right();
-	//m_vUp = m_mWorldMatrix.Up();
-	//m_vLook = m_mWorldMatrix.Forward();
-
-	////m_vLook = *(Vector3*)(&m_mWorldMatrix.m[LOOK]); // Update Look Var
 }
 
 void CTransform::Move_Forward(FLOAT fRotSpeed)

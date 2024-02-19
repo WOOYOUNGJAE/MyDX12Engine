@@ -59,13 +59,13 @@ void IMGUI_CUSTOM::OBJ_CUSTOMIZER::Imgui_Tick()
 	}
 
 	Text("Scale (x, y, z)");
-	if (InputFloat3("Scale ", fScaleArr) == false)
+	if (InputFloat3("##Scale", fScaleArr) == false) // label이 ##으로 시작하면 표시 안됨
 	{
 		pTarget->Set_Scale(Vector3(fScaleArr[0], fScaleArr[1], fScaleArr[2]));
 	}
 
 	Text("Position (x, y, z)");
-	if (InputFloat3("Position ", fPosArr) == false)
+	if (InputFloat3("##Position", fPosArr) == false)
 	{
 		pTarget->Set_Position(Vector3(fPosArr[0], fPosArr[1], fPosArr[2]));
 	}
