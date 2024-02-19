@@ -81,7 +81,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     FLOAT fFPSAcctime = 0.f;
     UINT iFrameAccCount = 0;
     INT iComputedFPS = 0;
-    
+    wstring strTitile = L"MyDx12Engine";
     while (WM_QUIT != msg.message)
     {
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -100,7 +100,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                 iComputedFPS = iFrameAccCount;
                 iFrameAccCount = 0;
                 fFPSAcctime = 0.f;
-                wstring strTitile = L"MyDx12Engine | fps : " + to_wstring(iComputedFPS);
+                strTitile = L"MyDx12Engine | fps : " + to_wstring(iComputedFPS);
                 SetWindowTextW(g_hwnd, strTitile.data());
             }
 

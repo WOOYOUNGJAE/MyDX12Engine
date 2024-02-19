@@ -23,6 +23,12 @@ IMGUI_CUSTOM::OBJ_CUSTOMIZER* IMGUI_CUSTOM::OBJ_CUSTOMIZER::Create(CGameObject* 
 	pInstance->fPosArr[1] = pGameObject->Get_Pos().y;
 	pInstance->fPosArr[2] = pGameObject->Get_Pos().z;
 
+	pInstance->fScaleArr[0] = pGameObject->Get_ScaleXYZ().x;
+	pInstance->fScaleArr[1] = pGameObject->Get_ScaleXYZ().y;
+	pInstance->fScaleArr[2] = pGameObject->Get_ScaleXYZ().z;
+
+	
+
 	return pInstance;
 }
 
@@ -52,11 +58,18 @@ void IMGUI_CUSTOM::OBJ_CUSTOMIZER::Imgui_Tick()
 		}
 	}
 
+	Text("Scale (x, y, z)");
+	if (InputFloat3("Scale ", fScaleArr) == false)
+	{
+		pTarget->Set_Scale(Vector3(fScaleArr[0], fScaleArr[1], fScaleArr[2]));
+	}
+
 	Text("Position (x, y, z)");
-	if (InputFloat3(" ", fPosArr) == false)
+	if (InputFloat3("Position ", fPosArr) == false)
 	{
 		pTarget->Set_Position(Vector3(fPosArr[0], fPosArr[1], fPosArr[2]));
 	}
+
 
 	End();
 }

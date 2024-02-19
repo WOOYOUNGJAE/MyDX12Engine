@@ -108,6 +108,11 @@ Vector3 CTriangle::Get_Pos()
 	return m_pTransformCom->Position();
 }
 
+Vector3 CTriangle::Get_ScaleXYZ()
+{
+	return m_pTransformCom->Get_ScaleXYZ();
+}
+
 D3D12_VERTEX_BUFFER_VIEW CTriangle::VertexBufferView()
 {
 	return m_pTriangleMeshCom->VertexBufferView();
@@ -126,4 +131,9 @@ _uint CTriangle::Num_Indices()
 void CTriangle::Set_Position(const Vector3& vPos)
 {
 	m_pTransformCom->Set_Position(vPos);
+}
+
+void CTriangle::Set_Scale(const Vector3& vScale)
+{
+	m_pTransformCom->Set_Scale(vScale);
 }

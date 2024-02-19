@@ -20,17 +20,22 @@ public: // LifeCycle
 	HRESULT Free() override;
 public: // getter setter, abstract
 	virtual int& Get_NumFrameDirtyRef() { int a = -1; return a; };
-	virtual Matrix Get_WorldMatrix() = 0;// { return XMFLOAT4X4(); };
-	virtual Vector3 Get_Pos() { return Vector3(); }
 	virtual D3D12_VERTEX_BUFFER_VIEW VertexBufferView() { return D3D12_VERTEX_BUFFER_VIEW(); }
 	virtual D3D12_INDEX_BUFFER_VIEW IndexBufferView()const {return D3D12_INDEX_BUFFER_VIEW();}
 	virtual D3D12_PRIMITIVE_TOPOLOGY PrimitiveType()const {	return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;} // Default;
 	virtual _uint Num_Indices() { return 0; }
+	//Offset
 	virtual UINT64 Get_CbvSrvUavHeapOffset_Texture() { return m_iCbvSrvUavOffset; }
 	UINT64* Get_CbvSrvUavOffsetPtr() { return &m_iCbvSrvUavOffset; }
+	// Tag
 	wstring Get_PrototypeTag() { return m_strPrototypeTag; }
 	void Set_PrototypeTag(const wstring& strTag) { m_strPrototypeTag = strTag; }
+	// Transform
+	virtual Matrix Get_WorldMatrix() = 0;// { return XMFLOAT4X4(); };
+	virtual Vector3 Get_Pos() { return Vector3(); }
+	virtual Vector3 Get_ScaleXYZ() { return Vector3(); }
 	virtual void Set_Position(const Vector3& vPos) {};
+	virtual void Set_Scale(const Vector3& vScale){}
 public:
 	virtual _bool Com_Already_Owned(const wstring& strComTag);
 	// 이미 있는지, 컴포넌트 생성, 맵에 넣기, 

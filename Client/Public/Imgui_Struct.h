@@ -39,6 +39,8 @@ struct OBJ_CUSTOMIZER
 
 	// for Imgui
 	FLOAT fPosArr[3]{};
+	FLOAT fScaleArr[3]{};
+
 };
 	
 _NAMESPACE
