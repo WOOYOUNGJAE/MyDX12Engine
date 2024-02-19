@@ -22,17 +22,17 @@ namespace Engine
 	{
 		OBJ_CONSTANT_BUFFER()
 		{
-			XMStoreFloat4x4(&WorldViewProj, XMMatrixIdentity());
+			XMStoreFloat4x4(&mWorldMat, XMMatrixIdentity());
 			ZeroMemory(padding, sizeof(FLOAT) * 48);
 		}
-		Matrix WorldViewProj;
+		Matrix mWorldMat;
 	private:
 		FLOAT padding[48];
 	};
 	struct PASS_CONSTANT_BUFFER
 	{
-		Matrix viewMat;
-		Matrix viewInvMat;
+		Matrix mViewMat;
+		Matrix mProjMat;
 	private:
 		FLOAT padding[32];
 	};

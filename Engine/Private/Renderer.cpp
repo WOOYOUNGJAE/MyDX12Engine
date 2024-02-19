@@ -1,10 +1,10 @@
 #include "Renderer.h"
-
 #include "Camera.h"
 #include "CameraManager.h"
 #include "Graphic_Device.h"
 #include "PipelineManager.h"
 #include "GameObject.h"
+#include "MyMath.h"
 
 CRenderer* CRenderer::Create()
 {
@@ -49,14 +49,6 @@ HRESULT CRenderer::Initialize_Prototype()
 	m_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 
 
-	/*D3D12_COMMAND_QUEUE_DESC queueDesc = {};
-	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-	if (FAILED(pDevice->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_pCommandQueue))))
-	{
-		return E_FAIL;
-	}*/
-
 	hr = pDevice->CreateCommandAllocator(
 		D3D12_COMMAND_LIST_TYPE_DIRECT,
 		IID_PPV_ARGS(&m_pCommandAllocator));
@@ -73,36 +65,6 @@ HRESULT CRenderer::Initialize_Prototype()
 	// ´ÝÈù »óÅÂ·Î ½ÃÀÛ
 	m_pCommandList->Close();
 
-#pragma region ConstantBuffer
-	// ObjConstantResource
-	const UINT iObjConstantBufSize = sizeof(OBJ_CONSTANT_BUFFER);
-
-	hr = pDevice->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(iObjConstantBufSize),
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&m_pObjConstantsResource));
-	if (FAILED(hr)) { return E_FAIL; }
-
-	// Describe and create a constant buffer view.
-	/*UINT& refNextCbvSrvUavHeapOffset = CGraphic_Device::Get_Instance()->m_iNextCbvSrvUavHeapOffset;
-	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-	cbvDesc.BufferLocation = m_pObjConstantsResource->GetGPUVirtualAddress();
-	cbvDesc.SizeInBytes = iObjConstantBufSize;
-	CD3DX12_CPU_DESCRIPTOR_HANDLE handle(CGraphic_Device::Get_Instance()->Get_CbvSrvUavHeapStart_CPU());
-	handle.Offset(1, refNextCbvSrvUavHeapOffset);
-	refNextCbvSrvUavHeapOffset += CGraphic_Device::Get_Instance()->m_iCbvSrvUavDescriptorSize;
-	pDevice->CreateConstantBufferView(&cbvDesc, handle);*/
-
-	//CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
-	//hr = (m_pObjConstantsResource->Map(0, &readRange, reinterpret_cast<void**>(&m_pCbvDataBegin)));
-	//memcpy(m_pCbvDataBegin, &m_constantBufferData, sizeof(m_constantBufferData));
-#pragma endregion
-
-
-	
 
 	m_queue_flush_desc = {
 		&m_iFenceValue,
@@ -110,6 +72,9 @@ HRESULT CRenderer::Initialize_Prototype()
 		m_pFence,
 		&m_fenceEvent
 	};
+
+	m_fAspectRatio = CGraphic_Device::Get_Instance()->m_fAspectRatio;
+	m_mProj = XMMatrixPerspectiveFovLH(0.25f * ::MyMath::Pi, m_fAspectRatio, m_fNear, m_fFar);
 
 	return S_OK;
 }
@@ -195,15 +160,15 @@ void CRenderer::Update_PassCB()
 {
 	Matrix mainCamMatInClient = CCameraManager::Get_Instance()->Get_MainCam()->Get_WorldMatrix();
 	PASS_CONSTANT_BUFFER passConstants;
-	passConstants.viewMat = mainCamMatInClient.Invert().Transpose();
-	passConstants.viewInvMat = mainCamMatInClient.Transpose();
+	passConstants.mViewMat = mainCamMatInClient.Invert().Transpose();
+	passConstants.mProjMat = m_mProj.Transpose();
 	m_pCurFrameResource->pPassCB->CopyData(0, passConstants);
 }
 
 void CRenderer::Update_ObjCB(CGameObject* pGameObj)
 {
 	OBJ_CONSTANT_BUFFER objConstants;
-	objConstants.WorldViewProj = pGameObj->Get_WorldMatrix().Transpose();
+	objConstants.mWorldMat = pGameObj->Get_WorldMatrix().Transpose();
 	m_pCurFrameResource->pObjectCB->CopyData(pGameObj->Get_ClonedNum() - 1, objConstants);
 }
 
@@ -235,8 +200,8 @@ void CRenderer::MainRender()
 	Update_PassCB();
 	
 	/*XMMATRIX matView = XMMatrixIdentity();
-	XMStoreFloat4x4(&passConstants.viewMat, XMMatrixTranspose(matView));
-	XMStoreFloat4x4(&passConstants.viewInvMat, XMMatrixTranspose(matView));*/
+	XMStoreFloat4x4(&passConstants.mViewMat, XMMatrixTranspose(matView));
+	XMStoreFloat4x4(&passConstants.mViewInvMat, XMMatrixTranspose(matView));*/
 
 	for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
 	{
@@ -326,7 +291,6 @@ HRESULT CRenderer::Free()
 {
 	CloseHandle(m_fenceEvent);
 
-	Safe_Release(m_pObjConstantsResource);
 	Safe_Release(m_pCommandList);
 	Safe_Release(m_pCommandAllocator);
 	Safe_Release(m_pFence);
@@ -398,5 +362,6 @@ FrameResource::FrameResource(ID3D12Device * pDevice, UINT iObjectCount, UINT iPa
 FrameResource::~FrameResource()
 {
 	Safe_Release(pObjectCB);
+	Safe_Release(pPassCB);
 	Safe_Release(pCmdListAlloc);
 }

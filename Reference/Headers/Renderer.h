@@ -38,7 +38,6 @@ public: // Component Functions for GameObject
 	
 public: // FrameResource
 	OBJ_CONSTANT_BUFFER m_objectConstants{};
-	ID3D12Resource* m_pObjConstantsResource = nullptr;
 	vector<FrameResource*> m_vecFrameResource;
 	FrameResource* m_pCurFrameResource = nullptr;
 	UINT m_iCurFrameResourceIndex = 0;
@@ -54,7 +53,7 @@ private: // DX Resource
 	ID3D12CommandQueue* m_pCommandQueue = nullptr;
 	ID3D12DescriptorHeap* m_pRtvHeap = nullptr;
 	ID3D12Resource** m_pRenderTargetArr = nullptr;
-private:
+private: // Index and Offset
 	UINT m_iFrameIndex = 0;
 	UINT m_iObjCBVHeapStartOffset = 0;
 	UINT m_iPassCBVHeapStartOffset = 0;
@@ -63,6 +62,11 @@ private: //Fence
 	UINT64 m_iFenceValue = 0;
 	HANDLE m_fenceEvent;
 	QUEUE_FLUSH_DESC m_queue_flush_desc{};
+private: // Pass Info
+	Matrix m_mProj;
+	FLOAT m_fAspectRatio = 0.f;
+	FLOAT m_fNear = 1.f;
+	FLOAT m_fFar = 1000.f;
 };
 
 struct FrameResource
