@@ -3,6 +3,7 @@
 
 NAMESPACE_(Engine)
 
+// Texture좌표도 있어야 해서 점 4*6개, 인덱스 6*6개
 class ENGINE_DLL CCubeMesh final: public CMeshGeometry
 {
 private:
@@ -18,7 +19,7 @@ public:
 	HRESULT Free() override;
 
 private:
-	VertexPositionColor* m_vertexData = nullptr; // Array
+	VertexPositionNormalTexture* m_vertexData = nullptr; // Array
 
 };
 

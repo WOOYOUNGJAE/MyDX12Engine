@@ -21,24 +21,22 @@ HRESULT CComponentManager::Initialize()
 	Add_Prototype(L"TriangleMesh_PT", CTriangleMesh_PT::Create());
 	// CShader
 	{
-		SHADER_INIT_DESC* pShader_desc = new SHADER_INIT_DESC[2]{};
-		pShader_desc[0].filename = L"..\\Bin\\Shader\\color1.hlsl";
-		pShader_desc[0].defines = nullptr;
-		pShader_desc[0].entrypoint = "VS";
-		pShader_desc[0].target = "vs_5_0";
+		SHADER_INIT_DESC shaderInitDesc[2]{};
+		shaderInitDesc[0].filename = L"..\\Bin\\Shader\\simpleShader.hlsl";
+		shaderInitDesc[0].defines = nullptr;
+		shaderInitDesc[0].inputLayout = SHADER_INIT_DESC::POS_COLOR;
+		shaderInitDesc[1] = shaderInitDesc[0];
+		shaderInitDesc[0].entrypoint = "VS";
+		shaderInitDesc[1].entrypoint = "PS";
+		shaderInitDesc[0].target = "vs_5_0";
+		shaderInitDesc[1].target = "ps_5_0";
+		Add_Prototype(L"Shader_Simple", CShader::Create(shaderInitDesc, 2));
 
-		pShader_desc[1] = pShader_desc[0];
-		pShader_desc[1].entrypoint = "PS";
-		pShader_desc[1].target = "ps_5_0";
-		Add_Prototype(L"Shader_Default", CShader::Create(pShader_desc, 2));
-
-		pShader_desc[0].filename = L"..\\Bin\\Shader\\simpleShader.hlsl";
-		pShader_desc[1].filename = L"..\\Bin\\Shader\\simpleShader.hlsl";
-		Add_Prototype(L"Shader_Simple", CShader::Create(pShader_desc, 2));
-		pShader_desc[0].filename = L"..\\Bin\\Shader\\simpleShader2.hlsl";
-		pShader_desc[1].filename = L"..\\Bin\\Shader\\simpleShader2.hlsl";
-		Add_Prototype(L"Shader_Simple2", CShader::Create(pShader_desc, 2));
-		Safe_Delete_Array(pShader_desc);
+		shaderInitDesc[0].filename = L"..\\Bin\\Shader\\simpleShader2.hlsl";
+		shaderInitDesc[1].filename = shaderInitDesc[0].filename;
+		shaderInitDesc[0].inputLayout = SHADER_INIT_DESC::POS_NORMAL_TEXCOORD;
+		shaderInitDesc[1].inputLayout = shaderInitDesc[0].inputLayout;
+		Add_Prototype(L"Shader_Simple2", CShader::Create(shaderInitDesc, 2));
 	}
 
 	Add_Prototype(L"Renderer", CRenderer::Create());
