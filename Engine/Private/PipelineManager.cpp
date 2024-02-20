@@ -146,7 +146,6 @@ HRESULT CPipelineManager::Initialize()
 
 #pragma endregion
 
-
 #pragma region Make InputLayout
 	D3D12_INPUT_ELEMENT_DESC inputLayoutDesc_single[1][1]
 	{ "POSITION",		0,		DXGI_FORMAT_R32G32B32_FLOAT,		0,		0,		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,		0 };
@@ -216,8 +215,6 @@ HRESULT CPipelineManager::Initialize()
 		{
 			for (UINT eShaderTypeEnum = 0; eShaderTypeEnum < RENDER_SHADERTYPE_END; ++eShaderTypeEnum)
 			{
-				/* 일단 shader type과 input layout 타입 일치시킴, 변경 가능성 */
-				pso_desc.InputLayout = { m_vecInputLayoutArr[eShaderTypeEnum].data(), (UINT)m_vecInputLayoutArr[eShaderTypeEnum].size() };
 				wstring strKey = L"";
 				switch (eShaderTypeEnum)
 				{
@@ -233,6 +230,10 @@ HRESULT CPipelineManager::Initialize()
 
 				// VertexShader ByteCode
 				CShader* pShader = dynamic_cast<CShader*>(m_pComponentManager->FindandGet_Prototype(strKey));
+				/* 일단 shader type과 input layout 타입 일치시킴, 변경 가능성 */
+				//pso_desc.InputLayout = { m_vecInputLayoutArr[eShaderTypeEnum].data(), (UINT)m_vecInputLayoutArr[eShaderTypeEnum].size() };
+				pso_desc.InputLayout = { *(pShader->Get_InputLayoutArr()), pShader->Get_InputLayoutSize() };
+
 				ComPtr<ID3DBlob>  byteCode = pShader->Get_ByteCode(CShader::TYPE_VERTEX);
 				pso_desc.VS = CD3DX12_SHADER_BYTECODE(byteCode.Get());
 				/*pso_desc.VS =

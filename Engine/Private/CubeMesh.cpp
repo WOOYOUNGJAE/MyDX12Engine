@@ -3,12 +3,12 @@
 
 CCubeMesh::CCubeMesh()
 {
-	m_iNumVertex = 8;
+	m_iNumVertex = 6 * 4;
 	m_iNumIndices = 6 * 6;
-	m_iVertexByteStride = sizeof(VertexPositionColor);
+	m_iVertexByteStride = sizeof(VertexPositionNormalTexture);
 	m_iVertexBufferByteSize = m_iNumVertex * m_iVertexByteStride;
 	IndexFormat = DXGI_FORMAT_R16_UINT;
-	m_iIndexBufferByteSize = m_iNumIndices * sizeof(_ushort);
+	m_iIndexBufferByteSize = m_iNumIndices * sizeof(USHORT);
 }
 
 CCubeMesh::CCubeMesh(CCubeMesh& rhs) : CMeshGeometry(rhs),
@@ -61,48 +61,74 @@ HRESULT CCubeMesh::Initialize_Prototype()
 	hr = CMeshGeometry::Initialize_Prototype();
 	if (FAILED(hr)) { return E_FAIL; }
 
-	m_vertexData = new VertexPositionColor[8]
+	m_vertexData = new VertexPositionNormalTexture[24]
 	{
-		// TODO : Color TEMP
-		VertexPositionColor({ _float3(-1.0f, -1.0f, -1.0f), _float4(Colors::White) }),
-		VertexPositionColor({ _float3(-1.0f, +1.0f, -1.0f), _float4(Colors::Black) }),
-		VertexPositionColor({ _float3(+1.0f, +1.0f, -1.0f), _float4(Colors::Red) }),
-		VertexPositionColor({ _float3(+1.0f, -1.0f, -1.0f), _float4(Colors::Green) }),
-		VertexPositionColor({ _float3(-1.0f, -1.0f, +1.0f), _float4(Colors::Blue) }),
-		VertexPositionColor({ _float3(-1.0f, +1.0f, +1.0f), _float4(Colors::Yellow) }),
-		VertexPositionColor({ _float3(+1.0f, +1.0f, +1.0f), _float4(Colors::Cyan) }),
-		VertexPositionColor({ _float3(+1.0f, -1.0f, +1.0f), _float4(Colors::Magenta) })
+		// front
+		VertexPositionNormalTexture(Vector3(-1, -1, -1), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.0f, 1.0f)),
+		VertexPositionNormalTexture(Vector3(-1, +1, -1), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.0f, 0.0f)),
+		VertexPositionNormalTexture(Vector3(+1, +1, -1), Vector3(0.0f, 0.0f, -1.0f), Vector2(1.0f, 0.0f)),
+		VertexPositionNormalTexture(Vector3(+1, -1, -1), Vector3(0.0f, 0.0f, -1.0f), Vector2(1.0f, 1.0f)),
+
+		// back
+		VertexPositionNormalTexture(Vector3(-1, -1, +1), Vector3(0.0f, 0.0f, 1.0f),  Vector2(1.0f, 1.0f)),
+		VertexPositionNormalTexture(Vector3(+1, -1, +1), Vector3(0.0f, 0.0f, 1.0f),  Vector2(0.0f, 1.0f)),
+		VertexPositionNormalTexture(Vector3(+1, +1, +1), Vector3(0.0f, 0.0f, 1.0f),  Vector2(0.0f, 0.0f)),
+		VertexPositionNormalTexture(Vector3(-1, +1, +1), Vector3(0.0f, 0.0f, 1.0f),  Vector2(1.0f, 0.0f)),
+
+		// top
+		VertexPositionNormalTexture(Vector3(-1, +1, -1), Vector3(0.0f, 1.0f, 0.0f), Vector2(0.0f, 1.0f)),
+		VertexPositionNormalTexture(Vector3(-1, +1, +1), Vector3(0.0f, 1.0f, 0.0f), Vector2(0.0f, 0.0f)),
+		VertexPositionNormalTexture(Vector3(+1, +1, +1), Vector3(0.0f, 1.0f, 0.0f), Vector2(1.0f, 0.0f)),
+		VertexPositionNormalTexture(Vector3(+1, +1, -1), Vector3(0.0f, 1.0f, 0.0f), Vector2(1.0f, 1.0f)),
+
+		// bottom
+		VertexPositionNormalTexture(Vector3(-1, -1, -1), Vector3(0.0f, -1.0f, 0.0f),  Vector2(1.0f, 1.0f)),
+		VertexPositionNormalTexture(Vector3(+1, -1, -1), Vector3(0.0f, -1.0f, 0.0f),  Vector2(0.0f, 1.0f)),
+		VertexPositionNormalTexture(Vector3(+1, -1, +1), Vector3(0.0f, -1.0f, 0.0f),  Vector2(0.0f, 0.0f)),
+		VertexPositionNormalTexture(Vector3(-1, -1, +1), Vector3(0.0f, -1.0f, 0.0f),  Vector2(1.0f, 0.0f)),
+
+		// left
+		VertexPositionNormalTexture(Vector3(-1, -1, +1), Vector3(-1.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f)),
+		VertexPositionNormalTexture(Vector3(-1, +1, +1), Vector3(-1.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f)),
+		VertexPositionNormalTexture(Vector3(-1, +1, -1), Vector3(-1.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f)),
+		VertexPositionNormalTexture(Vector3(-1, -1, -1), Vector3(-1.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f)),
+
+		// right
+		VertexPositionNormalTexture(Vector3(1, -1, -1), Vector3(1.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f)),
+		VertexPositionNormalTexture(Vector3(1, +1, -1), Vector3(1.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f)),
+		VertexPositionNormalTexture(Vector3(1, +1, +1), Vector3(1.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f)),
+		VertexPositionNormalTexture(Vector3(1, -1, +1), Vector3(1.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f))
 	};
 
-	_ushort indexData[36]
+	UINT32 indexData[36]
 	{
-		// front face
+		// front
 		0, 1, 2,
 		0, 2, 3,
 
-		// back face
-		4, 6, 5,
-		4, 7, 6,
+		// back
+		4, 5, 6,
+		4, 6, 7,
 
-		// left face
-		4, 5, 1,
-		4, 1, 0,
+		// top
+		8, 9, 10,
+		8, 10, 11,
 
-		// right face
-		3, 2, 6,
-		3, 6, 7,
+		// bottom
+		12, 13, 14,
+		12, 14, 15,
 
-		// top face
-		1, 5, 6,
-		1, 6, 2,
+		// left
+		16, 17, 18,
+		16, 18, 19,
 
-		// bottom face
-		4, 0, 3,
-		4, 3, 7
+		// right
+		20, 21, 22,
+		20, 22, 23,
 	};
 
-	const _uint iVertexBufferSize = sizeof(VertexPositionColor) * 8;
-	const _uint iIndexBufferSize = sizeof(_ushort) * 8;
+	const UINT iVertexBufferSize = sizeof(VertexPositionNormalTexture) * m_iNumVertex;
+	const UINT iIndexBufferSize = sizeof(UINT32) * m_iNumIndices;
 
 	hr = D3DCreateBlob(iVertexBufferSize, &m_vertexBufferCPU);
 	if (FAILED(hr))
