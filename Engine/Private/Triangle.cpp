@@ -51,7 +51,7 @@ HRESULT CTriangle::Initialize(void* pArg)
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));
 	if (FAILED(hr)) return hr;
-	hr = Add_Component(L"Shader_Simple", reinterpret_cast<CComponent**>(&m_pShaderCom));
+	hr = Add_Component(L"Shader_Simple2", reinterpret_cast<CComponent**>(&m_pShaderCom));
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_Checkboard"));
 	//hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_ice"));

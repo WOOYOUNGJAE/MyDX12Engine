@@ -21,17 +21,21 @@ public: // LifeCycle
 	HRESULT Free() override;
 public: // getter setter 
 	int& Get_NumFrameDirtyRef() override;
-	Matrix Get_WorldMatrix() override;
-	Vector3 Get_Pos() override;
 	D3D12_VERTEX_BUFFER_VIEW VertexBufferView() override;
 	D3D12_INDEX_BUFFER_VIEW IndexBufferView() const override;
 	_uint Num_Indices() override;
-
+	Matrix Get_WorldMatrix() override;
+	Vector3 Get_Pos() override;
+	Vector3 Get_ScaleXYZ() override;
+	void Set_Position(const Vector3& vPos) override;
+	void Set_Scale(const Vector3& vScale) override;
 protected:
 	class CTransform* m_pTransformCom = nullptr;
+	//class CTriangleMesh* m_pTriangleMeshCom = nullptr;
 	class CCubeMesh* m_pCubeMeshCom = nullptr;
 	class CShader* m_pShaderCom = nullptr;
 	class CRenderer* m_pRendererCom = nullptr;
+	class CTextureCompo* m_pTextureCom = nullptr;
 };
 
 _NAMESPACE
