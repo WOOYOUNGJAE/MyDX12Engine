@@ -20,7 +20,7 @@ public:
 
 private:
 	//VertexPositionNormalTexture* m_vertexData = nullptr; // Array
-	VertexPositionTexture* m_vertexData = nullptr; // Array
+	VertexPositionNormalTexture* m_vertexData = nullptr; // Array
 };
 
 

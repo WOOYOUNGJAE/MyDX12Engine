@@ -7,7 +7,7 @@ CTriangleMesh_PT::CTriangleMesh_PT()
 {
 	m_iNumVertex = 3;
 	m_iNumIndices = 3;
-	m_iVertexByteStride = sizeof(VertexPositionTexture);
+	m_iVertexByteStride = sizeof(VertexPositionNormalTexture);
 	m_iVertexBufferByteSize = m_iNumVertex * m_iVertexByteStride;
 	IndexFormat = DXGI_FORMAT_R16_UINT;
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(UINT32);
@@ -63,25 +63,25 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 	hr = CMeshGeometry::Initialize_Prototype();
 	if (FAILED(hr)) { return E_FAIL; }
 
-	/*m_vertexData = new VertexPositionNormalTexture[]
+	m_vertexData = new VertexPositionNormalTexture[]
 	{
 		{Vector3(0.0f, 0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.5f, 0.0f)},
 		{Vector3(0.25f, -0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f),Vector2(1.0f, 1.0f)},
 		{Vector3(- 0.25f, -0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f),Vector2(0.0f, 1.0f)}
-	};*/
-	m_vertexData = new VertexPositionTexture[]
+	};
+	/*m_vertexData = new VertexPositionTexture[]
 	{
 		{Vector3(0.0f, 0.25f, 0.0f), Vector2(0.5f, 0.0f)},
 		{Vector3(0.25f, -0.25f, 0.0f), Vector2(1.0f, 1.0f)},
 		{Vector3(- 0.25f, -0.25f, 0.0f), Vector2(0.0f, 1.0f)}
-	};
+	};*/
 
 	UINT32 indexData[3]
 	{
 		0, 1, 2,
 	};
 
-	const _uint iVertexBufferSize = sizeof(VertexPositionTexture) * 3;
+	const _uint iVertexBufferSize = sizeof(VertexPositionNormalTexture) * 3;
 	const _uint iIndexBufferSize = sizeof(UINT32) * 3;
 
 
