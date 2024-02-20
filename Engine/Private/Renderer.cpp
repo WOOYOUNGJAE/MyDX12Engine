@@ -233,9 +233,9 @@ void CRenderer::MainRender()
 					{
 						m_pCommandList->IASetPrimitiveTopology(iter->PrimitiveType());
 						m_pCommandList->IASetVertexBuffers(0, 1, &iter->VertexBufferView());
-						//m_pCommandList->IASetIndexBuffer(&iter->IndexBufferView());
+						m_pCommandList->IASetIndexBuffer(&iter->IndexBufferView());
 
-						// Texture
+						// Textures
 						cbvSrvUavHandle.Offset(iter->Get_CbvSrvUavHeapOffset_Texture());
 						m_pCommandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHandle);
 
@@ -247,14 +247,15 @@ void CRenderer::MainRender()
 
 
 
-						m_pCommandList->DrawInstanced(3, 1, 0, 0);
-						/*m_pCommandList->DrawIndexedInstanced(
-							3,
+						//m_pCommandList->DrawInstanced(24, 1, 0, 0);
+						m_pCommandList->DrawIndexedInstanced(
+							36,
 							1,
 							0,
 							0,
-							0);*/
-						Safe_Release(iter);
+							0);
+
+						Safe_Release(iter); // Added From AddtoRenderGroup
 					}
 					m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType].clear();
 				}

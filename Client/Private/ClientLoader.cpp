@@ -29,6 +29,10 @@ void CClientLoader::Load_Textures()
 	load_Desc.strPath = L"..\\..\\Resources\\Textures\\ice.dds";
 	m_pHelper->Load_Texture(load_Desc, L"Texture_ice");
 
+	load_Desc.strPath = L"..\\..\\Resources\\Textures\\Cubemap\\NightSkybox.dds";
+	load_Desc.bIsCubeMap = true;
+	m_pHelper->Load_Texture(load_Desc, L"Texture_NightSkybox");
+
 	m_pHelper->EndSign_Texture();
 }
 

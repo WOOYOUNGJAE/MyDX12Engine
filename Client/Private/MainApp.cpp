@@ -55,10 +55,15 @@ HRESULT CMainApp::Initialize()
 
 	m_pGameInstance->Set_MainCam(objDesc.strTag);
 
-	objDesc.strTag = L"";
+	/*objDesc.strTag = L"Triangle";
 	objDesc.vStartPos = Vector3(0, 0, 1);
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }*/
+
+	objDesc.strTag = L"Cube";
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
+
 	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", L"Layer0", &pObjectControlling);
 	if (FAILED(hr)) { return hr; }*/
 	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", L"Layer0", &pObjectControlling);

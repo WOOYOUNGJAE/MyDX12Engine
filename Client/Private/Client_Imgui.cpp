@@ -101,6 +101,9 @@ HRESULT CClient_Imgui::Initialize(ID3D12Device* pDevice)
     pTargetObj = pG_Instance->FindandGet_GameObj_Cloned(L"Triangle");
     m_vecObjCustomizer.push_back(OBJ_CUSTOMIZER::Create(pTargetObj, this));
 
+    pTargetObj = pG_Instance->FindandGet_GameObj_Cloned(L"Cube");
+    m_vecObjCustomizer.push_back(OBJ_CUSTOMIZER::Create(pTargetObj, this));
+
     Safe_Release(pG_Instance);
     return hr;
 }

@@ -8,7 +8,7 @@ CCubeMesh::CCubeMesh()
 	m_iVertexByteStride = sizeof(VertexPositionNormalTexture);
 	m_iVertexBufferByteSize = m_iNumVertex * m_iVertexByteStride;
 	IndexFormat = DXGI_FORMAT_R16_UINT;
-	m_iIndexBufferByteSize = m_iNumIndices * sizeof(USHORT);
+	m_iIndexBufferByteSize = m_iNumIndices * sizeof(UINT16);
 }
 
 CCubeMesh::CCubeMesh(CCubeMesh& rhs) : CMeshGeometry(rhs),
@@ -71,9 +71,9 @@ HRESULT CCubeMesh::Initialize_Prototype()
 
 		// back
 		VertexPositionNormalTexture(Vector3(-1, -1, +1), Vector3(0.0f, 0.0f, 1.0f),  Vector2(1.0f, 1.0f)),
-		VertexPositionNormalTexture(Vector3(+1, -1, +1), Vector3(0.0f, 0.0f, 1.0f),  Vector2(0.0f, 1.0f)),
-		VertexPositionNormalTexture(Vector3(+1, +1, +1), Vector3(0.0f, 0.0f, 1.0f),  Vector2(0.0f, 0.0f)),
 		VertexPositionNormalTexture(Vector3(-1, +1, +1), Vector3(0.0f, 0.0f, 1.0f),  Vector2(1.0f, 0.0f)),
+		VertexPositionNormalTexture(Vector3(+1, +1, +1), Vector3(0.0f, 0.0f, 1.0f),  Vector2(0.0f, 0.0f)),
+		VertexPositionNormalTexture(Vector3(+1, -1, +1), Vector3(0.0f, 0.0f, 1.0f),  Vector2(0.0f, 1.0f)),
 
 		// top
 		VertexPositionNormalTexture(Vector3(-1, +1, -1), Vector3(0.0f, 1.0f, 0.0f), Vector2(0.0f, 1.0f)),
@@ -83,9 +83,9 @@ HRESULT CCubeMesh::Initialize_Prototype()
 
 		// bottom
 		VertexPositionNormalTexture(Vector3(-1, -1, -1), Vector3(0.0f, -1.0f, 0.0f),  Vector2(1.0f, 1.0f)),
-		VertexPositionNormalTexture(Vector3(+1, -1, -1), Vector3(0.0f, -1.0f, 0.0f),  Vector2(0.0f, 1.0f)),
-		VertexPositionNormalTexture(Vector3(+1, -1, +1), Vector3(0.0f, -1.0f, 0.0f),  Vector2(0.0f, 0.0f)),
 		VertexPositionNormalTexture(Vector3(-1, -1, +1), Vector3(0.0f, -1.0f, 0.0f),  Vector2(1.0f, 0.0f)),
+		VertexPositionNormalTexture(Vector3(+1, -1, +1), Vector3(0.0f, -1.0f, 0.0f),  Vector2(0.0f, 0.0f)),
+		VertexPositionNormalTexture(Vector3(+1, -1, -1), Vector3(0.0f, -1.0f, 0.0f),  Vector2(0.0f, 1.0f)),
 
 		// left
 		VertexPositionNormalTexture(Vector3(-1, -1, +1), Vector3(-1.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f)),
@@ -97,26 +97,26 @@ HRESULT CCubeMesh::Initialize_Prototype()
 		VertexPositionNormalTexture(Vector3(1, -1, -1), Vector3(1.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f)),
 		VertexPositionNormalTexture(Vector3(1, +1, -1), Vector3(1.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f)),
 		VertexPositionNormalTexture(Vector3(1, +1, +1), Vector3(1.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f)),
-		VertexPositionNormalTexture(Vector3(1, -1, +1), Vector3(1.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f))
+		VertexPositionNormalTexture(Vector3(1, -1, +1), Vector3(1.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f)),
 	};
 
-	UINT32 indexData[36]
+	UINT16 indexData[36]
 	{
 		// front
 		0, 1, 2,
 		0, 2, 3,
 
 		// back
-		4, 5, 6,
-		4, 6, 7,
+		7, 6, 5,
+		7, 5, 4,
 
 		// top
 		8, 9, 10,
 		8, 10, 11,
 
 		// bottom
-		12, 13, 14,
-		12, 14, 15,
+		13, 12, 15,
+		13, 15, 14,
 
 		// left
 		16, 17, 18,
@@ -126,9 +126,33 @@ HRESULT CCubeMesh::Initialize_Prototype()
 		20, 21, 22,
 		20, 22, 23,
 	};
+//{
+	//	// front
+	//	0, 1, 2,
+	//	0, 2, 3,
 
+	//	// back
+	//	7, 6, 5,
+	//	7, 5, 4,
+
+	//	// top
+	//	8, 9, 10,
+	//	8, 10, 11,
+
+	//	// bottom
+	//	13, 12, 15,
+	//	13, 15, 14,
+
+	//	// left
+	//	16, 17, 18,
+	//	16, 18, 19,
+
+	//	// right
+	//	20, 21, 22,
+	//	20, 22, 23,
+	//};
 	const UINT iVertexBufferSize = sizeof(VertexPositionNormalTexture) * m_iNumVertex;
-	const UINT iIndexBufferSize = sizeof(UINT32) * m_iNumIndices;
+	const UINT iIndexBufferSize = sizeof(UINT16) * m_iNumIndices;
 
 	hr = D3DCreateBlob(iVertexBufferSize, &m_vertexBufferCPU);
 	if (FAILED(hr))
