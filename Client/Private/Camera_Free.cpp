@@ -49,30 +49,37 @@ HRESULT CCamera_Free::Initialize(void* pArg)
 
 void CCamera_Free::Tick(_float fDeltaTime)
 {
+	FLOAT fCurMoveSpeed = m_fMoveSpeed;
+	FLOAT fRotRotSpeed = m_fRotSpeed;
+	if (g_Input->Key_Pressing(VK_LSHIFT))
+	{
+		fCurMoveSpeed = m_fMoveSpeed * 3;
+		fRotRotSpeed = m_fRotSpeed * 2;
+	}
 
 	if (g_Input->Key_Pressing('W'))
 	{
-		m_pTransformCom->Move_Forward(m_fMoveSpeed * fDeltaTime);
+		m_pTransformCom->Move_Forward(fCurMoveSpeed * fDeltaTime);
 	}
 	if (g_Input->Key_Pressing('D'))
 	{
-		m_pTransformCom->Move_Right(m_fMoveSpeed * fDeltaTime);
+		m_pTransformCom->Move_Right(fCurMoveSpeed * fDeltaTime);
 	}
 	if (g_Input->Key_Pressing('S'))
 	{
-		m_pTransformCom->Move_Forward(-m_fMoveSpeed * fDeltaTime);
+		m_pTransformCom->Move_Forward(-fCurMoveSpeed * fDeltaTime);
 	}
 	if (g_Input->Key_Pressing('A'))
 	{
-		m_pTransformCom->Move_Right(-m_fMoveSpeed * fDeltaTime);
+		m_pTransformCom->Move_Right(-fCurMoveSpeed * fDeltaTime);
 	}
 	if (g_Input->Key_Pressing('Q'))
 	{
-		m_pTransformCom->Move_Up(m_fMoveSpeed * fDeltaTime);
+		m_pTransformCom->Move_Up(fCurMoveSpeed * fDeltaTime);
 	}
 	if (g_Input->Key_Pressing('E'))
 	{
-		m_pTransformCom->Move_Up(-m_fMoveSpeed * fDeltaTime);		
+		m_pTransformCom->Move_Up(-fCurMoveSpeed * fDeltaTime);		
 	}
 
 	if (g_Input->Key_Pressing(VK_RBUTTON))
@@ -80,8 +87,8 @@ void CCamera_Free::Tick(_float fDeltaTime)
 		const Vector2& vChangedDir = g_Input->Get_MouseDirPrevToCur();
 
 		// 먼저 절대적인 y축을 기준으로 회전 해야 함
-		m_pTransformCom->Rotate(Vector3::Up, vChangedDir.x * m_fRotSpeed * fDeltaTime);
-		m_pTransformCom->Rotate(m_pTransformCom->WorldMatrix().Right(), vChangedDir.y * m_fRotSpeed * fDeltaTime);
+		m_pTransformCom->Rotate(Vector3::Up, vChangedDir.x * fRotRotSpeed * fDeltaTime);
+		m_pTransformCom->Rotate(m_pTransformCom->WorldMatrix().Right(), vChangedDir.y * fRotRotSpeed * fDeltaTime);
 
 	}
 
