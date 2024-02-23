@@ -21,6 +21,8 @@ HRESULT CCamera::Initialize(void* pArg)
 
 	CCameraManager::Get_Instance()->Register(reinterpret_cast<GAMEOBJECT_INIT_DESC*>(pArg)->strTag, this);
 
+	m_pTransformCom->Set_Position(reinterpret_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
+
 	return hr;
 }
 
@@ -32,6 +34,7 @@ HRESULT CCamera::Free()
 
 void CCamera::Tick(_float fDeltaTime)
 {
+	int a = 1;
 }
 
 void CCamera::Late_Tick(_float fDeltaTime)

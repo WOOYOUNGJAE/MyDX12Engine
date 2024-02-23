@@ -100,6 +100,9 @@
     <Filter Include="Utility\Managers\Camera">
       <UniqueIdentifier>{aac0a365-38b9-45f4-b4b1-2fbf615ac493}</UniqueIdentifier>
     </Filter>
+    <Filter Include="0.Shaders\Includes">
+      <UniqueIdentifier>{b0cbca46-8e79-4e52-9b5d-426ea708a55a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -219,6 +222,10 @@
     <ClInclude Include="..\Public\CameraManager.h">
       <Filter>Utility\Managers\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\FrameResource_Struct.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Material.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -311,23 +318,30 @@
     <ClCompile Include="..\Private\CameraManager.cpp">
       <Filter>Utility\Managers\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Material.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />
-    <FxCompile Include="..\Bin\Shader\color0.hlsl">
-      <Filter>0.Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\Shader\color1.hlsl">
-      <Filter>0.Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="..\Bin\Shader\simpleShader.hlsl">
       <Filter>0.Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\simpleShader2.hlsl">
       <Filter>0.Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="..\Bin\Shader\simpleShader3.hlsl">
+      <Filter>0.Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="..\Bin\Shader\myMath.hlsli">
+      <Filter>0.Shaders\Includes</Filter>
+    </None>
+    <None Include="..\Bin\Shader\struct_Include0.hlsli">
+      <Filter>0.Shaders\Includes</Filter>
+    </None>
+    <None Include="..\Bin\Shader\light.hlsli">
+      <Filter>0.Shaders\Includes</Filter>
+    </None>
   </ItemGroup>
 </Project>

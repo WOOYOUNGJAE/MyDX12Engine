@@ -24,6 +24,8 @@ public: // getter setter
 	D3D12_VERTEX_BUFFER_VIEW VertexBufferView() override;
 	D3D12_INDEX_BUFFER_VIEW IndexBufferView() const override;
 	_uint Num_Indices() override;
+	MATERIAL_INFO Get_MaterialInfo() override;
+	// Transform
 	Matrix Get_WorldMatrix() override;
 	Vector3 Get_Pos() override;
 	Vector3 Get_ScaleXYZ() override;
@@ -36,6 +38,7 @@ protected:
 	class CShader* m_pShaderCom = nullptr;
 	class CRenderer* m_pRendererCom = nullptr;
 	class CTextureCompo* m_pTextureCom = nullptr;
+	class CMaterial* m_pMaterialCom = nullptr;
 };
 
 _NAMESPACE

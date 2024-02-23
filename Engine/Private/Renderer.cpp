@@ -100,7 +100,7 @@ HRESULT CRenderer::Build_FrameResource()
 	m_pCurFrameResource = m_vecFrameResource[0]; // TODO FrameResource 2이상되면 수정
 
 	// Build Obj Constant Buffer
-	UINT objCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(OBJ_CONSTANT_BUFFER));
+	UINT objCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(OBJECT_CB));
 	UINT objCount = 1; //
 	UINT iCbvSrvUavDescriptorSize = m_pGraphic_Device->m_iCbvSrvUavDescriptorSize;
 	auto handle = CD3DX12_CPU_DESCRIPTOR_HANDLE(m_pGraphic_Device->Get_CbvSrvUavHeapStart_CPU());
@@ -131,13 +131,31 @@ HRESULT CRenderer::Build_FrameResource()
 		}
 	}
 	
-	UINT passCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(PASS_CONSTANT_BUFFER));
+	UINT passCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(PASS_CB_VP));
 	handle.InitOffsetted(m_pGraphic_Device->Get_CbvSrvUavHeapStart_CPU(), 0);
 	handle.Offset(m_iPassCBVHeapStartOffset);
-	// 마지막 세 서술자는 FrameResource의 Pass CBV
+	
+
 	for (INT frameIndex = 0; frameIndex < g_iNumFrameResource; ++frameIndex)
 	{
-		ID3D12Resource* passCB = m_vecFrameResource[frameIndex]->pPassCB->Get_UploadBuffer(); 
+
+		//{
+		//	
+		//ID3D12Resource* passCB = m_vecFrameResource[frameIndex]->pPassCB->Get_UploadBuffer(); 
+		//D3D12_GPU_VIRTUAL_ADDRESS cbAddress = passCB->GetGPUVirtualAddress();
+
+		//// Offset to the pass cbv in the descriptor heap.
+		//// 서술자 힙 안에서 Pass CBV의 오프셋
+		//INT heapIndex = m_iPassCBVHeapStartOffset + frameIndex;
+
+		//D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
+		//cbvDesc.BufferLocation = cbAddress;
+		//cbvDesc.SizeInBytes = passCBByteSize;
+		//pDevice->CreateConstantBufferView(&cbvDesc, handle);
+		//}
+
+		passCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(PASS_CB_VP_LIGHT));
+		ID3D12Resource* passCB = m_vecFrameResource[frameIndex]->pPassCB_vp_light->Get_UploadBuffer(); 
 		D3D12_GPU_VIRTUAL_ADDRESS cbAddress = passCB->GetGPUVirtualAddress();
 
 		// Offset to the pass cbv in the descriptor heap.
@@ -157,17 +175,29 @@ HRESULT CRenderer::Build_FrameResource()
 
 void CRenderer::Update_PassCB()
 {
-	Matrix mainCamMatInClient = CCameraManager::Get_Instance()->Get_MainCam()->Get_WorldMatrix();
-	PASS_CONSTANT_BUFFER passConstants;
+	/*Matrix mainCamMatInClient = CCameraManager::Get_Instance()->Get_MainCam()->Get_WorldMatrix();
+	PASS_CB_VP passConstants;
 	passConstants.mViewMat = mainCamMatInClient.Invert().Transpose();
 	passConstants.mProjMat = m_mProj.Transpose();
-	m_pCurFrameResource->pPassCB->CopyData(0, passConstants);
-}
+	m_pCurFrameResource->pPassCB->CopyData(0, passConstants);*/
+
+	Matrix mainCamMatInClient = CCameraManager::Get_Instance()->Get_MainCam()->Get_WorldMatrix();
+	PASS_CB_VP_LIGHT passConstants;
+	passConstants.mViewMat = mainCamMatInClient.Invert().Transpose();
+	passConstants.mProjMat = m_mProj.Transpose();
+	Vector3 vLightDirTemp = Vector3(-1.f, -1.f, -1.f);
+	passConstants.light = LIGHT_INFO{Vector3::One, 0.f, vLightDirTemp, 100.f,
+	Vector3::Zero, 1.f};
+	m_pCurFrameResource->pPassCB_vp_light->CopyData(0, passConstants);
+
+}	
 
 void CRenderer::Update_ObjCB(CGameObject* pGameObj)
 {
-	OBJ_CONSTANT_BUFFER objConstants;
+	OBJECT_CB objConstants;
 	objConstants.mWorldMat = pGameObj->Get_WorldMatrix().Transpose();
+	objConstants.mInvTranspose = pGameObj->Get_WorldMatrix().Invert(); // Transpose 두번
+	objConstants.material = pGameObj->Get_MaterialInfo();
 	m_pCurFrameResource->pObjectCB->CopyData(pGameObj->Get_ClonedNum() - 1, objConstants);
 }
 
@@ -361,13 +391,15 @@ FrameResource::FrameResource(ID3D12Device * pDevice, UINT iObjectCount, UINT iPa
 		IID_PPV_ARGS(&pCmdListAlloc));
 
 	//PassCB = std::make_unique<UploadBuffer<PassConstants>>(device, passCount, true);
-	pObjectCB = CUploadBuffer<OBJ_CONSTANT_BUFFER>::Create(pDevice, iObjectCount, true);
-	pPassCB = CUploadBuffer<PASS_CONSTANT_BUFFER>::Create(pDevice, iPassCount, false);
+	pObjectCB = CUploadBuffer<OBJECT_CB>::Create(pDevice, iObjectCount, true);
+	pPassCB = CUploadBuffer<PASS_CB_VP>::Create(pDevice, iPassCount, true);
+	pPassCB_vp_light = CUploadBuffer<PASS_CB_VP_LIGHT>::Create(pDevice, iPassCount, true);
 }
 
 FrameResource::~FrameResource()
 {
-	Safe_Release(pObjectCB);
+	Safe_Release(pPassCB_vp_light);
 	Safe_Release(pPassCB);
+	Safe_Release(pObjectCB);
 	Safe_Release(pCmdListAlloc);
 }

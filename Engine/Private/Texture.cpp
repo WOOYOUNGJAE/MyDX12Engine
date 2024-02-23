@@ -30,6 +30,7 @@ HRESULT CTexture::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
+
 	//CGraphic_Device::Get_Instance()->Get_CommandList()->ResourceBarrier(1,
 	//	&CD3DX12_RESOURCE_BARRIER::Transition(m_pAssetData, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE | D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE));
 

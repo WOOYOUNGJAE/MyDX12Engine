@@ -1,5 +1,7 @@
 #pragma once
 
+#include "FrameResource_Struct.h"
+
 namespace Engine
 {
 	struct GRAPHIC_DESC
@@ -27,24 +29,6 @@ namespace Engine
 		void* pArg;
 	};
 
-	struct OBJ_CONSTANT_BUFFER
-	{
-		OBJ_CONSTANT_BUFFER()
-		{
-			XMStoreFloat4x4(&mWorldMat, XMMatrixIdentity());
-			ZeroMemory(padding, sizeof(FLOAT) * 48);
-		}
-		Matrix mWorldMat;
-	private:
-		FLOAT padding[48];
-	};
-	struct PASS_CONSTANT_BUFFER
-	{
-		Matrix mViewMat;
-		Matrix mProjMat;
-	private:
-		FLOAT padding[32];
-	};
 
 	struct CAMERA_DESC
 	{

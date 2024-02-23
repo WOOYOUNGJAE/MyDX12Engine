@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "CubeMesh.h"
 #include "Graphic_Device.h"
+#include "Material.h"
 #include "Shader.h"
 #include "Renderer.h"
 #include "TextureCompo.h"
@@ -16,6 +17,9 @@ HRESULT CComponentManager::Initialize()
 #pragma region Init_Basic_Components
 	ID3D12Device* pDevice = CGraphic_Device::Get_Instance()->Get_Device().Get();
 	CGraphic_Device::Get_Instance()->Reset_CmdList();
+
+	Add_Prototype(L"Transform", CTransform::Create());
+
 	Add_Prototype(L"CubeMesh", CCubeMesh::Create());
 	Add_Prototype(L"TriangleMesh", CTriangleMesh::Create());
 	Add_Prototype(L"TriangleMesh_PT", CTriangleMesh_PT::Create());
@@ -37,16 +41,20 @@ HRESULT CComponentManager::Initialize()
 		shaderInitDesc[0].inputLayout = SHADER_INIT_DESC::POS_NORMAL_TEXCOORD;
 		shaderInitDesc[1].inputLayout = shaderInitDesc[0].inputLayout;
 		Add_Prototype(L"Shader_Simple2", CShader::Create(shaderInitDesc, 2));
+
+		// SimpleShader3
+		shaderInitDesc[0].filename = L"..\\Bin\\Shader\\simpleShader3.hlsl";
+		shaderInitDesc[1].filename = shaderInitDesc[0].filename;
+		shaderInitDesc[0].inputLayout = SHADER_INIT_DESC::POS_NORMAL_TEXCOORD;
+		shaderInitDesc[1].inputLayout = shaderInitDesc[0].inputLayout;
+		Add_Prototype(L"Shader_Simple3", CShader::Create(shaderInitDesc, 2));
 	}
 
-	Add_Prototype(L"Renderer", CRenderer::Create());
+	Add_Prototype(L"Material", CMaterial::Create());
 
-
-#pragma region Component with Descriptor
-	Add_Prototype(L"Transform", CTransform::Create());
-#pragma endregion
 	
 	//Texture
+	Add_Prototype(L"Renderer", CRenderer::Create());
 	Add_Prototype(L"Texture", CTextureCompo::Create());
 
 	CGraphic_Device::Get_Instance()->Close_CmdList();

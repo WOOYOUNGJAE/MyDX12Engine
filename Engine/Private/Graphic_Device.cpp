@@ -215,7 +215,7 @@ HRESULT CGraphic_Device::Create_DescriptorHeap()
 
 	// CBV SRV UAV Heap
 	D3D12_DESCRIPTOR_HEAP_DESC cbvsrvuavHeapDesc = {};
-	cbvsrvuavHeapDesc.NumDescriptors = 3+1+1; // Tex + Obj + Pass
+	cbvsrvuavHeapDesc.NumDescriptors = 3 + 1 + 1;// +1; // Tex + Obj + Pass + Material
 	cbvsrvuavHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	cbvsrvuavHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE; // DescriptorCopySimple위해 Read Write 모두 허용
 	cbvsrvuavHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE; // DescriptorCopySimple위해 Read Write 모두 허용

@@ -20,7 +20,7 @@ public:
 	CComponent* Clone(void* pArg) override; // return this
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override;
-	HRESULT Build_FrameResource(); // Build FrameResource, Build CBV inside
+	HRESULT Build_FrameResource(); // Build FrameResource, Build CBV inside, SRV로드 후 실행
 	void Update_PassCB();
 	void Update_ObjCB(class CGameObject* pGameObj);
 	void BeginRender();
@@ -38,7 +38,7 @@ public: // Component Functions for GameObject
 	void Flush_CommandQueue();
 	
 public: // FrameResource
-	OBJ_CONSTANT_BUFFER m_objectConstants{};
+	OBJECT_CB m_objectConstants{};
 	vector<FrameResource*> m_vecFrameResource;
 	FrameResource* m_pCurFrameResource = nullptr;
 	UINT m_iCurFrameResourceIndex = 0;
@@ -79,8 +79,9 @@ struct FrameResource
 	ID3D12CommandAllocator* pCmdListAlloc;
 
 	// 상수 버퍼는 GPU가 명령 다 처리한 후 갱신해야 해서 매 프레임 새로운 상수버퍼 필요
-	CUploadBuffer<OBJ_CONSTANT_BUFFER>* pObjectCB = nullptr;
-	CUploadBuffer<PASS_CONSTANT_BUFFER>* pPassCB = nullptr;
+	CUploadBuffer<OBJECT_CB>* pObjectCB = nullptr;
+	CUploadBuffer<PASS_CB_VP>* pPassCB = nullptr;
+	CUploadBuffer<PASS_CB_VP_LIGHT>* pPassCB_vp_light = nullptr;
 	//std::unique_ptr<UploadBuffer<PassConstants>> PassCB = nullptr;
 
 	// Command 어디까지 해야 있는지 체크

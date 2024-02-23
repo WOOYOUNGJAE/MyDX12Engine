@@ -50,6 +50,7 @@ HRESULT CMainApp::Initialize()
 
 
 	objDesc.strTag = L"Camera_Free";
+	objDesc.vStartPos = Vector3(0.f, 2.f, -5.f);
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", OBJ_LAYER_DEFAULT,	&objDesc);
 	if (FAILED(hr)) { return hr; }
 
@@ -61,14 +62,9 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(hr)) { return hr; }*/
 
 	objDesc.strTag = L"Cube";
+	objDesc.vStartPos = Vector3(0.f, 0.f, 0.f);
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
-
-	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", L"Layer0", &pObjectControlling);
-	if (FAILED(hr)) { return hr; }*/
-	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", L"Layer0", &pObjectControlling);
-	if (FAILED(hr)) { return hr; }*/
-	// m_pGameInstance->Update_ObjPipelineLayer(pObjectControlling, Pipeline::ENUM_PSO::PSO_DEFAULT);
 #pragma endregion InLevel
 
 	// Renderer

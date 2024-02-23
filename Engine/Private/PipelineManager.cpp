@@ -56,139 +56,144 @@ HRESULT CPipelineManager::Initialize()
 #pragma endregion
 
 #pragma region _Rootsig_TextureSampler
-	// [][]
-	D3D12_FEATURE_DATA_ROOT_SIGNATURE RSFeatureData = {};
-
-	// This is the highest version the sample supports. If CheckFeatureSupport succeeds, the HighestVersion returned will not be greater than this.
-	RSFeatureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
-
-	hr = m_pDevice->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &RSFeatureData, sizeof(RSFeatureData));
-	if (FAILED(hr)) // 1_1 버전 지원하는지
 	{
-		RSFeatureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
+		// [][]
+		D3D12_FEATURE_DATA_ROOT_SIGNATURE RSFeatureData = {};
+
+		// This is the highest version the sample supports. If CheckFeatureSupport succeeds, the HighestVersion returned will not be greater than this.
+		RSFeatureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
+
+		hr = m_pDevice->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &RSFeatureData, sizeof(RSFeatureData));
+		if (FAILED(hr)) // 1_1 버전 지원하는지
+		{
+			RSFeatureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
+		}
+
+		//CD3DX12_DESCRIPTOR_RANGE1 ranges[1]; // DescriptorTable, RootDescriptor, RootConstant 가 될 수 있음(InitAs..)
+		//ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+
+		//CD3DX12_ROOT_PARAMETER1 rootParameters[1];
+		//rootParameters[0].InitAsDescriptorTable(1, &ranges[0], D3D12_SHADER_VISIBILITY_PIXEL);
+
+		//CD3DX12_DESCRIPTOR_RANGE1 ranges0[1]; // Only Texture
+		//ranges0[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+
+		//CD3DX12_DESCRIPTOR_RANGE1 ranges1[2]; // Texture, Constant Buffer
+		//ranges1[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+		//ranges1[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+
+		//CD3DX12_ROOT_PARAMETER1 rootParameters[TABLE_TYPE_END];
+		//rootParameters[TEX].InitAsDescriptorTable(_countof(ranges0), ranges0, D3D12_SHADER_VISIBILITY_ALL);
+		//rootParameters[TEX_CB].InitAsDescriptorTable(_countof(ranges1), ranges1, D3D12_SHADER_VISIBILITY_ALL);
+		/*CD3DX12_ROOT_PARAMETER1 rootParameters[TABLE_TYPE_END];
+		rootParameters[TEX].InitAsDescriptorTable(_countof(ranges0), ranges0, D3D12_SHADER_VISIBILITY_ALL);
+		rootParameters[TEX_CB].InitAsDescriptorTable(_countof(ranges1), ranges1, D3D12_SHADER_VISIBILITY_ALL);*/
+
+
+
+		CD3DX12_DESCRIPTOR_RANGE1 ranges[2]; // Texture, Constant Buffer
+		ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+		ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+
+		CD3DX12_DESCRIPTOR_RANGE1 range0;
+		range0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+
+		CD3DX12_DESCRIPTOR_RANGE1 range1[2];
+		range1[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC); // Obj
+		range1[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC); // VP_Light
+		//range1[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 2, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+		
+		CD3DX12_ROOT_PARAMETER1 rootParameters[2];
+		rootParameters[0].InitAsDescriptorTable(1, &range0, D3D12_SHADER_VISIBILITY_PIXEL);
+		rootParameters[1].InitAsDescriptorTable(_countof(range1), range1, D3D12_SHADER_VISIBILITY_ALL);
+
+
+		D3D12_STATIC_SAMPLER_DESC sampler = {};
+		sampler.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
+		sampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+		sampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+		sampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+		sampler.MipLODBias = 0;
+		sampler.MaxAnisotropy = 0;
+		sampler.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+		sampler.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+		sampler.MinLOD = 0.0f;
+		sampler.MaxLOD = D3D12_FLOAT32_MAX;
+		sampler.ShaderRegister = 0;
+		sampler.RegisterSpace = 0;
+		sampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+		CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
+		rootSignatureDesc.Init_1_1(_countof(rootParameters), rootParameters, 1, &sampler, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+		ComPtr<ID3DBlob> signature;
+		ComPtr<ID3DBlob> error;
+
+		hr = D3DX12SerializeVersionedRootSignature(
+			&rootSignatureDesc,
+			RSFeatureData.HighestVersion,
+			&signature,
+			&error);
+		if (FAILED(hr)) { return hr; }
+
+		hr = m_pDevice->CreateRootSignature(
+			0,
+			signature->GetBufferPointer(),
+			signature->GetBufferSize(),
+			IID_PPV_ARGS(&m_rootSigArr[ROOTSIG_DEFAULT]));
+		if (FAILED(hr)) { return hr; }
 	}
-
-	//CD3DX12_DESCRIPTOR_RANGE1 ranges[1]; // DescriptorTable, RootDescriptor, RootConstant 가 될 수 있음(InitAs..)
-	//ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-
-	//CD3DX12_ROOT_PARAMETER1 rootParameters[1];
-	//rootParameters[0].InitAsDescriptorTable(1, &ranges[0], D3D12_SHADER_VISIBILITY_PIXEL);
-
-	//CD3DX12_DESCRIPTOR_RANGE1 ranges0[1]; // Only Texture
-	//ranges0[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-
-	//CD3DX12_DESCRIPTOR_RANGE1 ranges1[2]; // Texture, Constant Buffer
-	//ranges1[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-	//ranges1[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-
-	//CD3DX12_ROOT_PARAMETER1 rootParameters[TABLE_TYPE_END];
-	//rootParameters[TEX].InitAsDescriptorTable(_countof(ranges0), ranges0, D3D12_SHADER_VISIBILITY_ALL);
-	//rootParameters[TEX_CB].InitAsDescriptorTable(_countof(ranges1), ranges1, D3D12_SHADER_VISIBILITY_ALL);
-	/*CD3DX12_ROOT_PARAMETER1 rootParameters[TABLE_TYPE_END];
-	rootParameters[TEX].InitAsDescriptorTable(_countof(ranges0), ranges0, D3D12_SHADER_VISIBILITY_ALL);
-	rootParameters[TEX_CB].InitAsDescriptorTable(_countof(ranges1), ranges1, D3D12_SHADER_VISIBILITY_ALL);*/
-
-
-
-	CD3DX12_DESCRIPTOR_RANGE1 ranges[2]; // Texture, Constant Buffer
-	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-	ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-
-	CD3DX12_DESCRIPTOR_RANGE1 range0;
-	range0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-	
-	CD3DX12_DESCRIPTOR_RANGE1 range1[2];
-	range1[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-	range1[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-
-	CD3DX12_ROOT_PARAMETER1 rootParameters[2];
-	rootParameters[0].InitAsDescriptorTable(1, &range0, D3D12_SHADER_VISIBILITY_PIXEL);
-	rootParameters[1].InitAsDescriptorTable(_countof(range1), range1, D3D12_SHADER_VISIBILITY_ALL);
-
-
-	D3D12_STATIC_SAMPLER_DESC sampler = {};
-	sampler.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
-	sampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-	sampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-	sampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-	sampler.MipLODBias = 0;
-	sampler.MaxAnisotropy = 0;
-	sampler.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-	sampler.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
-	sampler.MinLOD = 0.0f;
-	sampler.MaxLOD = D3D12_FLOAT32_MAX;
-	sampler.ShaderRegister = 0;
-	sampler.RegisterSpace = 0;
-	sampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
-	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
-	rootSignatureDesc.Init_1_1(_countof(rootParameters), rootParameters, 1, &sampler, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
-
-	ComPtr<ID3DBlob> signature;
-	ComPtr<ID3DBlob> error;
-
-	hr = D3DX12SerializeVersionedRootSignature(
-		&rootSignatureDesc,
-		RSFeatureData.HighestVersion,
-		&signature,
-		&error);
-	if (FAILED(hr)) { return hr; }
-
-	hr = m_pDevice->CreateRootSignature(
-		0,
-		signature->GetBufferPointer(),
-		signature->GetBufferSize(),
-		IID_PPV_ARGS(&m_rootSigArr[ROOTSIG_DEFAULT]));
-	if (FAILED(hr)) { return hr; }
-
 #pragma endregion
 
 
 #pragma endregion
 
 #pragma region Make InputLayout
-	D3D12_INPUT_ELEMENT_DESC inputLayoutDesc_single[1][1]
-	{ "POSITION",		0,		DXGI_FORMAT_R32G32B32_FLOAT,		0,		0,		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,		0 };
-
-	D3D12_INPUT_ELEMENT_DESC inputLayoutDesc_Double[2][2]
 	{
+
+		D3D12_INPUT_ELEMENT_DESC inputLayoutDesc_single[1][1]
+		{ "POSITION",		0,		DXGI_FORMAT_R32G32B32_FLOAT,		0,		0,		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,		0 };
+
+		D3D12_INPUT_ELEMENT_DESC inputLayoutDesc_Double[2][2]
 		{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
-		},
-	 {
-		 { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+			{
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+			},
+		 {
+			 { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+			}
+		};
+		UINT iInputLayoutIndex = 0;
+		// Vertex Type Single
+		// m_vecInputLayoutArr[SHADERTYPE_SIMPLE].push_back(inputLayoutDesc_single[1][1]);
+
+		// Vertex Type Double
+		for (auto& iterDesc : inputLayoutDesc_Double[0])
+		{
+			m_vecInputLayoutArr[SHADERTYPE_SIMPLE].push_back(iterDesc);
 		}
-	};
-	UINT iInputLayoutIndex = 0;
-	// Vertex Type Single
-	// m_vecInputLayoutArr[SHADERTYPE_SIMPLE].push_back(inputLayoutDesc_single[1][1]);
+		for (auto& iterDesc : inputLayoutDesc_Double[1])
+		{
+			m_vecInputLayoutArr[SHADERTYPE_SIMPLE2].push_back(iterDesc);
+		}
 
-	// Vertex Type Double
-	for (auto& iterDesc : inputLayoutDesc_Double[0])
-	{
-		m_vecInputLayoutArr[SHADERTYPE_SIMPLE].push_back(iterDesc);
+		//for (UINT iDoubleTypeIndex = 0; iDoubleTypeIndex < 2; ++iDoubleTypeIndex)
+		//{
+		//	for (auto& iterInputLayout : inputLayoutDesc_Double[iDoubleTypeIndex])
+		//	{
+		//		m_vecInputLayoutArr
+		//	}
+		//}
+		//for (UINT iInputLayoutType/*VertexTypes*/ = 0; iInputLayoutType < RENDER_PARAMCOMBO_END; ++iInputLayoutType)
+		//{
+		//	for (auto& iter : input_layout_desc[iInputLayoutType])
+		//	{
+		//		m_vecInputLayoutArr[iInputLayoutType].push_back(iter);
+		//	}
+		//}
 	}
-	for (auto& iterDesc : inputLayoutDesc_Double[1])
-	{
-		m_vecInputLayoutArr[SHADERTYPE_SIMPLE2].push_back(iterDesc);
-	}
-
-	//for (UINT iDoubleTypeIndex = 0; iDoubleTypeIndex < 2; ++iDoubleTypeIndex)
-	//{
-	//	for (auto& iterInputLayout : inputLayoutDesc_Double[iDoubleTypeIndex])
-	//	{
-	//		m_vecInputLayoutArr
-	//	}
-	//}
-	//for (UINT iInputLayoutType/*VertexTypes*/ = 0; iInputLayoutType < RENDER_PARAMCOMBO_END; ++iInputLayoutType)
-	//{
-	//	for (auto& iter : input_layout_desc[iInputLayoutType])
-	//	{
-	//		m_vecInputLayoutArr[iInputLayoutType].push_back(iter);
-	//	}
-	//}
 
 
 #pragma endregion
@@ -225,6 +230,9 @@ HRESULT CPipelineManager::Initialize()
 					break;
 				case SHADERTYPE_SIMPLE2:
 					strKey = L"Shader_Simple2";
+					break;
+				case SHADERTYPE_SIMPLE3:
+					strKey = L"Shader_Simple3";
 					break;
 				default: // 에러 피하기 위해 임시로 만들어놓기
 					strKey = L"Shader_Simple";
@@ -267,7 +275,6 @@ HRESULT CPipelineManager::Initialize()
 
 	return hr;
 }
-
 HRESULT CPipelineManager::Free()
 {
 	for (auto& iter0 : m_PSOsArr)

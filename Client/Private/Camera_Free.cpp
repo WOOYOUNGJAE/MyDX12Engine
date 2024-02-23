@@ -37,12 +37,14 @@ HRESULT CCamera_Free::Initialize_Prototype()
 
 HRESULT CCamera_Free::Initialize(void* pArg)
 {
+	CCamera::Initialize(pArg);
+
 	m_Desc = { XMConvertToRadians(60.f), g_iWinSizeX/ (FLOAT)g_iWinSizeY , 0.2f, 300.f};
 
 	m_fMoveSpeed = 1.f;
 	m_fRotSpeed = 0.5f;
 
-	return CCamera::Initialize(pArg);
+	return S_OK;
 }
 
 void CCamera_Free::Tick(_float fDeltaTime)

@@ -16,7 +16,8 @@ namespace Engine
 	enum RENDER_SHADERTYPE
 	{						// InputLayout 
 		SHADERTYPE_SIMPLE,	// Pos, Color
-		SHADERTYPE_SIMPLE2, // Pos, TexCoord
+		SHADERTYPE_SIMPLE2, // Pos, TexCoord, Normal
+		SHADERTYPE_SIMPLE3, // Simple2 + Light, Material
 		RENDER_SHADERTYPE_END
 	};
 	enum ROOTSIG_TYPE { ROOTSIG_DEFAULT, /*ROOTSIG_TEX, ROOTSIG_TEX_TRANSMAT,*/ ROOTSIG_TYPE_END};
