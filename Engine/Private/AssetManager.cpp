@@ -1,4 +1,6 @@
 #include "AssetManager.h"
+
+#include "MeshGeometry.h"
 #include "Texture.h"
 
 IMPLEMENT_SINGLETON(CAssetManager)
@@ -39,4 +41,44 @@ CTexture* CAssetManager::FindandGet_Texture(const wstring& strAssetName)
 	}
 
 	return iter->second;
+}
+
+HRESULT CAssetManager::Add_MeshDataPrototype(const wstring& strPrototypeTag, CMeshData* pMeshData)
+{
+	// 이미 존재한다면
+	if (FindandGet_Texture(strPrototypeTag))
+	{
+		MSG_BOX("AssetManager : Already Exists");
+		return E_FAIL;
+	}
+
+	m_mapMeshData.emplace(strPrototypeTag, pMeshData);
+
+	return S_OK;
+}
+
+CMeshData* CAssetManager::FindandGet_MeshData(const wstring& strPrototypeTag)
+{
+	auto iter = m_mapMeshData.find(strPrototypeTag);
+
+	// 존재하지 않는다면
+	if (iter == m_mapMeshData.end())
+	{
+		return nullptr;
+	}
+
+	return iter->second;
+}
+
+CMeshData* CAssetManager::Clone_MeshData(const wstring& strPrototypeTag, void* pArg)
+{
+	auto iter = m_mapMeshData.find(strPrototypeTag);
+
+	// 존재하지 않는다면
+	if (iter == m_mapMeshData.end())
+	{
+		return nullptr;
+	}
+
+	return iter->second->Clone(pArg);
 }

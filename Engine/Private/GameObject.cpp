@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "GameInstance.h"
+#include "Renderer.h"
 
 HRESULT CGameObject::Free()
 {

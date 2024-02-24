@@ -3,7 +3,7 @@
 
 NAMESPACE_(Engine)
 
-class CTriangleMesh : public CMeshGeometry
+class CTriangleMesh : public CMeshData
 {
 
 private:
@@ -13,7 +13,7 @@ private:
 
 public:
 	static CTriangleMesh* Create();
-	CComponent* Clone(void* pArg = nullptr) override;
+	CMeshData* Clone(void* pArg = nullptr) override;
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override; // Do Nothing (InitÀº Copy¿ë)
 	HRESULT Free() override;

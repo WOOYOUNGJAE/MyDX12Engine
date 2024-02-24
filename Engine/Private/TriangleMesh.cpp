@@ -13,7 +13,7 @@ CTriangleMesh::CTriangleMesh()
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(_ushort);
 }
 
-CTriangleMesh::CTriangleMesh(CTriangleMesh& rhs) : CMeshGeometry(rhs),
+CTriangleMesh::CTriangleMesh(CTriangleMesh& rhs) : CMeshData(rhs),
 m_vertexData(rhs.m_vertexData)
 {
 	m_iNumVertex = rhs.m_iNumVertex;
@@ -37,7 +37,7 @@ CTriangleMesh* CTriangleMesh::Create()
 	return pInstance;
 }
 
-CComponent* CTriangleMesh::Clone(void* pArg)
+CMeshData* CTriangleMesh::Clone(void* pArg)
 {
 	CTriangleMesh* pInstance = new CTriangleMesh(*this);
 
@@ -60,7 +60,7 @@ HRESULT CTriangleMesh::Initialize_Prototype()
 		return E_FAIL;
 	}
 
-	hr = CMeshGeometry::Initialize_Prototype();
+	hr = CMeshData::Initialize_Prototype();
 	if (FAILED(hr)) { return E_FAIL; }
 
 	m_vertexData = new VertexPositionColor[m_iNumVertex]
@@ -96,16 +96,16 @@ HRESULT CTriangleMesh::Initialize_Prototype()
 	}
 	memcpy(m_indexBufferCPU->GetBufferPointer(), indexData, iIndexBufferSize);
 
-	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice.Get(), m_pCommandList.Get(),
-		m_vertexData, iVertexBufferSize, m_vertexUploadBuffer, m_vertexBufferGPU);
+	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice, m_pCommandList,
+	                                          m_vertexData, iVertexBufferSize, &m_vertexUploadBuffer, &m_vertexBufferGPU);
 	if (FAILED(hr))
 	{
 		MSG_BOX("TriangleMesh : Failed to Create Buffer");
 		return E_FAIL;
 	}
 
-	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice.Get(), m_pCommandList.Get(),
-		indexData, iIndexBufferSize, m_indexUploadBuffer, m_indexBufferGPU);
+	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice, m_pCommandList,
+	                                          indexData, iIndexBufferSize, &m_indexUploadBuffer, &m_indexBufferGPU);
 	if (FAILED(hr))
 	{
 		MSG_BOX("TriangleMesh : Failed to Create Buffer");
@@ -117,7 +117,7 @@ HRESULT CTriangleMesh::Initialize_Prototype()
 
 HRESULT CTriangleMesh::Initialize(void* pArg)
 {
-	return CMeshGeometry::Initialize(pArg);
+	return S_OK;
 }
 
 HRESULT CTriangleMesh::Free()
@@ -126,7 +126,7 @@ HRESULT CTriangleMesh::Free()
 	{
 		Safe_Delete_Array(m_vertexData); // Prototype 경우에만 해제
 	}
-	if (FAILED(CMeshGeometry::Free()))
+	if (FAILED(CMeshData::Free()))
 	{
 		return E_FAIL;
 	}

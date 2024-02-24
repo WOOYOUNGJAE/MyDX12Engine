@@ -283,9 +283,11 @@
     <ClInclude Include="..\Public\GameObjectManager.h" />
     <ClInclude Include="..\Public\Graphic_Device.h" />
     <ClInclude Include="..\Public\InputManager.h" />
+    <ClInclude Include="..\Public\AssetMesh.h" />
     <ClInclude Include="..\Public\LoadHelper.h" />
     <ClInclude Include="..\Public\Material.h" />
     <ClInclude Include="..\Public\MeshGeometry.h" />
+    <ClInclude Include="..\Public\MeshObject.h" />
     <ClInclude Include="..\Public\MyMath.h" />
     <ClInclude Include="..\Public\ObjLayer.h" />
     <ClInclude Include="..\Public\ObjMonobehaviour.h" />
@@ -317,9 +319,11 @@
     <ClCompile Include="..\Private\GameObjectManager.cpp" />
     <ClCompile Include="..\Private\Graphic_Device.cpp" />
     <ClCompile Include="..\Private\InputManager.cpp" />
+    <ClCompile Include="..\Private\AssetMesh.cpp" />
     <ClCompile Include="..\Private\LoadHelper.cpp" />
     <ClCompile Include="..\Private\Material.cpp" />
     <ClCompile Include="..\Private\MeshGeometry.cpp" />
+    <ClCompile Include="..\Private\MeshObject.cpp" />
     <ClCompile Include="..\Private\ObjLayer.cpp" />
     <ClCompile Include="..\Private\ObjMonobehaviour.cpp" />
     <ClCompile Include="..\Private\PipelineManager.cpp" />

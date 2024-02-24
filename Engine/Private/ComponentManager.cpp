@@ -1,5 +1,7 @@
 #include "PipelineManager.h"
 #include "ComponentManager.h"
+
+#include "Asset.h"
 #include "Component.h"
 #include "Transform.h"
 #include "CubeMesh.h"
@@ -10,19 +12,22 @@
 #include "TextureCompo.h"
 #include "TriangleMesh.h"
 #include "TriangleMesh_PT.h"
+#include "MeshObject.h"
+#include "AssetManager.h"
 IMPLEMENT_SINGLETON(CComponentManager)
 
 HRESULT CComponentManager::Initialize()
 {
 #pragma region Init_Basic_Components
-	ID3D12Device* pDevice = CGraphic_Device::Get_Instance()->Get_Device().Get();
+	ID3D12Device* pDevice = CGraphic_Device::Get_Instance()->Get_Device();
 	CGraphic_Device::Get_Instance()->Reset_CmdList();
 
 	Add_Prototype(L"Transform", CTransform::Create());
 
-	Add_Prototype(L"CubeMesh", CCubeMesh::Create());
+	/*Add_Prototype(L"CubeMesh", CCubeMesh::Create());
 	Add_Prototype(L"TriangleMesh", CTriangleMesh::Create());
-	Add_Prototype(L"TriangleMesh_PT", CTriangleMesh_PT::Create());
+	Add_Prototype(L"TriangleMesh_PT", CTriangleMesh_PT::Create());*/
+	Add_Prototype(L"MeshObject", CMeshObject::Create());
 	// CShader
 	{
 		SHADER_INIT_DESC shaderInitDesc[2]{};
@@ -57,10 +62,18 @@ HRESULT CComponentManager::Initialize()
 	Add_Prototype(L"Renderer", CRenderer::Create());
 	Add_Prototype(L"Texture", CTextureCompo::Create());
 
-	CGraphic_Device::Get_Instance()->Close_CmdList();
-	CGraphic_Device::Get_Instance()->Execute_CmdList();
+	
 #pragma endregion Init_Basic_Components
 	
+	CAssetManager* pAssetManager = CAssetManager::Get_Instance();
+
+	pAssetManager->Add_MeshDataPrototype(L"CubeMesh", CCubeMesh::Create());
+	pAssetManager->Add_MeshDataPrototype(L"TriangleMesh", CTriangleMesh::Create());
+	pAssetManager->Add_MeshDataPrototype(L"TriangleMesh_PT", CTriangleMesh_PT::Create());
+
+
+	CGraphic_Device::Get_Instance()->Close_CmdList();
+	CGraphic_Device::Get_Instance()->Execute_CmdList();
 
 	return S_OK;
 }

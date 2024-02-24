@@ -4,7 +4,7 @@
 NAMESPACE_(Engine)
 
 // Texture좌표도 있어야 해서 점 4*6개, 인덱스 6*6개
-class ENGINE_DLL CCubeMesh final: public CMeshGeometry
+class ENGINE_DLL CCubeMesh final: public CMeshData
 {
 private:
 	CCubeMesh();
@@ -13,7 +13,7 @@ private:
 
 public:
 	static CCubeMesh* Create();
-	CComponent* Clone(void* pArg = nullptr) override;
+	CMeshData* Clone(void* pArg = nullptr) override;
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override; // Do Nothing (Init은 Copy용)
 	HRESULT Free() override;

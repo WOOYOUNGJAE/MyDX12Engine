@@ -259,31 +259,36 @@ void CRenderer::MainRender()
 
 					m_pCommandList->SetPipelineState(pPSO);
 
-					for (auto& iter : m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType])
+					for (CGameObject*& iter : m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType])
 					{
-						m_pCommandList->IASetPrimitiveTopology(iter->PrimitiveType());
-						m_pCommandList->IASetVertexBuffers(0, 1, &iter->VertexBufferView());
-						m_pCommandList->IASetIndexBuffer(&iter->IndexBufferView());
+						iter->Render(m_pCommandList, m_pCurFrameResource);
 
-						// Textures
-						cbvSrvUavHandle.Offset(iter->Get_CbvSrvUavHeapOffset_Texture());
-						m_pCommandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHandle);
+						//// ObjCB
+						//Update_ObjCB(iter);
 
-						// ObjCB
-						cbvSrvUavHandle.InitOffsetted(pSrvHeap->GetGPUDescriptorHandleForHeapStart(), 0);
-						cbvSrvUavHandle.Offset(m_iObjCBVHeapStartOffset);
-						m_pCommandList->SetGraphicsRootDescriptorTable(1, cbvSrvUavHandle);
-						Update_ObjCB(iter);
+
+						//m_pCommandList->IASetPrimitiveTopology(iter->PrimitiveType());
+						//m_pCommandList->IASetVertexBuffers(0, 1, &iter->VertexBufferView());
+						//m_pCommandList->IASetIndexBuffer(&iter->IndexBufferView());
 
 
 
-						//m_pCommandList->DrawInstanced(24, 1, 0, 0);
-						m_pCommandList->DrawIndexedInstanced(
-							36,
-							1,
-							0,
-							0,
-							0);
+
+						//// Set Descriptor Table
+						//cbvSrvUavHandle.Offset(iter->Get_CbvSrvUavHeapOffset_Texture());
+						//m_pCommandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHandle);
+
+						//cbvSrvUavHandle.InitOffsetted(pSrvHeap->GetGPUDescriptorHandleForHeapStart(), 0);
+						//cbvSrvUavHandle.Offset(m_iObjCBVHeapStartOffset);
+						//m_pCommandList->SetGraphicsRootDescriptorTable(1, cbvSrvUavHandle);
+
+						////m_pCommandList->DrawInstanced(24, 1, 0, 0);
+						//m_pCommandList->DrawIndexedInstanced(
+						//	36,
+						//	1,
+						//	0,
+						//	0,
+						//	0);
 
 						Safe_Release(iter); // Added From AddtoRenderGroup
 					}
@@ -362,6 +367,21 @@ D3D12_GPU_DESCRIPTOR_HANDLE CRenderer::Get_CbvSrvUavStart_GPU()
 D3D12_CPU_DESCRIPTOR_HANDLE CRenderer::Get_CbvSrvUavStart_CPU()
 {
 	return m_pGraphic_Device->Get_CbvSrvUavHeapStart_CPU();
+}
+
+CD3DX12_GPU_DESCRIPTOR_HANDLE CRenderer::Get_HandleOffsettedGPU(INT iOffset)
+{
+	return CD3DX12_GPU_DESCRIPTOR_HANDLE(Get_CbvSrvUavStart_GPU(), iOffset);
+}
+
+CD3DX12_GPU_DESCRIPTOR_HANDLE CRenderer::Get_ObjCbvHandleOffsettedGPU()
+{
+	return CD3DX12_GPU_DESCRIPTOR_HANDLE(Get_CbvSrvUavStart_GPU(), m_iObjCBVHeapStartOffset);
+}
+
+CD3DX12_GPU_DESCRIPTOR_HANDLE CRenderer::Get_PassCbvHandleOffsettedGPU()
+{
+	return CD3DX12_GPU_DESCRIPTOR_HANDLE(Get_CbvSrvUavStart_GPU(), m_iPassCBVHeapStartOffset);
 }
 
 void CRenderer::Set_ProjMat(const CAMERA_DESC& camDesc)

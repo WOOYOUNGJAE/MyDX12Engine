@@ -115,12 +115,12 @@ Vector3 CTriangle::Get_ScaleXYZ()
 
 D3D12_VERTEX_BUFFER_VIEW CTriangle::VertexBufferView()
 {
-	return m_pTriangleMeshCom->VertexBufferView();
+	return D3D12_VERTEX_BUFFER_VIEW();
 }
 
 D3D12_INDEX_BUFFER_VIEW CTriangle::IndexBufferView() const
 {
-	return m_pTriangleMeshCom->IndexBufferView();
+	return D3D12_INDEX_BUFFER_VIEW();
 }
 
 _uint CTriangle::Num_Indices()

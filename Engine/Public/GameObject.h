@@ -2,7 +2,7 @@
 #include "Base.h"
 
 NAMESPACE_(Engine)
-using namespace std;
+	using namespace std;
 class ENGINE_DLL CGameObject abstract : public CBase
 {
 protected:
@@ -17,6 +17,7 @@ public: // LifeCycle
 	virtual void Tick(_float fDeltaTime) = 0;
 	virtual void Late_Tick(_float fDeltaTime) = 0;
 	virtual void Render_Tick(){};
+	virtual void Render(ID3D12GraphicsCommandList* pCmdList, class FrameResource* pFrameResource){}
 	HRESULT Free() override;
 public: // getter setter, abstract
 	// Pipleline
@@ -26,9 +27,10 @@ public: // getter setter, abstract
 	virtual D3D12_PRIMITIVE_TOPOLOGY PrimitiveType()const {	return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;} // Default;
 	virtual _uint Num_Indices() { return 0; }
 	virtual MATERIAL_INFO Get_MaterialInfo() { return MATERIAL_INFO(); }
-	//Offset
+	//Offset, Handle
 	virtual UINT64 Get_CbvSrvUavHeapOffset_Texture() { return m_iCbvSrvUavOffset; }
 	UINT64* Get_CbvSrvUavOffsetPtr() { return &m_iCbvSrvUavOffset; }
+
 	// Tag
 	wstring Get_PrototypeTag() { return m_strPrototypeTag; }
 	void Set_PrototypeTag(const wstring& strTag) { m_strPrototypeTag = strTag; }

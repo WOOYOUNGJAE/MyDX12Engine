@@ -16,8 +16,8 @@ public:
 		ID3D12GraphicsCommandList* cmdList,
 		const void* initData,
 		UINT64 byteSize,
-		ComPtr<ID3D12Resource>& uploadBuffer,
-		ComPtr<ID3D12Resource>& refOutResource);
+		ID3D12Resource** ppUploadBuffer,
+		ID3D12Resource** ppOutResource);
 
 	// 256의 최소 공배수로 계산
 	static _uint ConstantBufferByteSize(_uint iByteSize)

@@ -30,9 +30,9 @@ public:
 	HRESULT Close_CmdList();
 	void Execute_CmdList();
 public: // Getter
-	ComPtr<ID3D12Device> Get_Device() { return m_pDevice.Get(); }
-	ComPtr<ID3D12GraphicsCommandList>  Get_CommandList() { return m_pCommandList.Get(); }
-	ComPtr < ID3D12CommandQueue> Get_CommandQueue() { return m_pCommandQueue.Get(); }
+	ID3D12Device* Get_Device() { return m_pDevice.Get(); }
+	ID3D12GraphicsCommandList* Get_CommandList() { return m_pCommandList.Get(); }
+	ID3D12CommandQueue* Get_CommandQueue() { return m_pCommandQueue.Get(); }
 	ID3D12Resource* CurrentBackBuffer() { return m_pRenderTargets[m_iCurrBackBuffer].Get(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_DepthStenciViewHeapStart() { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView() const;

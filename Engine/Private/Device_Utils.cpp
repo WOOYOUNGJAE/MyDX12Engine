@@ -1,10 +1,10 @@
 #include "Device_Utils.h"
 
 HRESULT CDevice_Utils::Create_Buffer_Default(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList,
-                                             const void* initData, UINT64 byteSize, ComPtr<ID3D12Resource>& uploadBuffer,
-                                             ComPtr<ID3D12Resource>& refOutResource)
+                                             const void* initData, UINT64 byteSize, ID3D12Resource** ppUploadBuffer,
+                                             ID3D12Resource** ppOutResource)
 {
-    ComPtr<ID3D12Resource> defaultBuffer;
+    ID3D12Resource* defaultBuffer;
 
     CD3DX12_HEAP_PROPERTIES temp_heap_properties(D3D12_HEAP_TYPE_DEFAULT);
     CD3DX12_RESOURCE_DESC TempBuffer =
@@ -18,7 +18,7 @@ HRESULT CDevice_Utils::Create_Buffer_Default(ID3D12Device* device, ID3D12Graphic
         &TempBuffer,
         D3D12_RESOURCE_STATE_COMMON,
         nullptr,
-        IID_PPV_ARGS(defaultBuffer.GetAddressOf()));
+        IID_PPV_ARGS(&defaultBuffer));
 
     if (FAILED(hr)) { return E_FAIL; }
 
@@ -30,7 +30,7 @@ HRESULT CDevice_Utils::Create_Buffer_Default(ID3D12Device* device, ID3D12Graphic
         &TempBuffer,
         D3D12_RESOURCE_STATE_GENERIC_READ,
         nullptr,
-        IID_PPV_ARGS(uploadBuffer.GetAddressOf()));
+        IID_PPV_ARGS(ppUploadBuffer));
 
     if (FAILED(hr)) { return E_FAIL; }
 
@@ -41,17 +41,17 @@ HRESULT CDevice_Utils::Create_Buffer_Default(ID3D12Device* device, ID3D12Graphic
     subResourceData.RowPitch = byteSize;
     subResourceData.SlicePitch = subResourceData.RowPitch;
 
-    cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(defaultBuffer.Get(),
+    cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(defaultBuffer,
         D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST));
 
     // 기본 버퍼 자원으로의 자료 복사 요청
     // UpdateSubresource : CPU메모리를 임시 업로드 힙에 복사하고 ID3D12CommandList::CopySubresourceRegion로 임시 업로드 힙의 자료를 buffer에 복사
-    UpdateSubresources<1>(cmdList, defaultBuffer.Get(), uploadBuffer.Get(), 0, 0, 1, &subResourceData);
+    UpdateSubresources<1>(cmdList, defaultBuffer, *ppUploadBuffer, 0, 0, 1, &subResourceData);
     //
-    cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(defaultBuffer.Get(),
+    cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(defaultBuffer,
         D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_GENERIC_READ));
 
-    refOutResource = defaultBuffer; // 
+    *ppOutResource = defaultBuffer; // 
 
     // 이 함수 호출 이후에도 uploadBuffer를 유지해야 함
     // 복사가 완료되었음이 확실해진 후에 해제하면 됨

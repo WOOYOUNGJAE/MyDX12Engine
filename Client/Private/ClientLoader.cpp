@@ -19,7 +19,7 @@ void CClientLoader::Load()
 
 void CClientLoader::Load_Textures()
 {
-	m_pHelper->StartSign_Texture();
+	m_pHelper->StartSign();
 
 	TEXTURE_LOAD_DESC load_Desc{};
 

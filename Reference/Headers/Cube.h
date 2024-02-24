@@ -18,11 +18,12 @@ public: // LifeCycle
 	void Tick(_float fDeltaTime) override;
 	void Late_Tick(_float fDeltaTime) override;
 	void Render_Tick() override;
+	void Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource) override;
 	HRESULT Free() override;
 public: // getter setter 
 	int& Get_NumFrameDirtyRef() override;
-	D3D12_VERTEX_BUFFER_VIEW VertexBufferView() override;
-	D3D12_INDEX_BUFFER_VIEW IndexBufferView() const override;
+	D3D12_VERTEX_BUFFER_VIEW VertexBufferView() override; // Not Used
+	D3D12_INDEX_BUFFER_VIEW IndexBufferView() const override; // Not Used
 	_uint Num_Indices() override;
 	MATERIAL_INFO Get_MaterialInfo() override;
 	// Transform
@@ -34,7 +35,7 @@ public: // getter setter
 protected:
 	class CTransform* m_pTransformCom = nullptr;
 	//class CTriangleMesh* m_pTriangleMeshCom = nullptr;
-	class CCubeMesh* m_pCubeMeshCom = nullptr;
+	class CMeshObject* m_pMeshObjectCom = nullptr;
 	class CShader* m_pShaderCom = nullptr;
 	class CRenderer* m_pRendererCom = nullptr;
 	class CTextureCompo* m_pTextureCom = nullptr;

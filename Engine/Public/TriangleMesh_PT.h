@@ -4,7 +4,7 @@
 
 NAMESPACE_(Engine)
 // TriangleMesh with PositionVal, Texture Typed Vertex
-class CTriangleMesh_PT : public CMeshGeometry
+class CTriangleMesh_PT : public CMeshData
 {
 private:
 	CTriangleMesh_PT();
@@ -13,7 +13,7 @@ private:
 
 public:
 	static CTriangleMesh_PT* Create();
-	CComponent* Clone(void* pArg = nullptr) override;
+	CMeshData* Clone(void* pArg = nullptr) override;
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override; // Do Nothing (InitÀº Copy¿ë)
 	HRESULT Free() override;

@@ -103,6 +103,12 @@
     <Filter Include="0.Shaders\Includes">
       <UniqueIdentifier>{b0cbca46-8e79-4e52-9b5d-426ea708a55a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\Components\GeometryMesh\3D\LoadedMesh">
+      <UniqueIdentifier>{db7e9d79-8fd8-4f10-8ad6-eb3caa13147b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\GeometryMesh\3D\CubeMesh">
+      <UniqueIdentifier>{1f655d80-f5a1-445b-8801-a302804af28f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -140,9 +146,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Device_Utils.h">
       <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\CubeMesh.h">
-      <Filter>Utility\Components\GeometryMesh\3D</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\GameObject.h">
       <Filter>Utility\GameObjects</Filter>
@@ -226,6 +229,11 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Material.h" />
+    <ClInclude Include="..\Public\CubeMesh.h">
+      <Filter>Utility\Components\GeometryMesh\3D\CubeMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AssetMesh.h" />
+    <ClInclude Include="..\Public\MeshObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -242,9 +250,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\Device_Utils.cpp">
       <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\CubeMesh.cpp">
-      <Filter>Utility\Components\GeometryMesh\3D</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\GameObject.cpp">
       <Filter>Utility\GameObjects</Filter>
@@ -319,6 +324,11 @@
       <Filter>Utility\Managers\Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Material.cpp" />
+    <ClCompile Include="..\Private\CubeMesh.cpp">
+      <Filter>Utility\Components\GeometryMesh\3D\CubeMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AssetMesh.cpp" />
+    <ClCompile Include="..\Private\MeshObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />
