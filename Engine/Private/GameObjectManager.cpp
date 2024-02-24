@@ -2,7 +2,6 @@
 #include "Cube.h"
 #include "ObjLayer.h"
 #include "Triangle.h"
-#include "Renderer.h" // ??
 IMPLEMENT_SINGLETON(CGameObjectManager)
 
 HRESULT CGameObjectManager::Initialize()

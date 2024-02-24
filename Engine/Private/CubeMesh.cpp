@@ -170,7 +170,6 @@ HRESULT CCubeMesh::Initialize_Prototype()
 	}
 
 	CMeshData::Init_VBV_IBV();
-
 	return S_OK;
 }
 
@@ -181,17 +180,22 @@ HRESULT CCubeMesh::Initialize(void* pArg)
 
 HRESULT CCubeMesh::Free()
 {
-	Safe_Release(m_vertexBufferCPU);
-	Safe_Release(m_indexBufferCPU);
-	Safe_Release(m_vertexBufferGPU);
-	Safe_Release(m_indexBufferGPU);
-	Safe_Release(m_vertexUploadBuffer);
-	Safe_Release(m_indexUploadBuffer);
+	
 
 	if (m_iClonedNum == 0)
 	{
 		Safe_Delete_Array(m_vertexData); // Prototype 경우에만 해제
 	}
+	else
+	{
+		Safe_Release(m_vertexBufferCPU);
+		Safe_Release(m_indexBufferCPU);
+		Safe_Release(m_vertexBufferGPU);
+		Safe_Release(m_indexBufferGPU);
+		Safe_Release(m_vertexUploadBuffer);
+		Safe_Release(m_indexUploadBuffer);
+	}
+
 	if (FAILED(CMeshData::Free()))
 	{
 		return E_FAIL;

@@ -24,9 +24,6 @@ HRESULT CComponentManager::Initialize()
 
 	Add_Prototype(L"Transform", CTransform::Create());
 
-	/*Add_Prototype(L"CubeMesh", CCubeMesh::Create());
-	Add_Prototype(L"TriangleMesh", CTriangleMesh::Create());
-	Add_Prototype(L"TriangleMesh_PT", CTriangleMesh_PT::Create());*/
 	Add_Prototype(L"MeshObject", CMeshObject::Create());
 	// CShader
 	{

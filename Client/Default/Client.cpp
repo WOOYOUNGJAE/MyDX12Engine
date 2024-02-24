@@ -13,9 +13,10 @@ HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
 HWND g_hwnd;
-bool g_bImguiOn = true;
 // Forward declare message handler from imgui_impl_win32.cpp
+#ifdef IMGUION
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+#endif
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -30,7 +31,9 @@ LARGE_INTEGER		g_OldTime;
 LARGE_INTEGER		g_OriginTime;
 LARGE_INTEGER		g_CpuTick;
 
+#ifdef IMGUION
 ID3D12DescriptorHeap* g_ImguiSrvDescHeap = nullptr;
+#endif
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
@@ -38,7 +41,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 {
 #ifdef _DEBUG
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
+    
     AllocConsole();
     freopen("CONIN$", "r", stdin);
     freopen("CONOUT$", "w", stdout);
@@ -68,10 +71,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
+#ifdef IMGUION
     // IMGUI Show the window
     ::ShowWindow(g_hwnd, SW_SHOWDEFAULT);
     ::UpdateWindow(g_hwnd);
-
+#endif
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CLIENT));
 
     MSG msg = {};
@@ -136,6 +140,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     {
         return FALSE;
     }
+
+    int* a = new int;
 
     return (int) msg.wParam;
 }
@@ -223,8 +229,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+#ifdef IMGUION
     if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
         return true;
+#endif
 
     switch (message)
     {

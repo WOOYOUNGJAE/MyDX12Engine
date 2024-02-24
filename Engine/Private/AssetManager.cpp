@@ -1,5 +1,5 @@
 #include "AssetManager.h"
-
+#include "Cube.h"
 #include "MeshGeometry.h"
 #include "Texture.h"
 
@@ -13,6 +13,12 @@ HRESULT CAssetManager::Free()
 	}
 	m_mapTextures.clear();
 
+	for (auto& pair : m_mapMeshData)
+	{
+		Safe_Release(pair.second);
+	}
+	m_mapMeshData.clear();
+	
 	return S_OK;
 }
 

@@ -36,7 +36,6 @@ CGameObject* CCube::Clone(void* pArg)
 
 HRESULT CCube::Initialize_Prototype()
 {
-
 	return S_OK;
 }
 
@@ -130,7 +129,7 @@ HRESULT CCube::Free()
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pMeshObjectCom);
 	Safe_Release(m_pTransformCom);
-
+	
 	return CGameObject::Free();
 }
 
