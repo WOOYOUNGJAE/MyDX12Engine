@@ -24,7 +24,6 @@ public: // getter
     vector<UINT32>& Get_vecIndices() { return m_vecIndexData; }
     wstring& Get_Path() { return m_strPath; }
 public:
-    void Load_FromFile();
 
 private:
     vector<VertexPositionNormalTexture> m_vecVertexData;

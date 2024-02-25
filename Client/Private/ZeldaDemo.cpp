@@ -6,7 +6,7 @@
 #include "Shader.h"
 #include "Material.h"
 #include "MeshData.h"
-CZeldaDemo::CZeldaDemo(CZeldaDemo& rhs)
+CZeldaDemo::CZeldaDemo(CZeldaDemo& rhs) : CGameObject(rhs)
 {
 }
 
@@ -61,7 +61,7 @@ HRESULT CZeldaDemo::Initialize(void* pArg)
 	hr = Add_Component(L"Material", reinterpret_cast<CComponent**>(&m_pMaterialCom), &matInfo);
 
 
-	//m_iCbvSrvUavOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
+	m_iCbvSrvUavStartOffset = m_pMeshObjectCom->Get_CbvSrvUavOffset(0);
 
 	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
 
@@ -78,12 +78,40 @@ void CZeldaDemo::Late_Tick(_float fDeltaTime)
 
 void CZeldaDemo::Render_Tick()
 {
-	CGameObject::Render_Tick();
+	m_pRendererCom->AddTo_RenderGroup(RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
 }
 
 void CZeldaDemo::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource)
 {
-	CGameObject::Render(pCmdList, pFrameResource);
+	// Update CB
+	OBJECT_CB objConstants;
+	objConstants.mWorldMat = Get_WorldMatrix().Transpose();
+	objConstants.mInvTranspose = Get_WorldMatrix().Invert(); // Transpose µÎ¹ø
+	objConstants.material = Get_MaterialInfo();
+	pFrameResource->pObjectCB->CopyData(m_iClonedNum - 1, objConstants);
+
+	pCmdList->IASetPrimitiveTopology(PrimitiveType());
+
+	// for each meshes
+	for (UINT i = 0; i < m_pMeshObjectCom->Get_vecMeshData()->size(); ++i)
+	{
+		CMeshData* pMesh = (*m_pMeshObjectCom->Get_vecMeshData())[i];
+
+		pCmdList->IASetVertexBuffers(0, 1, pMesh->Get_VertexBufferViewPtr());
+		pCmdList->IASetIndexBuffer(pMesh->Get_IndexBufferViewPtr());
+
+		// Set Descriptor Tables
+		pCmdList->SetGraphicsRootDescriptorTable(0, m_pRendererCom->Get_HandleOffsettedGPU(pMesh->Get_CbvSrvUavOffset()));
+		pCmdList->SetGraphicsRootDescriptorTable(1, m_pRendererCom->Get_ObjCbvHandleOffsettedGPU());
+
+		//pCmdList->DrawInstanced(24, 1, 0, 0);
+		pCmdList->DrawIndexedInstanced(
+			pMesh->Num_Indices(),
+			1,
+			0,
+			0,
+			0);
+	}
 }
 
 HRESULT CZeldaDemo::Free()
@@ -99,7 +127,7 @@ HRESULT CZeldaDemo::Free()
 
 MATERIAL_INFO CZeldaDemo::Get_MaterialInfo()
 {
-	return CGameObject::Get_MaterialInfo();
+	return m_pMaterialCom->Get_MaterialInfo();
 }
 
 Matrix CZeldaDemo::Get_WorldMatrix()

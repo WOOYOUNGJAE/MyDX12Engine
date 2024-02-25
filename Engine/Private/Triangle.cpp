@@ -57,7 +57,7 @@ HRESULT CTriangle::Initialize(void* pArg)
 	//hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_ice"));
 	if (FAILED(hr)) return hr;
 
-	m_iCbvSrvUavOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
+	m_iCbvSrvUavStartOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
 
 	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
 

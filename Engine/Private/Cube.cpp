@@ -63,7 +63,7 @@ HRESULT CCube::Initialize(void* pArg)
 	hr = Add_Component(L"Material", reinterpret_cast<CComponent**>(&m_pMaterialCom), &matInfo);
 
 
-	m_iCbvSrvUavOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
+	m_iCbvSrvUavStartOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
 
 	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
 
