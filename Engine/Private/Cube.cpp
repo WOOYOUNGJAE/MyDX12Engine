@@ -1,9 +1,9 @@
 #include "Cube.h"
+#include "TextureCompo.h"
 #include "MeshObject.h"
 #include "Transform.h"
 #include "Renderer.h"
 #include "Shader.h"
-#include "TextureCompo.h"
 #include "Material.h"
 #include "MeshData.h"
 
@@ -48,8 +48,8 @@ HRESULT CCube::Initialize(void* pArg)
 	/*hr = Add_Component(L"TriangleMesh", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
 	if (FAILED(hr)) return hr;*/
 
-	std::vector<wstring> strMeshTagArr = { L"CubeMesh", };
-	hr = Add_Component(L"MeshObject", reinterpret_cast<CComponent**>(&m_pMeshObjectCom), &strMeshTagArr);
+	MESHOBJ_INIT_DESC meshObjDesc { true, L"CubeMesh" };
+	hr = Add_Component(L"MeshObject", reinterpret_cast<CComponent**>(&m_pMeshObjectCom), &meshObjDesc);
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));
 	if (FAILED(hr)) return hr;
@@ -133,11 +133,6 @@ HRESULT CCube::Free()
 	return CGameObject::Free();
 }
 
-int& CCube::Get_NumFrameDirtyRef()
-{
-	return m_pShaderCom->Get_NumDirtyRef();
-}
-
 Matrix CCube::Get_WorldMatrix()
 {
 	return m_pTransformCom->WorldMatrix();
@@ -155,12 +150,12 @@ Vector3 CCube::Get_ScaleXYZ()
 
 void CCube::Set_Position(const Vector3& vPos)
 {
-	CGameObject::Set_Position(vPos);
+	m_pTransformCom->Set_Position(vPos);
 }
 
 void CCube::Set_Scale(const Vector3& vScale)
 {
-	CGameObject::Set_Scale(vScale);
+	m_pTransformCom->Set_Scale(vScale);
 }
 
 D3D12_VERTEX_BUFFER_VIEW CCube::VertexBufferView()
@@ -171,12 +166,6 @@ D3D12_VERTEX_BUFFER_VIEW CCube::VertexBufferView()
 D3D12_INDEX_BUFFER_VIEW CCube::IndexBufferView() const
 {
 	return D3D12_INDEX_BUFFER_VIEW();
-}
-
-_uint CCube::Num_Indices()
-{
-	return 0;
-	//return m_pMeshObjectCom->Num_Indices();
 }
 
 MATERIAL_INFO CCube::Get_MaterialInfo()

@@ -241,6 +241,7 @@
     <ClInclude Include="..\Public\Client_Imgui.h" />
     <ClInclude Include="..\Public\Imgui_Struct.h" />
     <ClInclude Include="..\Public\MainApp.h" />
+    <ClInclude Include="..\Public\ZeldaDemo.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
@@ -260,6 +261,7 @@
     <ClCompile Include="..\Private\Client_Imgui.cpp" />
     <ClCompile Include="..\Private\Imgui_Struct.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
+    <ClCompile Include="..\Private\ZeldaDemo.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -93,11 +93,6 @@ HRESULT CTriangle::Free()
 	return CGameObject::Free();
 }
 
-int& CTriangle::Get_NumFrameDirtyRef()
-{
-	return m_pShaderCom->Get_NumDirtyRef();
-}
-
 Matrix CTriangle::Get_WorldMatrix()
 {
 	return m_pTransformCom->WorldMatrix();
@@ -121,11 +116,6 @@ D3D12_VERTEX_BUFFER_VIEW CTriangle::VertexBufferView()
 D3D12_INDEX_BUFFER_VIEW CTriangle::IndexBufferView() const
 {
 	return D3D12_INDEX_BUFFER_VIEW();
-}
-
-_uint CTriangle::Num_Indices()
-{
-	return 0;
 }
 
 void CTriangle::Set_Position(const Vector3& vPos)

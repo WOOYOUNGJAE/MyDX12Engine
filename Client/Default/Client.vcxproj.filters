@@ -31,6 +31,15 @@
     <Filter Include="Loader">
       <UniqueIdentifier>{bceb26b3-3a1d-463e-b008-fd6a45718fb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject\Demo">
+      <UniqueIdentifier>{eba9e51f-4603-4835-8472-1076b29f2f07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Camera\Camera_Free">
+      <UniqueIdentifier>{5f16238f-1841-46ba-adf4-56951221cb4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Demo\ZeldaDemo">
+      <UniqueIdentifier>{bcfab51b-a97e-4bd1-9bfa-bae694a76caa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -53,9 +62,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\MainApp.h">
       <Filter>MainApp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Camera_Free.h">
-      <Filter>GameObject\Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\..\External\imgui-dx12\imconfig.h">
       <Filter>Imgui</Filter>
@@ -90,6 +96,10 @@
     <ClInclude Include="..\Public\ClientLoader.h">
       <Filter>Loader</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Camera_Free.h">
+      <Filter>GameObject\Camera\Camera_Free</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ZeldaDemo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -100,9 +110,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\MainApp.cpp">
       <Filter>MainApp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Camera_Free.cpp">
-      <Filter>GameObject\Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Client_Imgui.cpp">
       <Filter>Imgui\Imgui_Client</Filter>
@@ -134,6 +141,10 @@
     <ClCompile Include="..\Private\ClientLoader.cpp">
       <Filter>Loader</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Camera_Free.cpp">
+      <Filter>GameObject\Camera\Camera_Free</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ZeldaDemo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

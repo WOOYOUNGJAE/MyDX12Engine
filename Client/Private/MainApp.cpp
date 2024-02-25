@@ -5,7 +5,7 @@
 #include "GameInstance.h"
 #include "Camera_Free.h"
 #include "ClientLoader.h"
-
+#include "ZeldaDemo.h"
 #ifdef IMGUI_ON
 #include "Client_Imgui.h"
 #endif
@@ -47,6 +47,8 @@ HRESULT CMainApp::Initialize()
 	GAMEOBJECT_INIT_DESC objDesc{};
 	hr = m_pGameInstance->Add_GameObjPrototype(L"Camera_Free", CCamera_Free::Create());
 	if (FAILED(hr)) { return hr; }
+	hr = m_pGameInstance->Add_GameObjPrototype(L"ZeldaDemo", CZeldaDemo::Create());
+	if (FAILED(hr)) { return hr; }
 
 
 	objDesc.strTag = L"Camera_Free";
@@ -63,7 +65,10 @@ HRESULT CMainApp::Initialize()
 
 	objDesc.strTag = L"Cube";
 	objDesc.vStartPos = Vector3(0.f, 0.f, 0.f);
-	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }*/
+	objDesc.strTag = L"ZeldaDemo";
+	hr = m_pGameInstance->Add_GameObject_InScene(L"ZeldaDemo", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
 #pragma endregion InLevel
 

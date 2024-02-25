@@ -37,15 +37,23 @@ HRESULT CMeshObject::Initialize(void* pArg)
 {
 	CComponent::Initialize(pArg);
 
-	std::vector<wstring>* pVecMeshTag = reinterpret_cast<std::vector<wstring>*>(pArg);
+	MESHOBJ_INIT_DESC* init_desc = reinterpret_cast<MESHOBJ_INIT_DESC*>(pArg);
 
-	for (auto& iter : *pVecMeshTag)
+	if (init_desc->bIsSingle == true)
 	{
-		CMeshData* pInstance = CAssetManager::Get_Instance()->Clone_MeshData(iter, nullptr);
+		CMeshData* pInstance = CAssetManager::Get_Instance()->Clone_MeshData(init_desc->strPrototypeTag, nullptr);
 
 		if (pInstance)
 		{
 			m_vecMeshData.push_back(pInstance);
+		}
+	}
+	else // clustered meshes
+	{
+		list<CMeshData*> meshList = CAssetManager::Get_Instance()->Clone_MeshData_Clustered(init_desc->strPrototypeTag);
+		for (auto& iter : meshList)
+		{
+			m_vecMeshData.emplace_back(std::move(iter));
 		}
 	}
 
@@ -76,6 +84,11 @@ D3D12_VERTEX_BUFFER_VIEW* CMeshObject::Get_VertexBufferViewPtr(UINT iMeshIndex)
 D3D12_INDEX_BUFFER_VIEW* CMeshObject::Get_IndexBufferViewPtr(UINT iMeshIndex)
 {
 	return m_vecMeshData[iMeshIndex]->Get_IndexBufferViewPtr();
+}
+
+UINT CMeshObject::Get_CbvSrvUavOffset(UINT iMeshIndex)
+{
+	return m_vecMeshData[iMeshIndex]->Get_CbvSrvUavOffset();
 }
 
 void CMeshObject::Add_MeshData(CMeshData* pMeshData)

@@ -4,6 +4,8 @@
 
 namespace Engine
 {
+
+#pragma region Init_Desc
 	struct GRAPHIC_DESC
 	{
 		enum WINMODE { WINMODE_FULL, WINMODE_WIN, WINMODE_END };
@@ -12,9 +14,16 @@ namespace Engine
 		WINMODE			eWinMode;
 	};
 
+	struct GAMEOBJECT_INIT_DESC
+	{
+		Vector3 vStartPos;
+		std::wstring strTag;
+		void* pArg;
+	};
+
 	struct SHADER_INIT_DESC
 	{
-		enum INPUT_LAYOUT_ENUM {POS_COLOR, POS_TEXCOORD, POS_NORMAL_TEXCOORD, INPUT_LAYOUT_ENUM_END};
+		enum INPUT_LAYOUT_ENUM { POS_COLOR, POS_TEXCOORD, POS_NORMAL_TEXCOORD, INPUT_LAYOUT_ENUM_END };
 		INPUT_LAYOUT_ENUM inputLayout;
 		std::wstring filename; // 경로
 		D3D_SHADER_MACRO* defines; // 고급옵션, 일반적으로 nullptr
@@ -22,12 +31,22 @@ namespace Engine
 		std::string target; // 쉐이더 종류와 버전
 	};
 
-	struct GAMEOBJECT_INIT_DESC
+	struct TEXTURE_INIT_DESC
 	{
-		Vector3 vStartPos;
-		std::wstring strTag;
-		void* pArg;
+		bool bIsCubeMap;
+		ID3D12Device* pDevice;
+		ResourceUploadBatch* pResourceUpload;
+		std::wstring strPath;
+		UINT iCbvSrvUavHeapOffset;
 	};
+
+	struct MESHOBJ_INIT_DESC
+	{
+		bool bIsSingle;
+		std::wstring strPrototypeTag;
+	};
+#pragma endregion
+
 
 
 	struct CAMERA_DESC
@@ -48,14 +67,6 @@ namespace Engine
 	};
 
 
-	struct TEXTURE_INIT_DESC
-	{
-		bool bIsCubeMap;
-		ID3D12Device* pDevice;
-		ResourceUploadBatch* pResourceUpload;
-		std::wstring strPath;
-		UINT iCbvSrvUavHeapOffset;
-	};
 
 	struct TEXTURE_LOAD_DESC // for Client
 	{

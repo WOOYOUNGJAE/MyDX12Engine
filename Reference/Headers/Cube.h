@@ -21,10 +21,8 @@ public: // LifeCycle
 	void Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource) override;
 	HRESULT Free() override;
 public: // getter setter 
-	int& Get_NumFrameDirtyRef() override;
 	D3D12_VERTEX_BUFFER_VIEW VertexBufferView() override; // Not Used
 	D3D12_INDEX_BUFFER_VIEW IndexBufferView() const override; // Not Used
-	_uint Num_Indices() override;
 	MATERIAL_INFO Get_MaterialInfo() override;
 	// Transform
 	Matrix Get_WorldMatrix() override;

@@ -20,6 +20,7 @@ public:
 public: // getter setter
 	virtual D3D12_VERTEX_BUFFER_VIEW* Get_VertexBufferViewPtr();
 	virtual D3D12_INDEX_BUFFER_VIEW* Get_IndexBufferViewPtr();
+	virtual UINT Get_CbvSrvUavOffset() { return m_iCbvSrvUavOffset; }
 	virtual _uint Num_Indices() { return m_iNumIndices; }
 
 protected:
@@ -46,6 +47,8 @@ protected: // Data about the buffers.
 	DXGI_FORMAT IndexFormat = DXGI_FORMAT_R16_UINT; 
 	UINT m_iIndexBufferByteSize = 0;
 	D3D12_PRIMITIVE_TOPOLOGY PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+protected:
+	UINT m_iCbvSrvUavOffset = UINT32_MAX; // 모든 메쉬 오브젝트가 텍스트를 필수로 들고 있지 않음
 };
 
 _NAMESPACE
