@@ -15,6 +15,7 @@
 #include <list>
 #include <map>
 #include <algorithm>
+#include <filesystem>
 
 #include "d3dx12.h"
 #include <d3d12.h>
@@ -32,6 +33,14 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx12.h"
 
+// Assimp
+#include <assimp/Importer.hpp>
+#include <assimp/cimport.h>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
+#pragma comment(lib, "..\\..\\External\\Assimp\\assimp-vc143-mt")
+
+
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 using namespace Microsoft::WRL;
@@ -41,7 +50,6 @@ using namespace DirectX::SimpleMath;
 #pragma comment(lib, "dxgi")
 #pragma comment(lib, "dxguid")
 #pragma comment(lib, "d3dcompiler")
-
 #ifdef _DEBUG
 
 #define _CRTDBG_MAP_ALLOC

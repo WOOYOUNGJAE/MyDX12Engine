@@ -7,30 +7,7 @@
 #include "Renderer.h"
 #include "Texture.h"
 #include "D3DResourceManager.h"
-
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
-
-#include "assimp\Importer.hpp"
-
-#include "assimp\cimport.h"
-
-#include "assimp\postprocess.h"
-
-#include "assimp\scene.h"
-
-
-
-#pragma comment(lib, "assimp.lib")
-
-//#include <assimp\Importer.hpp>
-//#include <assimp\postprocess.h>
-//#include <assimp\scene.h>
-//#include <filesystem>
-//#include <memory>
-
+#include "MeshData.h"
 
 IMPLEMENT_SINGLETON(CLoadHelper)
 
@@ -61,6 +38,7 @@ HRESULT CLoadHelper::Initialize()
 
 void CLoadHelper::StartSign()
 {
+
 	CD3DResourceManager::Get_Instance()->Set_SrvOffsetStart((*m_pNextCbvSrvUavHeapOffset));
 	CGraphic_Device::Get_Instance()->Reset_CmdList();
 }
@@ -88,61 +66,120 @@ void CLoadHelper::EndSign_Texture()
 	dynamic_cast<CRenderer*>(CComponentManager::Get_Instance()->FindandGet_Prototype(L"Renderer"))->Build_FrameResource();
 	CD3DResourceManager::Get_Instance()->Set_SrvOffsetEnd((*m_pNextCbvSrvUavHeapOffset));
 }
-//
-//HRESULT CLoadHelper::Load_3DModel(const string& strPath, const string& strAssetName)
-//{
-//	HRESULT hr = S_OK;
-//
-//	/*Assimp::Importer importer;
-//
-//	const aiScene* pScene = importer.ReadFile(
-//	strPath.c_str(),
-//		aiProcess_Triangulate | aiProcess_ConvertToLeftHanded);
-//
-//	Matrix mTr;
-//	Recur_ProcessNode(pScene->mRootNode, pScene, mTr);*/
-//
-//	return hr;
-//}
-//
-//void CLoadHelper::Recur_ProcessNode(aiNode* pNode, const aiScene* pScene, Matrix& refTr)
-//{
-//
-//	/*Matrix m;
-//	ai_real* temp = &pNode->mTransformation.a1;
-//	float* mTemp = &m._11;
-//	for (int t = 0; t < 16; t++) {
-//		mTemp[t] = float(temp[t]);
-//	}
-//	m = m.Transpose() * refTr;
-//
-//	for (UINT i = 0; i < pNode->mNumMeshes; i++) 
-//	{
-//
-//
-//		aiMesh* pAiMesh = pScene->mMeshes[pNode->mMeshes[i]];
-//		CAssetMesh* pGeneratedMesh = this->Recur_ProcessMesh(pAiMesh, pScene);
-//
-//
-//
-//		for (VertexPositionNormalTexture*& v : pGeneratedMesh->Get_vecVertices())
-//		{
-//			v->position = Vector3::Transform(v->position, m);
-//		}
-//
-//		m_meshContainingList.emplace_back(pGeneratedMesh);
-//	}
-//
-//	for (UINT i = 0; i < pNode->mNumChildren; i++)
-//	{
-//		this->Recur_ProcessNode(pNode->mChildren[i], pScene, m);
-//	}*/
-//}
-//
-//CAssetMesh* CLoadHelper::Recur_ProcessMesh(aiMesh* pAiMesh, const aiScene* pScene)
-//{
-//	return nullptr;
-//}
+
+// ----------------------------------------------------------------------------------
+
+HRESULT CLoadHelper::Load_3DModel(const string& strPath, const string& strAssetName, list<CMeshData*>* pOutMeshList)
+{
+	HRESULT hr = S_OK;
+
+	m_strBasePath = strPath;
+
+	Assimp::Importer importer;
+
+	const aiScene* pScene = importer.ReadFile(
+	(strPath + strAssetName).c_str(),
+		aiProcess_Triangulate | aiProcess_ConvertToLeftHanded);
+
+	Matrix mTr;
+	Recur_ProcessNode(pScene->mRootNode, pScene, mTr);
+
+	*pOutMeshList = std::move(m_meshContainingList);
+
+	return hr;
+}
+
+void CLoadHelper::Recur_ProcessNode(aiNode* pNode, const aiScene* pScene, Matrix& refTr)
+{
+	Matrix m;
+	ai_real* temp = &pNode->mTransformation.a1;
+	float* mTemp = &m._11;
+	for (int t = 0; t < 16; t++) {
+		mTemp[t] = float(temp[t]);
+	}
+	m = m.Transpose() * refTr;
+
+	for (UINT i = 0; i < pNode->mNumMeshes; i++) 
+	{
+		aiMesh* pAiMesh = pScene->mMeshes[pNode->mMeshes[i]];
+		CMeshData* pGeneratedMesh = this->Recur_ProcessMesh(pAiMesh, pScene);
+
+		for (VertexPositionNormalTexture& v : dynamic_cast<CAssetMesh*>(pGeneratedMesh)->Get_vecVertices())
+		{
+			v.position = Vector3::Transform(v.position, m);
+		}
+
+		m_meshContainingList.emplace_back(pGeneratedMesh);
+	}
+
+	for (UINT i = 0; i < pNode->mNumChildren; i++)
+	{
+		this->Recur_ProcessNode(pNode->mChildren[i], pScene, m);
+	}
+}
+
+CMeshData* CLoadHelper::Recur_ProcessMesh(aiMesh* pAiMesh, const aiScene* pScene)
+{
+	std::vector<VertexPositionNormalTexture> vertices;
+	std::vector<UINT32> indices;
+
+	// Walk through each of the mesh's vertices
+	for (UINT i = 0; i < pAiMesh->mNumVertices; i++) {
+		VertexPositionNormalTexture vertex;
+
+		vertex.position.x = pAiMesh->mVertices[i].x;
+		vertex.position.y = pAiMesh->mVertices[i].y;
+		vertex.position.z = pAiMesh->mVertices[i].z;
+
+		vertex.normal.x = pAiMesh->mNormals[i].x;
+		vertex.normal.y = pAiMesh->mNormals[i].y;
+		vertex.normal.z = pAiMesh->mNormals[i].z;
+
+		XMVECTOR xmvNormalized = XMVector3Normalize(XMLoadFloat3(&vertex.normal));
+		XMStoreFloat3(&vertex.normal, xmvNormalized);
+
+
+		if (pAiMesh->mTextureCoords[0]) {
+			vertex.textureCoordinate.x = (float)pAiMesh->mTextureCoords[0][i].x;
+			vertex.textureCoordinate.y = (float)pAiMesh->mTextureCoords[0][i].y;
+		}
+
+		vertices.push_back(vertex);
+	}
+
+	for (UINT i = 0; i < pAiMesh->mNumFaces; i++) {
+		aiFace face = pAiMesh->mFaces[i];
+		for (UINT j = 0; j < face.mNumIndices; j++)
+			indices.push_back(face.mIndices[j]);
+	}
+
+	CMeshData* pGeneratedMesh = CAssetMesh::Create();
+	CAssetMesh* pDownCastedMesh = dynamic_cast<CAssetMesh*>(pGeneratedMesh);
+
+	pDownCastedMesh->Get_vecVertices() = std::move(vertices);
+	pDownCastedMesh->Get_vecIndices() = std::move(indices);
+
+	// http://assimp.sourceforge.net/lib_html/materials.html
+	if (pAiMesh->mMaterialIndex >= 0) {
+		aiMaterial* material = pScene->mMaterials[pAiMesh->mMaterialIndex];
+
+		if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
+			aiString filepath;
+			material->GetTexture(aiTextureType_DIFFUSE, 0, &filepath);
+
+			std::string fullPath =
+				this->m_strBasePath +
+				std::string(std::filesystem::path(filepath.C_Str())
+					.filename()
+					.string());
+
+			// string to wstring
+			pDownCastedMesh->Get_Path().assign(fullPath.begin(), fullPath.end());
+		}
+	}
+
+	return pGeneratedMesh;
+}
 
 void CLoadHelper::EndSign_3DModel()
 {

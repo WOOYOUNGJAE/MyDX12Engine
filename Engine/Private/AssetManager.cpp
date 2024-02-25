@@ -1,7 +1,8 @@
 #include "AssetManager.h"
 #include "Cube.h"
-#include "MeshGeometry.h"
+#include "MeshData.h"
 #include "Texture.h"
+#include "AssetMesh.h"
 
 IMPLEMENT_SINGLETON(CAssetManager)
 
@@ -18,13 +19,24 @@ HRESULT CAssetManager::Free()
 		Safe_Release(pair.second);
 	}
 	m_mapMeshData.clear();
-	
+
+	for (auto& pair : m_mapMeshData_Clustered)
+	{
+		for (CMeshData*& pMeshInstance : pair.second)
+		{
+			Safe_Release(pMeshInstance);
+		}
+		pair.second.clear();
+	}
+	m_mapMeshData_Clustered.clear();
+
+
 	return S_OK;
 }
 
 HRESULT CAssetManager::Add_Texture(const wstring& strAssetName, CTexture* pTextureInstance)
 {
-	// ÀÌ¹Ì Á¸ÀçÇÑ´Ù¸é
+	// ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ù¸ï¿½
 	if (FindandGet_Texture(strAssetName))
 	{
 		MSG_BOX("AssetManager : Already Exists");
@@ -40,7 +52,7 @@ CTexture* CAssetManager::FindandGet_Texture(const wstring& strAssetName)
 {
 	auto iter = m_mapTextures.find(strAssetName);
 
-	// Á¸ÀçÇÏÁö ¾Ê´Â´Ù¸é
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´Â´Ù¸ï¿½
 	if (iter == m_mapTextures.end())
 	{
 		return nullptr;
@@ -51,8 +63,8 @@ CTexture* CAssetManager::FindandGet_Texture(const wstring& strAssetName)
 
 HRESULT CAssetManager::Add_MeshDataPrototype(const wstring& strPrototypeTag, CMeshData* pMeshData)
 {
-	// ÀÌ¹Ì Á¸ÀçÇÑ´Ù¸é
-	if (FindandGet_Texture(strPrototypeTag))
+	// ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ù¸ï¿½
+	if (FindandGet_MeshData(strPrototypeTag))
 	{
 		MSG_BOX("AssetManager : Already Exists");
 		return E_FAIL;
@@ -67,7 +79,7 @@ CMeshData* CAssetManager::FindandGet_MeshData(const wstring& strPrototypeTag)
 {
 	auto iter = m_mapMeshData.find(strPrototypeTag);
 
-	// Á¸ÀçÇÏÁö ¾Ê´Â´Ù¸é
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´Â´Ù¸ï¿½
 	if (iter == m_mapMeshData.end())
 	{
 		return nullptr;
@@ -80,11 +92,61 @@ CMeshData* CAssetManager::Clone_MeshData(const wstring& strPrototypeTag, void* p
 {
 	auto iter = m_mapMeshData.find(strPrototypeTag);
 
-	// Á¸ÀçÇÏÁö ¾Ê´Â´Ù¸é
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´Â´Ù¸ï¿½
 	if (iter == m_mapMeshData.end())
 	{
 		return nullptr;
 	}
 
 	return iter->second->Clone(pArg);
+}
+
+HRESULT CAssetManager::Add_MeshData_ClusteredPrototype(const wstring& strPrototypeTag, list<CMeshData*> meshDataList)
+{
+	if (FindandGet_MeshData_Clustered(strPrototypeTag).empty() == false)
+	{
+		MSG_BOX("AssetManager : Already Exists");
+		return E_FAIL;
+	}
+
+	m_mapMeshData_Clustered.emplace(strPrototypeTag, meshDataList);
+
+	return S_OK;
+}
+
+list<CMeshData*>& CAssetManager::FindandGet_MeshData_Clustered(const wstring& strPrototypeTag)
+{
+	auto iter = m_mapMeshData_Clustered.find(strPrototypeTag);
+
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´Â´Ù¸ï¿½
+	if (iter == m_mapMeshData_Clustered.end())
+	{
+		list<CMeshData*> emptyList;
+		return emptyList;
+	}
+
+	return iter->second;
+}
+
+list<CMeshData*> CAssetManager::Clone_MeshData_Clustered(const wstring& strPrototypeTag)
+{
+	auto iter = m_mapMeshData_Clustered.find(strPrototypeTag);
+
+	// ëª»ì°¾ìŒ
+	if (iter == m_mapMeshData_Clustered.end())
+	{
+		list<CMeshData*> emptyList;
+		return emptyList;
+	}
+
+	list<CMeshData*> clonedList;
+	for (auto& pair : m_mapMeshData_Clustered)
+	{
+		for (CMeshData*& meshInstance : pair.second)
+		{
+			clonedList.emplace_back(dynamic_cast<CAssetMesh*>(meshInstance)->Clone());
+		}
+	}
+
+	return clonedList;
 }

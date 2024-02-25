@@ -1,7 +1,7 @@
 #include "MeshObject.h"
 
 #include "AssetManager.h"
-#include "MeshGeometry.h"
+#include "MeshData.h"
 
 CMeshObject::CMeshObject(CMeshObject& rhs) : CComponent(rhs)
 {

@@ -22,6 +22,7 @@ public: // getter setter
 	std::vector<CMeshData*>* Get_vecMeshData() { return &m_vecMeshData; }
 	virtual D3D12_VERTEX_BUFFER_VIEW* Get_VertexBufferViewPtr(UINT iMeshIndex = 0);
 	virtual D3D12_INDEX_BUFFER_VIEW* Get_IndexBufferViewPtr(UINT iMeshIndex = 0);
+	//virtual UINT Get_CbvSrvUavOffset(UINT iMeshIndex = 0);
 public:
 	void Add_MeshData(CMeshData* pMeshData);
 	std::vector<CMeshData*> m_vecMeshData;

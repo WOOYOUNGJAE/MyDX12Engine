@@ -5,7 +5,7 @@
 #include "Shader.h"
 #include "TextureCompo.h"
 #include "Material.h"
-#include "MeshGeometry.h"
+#include "MeshData.h"
 
 CCube* CCube::Create()
 {

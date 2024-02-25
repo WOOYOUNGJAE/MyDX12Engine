@@ -1,5 +1,11 @@
 #include "AssetMesh.h"
 
+CAssetMesh::CAssetMesh(CAssetMesh& rhs) : CMeshData(rhs),
+m_vecVertexData(rhs.m_vecVertexData),
+m_vecIndexData(rhs.m_vecIndexData)
+{
+}
+
 CAssetMesh* CAssetMesh::Create()
 {
 	return new CAssetMesh();

@@ -115,7 +115,7 @@
     <OutDir>..\Bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
-    <VcpkgEnabled>true</VcpkgEnabled>
+    <VcpkgEnabled>false</VcpkgEnabled>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -179,13 +179,14 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;ENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;ENGINE_EXPORTS;_WINDOWS;_USRDLL;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>Default</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>../Public/;..\..\External\imgui-dx12\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Public/;..\..\External\imgui-dx12\;D:\Projects\Git\MyProjects\MyDX12Engine\External\Assimp\include\assimp;D:\Projects\Git\MyProjects\MyDX12Engine\External\Assimp\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -212,7 +213,8 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>../Public/;..\..\External\imgui-dx12\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Public/;..\..\External\imgui-dx12\;D:\Projects\Git\MyProjects\MyDX12Engine\External\Assimp\include\assimp;D:\Projects\Git\MyProjects\MyDX12Engine\External\Assimp\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -235,13 +237,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;ENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;ENGINE_EXPORTS;_WINDOWS;_USRDLL;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>../Public/;..\..\External\imgui-dx12\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Public/;..\..\External\imgui-dx12\;D:\Projects\Git\MyProjects\MyDX12Engine\External\Assimp\include\assimp;D:\Projects\Git\MyProjects\MyDX12Engine\External\Assimp\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -286,7 +289,7 @@
     <ClInclude Include="..\Public\AssetMesh.h" />
     <ClInclude Include="..\Public\LoadHelper.h" />
     <ClInclude Include="..\Public\Material.h" />
-    <ClInclude Include="..\Public\MeshGeometry.h" />
+    <ClInclude Include="..\Public\MeshData.h" />
     <ClInclude Include="..\Public\MeshObject.h" />
     <ClInclude Include="..\Public\MyMath.h" />
     <ClInclude Include="..\Public\ObjLayer.h" />
@@ -322,7 +325,7 @@
     <ClCompile Include="..\Private\AssetMesh.cpp" />
     <ClCompile Include="..\Private\LoadHelper.cpp" />
     <ClCompile Include="..\Private\Material.cpp" />
-    <ClCompile Include="..\Private\MeshGeometry.cpp" />
+    <ClCompile Include="..\Private\MeshData.cpp" />
     <ClCompile Include="..\Private\MeshObject.cpp" />
     <ClCompile Include="..\Private\ObjLayer.cpp" />
     <ClCompile Include="..\Private\ObjMonobehaviour.cpp" />

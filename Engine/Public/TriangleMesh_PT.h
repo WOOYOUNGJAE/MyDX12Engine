@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MeshGeometry.h"
+#include "MeshData.h"
 
 NAMESPACE_(Engine)
 // TriangleMesh with PositionVal, Texture Typed Vertex

@@ -52,15 +52,6 @@
     <Filter Include="Utility\Components">
       <UniqueIdentifier>{e023286e-84c5-4a47-9a9e-3f35db58f842}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\Components\GeometryMesh">
-      <UniqueIdentifier>{a3610940-af9a-4b7f-a11a-ef859fa938ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\Components\GeometryMesh\2D">
-      <UniqueIdentifier>{e4a31efb-9c63-4db6-ae25-3f886bf97e03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\Components\GeometryMesh\3D">
-      <UniqueIdentifier>{c3999142-e124-405e-89ae-177a31cfb480}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility\Components\Shader">
       <UniqueIdentifier>{288c46b5-b6e7-47e4-b1b7-f19de8a39648}</UniqueIdentifier>
     </Filter>
@@ -103,11 +94,26 @@
     <Filter Include="0.Shaders\Includes">
       <UniqueIdentifier>{b0cbca46-8e79-4e52-9b5d-426ea708a55a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\Components\GeometryMesh\3D\LoadedMesh">
-      <UniqueIdentifier>{db7e9d79-8fd8-4f10-8ad6-eb3caa13147b}</UniqueIdentifier>
+    <Filter Include="Utility\MeshData">
+      <UniqueIdentifier>{a3610940-af9a-4b7f-a11a-ef859fa938ca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\Components\GeometryMesh\3D\CubeMesh">
+    <Filter Include="Utility\MeshData\2D">
+      <UniqueIdentifier>{e4a31efb-9c63-4db6-ae25-3f886bf97e03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\MeshData\3D">
+      <UniqueIdentifier>{c3999142-e124-405e-89ae-177a31cfb480}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\MeshData\3D\CubeMesh">
       <UniqueIdentifier>{1f655d80-f5a1-445b-8801-a302804af28f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\MeshObject">
+      <UniqueIdentifier>{10988b62-983a-4cdb-b7a2-82595a382247}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Components\Material">
+      <UniqueIdentifier>{81682513-1fc5-441b-8ff5-4373e0e22956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\MeshData\3D\AssetMesh">
+      <UniqueIdentifier>{db7e9d79-8fd8-4f10-8ad6-eb3caa13147b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -138,8 +144,8 @@
     <ClInclude Include="..\Public\Component.h">
       <Filter>Utility\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\MeshGeometry.h">
-      <Filter>Utility\Components\GeometryMesh</Filter>
+    <ClInclude Include="..\Public\MeshData.h">
+      <Filter>Utility\MeshData</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\DX12Test.h">
       <Filter>Utility</Filter>
@@ -172,7 +178,7 @@
       <Filter>Utility\Components\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\TriangleMesh.h">
-      <Filter>Utility\Components\GeometryMesh\2D</Filter>
+      <Filter>Utility\MeshData\2D</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Triangle.h">
       <Filter>Utility\GameObjects\DefaultGeometry</Filter>
@@ -190,7 +196,7 @@
       <Filter>System\D3D Graphics\Pipeline</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\TriangleMesh_PT.h">
-      <Filter>Utility\Components\GeometryMesh\2D</Filter>
+      <Filter>Utility\MeshData\2D</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Asset.h">
       <Filter>Utility\Asset</Filter>
@@ -228,12 +234,18 @@
     <ClInclude Include="..\Public\FrameResource_Struct.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Material.h" />
     <ClInclude Include="..\Public\CubeMesh.h">
-      <Filter>Utility\Components\GeometryMesh\3D\CubeMesh</Filter>
+      <Filter>Utility\MeshData\3D\CubeMesh</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\AssetMesh.h" />
-    <ClInclude Include="..\Public\MeshObject.h" />
+    <ClInclude Include="..\Public\MeshObject.h">
+      <Filter>Utility\Components\MeshObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Material.h">
+      <Filter>Utility\Components\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AssetMesh.h">
+      <Filter>Utility\MeshData\3D\AssetMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -245,8 +257,8 @@
     <ClCompile Include="..\Private\Component.cpp">
       <Filter>Utility\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\MeshGeometry.cpp">
-      <Filter>Utility\Components\GeometryMesh</Filter>
+    <ClCompile Include="..\Private\MeshData.cpp">
+      <Filter>Utility\MeshData</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Device_Utils.cpp">
       <Filter>System</Filter>
@@ -273,7 +285,7 @@
       <Filter>Utility\Components\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TriangleMesh.cpp">
-      <Filter>Utility\Components\GeometryMesh\2D</Filter>
+      <Filter>Utility\MeshData\2D</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Triangle.cpp">
       <Filter>Utility\GameObjects\DefaultGeometry</Filter>
@@ -291,7 +303,7 @@
       <Filter>System\D3D Graphics\Pipeline</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TriangleMesh_PT.cpp">
-      <Filter>Utility\Components\GeometryMesh\2D</Filter>
+      <Filter>Utility\MeshData\2D</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Asset.cpp">
       <Filter>Utility\Asset</Filter>
@@ -323,12 +335,18 @@
     <ClCompile Include="..\Private\CameraManager.cpp">
       <Filter>Utility\Managers\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Material.cpp" />
     <ClCompile Include="..\Private\CubeMesh.cpp">
-      <Filter>Utility\Components\GeometryMesh\3D\CubeMesh</Filter>
+      <Filter>Utility\MeshData\3D\CubeMesh</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\AssetMesh.cpp" />
-    <ClCompile Include="..\Private\MeshObject.cpp" />
+    <ClCompile Include="..\Private\MeshObject.cpp">
+      <Filter>Utility\Components\MeshObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Material.cpp">
+      <Filter>Utility\Components\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AssetMesh.cpp">
+      <Filter>Utility\MeshData\3D\AssetMesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />

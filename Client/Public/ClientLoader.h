@@ -19,10 +19,13 @@ public:
 	static CClientLoader* Create();
 	void Load();
 	void Load_Textures();
+	void Load_3DModels();
 	HRESULT Free() override;
 
 private:
 	CLoadHelper* m_pHelper = nullptr;
+	wstring m_strTextureRootPath = L"..\\..\\Resources\\Textures\\";
+	std::string m_str3DModelRootPath = "..\\..\\Resources\\3DModels\\";
 };
 
 _NAMESPACE

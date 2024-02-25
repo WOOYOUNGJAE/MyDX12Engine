@@ -1,12 +1,18 @@
 #pragma once
 #define NOMINMAX
 #include "Base.h"
+#include "MeshData.h"
+//
+//// Assimp
+//#include <assimp/Importer.hpp>
+//#include <assimp/cimport.h>
+//#include <assimp/postprocess.h>
+//#include <assimp/scene.h>
+//#pragma comment(lib, "..\\..\\External\\Assimp\\assimp-vc143-mt")
 
 
 NAMESPACE_(Engine)
-class CAssetMesh;
-//struct aiNode;
-//struct aiScene;
+class CMeshData;
 class ENGINE_DLL CLoadHelper : public CBase
 {
 	DECLARE_SINGLETON(CLoadHelper)
@@ -22,9 +28,9 @@ public:
 	HRESULT Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc, const wstring& strAssetName);
 	void EndSign_Texture(); // Srv 생성 후의 오프셋부터 CBV 생성하도록
 
-	//HRESULT Load_3DModel(const std::string& strPath, const std::string& strAssetName);
-	/*void Recur_ProcessNode(aiNode* pNode, const aiScene* pScene, Matrix& refTr);
-	CAssetMesh* Recur_ProcessMesh(aiMesh* pAiMesh, const aiScene* pScene);*/
+	HRESULT Load_3DModel(const std::string& strPath, const std::string& strAssetName, std::list<CMeshData*>* pOutMeshList);
+	void Recur_ProcessNode(aiNode* pNode, const aiScene* pScene, Matrix& refTr);
+	CMeshData* Recur_ProcessMesh(aiMesh* pAiMesh, const aiScene* pScene);
 	void EndSign_3DModel();
 
 	HRESULT Free() override;
@@ -39,7 +45,8 @@ private: // Textures
 	UINT* m_pNextCbvSrvUavHeapOffset = nullptr;
 	UINT m_iCbvSrvUavDescriptorSize = 0;
 private: // Mesh
-	std::list<CAssetMesh*> m_meshContainingList;
+	std::list<CMeshData*> m_meshContainingList;
+	std::string m_strBasePath;
 };
 
 _NAMESPACE

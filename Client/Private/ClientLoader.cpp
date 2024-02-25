@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "ClientLoader.h"
 #include "LoadHelper.h"
+#include "MeshData.h"
+#include "AssetManager.h"
 
 CClientLoader* CClientLoader::Create()
 {
@@ -15,6 +17,7 @@ void CClientLoader::Load()
 	Safe_AddRef(m_pHelper);
 
 	Load_Textures();
+	Load_3DModels();
 }
 
 void CClientLoader::Load_Textures()
@@ -23,17 +26,32 @@ void CClientLoader::Load_Textures()
 
 	TEXTURE_LOAD_DESC load_Desc{};
 
-	load_Desc.strPath = L"..\\..\\Resources\\Textures\\checkboard.dds";
+	load_Desc.strPath = m_strTextureRootPath + L"checkboard.dds";
 	m_pHelper->Load_Texture(load_Desc, L"Texture_Checkboard");
 
-	load_Desc.strPath = L"..\\..\\Resources\\Textures\\ice.dds";
+	load_Desc.strPath = m_strTextureRootPath + L"ice.dds";
 	m_pHelper->Load_Texture(load_Desc, L"Texture_ice");
 
-	load_Desc.strPath = L"..\\..\\Resources\\Textures\\Cubemap\\NightSkybox.dds";
+	load_Desc.strPath = m_strTextureRootPath + L"Cubemap\\NightSkybox.dds";
 	load_Desc.bIsCubeMap = true;
 	m_pHelper->Load_Texture(load_Desc, L"Texture_NightSkybox");
 
 	m_pHelper->EndSign_Texture();
+}
+
+void CClientLoader::Load_3DModels()
+{
+	m_pHelper->StartSign();
+
+	std::string strPath = m_str3DModelRootPath + "zelda\\";
+	std::string strAssetName = "zeldaPosed001.fbx";
+	std::wstring wstrPrototypeTag = L"zeldaPosed001";
+
+	list<CMeshData*> meshList;
+	m_pHelper->Load_3DModel(strPath, strAssetName, &meshList);
+
+
+	CAssetManager::Get_Instance()->Add_MeshData_ClusteredPrototype(wstrPrototypeTag, meshList);
 }
 
 HRESULT CClientLoader::Free()
