@@ -2,10 +2,35 @@
 #include "Graphic_Device.h"
 #include "ResourceUploadBatch.h"
 #include "AssetManager.h"
+#include "AssetMesh.h"
 #include "ComponentManager.h"
 #include "Renderer.h"
 #include "Texture.h"
 #include "D3DResourceManager.h"
+
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+
+#include "assimp\Importer.hpp"
+
+#include "assimp\cimport.h"
+
+#include "assimp\postprocess.h"
+
+#include "assimp\scene.h"
+
+
+
+#pragma comment(lib, "assimp.lib")
+
+//#include <assimp\Importer.hpp>
+//#include <assimp\postprocess.h>
+//#include <assimp\scene.h>
+//#include <filesystem>
+//#include <memory>
+
 
 IMPLEMENT_SINGLETON(CLoadHelper)
 
@@ -63,15 +88,61 @@ void CLoadHelper::EndSign_Texture()
 	dynamic_cast<CRenderer*>(CComponentManager::Get_Instance()->FindandGet_Prototype(L"Renderer"))->Build_FrameResource();
 	CD3DResourceManager::Get_Instance()->Set_SrvOffsetEnd((*m_pNextCbvSrvUavHeapOffset));
 }
-
-HRESULT CLoadHelper::Load_3DModel(const wstring& strPath, const wstring& strAssetName)
-{
-	HRESULT hr = S_OK;
-
-
-
-	return hr;
-}
+//
+//HRESULT CLoadHelper::Load_3DModel(const string& strPath, const string& strAssetName)
+//{
+//	HRESULT hr = S_OK;
+//
+//	/*Assimp::Importer importer;
+//
+//	const aiScene* pScene = importer.ReadFile(
+//	strPath.c_str(),
+//		aiProcess_Triangulate | aiProcess_ConvertToLeftHanded);
+//
+//	Matrix mTr;
+//	Recur_ProcessNode(pScene->mRootNode, pScene, mTr);*/
+//
+//	return hr;
+//}
+//
+//void CLoadHelper::Recur_ProcessNode(aiNode* pNode, const aiScene* pScene, Matrix& refTr)
+//{
+//
+//	/*Matrix m;
+//	ai_real* temp = &pNode->mTransformation.a1;
+//	float* mTemp = &m._11;
+//	for (int t = 0; t < 16; t++) {
+//		mTemp[t] = float(temp[t]);
+//	}
+//	m = m.Transpose() * refTr;
+//
+//	for (UINT i = 0; i < pNode->mNumMeshes; i++) 
+//	{
+//
+//
+//		aiMesh* pAiMesh = pScene->mMeshes[pNode->mMeshes[i]];
+//		CAssetMesh* pGeneratedMesh = this->Recur_ProcessMesh(pAiMesh, pScene);
+//
+//
+//
+//		for (VertexPositionNormalTexture*& v : pGeneratedMesh->Get_vecVertices())
+//		{
+//			v->position = Vector3::Transform(v->position, m);
+//		}
+//
+//		m_meshContainingList.emplace_back(pGeneratedMesh);
+//	}
+//
+//	for (UINT i = 0; i < pNode->mNumChildren; i++)
+//	{
+//		this->Recur_ProcessNode(pNode->mChildren[i], pScene, m);
+//	}*/
+//}
+//
+//CAssetMesh* CLoadHelper::Recur_ProcessMesh(aiMesh* pAiMesh, const aiScene* pScene)
+//{
+//	return nullptr;
+//}
 
 void CLoadHelper::EndSign_3DModel()
 {
