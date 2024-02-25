@@ -15,6 +15,8 @@ protected:
 public:
     static CAssetMesh* Create();
     CMeshData* Clone(void* pArg = nullptr) override;
+    HRESULT Initialize_Prototype() override;
+    HRESULT ReInit_Prototype(); // Init_Prototype와 달리 수동으로 호출
     HRESULT Initialize(void* pArg) override;
     HRESULT Free() override;
 public: // getter

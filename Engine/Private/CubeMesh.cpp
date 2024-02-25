@@ -59,11 +59,6 @@ CMeshData* CCubeMesh::Clone(void* pArg)
 HRESULT CCubeMesh::Initialize_Prototype()
 {
 	HRESULT hr = S_OK;
-	if (m_pDevice == nullptr || m_pCommandList == nullptr)
-	{
-		MSG_BOX("CubeMesh: Device Null");
-		return E_FAIL;
-	}
 
 	hr = CMeshData::Initialize_Prototype();
 	if (FAILED(hr)) { return E_FAIL; }
@@ -196,10 +191,5 @@ HRESULT CCubeMesh::Free()
 		Safe_Release(m_indexUploadBuffer);
 	}
 
-	if (FAILED(CMeshData::Free()))
-	{
-		return E_FAIL;
-	}
-	
-	return S_OK;
+	return CMeshData::Free();
 }

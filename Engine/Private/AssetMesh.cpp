@@ -1,14 +1,33 @@
 #include "AssetMesh.h"
 
+#include "Device_Utils.h"
+
 CAssetMesh::CAssetMesh(CAssetMesh& rhs) : CMeshData(rhs),
-m_vecVertexData(rhs.m_vecVertexData),
-m_vecIndexData(rhs.m_vecIndexData)
+                                          m_vecVertexData(rhs.m_vecVertexData),
+                                          m_vecIndexData(rhs.m_vecIndexData)
 {
+	Safe_AddRef(m_vertexBufferCPU);
+	Safe_AddRef(m_indexBufferCPU);
+	Safe_AddRef(m_vertexBufferGPU);
+	Safe_AddRef(m_indexBufferGPU);
+	Safe_AddRef(m_vertexUploadBuffer);
+	Safe_AddRef(m_indexUploadBuffer);
+
+	m_iNumVertex = rhs.m_iNumVertex;
+	m_iNumIndices = rhs.m_iNumIndices;
+	m_iVertexByteStride = rhs.m_iVertexByteStride;
+	m_iVertexBufferByteSize = rhs.m_iVertexBufferByteSize;
+	IndexFormat = rhs.IndexFormat;
+	m_iIndexBufferByteSize = rhs.m_iIndexBufferByteSize;
 }
 
 CAssetMesh* CAssetMesh::Create()
 {
-	return new CAssetMesh();
+	CAssetMesh* pInstance = new CAssetMesh();
+
+	pInstance->Initialize_Prototype();
+
+	return pInstance;
 }
 
 CMeshData* CAssetMesh::Clone(void* pArg)
@@ -20,6 +39,62 @@ CMeshData* CAssetMesh::Clone(void* pArg)
 	return pInstance;
 }
 
+HRESULT CAssetMesh::Initialize_Prototype()
+{
+	return CMeshData::Initialize_Prototype();
+}
+
+HRESULT CAssetMesh::ReInit_Prototype()
+{
+	HRESULT hr = S_OK;
+
+	m_iNumVertex = m_vecVertexData.size();
+	m_iNumIndices = m_vecIndexData.size();
+	m_iVertexByteStride = sizeof(VertexPositionNormalTexture);
+	m_iVertexBufferByteSize = m_iNumVertex * m_iVertexByteStride;
+	IndexFormat = DXGI_FORMAT_R32_UINT;
+	m_iIndexBufferByteSize = m_iNumIndices * sizeof(UINT32);
+
+	const UINT iVertexBufferSize = sizeof(VertexPositionNormalTexture) * m_iNumVertex;
+	const UINT iIndexBufferSize = sizeof(UINT32) * m_iNumIndices;
+
+	hr = D3DCreateBlob(iVertexBufferSize, &m_vertexBufferCPU);
+	if (FAILED(hr))
+	{
+		MSG_BOX("AssetMesh : Failed to Create Blob");
+		return E_FAIL;
+	}
+	memcpy(m_vertexBufferCPU->GetBufferPointer(), m_vecVertexData.data(), iVertexBufferSize);
+
+	hr = D3DCreateBlob(iIndexBufferSize, &m_indexBufferCPU);
+	if (FAILED(hr))
+	{
+		MSG_BOX("AssetMesh : Failed to Create Blob");
+		return E_FAIL;
+	}
+	memcpy(m_indexBufferCPU->GetBufferPointer(), m_vecIndexData.data(), iIndexBufferSize);
+
+	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice, m_pCommandList,
+		m_vecVertexData.data(), iVertexBufferSize, &m_vertexUploadBuffer, &m_vertexBufferGPU);
+	if (FAILED(hr))
+	{
+		MSG_BOX("CubeMesh : Failed to Create Buffer");
+		return E_FAIL;
+	}
+
+	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice, m_pCommandList,
+		m_vecIndexData.data(), iIndexBufferSize, &m_indexUploadBuffer, &m_indexBufferGPU);
+	if (FAILED(hr))
+	{
+		MSG_BOX("CubeMesh : Failed to Create Buffer");
+		return E_FAIL;
+	}
+
+	CMeshData::Init_VBV_IBV();
+
+	return hr;
+}
+
 HRESULT CAssetMesh::Initialize(void* pArg)
 {
 	return S_OK;
@@ -27,10 +102,15 @@ HRESULT CAssetMesh::Initialize(void* pArg)
 
 HRESULT CAssetMesh::Free()
 {
+	if (m_iClonedNum > 0)
+	{
+		Safe_Release(m_vertexBufferCPU);
+		Safe_Release(m_indexBufferCPU);
+		Safe_Release(m_vertexBufferGPU);
+		Safe_Release(m_indexBufferGPU);
+		Safe_Release(m_vertexUploadBuffer);
+		Safe_Release(m_indexUploadBuffer);
+	}
+
 	return CMeshData::Free();
-}
-
-void CAssetMesh::Load_FromFile()
-{
-
 }

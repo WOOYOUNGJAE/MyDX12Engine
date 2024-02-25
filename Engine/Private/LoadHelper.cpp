@@ -86,6 +86,12 @@ HRESULT CLoadHelper::Load_3DModel(const string& strPath, const string& strAssetN
 
 	*pOutMeshList = std::move(m_meshContainingList);
 
+	for (CMeshData*& iterMesh : *pOutMeshList)
+	{
+		hr = dynamic_cast<CAssetMesh*>(iterMesh)->ReInit_Prototype();
+		if (FAILED(hr)) { return E_FAIL; }
+	}
+
 	return hr;
 }
 
