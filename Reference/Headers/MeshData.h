@@ -5,7 +5,7 @@
 NAMESPACE_(Engine)
 using std::vector;
 	// MeshGeometry는 Prototype만 가능, Clone 비허용.
-class CMeshData abstract: public CBase
+class ENGINE_DLL CMeshData abstract: public CBase
 {
 protected:
 	CMeshData();

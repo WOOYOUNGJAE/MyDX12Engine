@@ -50,6 +50,7 @@ void CClientLoader::Load_3DModels()
 
 	list<CMeshData*> meshList;
 	m_pHelper->Load_3DModel(strPath, strAssetName, &meshList);
+	CMeshData::Normalize_Vertices(meshList);
 	CAssetManager::Get_Instance()->Add_MeshData_ClusteredPrototype(wstrMeshPrototypeTag, meshList);
 
 

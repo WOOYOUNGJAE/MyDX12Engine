@@ -65,21 +65,11 @@ HRESULT CMeshData::Free()
 
 D3D12_VERTEX_BUFFER_VIEW* CMeshData::Get_VertexBufferViewPtr()
 {
-	/*D3D12_VERTEX_BUFFER_VIEW vbv;
-	vbv.BufferLocation = m_vertexBufferGPU->GetGPUVirtualAddress();
-	vbv.StrideInBytes = m_iVertexByteStride;
-	vbv.SizeInBytes = m_iVertexBufferByteSize;*/
-
 	return &m_vertexBufferView;
 }
 
 D3D12_INDEX_BUFFER_VIEW* CMeshData::Get_IndexBufferViewPtr()
 {
-	/*D3D12_INDEX_BUFFER_VIEW ibv;
-	ibv.BufferLocation = m_indexBufferGPU->GetGPUVirtualAddress();
-	ibv.Format = IndexFormat;
-	ibv.SizeInBytes = m_iIndexBufferByteSize;*/
-
 	return &m_indexBufferView;
 }
 
@@ -88,35 +78,61 @@ void CMeshData::Normalize_Vertices(CMeshData* pMeshData)
 	// Normalize vertices
 	Vector3 vmin(1000, 1000, 1000);
 	Vector3 vmax(-1000, -1000, -1000);
+	// AABB min max
+	for (auto& v : pMeshData->Get_vecVertices()) 
+	{
+		vmin.x = XMMin(vmin.x, v.position.x);
+		vmin.y = XMMin(vmin.y, v.position.y);
+		vmin.z = XMMin(vmin.z, v.position.z);
+		vmax.x = XMMax(vmax.x, v.position.x);
+		vmax.y = XMMax(vmax.y, v.position.y);
+		vmax.z = XMMax(vmax.z, v.position.z);
+	}
+	float dx = vmax.x - vmin.x, dy = vmax.y - vmin.y, dz = vmax.z - vmin.z;
+	float dl = XMMax(XMMax(dx, dy), dz);
+	float cx = (vmax.x + vmin.x) * 0.5f, cy = (vmax.y + vmin.y) * 0.5f,
+		cz = (vmax.z + vmin.z) * 0.5f;
 
+	// normalize
+	for (auto& v : pMeshData->Get_vecVertices())
+	{
+		v.position.x = (v.position.x - cx) / dl;
+		v.position.y = (v.position.y - cy) / dl;
+		v.position.z = (v.position.z - cz) / dl;
+	}
 }
 
 void CMeshData::Normalize_Vertices(std::list<CMeshData*>& refMeshList)
 {
-	//// Normalize vertices
-	//Vector3 vmin(1000, 1000, 1000);
-	//Vector3 vmax(-1000, -1000, -1000);
-	//for (auto& mesh : refMeshList) {
-	//	for (auto& v : mesh. mesh.vertices) {
-	//		vmin.x = XMMin(vmin.x, v.position.x);
-	//		vmin.y = XMMin(vmin.y, v.position.y);
-	//		vmin.z = XMMin(vmin.z, v.position.z);
-	//		vmax.x = XMMax(vmax.x, v.position.x);
-	//		vmax.y = XMMax(vmax.y, v.position.y);
-	//		vmax.z = XMMax(vmax.z, v.position.z);
-	//	}
-	//}
+	// Normalize vertices
+	Vector3 vmin(1000, 1000, 1000);
+	Vector3 vmax(-1000, -1000, -1000);
+	// AABB min max
+	for (auto& iterMesh : refMeshList)
+	{
+		for (auto& v : iterMesh->Get_vecVertices())
+		{
+			vmin.x = XMMin(vmin.x, v.position.x);
+			vmin.y = XMMin(vmin.y, v.position.y);
+			vmin.z = XMMin(vmin.z, v.position.z);
+			vmax.x = XMMax(vmax.x, v.position.x);
+			vmax.y = XMMax(vmax.y, v.position.y);
+			vmax.z = XMMax(vmax.z, v.position.z);
+		}
+	}
 
-	//float dx = vmax.x - vmin.x, dy = vmax.y - vmin.y, dz = vmax.z - vmin.z;
-	//float dl = XMMax(XMMax(dx, dy), dz);
-	//float cx = (vmax.x + vmin.x) * 0.5f, cy = (vmax.y + vmin.y) * 0.5f,
-	//	cz = (vmax.z + vmin.z) * 0.5f;
+	float dx = vmax.x - vmin.x, dy = vmax.y - vmin.y, dz = vmax.z - vmin.z;
+	float dl = XMMax(XMMax(dx, dy), dz);
+	float cx = (vmax.x + vmin.x) * 0.5f, cy = (vmax.y + vmin.y) * 0.5f,
+		cz = (vmax.z + vmin.z) * 0.5f;
 
-	//for (auto& mesh : refMeshList) {
-	//	for (auto& v : mesh.vertices) {
-	//		v.position.x = (v.position.x - cx) / dl;
-	//		v.position.y = (v.position.y - cy) / dl;
-	//		v.position.z = (v.position.z - cz) / dl;
-	//	}
-	//}
+	// normalize
+	for (auto& iterMesh : refMeshList) {
+		for (auto& v : iterMesh->Get_vecVertices())
+		{
+			v.position.x = (v.position.x - cx) / dl;
+			v.position.y = (v.position.y - cy) / dl;
+			v.position.z = (v.position.z - cz) / dl;
+		}
+	}
 }
