@@ -6,7 +6,7 @@
 #include "ComponentManager.h"
 #include "Renderer.h"
 #include "Texture.h"
-#include "D3DResourceManager.h"
+//#include "D3DResourceManager.h"
 #include "MeshData.h"
 
 IMPLEMENT_SINGLETON(CLoadHelper)
@@ -39,7 +39,7 @@ HRESULT CLoadHelper::Initialize()
 void CLoadHelper::StartSign()
 {
 
-	CD3DResourceManager::Get_Instance()->Set_SrvOffsetStart((*m_pNextCbvSrvUavHeapOffset));
+	//CD3DResourceManager::Get_Instance()->Set_SrvOffsetStart((*m_pNextCbvSrvUavHeapOffset));
 	CGraphic_Device::Get_Instance()->Reset_CmdList();
 }
 
@@ -60,11 +60,11 @@ HRESULT CLoadHelper::Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc,
 	return S_OK;
 }
 
-void CLoadHelper::EndSign_Texture()
+void CLoadHelper::EndSign()
 {
 	CGraphic_Device::Get_Instance()->Close_CmdList();
 	dynamic_cast<CRenderer*>(CComponentManager::Get_Instance()->FindandGet_Prototype(L"Renderer"))->Build_FrameResource();
-	CD3DResourceManager::Get_Instance()->Set_SrvOffsetEnd((*m_pNextCbvSrvUavHeapOffset));
+	//CD3DResourceManager::Get_Instance()->Set_SrvOffsetEnd((*m_pNextCbvSrvUavHeapOffset));
 }
 
 // ----------------------------------------------------------------------------------
@@ -88,8 +88,53 @@ HRESULT CLoadHelper::Load_3DModel(const string& strPath, const string& strAssetN
 
 	for (CMeshData*& iterMesh : *pOutMeshList)
 	{
-		hr = dynamic_cast<CAssetMesh*>(iterMesh)->ReInit_Prototype();
+		// 다른 메쉬가 같은 텍스처 공유하는 경우 있음
+		CAssetMesh* pDownCastedMesh = dynamic_cast<CAssetMesh*>(iterMesh);
+		hr = pDownCastedMesh->ReInit_Prototype();
 		if (FAILED(hr)) { return E_FAIL; }
+
+		// Textures
+		wstring wstrAssetName = pDownCastedMesh->Get_Path();
+		// 3DModels포함해서 이전 경로 삭제
+		size_t extIndex = wstrAssetName.find(L"3DModels");
+		if (extIndex != wstring::npos)
+		{
+			wstrAssetName.erase(0, extIndex + wcslen(L"3DModels") + 1);
+		}
+		// 확장자 제거
+		extIndex = wstrAssetName.rfind(L'.');
+		if (extIndex != wstring::npos)
+		{
+			wstrAssetName.erase(extIndex, wstrAssetName.size() - extIndex + 1);
+		}
+
+		CTexture* pInstance = m_pAssetManager->FindandGet_Texture(wstrAssetName);
+		if (pInstance) // 이미 있다면 텍스처 로드는 건너 뜀
+		{
+			iterMesh->Set_CbvSrvUavOffset(pInstance->m_iCbvSrvUavHeapOffset);
+			continue;
+		}
+		pInstance = nullptr;
+
+		// Texture Load
+		m_pResourceUpload->Begin();
+
+		m_texture_init_desc.bIsCubeMap = false;
+		m_texture_init_desc.strPath = pDownCastedMesh->Get_Path();
+		m_texture_init_desc.iCbvSrvUavHeapOffset = *m_pNextCbvSrvUavHeapOffset;
+
+		hr = m_pAssetManager->Add_Texture(wstrAssetName, CTexture::Create(&m_texture_init_desc));
+		if (FAILED(hr))
+		{
+			MSG_BOX("Craeting Texture Failed");
+			return hr;
+		}
+		iterMesh->Set_CbvSrvUavOffset(*m_pNextCbvSrvUavHeapOffset);
+
+		auto finish = m_pResourceUpload->End(CGraphic_Device::Get_Instance()->Get_CommandQueue());
+		finish.wait();
+
+		(*m_pNextCbvSrvUavHeapOffset) += m_iCbvSrvUavDescriptorSize;
 	}
 
 	return hr;

@@ -19,7 +19,8 @@ m_indexBufferGPU(rhs.m_indexBufferGPU),
 m_vertexUploadBuffer(rhs.m_vertexUploadBuffer),
 m_indexUploadBuffer(rhs.m_indexUploadBuffer),
 m_vertexBufferView(rhs.m_vertexBufferView),
-m_indexBufferView(rhs.m_indexBufferView)
+m_indexBufferView(rhs.m_indexBufferView),
+m_iCbvSrvUavOffset(rhs.m_iCbvSrvUavOffset)
 {
 
 }

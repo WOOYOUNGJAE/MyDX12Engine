@@ -16,13 +16,16 @@ void CClientLoader::Load()
 	m_pHelper = CLoadHelper::Get_Instance();
 	Safe_AddRef(m_pHelper);
 
+	m_pHelper->StartSign();
+
 	Load_Textures();
 	Load_3DModels();
+
+	m_pHelper->EndSign();
 }
 
 void CClientLoader::Load_Textures()
 {
-	m_pHelper->StartSign();
 
 	TEXTURE_LOAD_DESC load_Desc{};
 
@@ -36,12 +39,10 @@ void CClientLoader::Load_Textures()
 	load_Desc.bIsCubeMap = true;
 	m_pHelper->Load_Texture(load_Desc, L"Texture_NightSkybox");
 
-	m_pHelper->EndSign_Texture();
 }
 
 void CClientLoader::Load_3DModels()
 {
-	m_pHelper->StartSign();
 
 	std::string strPath = m_str3DModelRootPath + "zelda\\";
 	std::string strAssetName = "zeldaPosed001.fbx";
@@ -49,9 +50,9 @@ void CClientLoader::Load_3DModels()
 
 	list<CMeshData*> meshList;
 	m_pHelper->Load_3DModel(strPath, strAssetName, &meshList);
-
-
 	CAssetManager::Get_Instance()->Add_MeshData_ClusteredPrototype(wstrMeshPrototypeTag, meshList);
+
+
 }
 
 HRESULT CClientLoader::Free()

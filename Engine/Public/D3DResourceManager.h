@@ -3,7 +3,7 @@
 // ID3D12Resource 관리
 // Resource가 생성될 때 레퍼런스 카운트 증가시킨 후 매니저에 등록
 // 관리 대상 : Texture, ConstantBuffer
-
+// 임시 폐기
 NAMESPACE_(Engine)
 
 class ENGINE_DLL CD3DResourceManager : public CBase

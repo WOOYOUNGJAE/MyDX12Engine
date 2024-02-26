@@ -26,13 +26,14 @@ public:
 
 	void StartSign();
 	HRESULT Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc, const wstring& strAssetName);
-	void EndSign_Texture(); // Srv 생성 후의 오프셋부터 CBV 생성하도록
+	void EndSign(); // Srv 생성 후의 오프셋부터 CBV 생성하도록
 
+	// Mesh랑 Texture 동시에, 후에는 뼈대도
 	HRESULT Load_3DModel(const std::string& strPath, const std::string& strAssetName, std::list<CMeshData*>* pOutMeshList);
 	void Recur_ProcessNode(aiNode* pNode, const aiScene* pScene, Matrix& refTr);
 	CMeshData* Recur_ProcessMesh(aiMesh* pAiMesh, const aiScene* pScene);
 	void EndSign_3DModel();
-
+	
 	HRESULT Free() override;
 
 private:

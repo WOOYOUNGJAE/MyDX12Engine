@@ -22,7 +22,7 @@ public: // getter setter
 	virtual D3D12_INDEX_BUFFER_VIEW* Get_IndexBufferViewPtr();
 	virtual UINT Get_CbvSrvUavOffset() { return m_iCbvSrvUavOffset; }
 	virtual _uint Num_Indices() { return m_iNumIndices; }
-
+	void Set_CbvSrvUavOffset(UINT iOffset) { m_iCbvSrvUavOffset = iOffset; }
 protected:
 	ID3D12Device* m_pDevice = nullptr;
 	ID3D12GraphicsCommandList* m_pCommandList = nullptr;

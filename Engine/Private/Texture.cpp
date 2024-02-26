@@ -1,6 +1,7 @@
 #include "Texture.h"
 #include "Graphic_Device.h"
 #include "D3DResourceManager.h"
+#include "WICTextureLoader.h"
 
 CTexture* CTexture::Create(void* pArg)
 {
@@ -18,18 +19,35 @@ HRESULT CTexture::Initialize(void* pArg)
 
 	m_strPath = pInitDesc->strPath;
 
-	hr = CreateDDSTextureFromFile(
-		pInitDesc->pDevice,
-		*pInitDesc->pResourceUpload,
-		pInitDesc->strPath.c_str(),
-		&m_pAssetData, false, 0, nullptr,
-		&pInitDesc->bIsCubeMap);
-	if (FAILED(hr))
+	if (m_strPath.rfind(L".dds") != wstring::npos) // dds 파일이라면
 	{
-		MSG_BOX("Create DDS Failed");
-		return E_FAIL;
+		hr = CreateDDSTextureFromFile(
+			pInitDesc->pDevice,
+			*pInitDesc->pResourceUpload,
+			pInitDesc->strPath.c_str(),
+			&m_pAssetData, false, 0, nullptr,
+			&pInitDesc->bIsCubeMap);
+		if (FAILED(hr))
+		{
+			MSG_BOX("Create DDS Failed");
+			return E_FAIL;
+		}
+	}
+	else // dds 아닐 때
+	{
+		hr = CreateWICTextureFromFile(
+			pInitDesc->pDevice,
+			*pInitDesc->pResourceUpload,
+			pInitDesc->strPath.c_str(),
+			&m_pAssetData, false, 0);
+		if (FAILED(hr))
+		{
+			MSG_BOX("Create not DDS Failed");
+			return E_FAIL;
+		}		
 	}
 
+	
 
 	//CGraphic_Device::Get_Instance()->Get_CommandList()->ResourceBarrier(1,
 	//	&CD3DX12_RESOURCE_BARRIER::Transition(m_pAssetData, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE | D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE));
@@ -55,7 +73,7 @@ HRESULT CTexture::Initialize(void* pArg)
 		handle
 		);
 
-	CD3DResourceManager::Get_Instance()->Register_Resource(MANAGED_RESOURCE_TEX, &m_pAssetData);
+	//CD3DResourceManager::Get_Instance()->Register_Resource(MANAGED_RESOURCE_TEX, &m_pAssetData);
 
 
 	return hr;
