@@ -211,7 +211,7 @@ void CRenderer::BeginRender()
 	m_pCommandList->ResourceBarrier(1,
 		&CD3DX12_RESOURCE_BARRIER::Transition(m_pRenderTargetArr[m_iFrameIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
-	m_pCommandList->ClearRenderTargetView(m_pGraphic_Device->CurrentBackBufferView(), Colors::LightSteelBlue, 0, nullptr);
+	m_pCommandList->ClearRenderTargetView(m_pGraphic_Device->CurrentBackBufferView(), Colors::DarkGray, 0, nullptr);
 
 	m_pCommandList->RSSetViewports(1, &m_pGraphic_Device->m_screenViewport);
 	m_pCommandList->RSSetScissorRects(1, &m_pGraphic_Device->m_ScissorRect);

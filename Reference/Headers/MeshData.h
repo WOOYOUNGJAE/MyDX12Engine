@@ -30,6 +30,7 @@ public: // getter
 public: // static util func
 	static void Normalize_Vertices(CMeshData* pMeshData);
 	static void Normalize_Vertices(std::list<CMeshData*>& refMeshList);
+	static void Normalize_Vertices(std::vector<CMeshData*>& refVecMesh);
 protected:
 	ID3D12Device* m_pDevice = nullptr;
 	ID3D12GraphicsCommandList* m_pCommandList = nullptr;

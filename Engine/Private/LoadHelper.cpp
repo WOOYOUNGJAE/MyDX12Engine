@@ -63,6 +63,7 @@ HRESULT CLoadHelper::Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc,
 void CLoadHelper::EndSign()
 {
 	CGraphic_Device::Get_Instance()->Close_CmdList();
+	CGraphic_Device::Get_Instance()->Execute_CmdList();
 	dynamic_cast<CRenderer*>(CComponentManager::Get_Instance()->FindandGet_Prototype(L"Renderer"))->Build_FrameResource();
 	//CD3DResourceManager::Get_Instance()->Set_SrvOffsetEnd((*m_pNextCbvSrvUavHeapOffset));
 }
@@ -136,6 +137,10 @@ HRESULT CLoadHelper::Load_3DModel(const string& strPath, const string& strAssetN
 
 		(*m_pNextCbvSrvUavHeapOffset) += m_iCbvSrvUavDescriptorSize;
 	}
+	CGraphic_Device::Get_Instance()->Close_CmdList();
+	CGraphic_Device::Get_Instance()->Execute_CmdList();
+	CGraphic_Device::Get_Instance()->Reset_CmdList();
+
 
 	return hr;
 }

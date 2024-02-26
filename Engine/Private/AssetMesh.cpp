@@ -47,6 +47,8 @@ HRESULT CAssetMesh::ReInit_Prototype()
 {
 	HRESULT hr = S_OK;
 
+	//Normalize_Vertices(this);
+
 	m_iNumVertex = m_vecVertexData.size();
 	m_iNumIndices = m_vecIndexData.size();
 	m_iVertexByteStride = sizeof(VertexPositionNormalTexture);

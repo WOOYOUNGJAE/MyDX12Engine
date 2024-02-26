@@ -109,9 +109,8 @@ void CCube::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameRes
 		pCmdList->SetGraphicsRootDescriptorTable(0, m_pRendererCom->Get_HandleOffsettedGPU(Get_CbvSrvUavHeapOffset_Texture()));
 		pCmdList->SetGraphicsRootDescriptorTable(1, m_pRendererCom->Get_ObjCbvHandleOffsettedGPU());
 
-		//pCmdList->DrawInstanced(24, 1, 0, 0);
 		pCmdList->DrawIndexedInstanced(
-			36,
+			pMesh->Num_Indices(),
 			1,
 			0,
 			0,

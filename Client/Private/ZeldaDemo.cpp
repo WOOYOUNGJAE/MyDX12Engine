@@ -65,6 +65,8 @@ HRESULT CZeldaDemo::Initialize(void* pArg)
 
 	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
 
+	m_pTransformCom->Set_Scale(Vector3(0.01, 0.01, 0.01));
+
 	return hr;
 }
 
@@ -101,7 +103,7 @@ void CZeldaDemo::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFra
 		pCmdList->IASetIndexBuffer(pMesh->Get_IndexBufferViewPtr());
 
 		// Set Descriptor Tables
-		pCmdList->SetGraphicsRootDescriptorTable(0, m_pRendererCom->Get_HandleOffsettedGPU(pMesh->Get_CbvSrvUavOffset()));
+		pCmdList->SetGraphicsRootDescriptorTable(0, m_pRendererCom->Get_HandleOffsettedGPU((INT)pMesh->Get_CbvSrvUavOffset()));
 		pCmdList->SetGraphicsRootDescriptorTable(1, m_pRendererCom->Get_ObjCbvHandleOffsettedGPU());
 
 		//pCmdList->DrawInstanced(24, 1, 0, 0);

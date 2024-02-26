@@ -141,7 +141,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
-    int* a = new int;
+    BYTE* a = new BYTE;
 
     return (int) msg.wParam;
 }
