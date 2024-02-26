@@ -3,6 +3,7 @@
 #include "Engine_Defines.h"
 
 NAMESPACE_(Engine)
+using std::vector;
 	// MeshGeometry는 Prototype만 가능, Clone 비허용.
 class CMeshData abstract: public CBase
 {
@@ -23,6 +24,12 @@ public: // getter setter
 	virtual UINT Get_CbvSrvUavOffset() { return m_iCbvSrvUavOffset; }
 	virtual _uint Num_Indices() { return m_iNumIndices; }
 	void Set_CbvSrvUavOffset(UINT iOffset) { m_iCbvSrvUavOffset = iOffset; }
+public: // getter
+	vector<VertexPositionNormalTexture>& Get_vecVertices() { return m_vecVertexData; }
+	vector<UINT32>& Get_vecIndices() { return m_vecIndexData; }
+public: // static util func
+	static void Normalize_Vertices(CMeshData* pMeshData);
+	static void Normalize_Vertices(std::list<CMeshData*>& refMeshList);
 protected:
 	ID3D12Device* m_pDevice = nullptr;
 	ID3D12GraphicsCommandList* m_pCommandList = nullptr;
@@ -49,6 +56,9 @@ protected: // Data about the buffers.
 	D3D12_PRIMITIVE_TOPOLOGY PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 protected:
 	UINT m_iCbvSrvUavOffset = UINT32_MAX; // 모든 메쉬 오브젝트가 텍스트를 필수로 들고 있지 않음
+protected:
+	vector<VertexPositionNormalTexture> m_vecVertexData;
+	vector<UINT32> m_vecIndexData; // UINT16 쓰는 메쉬는 자식에 따로 구현
 };
 
 _NAMESPACE

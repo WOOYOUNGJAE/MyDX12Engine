@@ -3,8 +3,7 @@
 #include "Device_Utils.h"
 
 CAssetMesh::CAssetMesh(CAssetMesh& rhs) : CMeshData(rhs),
-                                          m_vecVertexData(rhs.m_vecVertexData),
-                                          m_vecIndexData(rhs.m_vecIndexData)
+m_strPath(rhs.m_strPath)
 {
 	Safe_AddRef(m_vertexBufferCPU);
 	Safe_AddRef(m_indexBufferCPU);

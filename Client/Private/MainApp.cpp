@@ -65,11 +65,11 @@ HRESULT CMainApp::Initialize()
 
 	objDesc.strTag = L"Cube";
 	objDesc.vStartPos = Vector3(0.f, 0.f, 0.f);
-	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
-	if (FAILED(hr)) { return hr; }*/
-	objDesc.strTag = L"ZeldaDemo";
-	hr = m_pGameInstance->Add_GameObject_InScene(L"ZeldaDemo", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
+	objDesc.strTag = L"ZeldaDemo";
+	/*hr = m_pGameInstance->Add_GameObject_InScene(L"ZeldaDemo", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }*/
 #pragma endregion InLevel
 
 	// Renderer

@@ -11,8 +11,8 @@ CCubeMesh::CCubeMesh()
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(UINT16);
 }
 
-CCubeMesh::CCubeMesh(CCubeMesh& rhs) : CMeshData(rhs),
-m_vertexData(rhs.m_vertexData)
+CCubeMesh::CCubeMesh(CCubeMesh& rhs) : CMeshData(rhs)
+//m_vertexData(rhs.m_vertexData)
 {
 	Safe_AddRef(m_vertexBufferCPU);
 	Safe_AddRef(m_indexBufferCPU);
@@ -63,7 +63,8 @@ HRESULT CCubeMesh::Initialize_Prototype()
 	hr = CMeshData::Initialize_Prototype();
 	if (FAILED(hr)) { return E_FAIL; }
 
-	m_vertexData = new VertexPositionNormalTexture[24]
+
+	VertexPositionNormalTexture tempVertices[]
 	{
 		// front
 		VertexPositionNormalTexture(Vector3(-1, -1, -1), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.0f, 1.0f)),
@@ -101,8 +102,10 @@ HRESULT CCubeMesh::Initialize_Prototype()
 		VertexPositionNormalTexture(Vector3(1, +1, +1), Vector3(1.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f)),
 		VertexPositionNormalTexture(Vector3(1, -1, +1), Vector3(1.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f)),
 	};
+	m_vecVertexData.reserve(24);
+	m_vecVertexData.assign(tempVertices, tempVertices + _countof(tempVertices));
 
-	UINT16 indexData[36]
+	UINT16 indicesData[]
 	{
 		// front
 		0, 1, 2,
@@ -138,7 +141,7 @@ HRESULT CCubeMesh::Initialize_Prototype()
 		MSG_BOX("CubeMesh : Failed to Create Blob");
 		return E_FAIL;
 	}
-	memcpy(m_vertexBufferCPU->GetBufferPointer(), m_vertexData, iVertexBufferSize);
+	memcpy(m_vertexBufferCPU->GetBufferPointer(), m_vecVertexData.data(), iVertexBufferSize);
 
 	hr = D3DCreateBlob(iIndexBufferSize, &m_indexBufferCPU);
 	if (FAILED(hr))
@@ -146,10 +149,10 @@ HRESULT CCubeMesh::Initialize_Prototype()
 		MSG_BOX("CubeMesh : Failed to Create Blob");
 		return E_FAIL;
 	}
-	memcpy(m_indexBufferCPU->GetBufferPointer(), indexData, iIndexBufferSize);
+	memcpy(m_indexBufferCPU->GetBufferPointer(), indicesData, iIndexBufferSize);
 
 	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice, m_pCommandList,
-	                                          m_vertexData, iVertexBufferSize, &m_vertexUploadBuffer, &m_vertexBufferGPU);
+		m_vecVertexData.data(), iVertexBufferSize, &m_vertexUploadBuffer, &m_vertexBufferGPU);
 	if (FAILED(hr))
 	{
 		MSG_BOX("CubeMesh : Failed to Create Buffer");
@@ -157,7 +160,7 @@ HRESULT CCubeMesh::Initialize_Prototype()
 	}
 
 	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice, m_pCommandList,
-	                                          indexData, iIndexBufferSize, &m_indexUploadBuffer, &m_indexBufferGPU);
+		indicesData, iIndexBufferSize, &m_indexUploadBuffer, &m_indexBufferGPU);
 	if (FAILED(hr))
 	{
 		MSG_BOX("CubeMesh : Failed to Create Buffer");
@@ -177,11 +180,20 @@ HRESULT CCubeMesh::Free()
 {
 	
 
-	if (m_iClonedNum == 0)
-	{
-		Safe_Delete_Array(m_vertexData); // Prototype 경우에만 해제
-	}
-	else
+	//if (m_iClonedNum == 0)
+	//{
+	//	Safe_Delete_Array(m_vertexData); // Prototype 경우에만 해제
+	//}
+	//else
+	//{
+	//	Safe_Release(m_vertexBufferCPU);
+	//	Safe_Release(m_indexBufferCPU);
+	//	Safe_Release(m_vertexBufferGPU);
+	//	Safe_Release(m_indexBufferGPU);
+	//	Safe_Release(m_vertexUploadBuffer);
+	//	Safe_Release(m_indexUploadBuffer);
+	//}
+	if (m_iClonedNum > 0)
 	{
 		Safe_Release(m_vertexBufferCPU);
 		Safe_Release(m_indexBufferCPU);

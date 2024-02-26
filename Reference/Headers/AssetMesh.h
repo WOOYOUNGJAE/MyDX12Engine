@@ -19,15 +19,9 @@ public:
     HRESULT ReInit_Prototype(); // Init_Prototype와 달리 수동으로 호출
     HRESULT Initialize(void* pArg) override;
     HRESULT Free() override;
-public: // getter
-    vector<VertexPositionNormalTexture>& Get_vecVertices() { return m_vecVertexData; }
-    vector<UINT32>& Get_vecIndices() { return m_vecIndexData; }
     wstring& Get_Path() { return m_strPath; }
 public:
 
-private:
-    vector<VertexPositionNormalTexture> m_vecVertexData;
-    vector<UINT32> m_vecIndexData;
     wstring m_strPath;
 };
 
