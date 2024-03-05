@@ -13,7 +13,7 @@ CZeldaDemo::CZeldaDemo(CZeldaDemo& rhs) : CGameObject(rhs)
 CZeldaDemo* CZeldaDemo::Create()
 {
 	CZeldaDemo* pInstance = new CZeldaDemo;
-
+	pInstance->m_bIsPrototype = true;
 	if (pInstance)
 	{
 		pInstance->Initialize_Prototype();

@@ -9,7 +9,7 @@
 CRenderer* CRenderer::Create()
 {
 	CRenderer* pInstance = new CRenderer();
-
+	pInstance->m_bIsPrototype = true;
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
 		MSG_BOX("CRenderer : Failed to Init Prototype");
@@ -93,7 +93,7 @@ HRESULT CRenderer::Build_FrameResource()
 	{
 		m_vecFrameResource.push_back(new FrameResource(
 			pDevice,
-			1/**/,
+			2/**/,
 			1/**/)
 		);
 	}
@@ -207,15 +207,20 @@ void CRenderer::BeginRender()
 	m_pCommandList->Reset(m_pCommandAllocator, nullptr);
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHeapHandle(m_pRtvHeap->GetCPUDescriptorHandleForHeapStart(),
 		m_iFrameIndex, m_pGraphic_Device->m_iRtvDescriptorSize);
-	
+	CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHeapHandle(m_pGraphic_Device->Get_DepthStencilViewHeapStart());
+
 	m_pCommandList->ResourceBarrier(1,
 		&CD3DX12_RESOURCE_BARRIER::Transition(m_pRenderTargetArr[m_iFrameIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
-	m_pCommandList->ClearRenderTargetView(m_pGraphic_Device->CurrentBackBufferView(), Colors::DarkGray, 0, nullptr);
 
 	m_pCommandList->RSSetViewports(1, &m_pGraphic_Device->m_screenViewport);
 	m_pCommandList->RSSetScissorRects(1, &m_pGraphic_Device->m_ScissorRect);
-	m_pCommandList->OMSetRenderTargets(1, &rtvHeapHandle, FALSE, nullptr);
+	m_pCommandList->OMSetRenderTargets(1, &rtvHeapHandle, FALSE, &dsvHeapHandle);
+
+	m_pCommandList->ClearRenderTargetView(m_pGraphic_Device->CurrentBackBufferView(), Colors::DarkGray, 0, nullptr);
+	//m_pCommandList->ClearDepthStencilView(m_pGraphic_Device->Get_DepthStencilViewHeapStart(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	m_pCommandList->ClearDepthStencilView(dsvHeapHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
+	
 }
 
 void CRenderer::MainRender()

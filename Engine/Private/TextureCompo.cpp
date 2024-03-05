@@ -9,7 +9,10 @@ CTextureCompo::CTextureCompo()
 
 CTextureCompo* CTextureCompo::Create()
 {
-	return new CTextureCompo;
+	CTextureCompo* pInstance = new CTextureCompo;
+	pInstance->m_bIsPrototype = true;
+
+	return pInstance;
 }
 
 CComponent* CTextureCompo::Clone(void* pArg)

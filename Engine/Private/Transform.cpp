@@ -3,7 +3,7 @@
 CTransform* CTransform::Create()
 {
 	CTransform* pInstance = new CTransform();
-
+	pInstance->m_bIsPrototype = true;
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
 		MSG_BOX("Transform: Failed to Create Transform");

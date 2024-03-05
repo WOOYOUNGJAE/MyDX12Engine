@@ -2,7 +2,10 @@
 
 CMaterial* CMaterial::Create()
 {
-	return new CMaterial;
+	CMaterial* pInstance = new CMaterial;
+	pInstance->m_bIsPrototype = true;
+
+	return pInstance;
 }
 
 CComponent* CMaterial::Clone(void* pArg)

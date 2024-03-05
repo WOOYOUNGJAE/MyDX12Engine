@@ -9,12 +9,12 @@ CCamera_Free::CCamera_Free(CCamera_Free& rhs) : CCamera(rhs)
 CCamera_Free* CCamera_Free::Create()
 {
 	CCamera_Free* pInstance = new CCamera_Free();
-
+	pInstance->m_bIsPrototype = true;
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
 		MSG_BOX("CameraFree: Failed to Init CameraFree");
 	}
-
+	
 	return pInstance;
 }
 

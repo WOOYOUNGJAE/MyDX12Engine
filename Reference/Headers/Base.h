@@ -6,7 +6,7 @@ class ENGINE_DLL CBase abstract
 {
 protected:
 	CBase() = default;
-	CBase(CBase& rhs) { m_iClonedNum = rhs.m_iClonedNum + 1; }
+	CBase(CBase& rhs) { m_iClonedNum = ++rhs.m_iClonedNum; }
 	virtual ~CBase() = default;
 
 public:
@@ -28,6 +28,7 @@ public:
 
 protected:
 	UINT m_iClonedNum = 0; // Prototype은 0, Clone은 1부터 증가
+	bool m_bIsPrototype = false;
 private:
 	_ulong m_dwRefCnt = 0;
 };

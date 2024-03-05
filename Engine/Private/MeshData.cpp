@@ -51,7 +51,7 @@ void CMeshData::Init_VBV_IBV()
 
 HRESULT CMeshData::Free()
 {
-	if (m_iClonedNum == 0)
+	if (m_bIsPrototype == true)
 	{
 		Safe_Release(m_vertexBufferCPU);
 		Safe_Release(m_indexBufferCPU);

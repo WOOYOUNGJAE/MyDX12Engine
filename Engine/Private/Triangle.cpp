@@ -9,7 +9,7 @@
 CTriangle* CTriangle::Create()
 {
 	CTriangle* pInstance = new CTriangle;
-
+	pInstance->m_bIsPrototype = true;
 	if (pInstance)
 	{
 		pInstance->Initialize_Prototype();

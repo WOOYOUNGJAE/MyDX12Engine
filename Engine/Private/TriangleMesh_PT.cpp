@@ -27,7 +27,7 @@ m_vertexData(rhs.m_vertexData)
 CTriangleMesh_PT* CTriangleMesh_PT::Create()
 {
 	CTriangleMesh_PT* pInstance = new CTriangleMesh_PT();
-
+	pInstance->m_bIsPrototype = true;
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
 		Safe_Release(pInstance);
@@ -129,7 +129,7 @@ HRESULT CTriangleMesh_PT::Initialize(void* pArg)
 
 HRESULT CTriangleMesh_PT::Free()
 {
-	if (m_iClonedNum == 0)
+	if (m_bIsPrototype == true)
 	{
 		Safe_Delete_Array(m_vertexData); // Prototype 경우에만 해제
 	}

@@ -32,7 +32,7 @@ CCubeMesh::CCubeMesh(CCubeMesh& rhs) : CMeshData(rhs)
 CCubeMesh* CCubeMesh::Create()
 {
 	CCubeMesh* pInstance = new CCubeMesh();
-
+	pInstance->m_bIsPrototype = true;
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
 		Safe_Release(pInstance);
@@ -193,7 +193,7 @@ HRESULT CCubeMesh::Free()
 	//	Safe_Release(m_vertexUploadBuffer);
 	//	Safe_Release(m_indexUploadBuffer);
 	//}
-	if (m_iClonedNum > 0)
+	if (m_bIsPrototype == false)
 	{
 		Safe_Release(m_vertexBufferCPU);
 		Safe_Release(m_indexBufferCPU);

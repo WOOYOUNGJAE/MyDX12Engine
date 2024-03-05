@@ -11,7 +11,7 @@ CMeshObject::CMeshObject(CMeshObject& rhs) : CComponent(rhs)
 CMeshObject* CMeshObject::Create()
 {
 	CMeshObject* pInstance = new CMeshObject;
-
+	pInstance->m_bIsPrototype = true;
 	pInstance->Initialize_Prototype();
 
 	return pInstance;

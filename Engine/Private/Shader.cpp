@@ -15,7 +15,7 @@ m_pInputLayoutArr(rhs.m_pInputLayoutArr)
 CShader* CShader::Create(const SHADER_INIT_DESC* shaderInputArr, _uint iArrSize)
 {
 	CShader* pInstance = new CShader();
-
+	pInstance->m_bIsPrototype = true;
 	if (pInstance == nullptr)
 	{
 		MSG_BOX("Shader : Fail to Create Shader");
@@ -111,7 +111,7 @@ HRESULT CShader::Initialize_Prototype(const SHADER_INIT_DESC* shaderInputArr, _u
 
 HRESULT CShader::Free()
 {
-	if (m_iClonedNum == 0)
+	if (m_bIsPrototype == true)
 	{
 		Safe_Delete_Array(m_pInputLayoutArr);		
 	}

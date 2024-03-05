@@ -23,6 +23,7 @@ m_strPath(rhs.m_strPath)
 CAssetMesh* CAssetMesh::Create()
 {
 	CAssetMesh* pInstance = new CAssetMesh();
+	pInstance->m_bIsPrototype = true;
 
 	pInstance->Initialize_Prototype();
 
@@ -103,7 +104,7 @@ HRESULT CAssetMesh::Initialize(void* pArg)
 
 HRESULT CAssetMesh::Free()
 {
-	if (m_iClonedNum > 0)
+	if (m_bIsPrototype == false)
 	{
 		Safe_Release(m_vertexBufferCPU);
 		Safe_Release(m_indexBufferCPU);

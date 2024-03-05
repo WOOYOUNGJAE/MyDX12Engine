@@ -96,7 +96,6 @@ HRESULT CComponentManager::Add_Prototype(const wstring& strTag, CComponent* pCom
 		MSG_BOX("ComponentManager: Protype Already Exists");
 		return E_FAIL;
 	}
-
 	m_mapComPrototypes.emplace(strTag, pComInstance);
 
 	return S_OK;

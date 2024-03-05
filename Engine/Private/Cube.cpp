@@ -10,7 +10,7 @@
 CCube* CCube::Create()
 {
 	CCube* pInstance = new CCube;
-
+	pInstance->m_bIsPrototype = true;
 	if (pInstance)
 	{
 		pInstance->Initialize_Prototype();
