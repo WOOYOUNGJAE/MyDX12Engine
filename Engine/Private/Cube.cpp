@@ -63,7 +63,7 @@ HRESULT CCube::Initialize(void* pArg)
 	hr = Add_Component(L"Material", reinterpret_cast<CComponent**>(&m_pMaterialCom), &matInfo);
 
 
-	m_iCbvSrvUavStartOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
+	m_iTextureSrvOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
 
 	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
 
@@ -108,6 +108,10 @@ void CCube::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameRes
 		// Set Descriptor Tables
 		pCmdList->SetGraphicsRootDescriptorTable(0, m_pRendererCom->Get_HandleOffsettedGPU(Get_CbvSrvUavHeapOffset_Texture()));
 		pCmdList->SetGraphicsRootDescriptorTable(1, m_pRendererCom->Get_ObjCbvHandleOffsettedGPU());
+		/*pCmdList->SetGraphicsRootDescriptorTable(1,
+			m_pRendererCom->Get_ObjCbvHandleOffsettedGPU(
+				(m_iClonedNum - 1) * m_pRendererCom->Get_ObjCbvDescriptorSize()
+			));*/
 
 		pCmdList->DrawIndexedInstanced(
 			pMesh->Num_Indices(),

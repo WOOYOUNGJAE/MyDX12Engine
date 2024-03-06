@@ -61,7 +61,7 @@ HRESULT CZeldaDemo::Initialize(void* pArg)
 	hr = Add_Component(L"Material", reinterpret_cast<CComponent**>(&m_pMaterialCom), &matInfo);
 
 
-	m_iCbvSrvUavStartOffset = m_pMeshObjectCom->Get_CbvSrvUavOffset(0);
+	m_iTextureSrvOffset = m_pMeshObjectCom->Get_CbvSrvUavOffset(0);
 
 	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
 

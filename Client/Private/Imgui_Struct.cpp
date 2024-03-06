@@ -15,7 +15,7 @@ IMGUI_CUSTOM::OBJ_CUSTOMIZER* IMGUI_CUSTOM::OBJ_CUSTOMIZER::Create(CGameObject* 
 {
 	OBJ_CUSTOMIZER* pInstance = new OBJ_CUSTOMIZER(pGameObject, pInController);
 
-	pInstance->pTargetCbvSrvUavOffset = pInstance->pTarget->Get_CbvSrvUavOffsetPtr();
+	pInstance->pTargetCbvSrvUavOffset = pInstance->pTarget->Get_CbvSrvUavHeapOffsetPtr_Texture();
 	pInstance->iCbvSrvUavDescriptorSize = CGameInstance::Get_Instance()->Get_CbvSrvUavDescriptorSize();
 	pInstance->pController = pInController;
 

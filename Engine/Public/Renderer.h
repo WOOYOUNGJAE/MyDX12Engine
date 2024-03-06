@@ -33,8 +33,9 @@ public: // getter setter
 	D3D12_GPU_DESCRIPTOR_HANDLE Get_CbvSrvUavStart_GPU();
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_CbvSrvUavStart_CPU();
 	CD3DX12_GPU_DESCRIPTOR_HANDLE Get_HandleOffsettedGPU(INT iOffset);
-	CD3DX12_GPU_DESCRIPTOR_HANDLE Get_ObjCbvHandleOffsettedGPU();
+	CD3DX12_GPU_DESCRIPTOR_HANDLE Get_ObjCbvHandleOffsettedGPU(UINT iOffsetPlus = 0);
 	CD3DX12_GPU_DESCRIPTOR_HANDLE Get_PassCbvHandleOffsettedGPU();
+	UINT Get_ObjCbvDescriptorSize() { return m_iObjCbvDescriptorSize; }
 	void Set_ProjMat(const CAMERA_DESC& camDesc);
 public: // Component Functions for GameObject
 	void AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigTypeEnum, class CGameObject* pGameObject);
@@ -61,6 +62,7 @@ private: // Index and Offset
 	UINT m_iFrameIndex = 0;
 	UINT m_iObjCBVHeapStartOffset = 0;
 	UINT m_iPassCBVHeapStartOffset = 0;
+	UINT m_iObjCbvDescriptorSize = 0;
 private: //Fence
 	ID3D12Fence* m_pFence = nullptr;
 	UINT64 m_iFenceValue = 0;

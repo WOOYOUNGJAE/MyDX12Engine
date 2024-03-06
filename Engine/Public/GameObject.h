@@ -26,8 +26,8 @@ public: // getter setter, abstract
 	virtual D3D12_PRIMITIVE_TOPOLOGY PrimitiveType()const {	return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;} // Default;
 	virtual MATERIAL_INFO Get_MaterialInfo() { return MATERIAL_INFO(); }
 	//Offset, Handle
-	virtual UINT64 Get_CbvSrvUavHeapOffset_Texture() { return m_iCbvSrvUavStartOffset; }
-	UINT64* Get_CbvSrvUavOffsetPtr() { return &m_iCbvSrvUavStartOffset; }
+	virtual UINT64 Get_CbvSrvUavHeapOffset_Texture() { return m_iTextureSrvOffset; }
+	UINT64* Get_CbvSrvUavHeapOffsetPtr_Texture() { return &m_iTextureSrvOffset; }
 
 	// Tag
 	wstring Get_PrototypeTag() { return m_strPrototypeTag; }
@@ -46,7 +46,7 @@ public:
 protected:
 	wstring m_strPrototypeTag;
 	map<wstring, CComponent*> m_mapComponents;
-	UINT64 m_iCbvSrvUavStartOffset = ULONGLONG_MAX; // 일단 오브젝트당 텍스처 1개 가정
+	UINT64 m_iTextureSrvOffset = ULONGLONG_MAX; // 일단 오브젝트당 텍스처 1개 가정
 };
 
 _NAMESPACE

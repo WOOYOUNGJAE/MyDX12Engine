@@ -34,6 +34,7 @@ HRESULT CRenderer::Initialize_Prototype()
 	m_pCommandQueue = m_pGraphic_Device->m_pCommandQueue.Get(); // CommandQueue는 따로 만들지 않고 공유, 스왑체인이 매치되어야 하기 때문
 	m_pRtvHeap = m_pGraphic_Device->m_pRtvHeap.Get();
 	m_pRenderTargetArr = m_pGraphic_Device->m_pRenderTargets->GetAddressOf();
+	m_iObjCbvDescriptorSize = m_pGraphic_Device->Get_CbvSrvUavDescriptorSize();
 	//m_pFence = m_pGraphic_Device->m_pFence.Get();
 
 	ID3D12Device* pDevice = m_pGraphic_Device->m_pDevice.Get();
@@ -379,9 +380,9 @@ CD3DX12_GPU_DESCRIPTOR_HANDLE CRenderer::Get_HandleOffsettedGPU(INT iOffset)
 	return CD3DX12_GPU_DESCRIPTOR_HANDLE(Get_CbvSrvUavStart_GPU(), iOffset);
 }
 
-CD3DX12_GPU_DESCRIPTOR_HANDLE CRenderer::Get_ObjCbvHandleOffsettedGPU()
+CD3DX12_GPU_DESCRIPTOR_HANDLE CRenderer::Get_ObjCbvHandleOffsettedGPU(UINT iOffsetPlus)
 {
-	return CD3DX12_GPU_DESCRIPTOR_HANDLE(Get_CbvSrvUavStart_GPU(), m_iObjCBVHeapStartOffset);
+	return CD3DX12_GPU_DESCRIPTOR_HANDLE(Get_CbvSrvUavStart_GPU(), m_iObjCBVHeapStartOffset + iOffsetPlus);
 }
 
 CD3DX12_GPU_DESCRIPTOR_HANDLE CRenderer::Get_PassCbvHandleOffsettedGPU()
