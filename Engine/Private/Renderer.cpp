@@ -207,7 +207,7 @@ void CRenderer::BeginRender()
 	m_pCommandAllocator->Reset();
 	m_pCommandList->Reset(m_pCommandAllocator, nullptr);
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHeapHandle(m_pRtvHeap->GetCPUDescriptorHandleForHeapStart(),
-		m_iFrameIndex, m_pGraphic_Device->m_iRtvDescriptorSize);
+		(INT)m_iFrameIndex, m_pGraphic_Device->m_iRtvDescriptorSize);
 	CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHeapHandle(m_pGraphic_Device->Get_DepthStencilViewHeapStart());
 
 	m_pCommandList->ResourceBarrier(1,
@@ -216,12 +216,13 @@ void CRenderer::BeginRender()
 
 	m_pCommandList->RSSetViewports(1, &m_pGraphic_Device->m_screenViewport);
 	m_pCommandList->RSSetScissorRects(1, &m_pGraphic_Device->m_ScissorRect);
-	m_pCommandList->OMSetRenderTargets(1, &rtvHeapHandle, FALSE, &dsvHeapHandle);
+
 
 	m_pCommandList->ClearRenderTargetView(m_pGraphic_Device->CurrentBackBufferView(), Colors::DarkGray, 0, nullptr);
 	//m_pCommandList->ClearDepthStencilView(m_pGraphic_Device->Get_DepthStencilViewHeapStart(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	m_pCommandList->ClearDepthStencilView(dsvHeapHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
 	
+	m_pCommandList->OMSetRenderTargets(1, &rtvHeapHandle, true, &dsvHeapHandle);
 }
 
 void CRenderer::MainRender()

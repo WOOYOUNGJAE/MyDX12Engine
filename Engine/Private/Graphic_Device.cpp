@@ -431,7 +431,7 @@ HRESULT CGraphic_Device::On_Resize()
 		dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		dsvDesc.Texture2D.MipSlice = 0;
-		m_pDevice->CreateDepthStencilView(m_pDepthStencilBuffer.Get(), &dsvDesc, Get_DepthStenciViewHeapStart());
+		m_pDevice->CreateDepthStencilView(m_pDepthStencilBuffer.Get(), &dsvDesc, Get_DepthStencilViewHeapStart());
 	}
 
 	CD3DX12_RESOURCE_BARRIER tempBarrier = CD3DX12_RESOURCE_BARRIER::Transition(m_pDepthStencilBuffer.Get(),

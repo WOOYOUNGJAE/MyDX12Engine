@@ -34,7 +34,6 @@ public: // Getter
 	ID3D12GraphicsCommandList* Get_CommandList() { return m_pCommandList.Get(); }
 	ID3D12CommandQueue* Get_CommandQueue() { return m_pCommandQueue.Get(); }
 	ID3D12Resource* CurrentBackBuffer() { return m_pRenderTargets[m_iCurrBackBuffer].Get(); }
-	D3D12_CPU_DESCRIPTOR_HANDLE Get_DepthStenciViewHeapStart() { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView() const;
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_DepthStencilViewHeapStart()const { return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart(); };
 	D3D12_GPU_DESCRIPTOR_HANDLE Get_CbvSrvUavHeapStart_GPU() { return m_pCbvSrvUavHeap.Get()->GetGPUDescriptorHandleForHeapStart(); }
