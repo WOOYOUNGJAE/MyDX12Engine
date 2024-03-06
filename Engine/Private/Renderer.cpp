@@ -264,7 +264,8 @@ void CRenderer::MainRender()
 					}
 
 					m_pCommandList->SetPipelineState(pPSO);
-
+					m_pCommandList->SetGraphicsRootConstantBufferView(2 /*Index*/,
+						m_pCurFrameResource->pPassCB_vp_light->Get_UploadBuffer()->GetGPUVirtualAddress());
 					for (CGameObject*& iter : m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType])
 					{
 						iter->Render(m_pCommandList, m_pCurFrameResource);

@@ -102,12 +102,16 @@ void CCube::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameRes
 	{
 		CMeshData* pMesh = (*m_pMeshObjectCom->Get_vecMeshData())[i];
 
+		UINT objCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(OBJECT_CB));
+		D3D12_GPU_VIRTUAL_ADDRESS objCBAddress =
+			pFrameResource->pObjectCB->Get_UploadBuffer()->GetGPUVirtualAddress() + (m_iClonedNum - 1) * objCBByteSize;
+
 		pCmdList->IASetVertexBuffers(0, 1, pMesh->Get_VertexBufferViewPtr());
 		pCmdList->IASetIndexBuffer(pMesh->Get_IndexBufferViewPtr());
 
 		// Set Descriptor Tables
 		pCmdList->SetGraphicsRootDescriptorTable(0, m_pRendererCom->Get_HandleOffsettedGPU(Get_CbvSrvUavHeapOffset_Texture()));
-		pCmdList->SetGraphicsRootDescriptorTable(1, m_pRendererCom->Get_ObjCbvHandleOffsettedGPU());
+		pCmdList->SetGraphicsRootConstantBufferView(1, objCBAddress);
 		/*pCmdList->SetGraphicsRootDescriptorTable(1,
 			m_pRendererCom->Get_ObjCbvHandleOffsettedGPU(
 				(m_iClonedNum - 1) * m_pRendererCom->Get_ObjCbvDescriptorSize()
