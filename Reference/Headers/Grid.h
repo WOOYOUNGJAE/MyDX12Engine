@@ -3,23 +3,26 @@
 
 NAMESPACE_(Engine)
 
-class CTriangle : public CGameObject
+class ENGINE_DLL CGrid : public CGameObject
 {
 protected:
-	CTriangle() = default;
-	CTriangle(CTriangle& rhs) : CGameObject(rhs) {}
-	~CTriangle() override = default;
+	CGrid() = default;
+	CGrid(CGrid& rhs);
+	~CGrid() override = default;
 
 public: // LifeCycle
-	static CTriangle* Create();
+	static CGrid* Create(const wstring& strGridMeshTag);
 	CGameObject* Clone(void* pArg) override;
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override;
 	void Tick(_float fDeltaTime) override;
 	void Late_Tick(_float fDeltaTime) override;
 	void Render_Tick() override;
+	void Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource) override;
 	HRESULT Free() override;
 public: // getter setter 
+	MATERIAL_INFO Get_MaterialInfo() override;
+	// Transform
 	Matrix Get_WorldMatrix() override;
 	Vector3 Get_Pos() override;
 	Vector3 Get_ScaleXYZ() override;
@@ -28,10 +31,14 @@ public: // getter setter
 protected:
 	class CTransform* m_pTransformCom = nullptr;
 	//class CTriangleMesh* m_pTriangleMeshCom = nullptr;
-	class CTriangleMesh_PT* m_pTriangleMeshCom = nullptr;
+	class CMeshObject* m_pMeshObjectCom = nullptr;
 	class CShader* m_pShaderCom = nullptr;
 	class CRenderer* m_pRendererCom = nullptr;
 	class CTextureCompo* m_pTextureCom = nullptr;
+	class CMaterial* m_pMaterialCom = nullptr;
+
+private:
+	wstring m_strGridMeshTag;
 };
 
 _NAMESPACE

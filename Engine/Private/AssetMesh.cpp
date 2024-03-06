@@ -12,7 +12,7 @@ m_strPath(rhs.m_strPath)
 	Safe_AddRef(m_vertexUploadBuffer);
 	Safe_AddRef(m_indexUploadBuffer);
 
-	m_iNumVertex = rhs.m_iNumVertex;
+	m_iNumVertices = rhs.m_iNumVertices;
 	m_iNumIndices = rhs.m_iNumIndices;
 	m_iVertexByteStride = rhs.m_iVertexByteStride;
 	m_iVertexBufferByteSize = rhs.m_iVertexBufferByteSize;
@@ -50,14 +50,14 @@ HRESULT CAssetMesh::ReInit_Prototype()
 
 	//Normalize_Vertices(this);
 
-	m_iNumVertex = m_vecVertexData.size();
+	m_iNumVertices = m_vecVertexData.size();
 	m_iNumIndices = m_vecIndexData.size();
 	m_iVertexByteStride = sizeof(VertexPositionNormalTexture);
-	m_iVertexBufferByteSize = m_iNumVertex * m_iVertexByteStride;
+	m_iVertexBufferByteSize = m_iNumVertices * m_iVertexByteStride;
 	IndexFormat = DXGI_FORMAT_R32_UINT;
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(UINT32);
 
-	const UINT iVertexBufferSize = sizeof(VertexPositionNormalTexture) * m_iNumVertex;
+	const UINT iVertexBufferSize = sizeof(VertexPositionNormalTexture) * m_iNumVertices;
 	const UINT iIndexBufferSize = sizeof(UINT32) * m_iNumIndices;
 
 	hr = D3DCreateBlob(iVertexBufferSize, &m_vertexBufferCPU);

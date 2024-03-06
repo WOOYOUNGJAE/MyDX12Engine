@@ -63,7 +63,6 @@ CTexture* CAssetManager::FindandGet_Texture(const wstring& strAssetName)
 
 HRESULT CAssetManager::Add_MeshDataPrototype(const wstring& strPrototypeTag, CMeshData* pMeshData)
 {
-	// �̹� �����Ѵٸ�
 	if (FindandGet_MeshData(strPrototypeTag))
 	{
 		MSG_BOX("AssetManager : Already Exists");

@@ -204,7 +204,7 @@ HRESULT CPipelineManager::Initialize()
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pso_desc{};
 	pso_desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	
-	//pso_desc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
+	pso_desc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
 	
 	pso_desc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	pso_desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);

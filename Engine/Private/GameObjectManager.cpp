@@ -1,5 +1,6 @@
 #include "GameObjectManager.h"
 #include "Cube.h"
+#include "Grid.h"
 #include "ObjLayer.h"
 #include "Triangle.h"
 IMPLEMENT_SINGLETON(CGameObjectManager)
@@ -9,6 +10,8 @@ HRESULT CGameObjectManager::Initialize()
 #pragma region Init_Basic_GameObject
 	Add_Prototype(L"Cube", CCube::Create());
 	Add_Prototype(L"Triangle", CTriangle::Create());
+	Add_Prototype(L"Grid_1X1", CGrid::Create(L"Grid_1X1"));
+	Add_Prototype(L"Grid_10X10", CGrid::Create(L"Grid_10X10"));
 #pragma endregion Init_Basic_GameObject
 	return S_OK;
 }

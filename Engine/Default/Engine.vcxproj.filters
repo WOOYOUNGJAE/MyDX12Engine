@@ -115,6 +115,21 @@
     <Filter Include="Utility\MeshData\3D\AssetMesh">
       <UniqueIdentifier>{db7e9d79-8fd8-4f10-8ad6-eb3caa13147b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\GameObjects\DefaultGeometry\Cube">
+      <UniqueIdentifier>{b11c7a94-48b6-4c5c-b31a-7bbdbdbee498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\GameObjects\DefaultGeometry\Triangle">
+      <UniqueIdentifier>{286a20f7-ef30-4345-a54d-2038f9127d24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\GameObjects\DefaultGeometry\Grid">
+      <UniqueIdentifier>{d24b3cf6-905c-495a-bab8-abc8dc28f111}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\MeshData\2D\GridMesh">
+      <UniqueIdentifier>{a1646b1a-69ba-47c5-af05-056a0c2434d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\MeshData\2D\TriangleMesh">
+      <UniqueIdentifier>{8c689582-8def-4a34-b4b6-daee17576605}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -159,9 +174,6 @@
     <ClInclude Include="..\Public\ObjLayer.h">
       <Filter>Utility\GameObjects\Layer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Cube.h">
-      <Filter>Utility\GameObjects\DefaultGeometry</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Engine_Enums.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -177,12 +189,6 @@
     <ClInclude Include="..\Public\Renderer.h">
       <Filter>Utility\Components\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\TriangleMesh.h">
-      <Filter>Utility\MeshData\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Triangle.h">
-      <Filter>Utility\GameObjects\DefaultGeometry</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\ObjMonobehaviour.h">
       <Filter>System\Interface</Filter>
     </ClInclude>
@@ -194,9 +200,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\PipelineManager.h">
       <Filter>System\D3D Graphics\Pipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\TriangleMesh_PT.h">
-      <Filter>Utility\MeshData\2D</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Asset.h">
       <Filter>Utility\Asset</Filter>
@@ -246,6 +249,24 @@
     <ClInclude Include="..\Public\AssetMesh.h">
       <Filter>Utility\MeshData\3D\AssetMesh</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\TriangleMesh.h">
+      <Filter>Utility\MeshData\2D\TriangleMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TriangleMesh_PT.h">
+      <Filter>Utility\MeshData\2D\TriangleMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Cube.h">
+      <Filter>Utility\GameObjects\DefaultGeometry\Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Triangle.h">
+      <Filter>Utility\GameObjects\DefaultGeometry\Triangle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\GridMesh.h">
+      <Filter>Utility\MeshData\2D\GridMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Grid.h">
+      <Filter>Utility\GameObjects\DefaultGeometry\Grid</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -269,9 +290,6 @@
     <ClCompile Include="..\Private\ObjLayer.cpp">
       <Filter>Utility\GameObjects\Layer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Cube.cpp">
-      <Filter>Utility\GameObjects\DefaultGeometry</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Shader.cpp">
       <Filter>Utility\Components\Shader</Filter>
     </ClCompile>
@@ -284,12 +302,6 @@
     <ClCompile Include="..\Private\Renderer.cpp">
       <Filter>Utility\Components\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\TriangleMesh.cpp">
-      <Filter>Utility\MeshData\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Triangle.cpp">
-      <Filter>Utility\GameObjects\DefaultGeometry</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\ObjMonobehaviour.cpp">
       <Filter>System\Interface</Filter>
     </ClCompile>
@@ -301,9 +313,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\PipelineManager.cpp">
       <Filter>System\D3D Graphics\Pipeline</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\TriangleMesh_PT.cpp">
-      <Filter>Utility\MeshData\2D</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Asset.cpp">
       <Filter>Utility\Asset</Filter>
@@ -346,6 +355,24 @@
     </ClCompile>
     <ClCompile Include="..\Private\AssetMesh.cpp">
       <Filter>Utility\MeshData\3D\AssetMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TriangleMesh.cpp">
+      <Filter>Utility\MeshData\2D\TriangleMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TriangleMesh_PT.cpp">
+      <Filter>Utility\MeshData\2D\TriangleMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Cube.cpp">
+      <Filter>Utility\GameObjects\DefaultGeometry\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Triangle.cpp">
+      <Filter>Utility\GameObjects\DefaultGeometry\Triangle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GridMesh.cpp">
+      <Filter>Utility\MeshData\2D\GridMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Grid.cpp">
+      <Filter>Utility\GameObjects\DefaultGeometry\Grid</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

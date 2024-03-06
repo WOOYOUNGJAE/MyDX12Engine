@@ -3,10 +3,10 @@
 
 CCubeMesh::CCubeMesh()
 {
-	m_iNumVertex = 6 * 4;
+	m_iNumVertices = 6 * 4;
 	m_iNumIndices = 6 * 6;
 	m_iVertexByteStride = sizeof(VertexPositionNormalTexture);
-	m_iVertexBufferByteSize = m_iNumVertex * m_iVertexByteStride;
+	m_iVertexBufferByteSize = m_iNumVertices * m_iVertexByteStride;
 	IndexFormat = DXGI_FORMAT_R16_UINT;
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(UINT16);
 }
@@ -21,7 +21,7 @@ CCubeMesh::CCubeMesh(CCubeMesh& rhs) : CMeshData(rhs)
 	Safe_AddRef(m_vertexUploadBuffer);
 	Safe_AddRef(m_indexUploadBuffer);
 
-	m_iNumVertex = rhs.m_iNumVertex;
+	m_iNumVertices = rhs.m_iNumVertices;
 	m_iNumIndices = rhs.m_iNumIndices;
 	m_iVertexByteStride = rhs.m_iVertexByteStride;
 	m_iVertexBufferByteSize = rhs.m_iVertexBufferByteSize;
@@ -132,7 +132,7 @@ HRESULT CCubeMesh::Initialize_Prototype()
 		20, 22, 23,
 	};
 
-	const UINT iVertexBufferSize = sizeof(VertexPositionNormalTexture) * m_iNumVertex;
+	const UINT iVertexBufferSize = sizeof(VertexPositionNormalTexture) * m_iNumVertices;
 	const UINT iIndexBufferSize = sizeof(UINT16) * m_iNumIndices;
 
 	hr = D3DCreateBlob(iVertexBufferSize, &m_vertexBufferCPU);
@@ -168,7 +168,7 @@ HRESULT CCubeMesh::Initialize_Prototype()
 	}
 
 	CMeshData::Init_VBV_IBV();
-	return S_OK;
+	return hr;
 }
 
 HRESULT CCubeMesh::Initialize(void* pArg)
@@ -178,21 +178,6 @@ HRESULT CCubeMesh::Initialize(void* pArg)
 
 HRESULT CCubeMesh::Free()
 {
-	
-
-	//if (m_iClonedNum == 0)
-	//{
-	//	Safe_Delete_Array(m_vertexData); // Prototype 경우에만 해제
-	//}
-	//else
-	//{
-	//	Safe_Release(m_vertexBufferCPU);
-	//	Safe_Release(m_indexBufferCPU);
-	//	Safe_Release(m_vertexBufferGPU);
-	//	Safe_Release(m_indexBufferGPU);
-	//	Safe_Release(m_vertexUploadBuffer);
-	//	Safe_Release(m_indexUploadBuffer);
-	//}
 	if (m_bIsPrototype == false)
 	{
 		Safe_Release(m_vertexBufferCPU);

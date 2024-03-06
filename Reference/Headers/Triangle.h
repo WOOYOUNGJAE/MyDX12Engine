@@ -20,8 +20,6 @@ public: // LifeCycle
 	void Render_Tick() override;
 	HRESULT Free() override;
 public: // getter setter 
-	D3D12_VERTEX_BUFFER_VIEW VertexBufferView() override;
-	D3D12_INDEX_BUFFER_VIEW IndexBufferView() const override;
 	Matrix Get_WorldMatrix() override;
 	Vector3 Get_Pos() override;
 	Vector3 Get_ScaleXYZ() override;

@@ -5,10 +5,10 @@
 
 CTriangleMesh_PT::CTriangleMesh_PT()
 {
-	m_iNumVertex = 3;
+	m_iNumVertices = 3;
 	m_iNumIndices = 3;
 	m_iVertexByteStride = sizeof(VertexPositionNormalTexture);
-	m_iVertexBufferByteSize = m_iNumVertex * m_iVertexByteStride;
+	m_iVertexBufferByteSize = m_iNumVertices * m_iVertexByteStride;
 	IndexFormat = DXGI_FORMAT_R16_UINT;
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(UINT32);
 }
@@ -16,7 +16,7 @@ CTriangleMesh_PT::CTriangleMesh_PT()
 CTriangleMesh_PT::CTriangleMesh_PT(CTriangleMesh_PT& rhs) : CMeshData(rhs),
 m_vertexData(rhs.m_vertexData)
 {
-	m_iNumVertex = rhs.m_iNumVertex;
+	m_iNumVertices = rhs.m_iNumVertices;
 	m_iNumIndices = rhs.m_iNumIndices;
 	m_iVertexByteStride = rhs.m_iVertexByteStride;
 	m_iVertexBufferByteSize = rhs.m_iVertexBufferByteSize;

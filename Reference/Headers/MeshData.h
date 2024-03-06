@@ -48,7 +48,7 @@ protected: // View
 	D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView{};
 	D3D12_INDEX_BUFFER_VIEW m_indexBufferView{};
 protected: // Data about the buffers.
-	UINT m_iNumVertex = 0;
+	UINT m_iNumVertices = 0;
 	UINT m_iNumIndices = 0;
 	UINT m_iVertexByteStride = 0; 
 	UINT m_iVertexBufferByteSize = 0;

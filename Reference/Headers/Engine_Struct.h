@@ -17,8 +17,15 @@ namespace Engine
 	struct GAMEOBJECT_INIT_DESC
 	{
 		Vector3 vStartPos;
+		Vector3 vStartScale;
 		std::wstring strTag;
 		void* pArg;
+	};
+
+	struct GRIDOBJECT_INIT_DESC
+	{
+		UINT iNumSlices;
+		UINT iNumStacks;
 	};
 
 	struct SHADER_INIT_DESC

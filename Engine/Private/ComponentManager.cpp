@@ -14,6 +14,7 @@
 #include "TriangleMesh_PT.h"
 #include "MeshObject.h"
 #include "AssetManager.h"
+#include "GridMesh.h"
 IMPLEMENT_SINGLETON(CComponentManager)
 
 HRESULT CComponentManager::Initialize()
@@ -67,6 +68,8 @@ HRESULT CComponentManager::Initialize()
 	pAssetManager->Add_MeshDataPrototype(L"CubeMesh", CCubeMesh::Create());
 	pAssetManager->Add_MeshDataPrototype(L"TriangleMesh", CTriangleMesh::Create());
 	pAssetManager->Add_MeshDataPrototype(L"TriangleMesh_PT", CTriangleMesh_PT::Create());
+	pAssetManager->Add_MeshDataPrototype(L"Grid_1X1", CGridMesh::Create(1, 1));
+	pAssetManager->Add_MeshDataPrototype(L"Grid_10X10", CGridMesh::Create(10,10));
 
 
 	CGraphic_Device::Get_Instance()->Close_CmdList();

@@ -5,10 +5,10 @@
 
 CTriangleMesh::CTriangleMesh()
 {
-	m_iNumVertex = 3;
+	m_iNumVertices = 3;
 	m_iNumIndices = 3;
 	m_iVertexByteStride = sizeof(VertexPositionColor);
-	m_iVertexBufferByteSize = m_iNumVertex * m_iVertexByteStride;
+	m_iVertexBufferByteSize = m_iNumVertices * m_iVertexByteStride;
 	IndexFormat = DXGI_FORMAT_R16_UINT;
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(_ushort);
 }
@@ -16,7 +16,7 @@ CTriangleMesh::CTriangleMesh()
 CTriangleMesh::CTriangleMesh(CTriangleMesh& rhs) : CMeshData(rhs),
 m_vertexData(rhs.m_vertexData)
 {
-	m_iNumVertex = rhs.m_iNumVertex;
+	m_iNumVertices = rhs.m_iNumVertices;
 	m_iNumIndices = rhs.m_iNumIndices;
 	m_iVertexByteStride = rhs.m_iVertexByteStride;
 	m_iVertexBufferByteSize = rhs.m_iVertexBufferByteSize;
@@ -63,7 +63,7 @@ HRESULT CTriangleMesh::Initialize_Prototype()
 	hr = CMeshData::Initialize_Prototype();
 	if (FAILED(hr)) { return E_FAIL; }
 
-	m_vertexData = new VertexPositionColor[m_iNumVertex]
+	m_vertexData = new VertexPositionColor[m_iNumVertices]
 	{
 		// TODO : Color TEMP
 		VertexPositionColor({ _float3(0.f, 0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio, 0.25f), _float4(1.0f, 0.0f, 0.0f, 1.0f) }),

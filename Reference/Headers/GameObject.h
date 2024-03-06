@@ -21,8 +21,6 @@ public: // LifeCycle
 	virtual void Render(ID3D12GraphicsCommandList* pCmdList, struct FrameResource* pFrameResource){}
 	HRESULT Free() override;
 public: // getter setter, abstract
-	virtual D3D12_VERTEX_BUFFER_VIEW VertexBufferView() { return D3D12_VERTEX_BUFFER_VIEW(); }
-	virtual D3D12_INDEX_BUFFER_VIEW IndexBufferView()const {return D3D12_INDEX_BUFFER_VIEW();}
 	virtual D3D12_PRIMITIVE_TOPOLOGY PrimitiveType()const {	return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;} // Default;
 	virtual MATERIAL_INFO Get_MaterialInfo() { return MATERIAL_INFO(); }
 	//Offset, Handle

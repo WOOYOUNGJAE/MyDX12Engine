@@ -1,4 +1,4 @@
-#include "Cube.h"
+#include "Grid.h"
 #include "TextureCompo.h"
 #include "MeshObject.h"
 #include "Transform.h"
@@ -7,9 +7,24 @@
 #include "Material.h"
 #include "MeshData.h"
 
-CCube* CCube::Create()
+CGrid::CGrid(CGrid& rhs) : CGameObject(rhs),
+m_strGridMeshTag(rhs.m_strGridMeshTag)
 {
-	CCube* pInstance = new CCube;
+}
+
+CGrid* CGrid::Create(const wstring& strGridMeshTag)
+{
+	CGrid* pInstance = new CGrid;
+	if (strGridMeshTag.empty())
+	{
+		MSG_BOX("CGrid : Enter Grid Tag");
+		return nullptr;
+	}
+	else
+	{
+		pInstance->m_strGridMeshTag = strGridMeshTag;
+	}
+
 	pInstance->m_bIsPrototype = true;
 	if (pInstance)
 	{
@@ -19,9 +34,9 @@ CCube* CCube::Create()
 	return pInstance;
 }
 
-CGameObject* CCube::Clone(void* pArg)
+CGameObject* CGrid::Clone(void* pArg)
 {
-	CCube* pInstance = new CCube(*this);
+	CGrid* pInstance = new CGrid(*this);
 
 	if (pInstance)
 	{
@@ -34,12 +49,14 @@ CGameObject* CCube::Clone(void* pArg)
 	return pInstance;
 }
 
-HRESULT CCube::Initialize_Prototype()
+HRESULT CGrid::Initialize_Prototype()
 {
-	return S_OK;
+	HRESULT hr = S_OK;
+
+	return hr;
 }
 
-HRESULT CCube::Initialize(void* pArg)
+HRESULT CGrid::Initialize(void* pArg)
 {
 	HRESULT hr = S_OK;
 	// ±âº» ÄÄÆ÷³ÍÆ® ºÎÂø
@@ -47,46 +64,48 @@ HRESULT CCube::Initialize(void* pArg)
 	if (FAILED(hr)) return hr;
 	/*hr = Add_Component(L"TriangleMesh", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
 	if (FAILED(hr)) return hr;*/
-
-	MESHOBJ_INIT_DESC meshObjDesc { true, L"CubeMesh" };
+	MESHOBJ_INIT_DESC meshObjDesc{ true, m_strGridMeshTag };
 	hr = Add_Component(L"MeshObject", reinterpret_cast<CComponent**>(&m_pMeshObjectCom), &meshObjDesc);
 	if (FAILED(hr)) return hr;
+
+
 	hr = Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Shader_Simple2", reinterpret_cast<CComponent**>(&m_pShaderCom));
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_NightSkybox"));
 	//hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_ice"));
-	if (FAILED(hr)) return hr;
+	if (FAILED(hr)) return hr; 
 
-	MATERIAL_INFO matInfo{ Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f};
+	MATERIAL_INFO matInfo{ Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f };
 	hr = Add_Component(L"Material", reinterpret_cast<CComponent**>(&m_pMaterialCom), &matInfo);
 
 
 	m_iTextureSrvOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
 
 	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
+	m_pTransformCom->Set_Scale(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartScale);
 
 	return hr;
 }
 
-void CCube::Tick(_float fDeltaTime)
+void CGrid::Tick(_float fDeltaTime)
 {
 	int a = 0;
 }
 
-void CCube::Late_Tick(_float fDeltaTime)
+void CGrid::Late_Tick(_float fDeltaTime)
 {
 	int a = 0;
 }
 
-void CCube::Render_Tick()
+void CGrid::Render_Tick()
 {
 	int a = 0;
-	m_pRendererCom->AddTo_RenderGroup(CW, RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
+	m_pRendererCom->AddTo_RenderGroup( RENDER_CULLMODE::NONE, RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
 }
 
-void CCube::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource)
+void CGrid::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource)
 {
 	// Update CB
 	OBJECT_CB objConstants;
@@ -128,7 +147,7 @@ void CCube::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameRes
 
 
 
-HRESULT CCube::Free()
+HRESULT CGrid::Free()
 {
 	Safe_Release(m_pMaterialCom);
 	Safe_Release(m_pTextureCom);
@@ -136,36 +155,36 @@ HRESULT CCube::Free()
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pMeshObjectCom);
 	Safe_Release(m_pTransformCom);
-	
+
 	return CGameObject::Free();
 }
 
-Matrix CCube::Get_WorldMatrix()
+Matrix CGrid::Get_WorldMatrix()
 {
 	return m_pTransformCom->WorldMatrix();
 }
 
-Vector3 CCube::Get_Pos()
+Vector3 CGrid::Get_Pos()
 {
 	return m_pTransformCom->Position();
 }
 
-Vector3 CCube::Get_ScaleXYZ()
+Vector3 CGrid::Get_ScaleXYZ()
 {
 	return CGameObject::Get_ScaleXYZ();
 }
 
-void CCube::Set_Position(const Vector3& vPos)
+void CGrid::Set_Position(const Vector3& vPos)
 {
 	m_pTransformCom->Set_Position(vPos);
 }
 
-void CCube::Set_Scale(const Vector3& vScale)
+void CGrid::Set_Scale(const Vector3& vScale)
 {
 	m_pTransformCom->Set_Scale(vScale);
 }
 
-MATERIAL_INFO CCube::Get_MaterialInfo()
+MATERIAL_INFO CGrid::Get_MaterialInfo()
 {
 	return m_pMaterialCom->Get_MaterialInfo();
 }

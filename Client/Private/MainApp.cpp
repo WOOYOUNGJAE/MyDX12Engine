@@ -70,9 +70,19 @@ HRESULT CMainApp::Initialize()
 	/*objDesc.vStartPos = Vector3(1.f, 1.f, 0.f);
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }*/
-	objDesc.strTag = L"ZeldaDemo";
+	/*objDesc.strTag = L"ZeldaDemo";
 	hr = m_pGameInstance->Add_GameObject_InScene(L"ZeldaDemo", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }*/
+	objDesc.strTag = L"Grid_1X1";
+	objDesc.vStartScale = Vector3(2, 2, 2);
+	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
+	objDesc.strTag = L"Grid_10X10";
+	objDesc.vStartPos = Vector3(2, 2, -4);
+	objDesc.vStartScale = Vector3(2, 2, 2);
+	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }
+
 #pragma endregion InLevel
 
 	// Renderer
