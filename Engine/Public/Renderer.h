@@ -38,7 +38,7 @@ public: // getter setter
 	UINT Get_ObjCbvDescriptorSize() { return m_iObjCbvDescriptorSize; }
 	void Set_ProjMat(const CAMERA_DESC& camDesc);
 public: // Component Functions for GameObject
-	void AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigTypeEnum, class CGameObject* pGameObject);
+	void AddTo_RenderGroup(UINT eCullMode, UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigTypeEnum, class CGameObject* pGameObject);
 	void Flush_CommandQueue();
 	
 public: // FrameResource
@@ -48,7 +48,7 @@ public: // FrameResource
 	UINT m_iCurFrameResourceIndex = 0;
 private:
 	// n차원 배열
-	list<CGameObject*> m_RenderGroup[RENDER_PRIORITY_END][RENDER_BLENDMODE_END][RENDER_SHADERTYPE_END][ROOTSIG_TYPE_END];
+	list<CGameObject*> m_RenderGroup[D3D12_CULL_MODE_END][RENDER_PRIORITY_END][RENDER_BLENDMODE_END][RENDER_SHADERTYPE_END][ROOTSIG_TYPE_END];
 private: // pointer
 	class CGraphic_Device* m_pGraphic_Device = nullptr;
 	class CPipelineManager* m_pPipelineManager = nullptr;

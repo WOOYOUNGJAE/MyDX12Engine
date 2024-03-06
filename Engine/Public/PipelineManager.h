@@ -32,7 +32,7 @@ public: // RootSig and PSO
 
 	// getter
 	ID3D12RootSignature* Get_RootSig(UINT eRootSigType);
-	ID3D12PipelineState* Get_PSO(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigType);
+	ID3D12PipelineState* Get_PSO(UINT eCullMode, UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigType);
 
 	void Update_ObjPipelineLayer(CGameObject* pObject, Pipeline::ENUM_PSO ePsoEnum);
 	
@@ -46,7 +46,7 @@ private: // Root Signature
 	
 	ID3D12RootSignature* m_rootSigArr[ROOTSIG_TYPE_END];
 private: // PSO
-	ID3D12PipelineState* m_PSOsArr[RENDER_PRIORITY_END][RENDER_BLENDMODE_END][RENDER_SHADERTYPE_END][ROOTSIG_TYPE_END];
+	ID3D12PipelineState* m_PSOsArr[D3D12_CULL_MODE_END][RENDER_PRIORITY_END][RENDER_BLENDMODE_END][RENDER_SHADERTYPE_END][ROOTSIG_TYPE_END];
 	map<wstring, ID3D12PipelineState*> m_mapPSO;
 	PipelineLayer m_vecPipelineLayerArr[Pipeline::PSO_END]; // 게임 오브젝트의 Pipeline_Tick을 대신해 돌려주는 함수
 private: // Pointer

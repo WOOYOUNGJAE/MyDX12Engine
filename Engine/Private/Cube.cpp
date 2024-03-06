@@ -83,7 +83,7 @@ void CCube::Late_Tick(_float fDeltaTime)
 void CCube::Render_Tick()
 {
 	int a = 0;
-	m_pRendererCom->AddTo_RenderGroup(RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
+	m_pRendererCom->AddTo_RenderGroup(CW, RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
 }
 
 void CCube::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource)

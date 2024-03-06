@@ -238,69 +238,71 @@ void CRenderer::MainRender()
 	/*XMMATRIX matView = XMMatrixIdentity();
 	XMStoreFloat4x4(&passConstants.mViewMat, XMMatrixTranspose(matView));
 	XMStoreFloat4x4(&passConstants.mViewInvMat, XMMatrixTranspose(matView));*/
-
-	for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
+	for (UINT eCullMode = 0; eCullMode < D3D12_CULL_MODE_END; ++eCullMode)
 	{
-		for (UINT eBlendModeEnum = 0; eBlendModeEnum < RENDER_BLENDMODE_END; ++eBlendModeEnum)
+		for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
 		{
-			for (UINT eShaderTypeEnum = 0; eShaderTypeEnum < RENDER_SHADERTYPE_END; ++eShaderTypeEnum)
+			for (UINT eBlendModeEnum = 0; eBlendModeEnum < RENDER_BLENDMODE_END; ++eBlendModeEnum)
 			{
-				iTableTypeIndex = eShaderTypeEnum; // shaderType과 RootSigParamType 일관하다고 가정 시, 가능성
-				for (UINT eRootsigType = 0; eRootsigType < ROOTSIG_TYPE_END; ++eRootsigType)
+				for (UINT eShaderTypeEnum = 0; eShaderTypeEnum < RENDER_SHADERTYPE_END; ++eShaderTypeEnum)
 				{
-					if (m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType].empty())
+					iTableTypeIndex = eShaderTypeEnum; // shaderType과 RootSigParamType 일관하다고 가정 시, 가능성
+					for (UINT eRootsigType = 0; eRootsigType < ROOTSIG_TYPE_END; ++eRootsigType)
 					{
-						continue;
+						if (m_RenderGroup[eCullMode][IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType].empty())
+						{
+							continue;
+						}
+
+						ID3D12PipelineState* pPSO = m_pPipelineManager->Get_PSO(eCullMode, IsFirst, eBlendModeEnum, eShaderTypeEnum, eRootsigType);
+						if (pPSO == nullptr) { continue; }
+
+						cbvSrvUavHandle.InitOffsetted(pSrvHeap->GetGPUDescriptorHandleForHeapStart(), 0);
+						m_pCommandList->SetGraphicsRootSignature(m_pPipelineManager->Get_RootSig(eRootsigType)); // RootSig객체 세팅
+						if (eShaderTypeEnum != SHADERTYPE_SIMPLE)
+						{
+							pSrvHeap = m_pGraphic_Device->Get_CbvSrvUavHeap();
+							m_pCommandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+						}
+
+						m_pCommandList->SetPipelineState(pPSO);
+						m_pCommandList->SetGraphicsRootConstantBufferView(2 /*Index*/,
+							m_pCurFrameResource->pPassCB_vp_light->Get_UploadBuffer()->GetGPUVirtualAddress());
+						for (CGameObject*& iter : m_RenderGroup[eCullMode][IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType])
+						{
+							iter->Render(m_pCommandList, m_pCurFrameResource);
+
+							//// ObjCB
+							//Update_ObjCB(iter);
+
+
+							//m_pCommandList->IASetPrimitiveTopology(iter->PrimitiveType());
+							//m_pCommandList->IASetVertexBuffers(0, 1, &iter->VertexBufferView());
+							//m_pCommandList->IASetIndexBuffer(&iter->IndexBufferView());
+
+
+
+
+							//// Set Descriptor Table
+							//cbvSrvUavHandle.Offset(iter->Get_CbvSrvUavHeapOffset_Texture());
+							//m_pCommandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHandle);
+
+							//cbvSrvUavHandle.InitOffsetted(pSrvHeap->GetGPUDescriptorHandleForHeapStart(), 0);
+							//cbvSrvUavHandle.Offset(m_iObjCBVHeapStartOffset);
+							//m_pCommandList->SetGraphicsRootDescriptorTable(1, cbvSrvUavHandle);
+
+							////m_pCommandList->DrawInstanced(24, 1, 0, 0);
+							//m_pCommandList->DrawIndexedInstanced(
+							//	36,
+							//	1,
+							//	0,
+							//	0,
+							//	0);
+
+							Safe_Release(iter); // Added From AddtoRenderGroup
+						}
+						m_RenderGroup[eCullMode][IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType].clear();
 					}
-
-					ID3D12PipelineState* pPSO = m_pPipelineManager->Get_PSO(IsFirst, eBlendModeEnum, eShaderTypeEnum, eRootsigType);
-					if (pPSO == nullptr) { continue; }
-
-					cbvSrvUavHandle.InitOffsetted(pSrvHeap->GetGPUDescriptorHandleForHeapStart(), 0);
-					m_pCommandList->SetGraphicsRootSignature(m_pPipelineManager->Get_RootSig(eRootsigType)); // RootSig객체 세팅
-					if (eShaderTypeEnum != SHADERTYPE_SIMPLE)
-					{
-						pSrvHeap = m_pGraphic_Device->Get_CbvSrvUavHeap();
-						m_pCommandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-					}
-
-					m_pCommandList->SetPipelineState(pPSO);
-					m_pCommandList->SetGraphicsRootConstantBufferView(2 /*Index*/,
-						m_pCurFrameResource->pPassCB_vp_light->Get_UploadBuffer()->GetGPUVirtualAddress());
-					for (CGameObject*& iter : m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType])
-					{
-						iter->Render(m_pCommandList, m_pCurFrameResource);
-
-						//// ObjCB
-						//Update_ObjCB(iter);
-
-
-						//m_pCommandList->IASetPrimitiveTopology(iter->PrimitiveType());
-						//m_pCommandList->IASetVertexBuffers(0, 1, &iter->VertexBufferView());
-						//m_pCommandList->IASetIndexBuffer(&iter->IndexBufferView());
-
-
-
-
-						//// Set Descriptor Table
-						//cbvSrvUavHandle.Offset(iter->Get_CbvSrvUavHeapOffset_Texture());
-						//m_pCommandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHandle);
-
-						//cbvSrvUavHandle.InitOffsetted(pSrvHeap->GetGPUDescriptorHandleForHeapStart(), 0);
-						//cbvSrvUavHandle.Offset(m_iObjCBVHeapStartOffset);
-						//m_pCommandList->SetGraphicsRootDescriptorTable(1, cbvSrvUavHandle);
-
-						////m_pCommandList->DrawInstanced(24, 1, 0, 0);
-						//m_pCommandList->DrawIndexedInstanced(
-						//	36,
-						//	1,
-						//	0,
-						//	0,
-						//	0);
-
-						Safe_Release(iter); // Added From AddtoRenderGroup
-					}
-					m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType].clear();
 				}
 			}
 		}
@@ -355,9 +357,12 @@ HRESULT CRenderer::Free()
 				{
 					for (auto& iter4 : iter3)
 					{
-						Safe_Release(iter4);						
+						for (auto& iter5 : iter4)
+						{
+							Safe_Release(iter5);							
+						}
+						iter4.clear();
 					}
-					iter3.clear();
 				}
 				
 			}
@@ -398,10 +403,10 @@ void CRenderer::Set_ProjMat(const CAMERA_DESC& camDesc)
 	m_mProj = XMMatrixPerspectiveFovLH(camDesc.fFovy, camDesc.fAspectRatio, camDesc.fNear, camDesc.fFar);
 }
 
-void CRenderer::AddTo_RenderGroup(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigTypeEnum,
-                                  CGameObject* pGameObject)
+void CRenderer::AddTo_RenderGroup(UINT eCullMode, UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum,
+                                  UINT eRootsigTypeEnum, CGameObject* pGameObject)
 {
-	m_RenderGroup[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigTypeEnum].push_back(pGameObject);
+	m_RenderGroup[eCullMode][IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigTypeEnum].push_back(pGameObject);
 	Safe_AddRef(pGameObject);
 }
 

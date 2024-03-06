@@ -203,9 +203,7 @@ HRESULT CPipelineManager::Initialize()
 #pragma region Build PSO
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pso_desc{};
 	pso_desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	//pso_desc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
-	//pso_desc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-	//pso_desc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
+	
 	//pso_desc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
 	
 	pso_desc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
@@ -220,58 +218,61 @@ HRESULT CPipelineManager::Initialize()
 	pso_desc.SampleDesc.Quality = 0;
 	pso_desc.DSVFormat = m_pGraphic_Device->m_DepthStencilFormat;
 
-	for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
+	for (UINT eCullMode = 0; eCullMode < D3D12_CULL_MODE_END; ++eCullMode)
 	{
-		for (UINT eBlendModeEnum = 0; eBlendModeEnum < RENDER_BLENDMODE_END; ++eBlendModeEnum)
+		pso_desc.RasterizerState.CullMode = static_cast<D3D12_CULL_MODE>(eCullMode + 1);
+		for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
 		{
-			for (UINT eShaderTypeEnum = 0; eShaderTypeEnum < RENDER_SHADERTYPE_END; ++eShaderTypeEnum)
+			for (UINT eBlendModeEnum = 0; eBlendModeEnum < RENDER_BLENDMODE_END; ++eBlendModeEnum)
 			{
-				wstring strKey = L"";
-				switch (eShaderTypeEnum)
+				for (UINT eShaderTypeEnum = 0; eShaderTypeEnum < RENDER_SHADERTYPE_END; ++eShaderTypeEnum)
 				{
-				case SHADERTYPE_SIMPLE:
-					strKey = L"Shader_Simple";
-					break;
-				case SHADERTYPE_SIMPLE2:
-					strKey = L"Shader_Simple2";
-					break;
-				case SHADERTYPE_SIMPLE3:
-					strKey = L"Shader_Simple3";
-					break;
-				default: // 에러 피하기 위해 임시로 만들어놓기
-					strKey = L"Shader_Simple";
-				}
-
-				// VertexShader ByteCode
-				CShader* pShader = dynamic_cast<CShader*>(m_pComponentManager->FindandGet_Prototype(strKey));
-				/* 일단 shader type과 input layout 타입 일치시킴, 변경 가능성 */
-				//pso_desc.InputLayout = { m_vecInputLayoutArr[eShaderTypeEnum].data(), (UINT)m_vecInputLayoutArr[eShaderTypeEnum].size() };
-				pso_desc.InputLayout = { *(pShader->Get_InputLayoutArr()), pShader->Get_InputLayoutSize() };
-
-				ComPtr<ID3DBlob>  byteCode = pShader->Get_ByteCode(CShader::TYPE_VERTEX);
-				pso_desc.VS = CD3DX12_SHADER_BYTECODE(byteCode.Get());
-				/*pso_desc.VS =
-				{
-					reinterpret_cast<BYTE*>(byteCode->GetBufferPointer()),
-					byteCode->GetBufferSize()
-				};*/
-				byteCode = pShader->Get_ByteCode(CShader::TYPE_PIXEL);
-				pso_desc.PS = CD3DX12_SHADER_BYTECODE(byteCode.Get());
-
-				for (UINT eRootSigType = 0; eRootSigType < ROOTSIG_TYPE_END; ++eRootSigType)
-				{
-					pso_desc.pRootSignature = m_rootSigArr[eRootSigType];
-					hr = m_pDevice->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(&m_PSOsArr[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootSigType]));
-					if (FAILED(hr))
+					wstring strKey = L"";
+					switch (eShaderTypeEnum)
 					{
-						MSG_BOX("Failed to Create PSO");
-						return hr;
+					case SHADERTYPE_SIMPLE:
+						strKey = L"Shader_Simple";
+						break;
+					case SHADERTYPE_SIMPLE2:
+						strKey = L"Shader_Simple2";
+						break;
+					case SHADERTYPE_SIMPLE3:
+						strKey = L"Shader_Simple3";
+						break;
+					default: // 에러 피하기 위해 임시로 만들어놓기
+						strKey = L"Shader_Simple";
+					}
+
+					// VertexShader ByteCode
+					CShader* pShader = dynamic_cast<CShader*>(m_pComponentManager->FindandGet_Prototype(strKey));
+					/* 일단 shader type과 input layout 타입 일치시킴, 변경 가능성 */
+					//pso_desc.InputLayout = { m_vecInputLayoutArr[eShaderTypeEnum].data(), (UINT)m_vecInputLayoutArr[eShaderTypeEnum].size() };
+					pso_desc.InputLayout = { *(pShader->Get_InputLayoutArr()), pShader->Get_InputLayoutSize() };
+
+					ComPtr<ID3DBlob>  byteCode = pShader->Get_ByteCode(CShader::TYPE_VERTEX);
+					pso_desc.VS = CD3DX12_SHADER_BYTECODE(byteCode.Get());
+					/*pso_desc.VS =
+					{
+						reinterpret_cast<BYTE*>(byteCode->GetBufferPointer()),
+						byteCode->GetBufferSize()
+					};*/
+					byteCode = pShader->Get_ByteCode(CShader::TYPE_PIXEL);
+					pso_desc.PS = CD3DX12_SHADER_BYTECODE(byteCode.Get());
+
+					for (UINT eRootSigType = 0; eRootSigType < ROOTSIG_TYPE_END; ++eRootSigType)
+					{
+						pso_desc.pRootSignature = m_rootSigArr[eRootSigType];
+						hr = m_pDevice->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(&m_PSOsArr[eCullMode][IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootSigType]));
+						if (FAILED(hr))
+						{
+							MSG_BOX("Failed to Create PSO");
+							return hr;
+						}
 					}
 				}
 			}
 		}
 	}
-
 
 	
 #pragma endregion
@@ -289,7 +290,10 @@ HRESULT CPipelineManager::Free()
 			{
 				for (auto& iter3 : iter2)
 				{
-					Safe_Release(iter3);
+					for (auto& iter4 : iter3)
+					{
+						Safe_Release(iter4);
+					}
 				}
 			}
 		}
@@ -318,9 +322,9 @@ ID3D12RootSignature* CPipelineManager::Get_RootSig(UINT eRootSigType)
 }
 
 
-ID3D12PipelineState* CPipelineManager::Get_PSO(UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigType)
+ID3D12PipelineState* CPipelineManager::Get_PSO(UINT eCullMode, UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigType)
 {
-	return m_PSOsArr[IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType];
+	return m_PSOsArr[eCullMode][IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType];
 }
 
 void CPipelineManager::Update_ObjPipelineLayer(CGameObject* pObject, ENUM_PSO ePsoEnum)
