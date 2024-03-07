@@ -148,63 +148,11 @@ HRESULT CPipelineManager::Initialize()
 
 #pragma endregion
 
-#pragma region Make InputLayout
-	{
-
-		D3D12_INPUT_ELEMENT_DESC inputLayoutDesc_single[1][1]
-		{ "POSITION",		0,		DXGI_FORMAT_R32G32B32_FLOAT,		0,		0,		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,		0 };
-
-		D3D12_INPUT_ELEMENT_DESC inputLayoutDesc_Double[2][2]
-		{
-			{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
-			},
-		 {
-			 { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
-			}
-		};
-		UINT iInputLayoutIndex = 0;
-		// Vertex Type Single
-		// m_vecInputLayoutArr[SHADERTYPE_SIMPLE].push_back(inputLayoutDesc_single[1][1]);
-
-		// Vertex Type Double
-		for (auto& iterDesc : inputLayoutDesc_Double[0])
-		{
-			m_vecInputLayoutArr[SHADERTYPE_SIMPLE].push_back(iterDesc);
-		}
-		for (auto& iterDesc : inputLayoutDesc_Double[1])
-		{
-			m_vecInputLayoutArr[SHADERTYPE_SIMPLE2].push_back(iterDesc);
-		}
-
-		//for (UINT iDoubleTypeIndex = 0; iDoubleTypeIndex < 2; ++iDoubleTypeIndex)
-		//{
-		//	for (auto& iterInputLayout : inputLayoutDesc_Double[iDoubleTypeIndex])
-		//	{
-		//		m_vecInputLayoutArr
-		//	}
-		//}
-		//for (UINT iInputLayoutType/*VertexTypes*/ = 0; iInputLayoutType < RENDER_PARAMCOMBO_END; ++iInputLayoutType)
-		//{
-		//	for (auto& iter : input_layout_desc[iInputLayoutType])
-		//	{
-		//		m_vecInputLayoutArr[iInputLayoutType].push_back(iter);
-		//	}
-		//}
-	}
-
-
-#pragma endregion
-
-
-
 #pragma region Build PSO
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pso_desc{};
 	pso_desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	
-	pso_desc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
+	//pso_desc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
 	
 	pso_desc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	pso_desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);

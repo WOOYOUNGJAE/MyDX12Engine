@@ -18,7 +18,7 @@ public: // LifeCycle
 	virtual void Tick(_float fDeltaTime) = 0;
 	virtual void Late_Tick(_float fDeltaTime) = 0;
 	virtual void Render_Tick(){};
-	virtual void Render(ID3D12GraphicsCommandList* pCmdList, struct FrameResource* pFrameResource){}
+	virtual void Render(ID3D12GraphicsCommandList* pCmdList, struct FrameResource* pFrameResource, UINT iRenderingElementIndex){}
 	HRESULT Free() override;
 public: // getter setter, abstract
 	virtual D3D12_PRIMITIVE_TOPOLOGY PrimitiveType()const {	return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;} // Default;

@@ -72,6 +72,7 @@ private: // Pass Info
 	class CCamera* m_pActiveCam = nullptr;
 	Matrix m_mProj;
 	FLOAT m_fAspectRatio = 0.f;
+private:
 };
 
 struct FrameResource

@@ -83,14 +83,14 @@ void CZeldaDemo::Render_Tick()
 	m_pRendererCom->AddTo_RenderGroup(RENDER_CULLMODE::CCW, RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
 }
 
-void CZeldaDemo::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource)
+void CZeldaDemo::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource, UINT iRenderingElementIndex)
 {
 	// Update CB
 	OBJECT_CB objConstants;
 	objConstants.mWorldMat = Get_WorldMatrix().Transpose();
 	objConstants.mInvTranspose = Get_WorldMatrix().Invert(); // Transpose µÎ¹ø
 	objConstants.material = Get_MaterialInfo();
-	pFrameResource->pObjectCB->CopyData(m_iClonedNum - 1, objConstants);
+	pFrameResource->pObjectCB->CopyData( iRenderingElementIndex, objConstants);
 
 	pCmdList->IASetPrimitiveTopology(PrimitiveType());
 

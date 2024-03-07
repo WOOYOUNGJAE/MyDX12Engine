@@ -288,7 +288,9 @@
     <ClInclude Include="..\Public\SphereMesh.h">
       <Filter>Utility\MeshData\3D\SphereMesh</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Sphere.h" />
+    <ClInclude Include="..\Public\Sphere.h">
+      <Filter>Utility\GameObjects\DefaultGeometry\Sphere</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -405,7 +407,9 @@
     <ClCompile Include="..\Private\SphereMesh.cpp">
       <Filter>Utility\MeshData\3D\SphereMesh</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Sphere.cpp" />
+    <ClCompile Include="..\Private\Sphere.cpp">
+      <Filter>Utility\GameObjects\DefaultGeometry\Sphere</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />
@@ -416,6 +420,9 @@
       <Filter>0.Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\simpleShader3.hlsl">
+      <Filter>0.Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\skybox.hlsl">
       <Filter>0.Shaders</Filter>
     </FxCompile>
   </ItemGroup>

@@ -236,8 +236,8 @@
     <ClInclude Include="..\..\External\imgui-dx12\imstb_textedit.h" />
     <ClInclude Include="..\..\External\imgui-dx12\imstb_truetype.h" />
     <ClInclude Include="..\Public\Camera_Free.h" />
-    <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\ClientLoader.h" />
+    <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\Client_Imgui.h" />
     <ClInclude Include="..\Public\Imgui_Struct.h" />
     <ClInclude Include="..\Public\MainApp.h" />

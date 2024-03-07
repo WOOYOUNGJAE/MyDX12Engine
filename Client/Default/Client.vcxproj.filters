@@ -93,13 +93,13 @@
     <ClInclude Include="..\Public\Imgui_Struct.h">
       <Filter>Imgui\Imgui_Struct</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\ClientLoader.h">
-      <Filter>Loader</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Camera_Free.h">
       <Filter>GameObject\Camera\Camera_Free</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ZeldaDemo.h" />
+    <ClInclude Include="..\Public\ClientLoader.h">
+      <Filter>Loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -138,13 +138,13 @@
     <ClCompile Include="..\Private\Imgui_Struct.cpp">
       <Filter>Imgui\Imgui_Struct</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\ClientLoader.cpp">
-      <Filter>Loader</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Camera_Free.cpp">
       <Filter>GameObject\Camera\Camera_Free</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ZeldaDemo.cpp" />
+    <ClCompile Include="..\Private\ClientLoader.cpp">
+      <Filter>Loader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

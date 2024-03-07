@@ -105,14 +105,14 @@ void CSphere::Render_Tick()
 	m_pRendererCom->AddTo_RenderGroup(RENDER_CULLMODE::NONE, RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
 }
 
-void CSphere::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource)
+void CSphere::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource, UINT iRenderingElementIndex)
 {
 	// Update CB
 	OBJECT_CB objConstants;
 	objConstants.mWorldMat = Get_WorldMatrix().Transpose();
 	objConstants.mInvTranspose = Get_WorldMatrix().Invert(); // Transpose µÎ¹ø
 	objConstants.material = Get_MaterialInfo();
-	pFrameResource->pObjectCB->CopyData(m_iClonedNum - 1, objConstants);
+	pFrameResource->pObjectCB->CopyData( iRenderingElementIndex, objConstants);
 
 	pCmdList->IASetPrimitiveTopology(PrimitiveType());
 
@@ -123,7 +123,7 @@ void CSphere::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameR
 
 		UINT objCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(OBJECT_CB));
 		D3D12_GPU_VIRTUAL_ADDRESS objCBAddress =
-			pFrameResource->pObjectCB->Get_UploadBuffer()->GetGPUVirtualAddress() + (m_iClonedNum - 1) * objCBByteSize;
+			pFrameResource->pObjectCB->Get_UploadBuffer()->GetGPUVirtualAddress() + iRenderingElementIndex * objCBByteSize;
 
 		pCmdList->IASetVertexBuffers(0, 1, pMesh->Get_VertexBufferViewPtr());
 		pCmdList->IASetIndexBuffer(pMesh->Get_IndexBufferViewPtr());

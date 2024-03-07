@@ -238,6 +238,7 @@ void CRenderer::MainRender()
 	/*XMMATRIX matView = XMMatrixIdentity();
 	XMStoreFloat4x4(&passConstants.mViewMat, XMMatrixTranspose(matView));
 	XMStoreFloat4x4(&passConstants.mViewInvMat, XMMatrixTranspose(matView));*/
+	UINT iRenderingElementIndex = 0;
 	for (UINT eCullMode = 0; eCullMode < D3D12_CULL_MODE_END; ++eCullMode)
 	{
 		for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
@@ -270,7 +271,7 @@ void CRenderer::MainRender()
 							m_pCurFrameResource->pPassCB_vp_light->Get_UploadBuffer()->GetGPUVirtualAddress());
 						for (CGameObject*& iter : m_RenderGroup[eCullMode][IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType])
 						{
-							iter->Render(m_pCommandList, m_pCurFrameResource);
+							iter->Render(m_pCommandList, m_pCurFrameResource, iRenderingElementIndex++);
 
 							//// ObjCB
 							//Update_ObjCB(iter);

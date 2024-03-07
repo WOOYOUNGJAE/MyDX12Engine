@@ -53,7 +53,7 @@ HRESULT CCube::Initialize(void* pArg)
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));
 	if (FAILED(hr)) return hr;
-	hr = Add_Component(L"Shader_Simple2", reinterpret_cast<CComponent**>(&m_pShaderCom));
+	hr = Add_Component(L"Shader_Simple3", reinterpret_cast<CComponent**>(&m_pShaderCom));
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_NightSkybox"));
 	//hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_ice"));
@@ -86,14 +86,14 @@ void CCube::Render_Tick()
 	m_pRendererCom->AddTo_RenderGroup(CW, RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
 }
 
-void CCube::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource)
+void CCube::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource, UINT iRenderingElementIndex)
 {
 	// Update CB
 	OBJECT_CB objConstants;
 	objConstants.mWorldMat = Get_WorldMatrix().Transpose();
 	objConstants.mInvTranspose = Get_WorldMatrix().Invert(); // Transpose µÎ¹ø
 	objConstants.material = Get_MaterialInfo();
-	pFrameResource->pObjectCB->CopyData(m_iClonedNum - 1, objConstants);
+	pFrameResource->pObjectCB->CopyData( iRenderingElementIndex, objConstants);
 
 	pCmdList->IASetPrimitiveTopology(PrimitiveType());
 
@@ -104,7 +104,7 @@ void CCube::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameRes
 
 		UINT objCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(OBJECT_CB));
 		D3D12_GPU_VIRTUAL_ADDRESS objCBAddress =
-			pFrameResource->pObjectCB->Get_UploadBuffer()->GetGPUVirtualAddress() + (m_iClonedNum - 1) * objCBByteSize;
+			pFrameResource->pObjectCB->Get_UploadBuffer()->GetGPUVirtualAddress() + iRenderingElementIndex * objCBByteSize;
 
 		pCmdList->IASetVertexBuffers(0, 1, pMesh->Get_VertexBufferViewPtr());
 		pCmdList->IASetIndexBuffer(pMesh->Get_IndexBufferViewPtr());

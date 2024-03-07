@@ -27,7 +27,7 @@ public:
 	void Tick(_float fDeltaTime) override;
 	void Late_Tick(_float fDeltaTime) override;
 	void Render_Tick() override;
-	void Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource) override;
+	void Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource, UINT iRenderingElementIndex) override;
 	HRESULT Free() override;
 public: // getter setter
 	MATERIAL_INFO Get_MaterialInfo() override;
