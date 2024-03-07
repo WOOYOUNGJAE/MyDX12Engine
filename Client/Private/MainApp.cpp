@@ -5,6 +5,7 @@
 #include "GameInstance.h"
 #include "Camera_Free.h"
 #include "ClientLoader.h"
+#include "Skybox.h"
 #include "ZeldaDemo.h"
 #ifdef IMGUI_ON
 #include "Client_Imgui.h"
@@ -52,6 +53,8 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(hr)) { return hr; }
 	hr = m_pGameInstance->Add_GameObjPrototype(L"ZeldaDemo", CZeldaDemo::Create());
 	if (FAILED(hr)) { return hr; }
+	hr = m_pGameInstance->Add_GameObjPrototype(L"Skybox", CSkybox::Create());
+	if (FAILED(hr)) { return hr; }
 
 
 	objDesc.strTag = L"Camera_Free";
@@ -83,9 +86,15 @@ HRESULT CMainApp::Initialize()
 	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }*/
 
-	objDesc.strTag = L"Sphere_15X15";
+	/*objDesc.strTag = L"Sphere_15X15";
 	objDesc.vStartPos = Vector3(1, 1, 1);
 	objDesc.vStartScale = Vector3::One * 0.6f;
+	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }*/
+
+	objDesc.strTag = L"Skybox";
+	objDesc.vStartPos = Vector3::Zero;
+	objDesc.vStartScale = Vector3::One;
 	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
 #pragma endregion InLevel

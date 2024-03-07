@@ -53,6 +53,13 @@ HRESULT CComponentManager::Initialize()
 		shaderInitDesc[0].inputLayout = SHADER_INIT_DESC::POS_NORMAL_TEXCOORD;
 		shaderInitDesc[1].inputLayout = shaderInitDesc[0].inputLayout;
 		Add_Prototype(L"Shader_Simple3", CShader::Create(shaderInitDesc, 2));
+
+		// skybox.hlsl
+		shaderInitDesc[0].filename = L"..\\Bin\\Shader\\skybox.hlsl";
+		shaderInitDesc[1].filename = shaderInitDesc[0].filename;
+		shaderInitDesc[0].inputLayout = SHADER_INIT_DESC::POS_NORMAL_TEXCOORD;
+		shaderInitDesc[1].inputLayout = shaderInitDesc[0].inputLayout;
+		Add_Prototype(L"Shader_skybox", CShader::Create(shaderInitDesc, 2));
 	}
 
 	Add_Prototype(L"Material", CMaterial::Create());

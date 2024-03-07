@@ -1,4 +1,8 @@
-#include "Cube.h"
+#include "pch.h"
+#include "Skybox.h"
+
+#include <Camera.h>
+
 #include "TextureCompo.h"
 #include "MeshObject.h"
 #include "Transform.h"
@@ -6,10 +10,11 @@
 #include "Shader.h"
 #include "Material.h"
 #include "MeshData.h"
+#include "CameraManager.h"
 
-CCube* CCube::Create()
+CSkybox* CSkybox::Create()
 {
-	CCube* pInstance = new CCube;
+	CSkybox* pInstance = new CSkybox;
 	pInstance->m_bIsPrototype = true;
 	if (pInstance)
 	{
@@ -19,9 +24,9 @@ CCube* CCube::Create()
 	return pInstance;
 }
 
-CGameObject* CCube::Clone(void* pArg)
+CGameObject* CSkybox::Clone(void* pArg)
 {
-	CCube* pInstance = new CCube(*this);
+	CSkybox* pInstance = new CSkybox(*this);
 
 	if (pInstance)
 	{
@@ -34,12 +39,12 @@ CGameObject* CCube::Clone(void* pArg)
 	return pInstance;
 }
 
-HRESULT CCube::Initialize_Prototype()
+HRESULT CSkybox::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CCube::Initialize(void* pArg)
+HRESULT CSkybox::Initialize(void* pArg)
 {
 	HRESULT hr = S_OK;
 	// ±âº» ÄÄÆ÷³ÍÆ® ºÎÂø
@@ -48,53 +53,53 @@ HRESULT CCube::Initialize(void* pArg)
 	/*hr = Add_Component(L"TriangleMesh", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
 	if (FAILED(hr)) return hr;*/
 
-	MESHOBJ_INIT_DESC meshObjDesc { true, L"CubeMesh" };
+	MESHOBJ_INIT_DESC meshObjDesc{ true, L"CubeMesh" };
 	hr = Add_Component(L"MeshObject", reinterpret_cast<CComponent**>(&m_pMeshObjectCom), &meshObjDesc);
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));
 	if (FAILED(hr)) return hr;
-	hr = Add_Component(L"Shader_Simple3", reinterpret_cast<CComponent**>(&m_pShaderCom));
+	hr = Add_Component(L"Shader_skybox", reinterpret_cast<CComponent**>(&m_pShaderCom));
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_NightSkybox"));
 	//hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_ice"));
 	if (FAILED(hr)) return hr;
 
-	MATERIAL_INFO matInfo{ Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f};
+	MATERIAL_INFO matInfo{ Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f };
 	hr = Add_Component(L"Material", reinterpret_cast<CComponent**>(&m_pMaterialCom), &matInfo);
 
 
 	m_iTextureSrvOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
 
-	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
-	m_pTransformCom->Set_Scale(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartScale);
+	m_pTransformCom->Set_Position(Vector3::Zero);
+	m_pTransformCom->Set_Scale(Vector3::One);
 
 	return hr;
 }
 
-void CCube::Tick(_float fDeltaTime)
+void CSkybox::Tick(_float fDeltaTime)
 {
 	int a = 0;
 }
 
-void CCube::Late_Tick(_float fDeltaTime)
+void CSkybox::Late_Tick(_float fDeltaTime)
 {
-	int a = 0;
+	m_pTransformCom->Set_Position(CCameraManager::Get_Instance()->Get_MainCam()->Get_Pos());
 }
 
-void CCube::Render_Tick()
+void CSkybox::Render_Tick()
 {
 	int a = 0;
-	m_pRendererCom->AddTo_RenderGroup(CW, RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
+	m_pRendererCom->AddTo_RenderGroup( RENDER_CULLMODE::NONE, RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
 }
 
-void CCube::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource, UINT iRenderingElementIndex)
+void CSkybox::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource, UINT iRenderingElementIndex)
 {
 	// Update CB
 	OBJECT_CB objConstants;
 	objConstants.mWorldMat = Get_WorldMatrix().Transpose();
 	objConstants.mInvTranspose = Get_WorldMatrix().Invert(); // Transpose µÎ¹ø
 	objConstants.material = Get_MaterialInfo();
-	pFrameResource->pObjectCB->CopyData( iRenderingElementIndex, objConstants);
+	pFrameResource->pObjectCB->CopyData(iRenderingElementIndex, objConstants);
 
 	pCmdList->IASetPrimitiveTopology(PrimitiveType());
 
@@ -129,7 +134,7 @@ void CCube::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameRes
 
 
 
-HRESULT CCube::Free()
+HRESULT CSkybox::Free()
 {
 	Safe_Release(m_pMaterialCom);
 	Safe_Release(m_pTextureCom);
@@ -137,36 +142,36 @@ HRESULT CCube::Free()
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pMeshObjectCom);
 	Safe_Release(m_pTransformCom);
-	
+
 	return CGameObject::Free();
 }
 
-Matrix CCube::Get_WorldMatrix()
+Matrix CSkybox::Get_WorldMatrix()
 {
 	return m_pTransformCom->WorldMatrix();
 }
 
-Vector3 CCube::Get_Pos()
+Vector3 CSkybox::Get_Pos()
 {
 	return m_pTransformCom->Position();
 }
 
-Vector3 CCube::Get_ScaleXYZ()
+Vector3 CSkybox::Get_ScaleXYZ()
 {
 	return CGameObject::Get_ScaleXYZ();
 }
 
-void CCube::Set_Position(const Vector3& vPos)
+void CSkybox::Set_Position(const Vector3& vPos)
 {
 	m_pTransformCom->Set_Position(vPos);
 }
 
-void CCube::Set_Scale(const Vector3& vScale)
+void CSkybox::Set_Scale(const Vector3& vScale)
 {
 	m_pTransformCom->Set_Scale(vScale);
 }
 
-MATERIAL_INFO CCube::Get_MaterialInfo()
+MATERIAL_INFO CSkybox::Get_MaterialInfo()
 {
 	return m_pMaterialCom->Get_MaterialInfo();
 }

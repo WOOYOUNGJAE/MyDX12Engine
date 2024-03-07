@@ -173,7 +173,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);IMGUI_DEFINE_MATH_OPERATORS;NOMINMAX</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>Default</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>../Public/;../../Reference/Headers/;..\..\packages\directxtk12_desktop_2019.2024.1.1.1\include;..\..\External\imgui-dx12\;D:\Projects\Git\MyProjects\MyDX12Engine\External\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -241,6 +241,7 @@
     <ClInclude Include="..\Public\Client_Imgui.h" />
     <ClInclude Include="..\Public\Imgui_Struct.h" />
     <ClInclude Include="..\Public\MainApp.h" />
+    <ClInclude Include="..\Public\Skybox.h" />
     <ClInclude Include="..\Public\ZeldaDemo.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
@@ -261,6 +262,7 @@
     <ClCompile Include="..\Private\Client_Imgui.cpp" />
     <ClCompile Include="..\Private\Imgui_Struct.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
+    <ClCompile Include="..\Private\Skybox.cpp" />
     <ClCompile Include="..\Private\ZeldaDemo.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">

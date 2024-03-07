@@ -40,6 +40,9 @@
     <Filter Include="GameObject\Demo\ZeldaDemo">
       <UniqueIdentifier>{bcfab51b-a97e-4bd1-9bfa-bae694a76caa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject\Skybox">
+      <UniqueIdentifier>{af6f412f-155e-4bd0-a246-997ceee0312c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -96,9 +99,12 @@
     <ClInclude Include="..\Public\Camera_Free.h">
       <Filter>GameObject\Camera\Camera_Free</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\ZeldaDemo.h" />
     <ClInclude Include="..\Public\ClientLoader.h">
       <Filter>Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Skybox.h" />
+    <ClInclude Include="..\Public\ZeldaDemo.h">
+      <Filter>GameObject\Demo\ZeldaDemo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -141,9 +147,12 @@
     <ClCompile Include="..\Private\Camera_Free.cpp">
       <Filter>GameObject\Camera\Camera_Free</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\ZeldaDemo.cpp" />
     <ClCompile Include="..\Private\ClientLoader.cpp">
       <Filter>Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Skybox.cpp" />
+    <ClCompile Include="..\Private\ZeldaDemo.cpp">
+      <Filter>GameObject\Demo\ZeldaDemo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
