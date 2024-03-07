@@ -1,5 +1,6 @@
 #include "GameObjectManager.h"
 #include "Cube.h"
+#include "Cylinder.h"
 #include "Grid.h"
 #include "ObjLayer.h"
 #include "Triangle.h"
@@ -12,6 +13,8 @@ HRESULT CGameObjectManager::Initialize()
 	Add_Prototype(L"Triangle", CTriangle::Create());
 	Add_Prototype(L"Grid_1X1", CGrid::Create(L"Grid_1X1"));
 	Add_Prototype(L"Grid_10X10", CGrid::Create(L"Grid_10X10"));
+	Add_Prototype(L"Cylinder_20_05_05", CCylinder::Create(L"Cylinder_20_05_05"));
+
 #pragma endregion Init_Basic_GameObject
 	return S_OK;
 }

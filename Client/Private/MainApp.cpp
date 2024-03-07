@@ -45,6 +45,9 @@ HRESULT CMainApp::Initialize()
 #pragma region InLevel
 	CGameObject* pObjectControlling = nullptr;
 	GAMEOBJECT_INIT_DESC objDesc{};
+	objDesc.vStartPos = Vector3(0.f, 0.f, 0.f);
+	objDesc.vStartScale = Vector3::One;
+
 	hr = m_pGameInstance->Add_GameObjPrototype(L"Camera_Free", CCamera_Free::Create());
 	if (FAILED(hr)) { return hr; }
 	hr = m_pGameInstance->Add_GameObjPrototype(L"ZeldaDemo", CZeldaDemo::Create());
@@ -64,7 +67,6 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(hr)) { return hr; }*/
 
 	objDesc.strTag = L"Cube";
-	objDesc.vStartPos = Vector3(0.f, 0.f, 0.f);
 	/*hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }*/
 	/*objDesc.vStartPos = Vector3(1.f, 1.f, 0.f);
@@ -73,16 +75,13 @@ HRESULT CMainApp::Initialize()
 	/*objDesc.strTag = L"ZeldaDemo";
 	hr = m_pGameInstance->Add_GameObject_InScene(L"ZeldaDemo", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }*/
-	objDesc.strTag = L"Grid_1X1";
+	/*objDesc.strTag = L"Grid_1X1";
 	objDesc.vStartScale = Vector3(2, 2, 2);
 	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
-	if (FAILED(hr)) { return hr; }
-	objDesc.strTag = L"Grid_10X10";
-	objDesc.vStartPos = Vector3(2, 2, -4);
-	objDesc.vStartScale = Vector3(2, 2, 2);
+	if (FAILED(hr)) { return hr; }*/
+	objDesc.strTag = L"Cylinder_20_05_05";
 	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
-
 #pragma endregion InLevel
 
 	// Renderer

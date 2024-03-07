@@ -264,6 +264,8 @@
     <ClInclude Include="..\Public\ComponentManager.h" />
     <ClInclude Include="..\Public\Cube.h" />
     <ClInclude Include="..\Public\CubeMesh.h" />
+    <ClInclude Include="..\Public\Cylinder.h" />
+    <ClInclude Include="..\Public\CylinderMesh.h" />
     <ClInclude Include="..\Public\D3DResourceManager.h" />
     <ClInclude Include="..\Public\d3dx12.h" />
     <ClInclude Include="..\Public\Device_Utils.h" />
@@ -317,6 +319,8 @@
     <ClCompile Include="..\Private\ComponentManager.cpp" />
     <ClCompile Include="..\Private\Cube.cpp" />
     <ClCompile Include="..\Private\CubeMesh.cpp" />
+    <ClCompile Include="..\Private\Cylinder.cpp" />
+    <ClCompile Include="..\Private\CylinderMesh.cpp" />
     <ClCompile Include="..\Private\D3DResourceManager.cpp" />
     <ClCompile Include="..\Private\Device_Utils.cpp" />
     <ClCompile Include="..\Private\GameInstance.cpp" />

@@ -130,6 +130,12 @@
     <Filter Include="Utility\MeshData\2D\TriangleMesh">
       <UniqueIdentifier>{8c689582-8def-4a34-b4b6-daee17576605}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\MeshData\3D\CylinderMesh">
+      <UniqueIdentifier>{c0c86ebd-fef1-484a-8d30-e8bc76da8f92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\GameObjects\Cylinder">
+      <UniqueIdentifier>{e2a1b18e-1ac9-4e12-8c77-f8f43879813c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -267,6 +273,10 @@
     <ClInclude Include="..\Public\Grid.h">
       <Filter>Utility\GameObjects\DefaultGeometry\Grid</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\CylinderMesh.h">
+      <Filter>Utility\MeshData\3D\CylinderMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Cylinder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -374,6 +384,10 @@
     <ClCompile Include="..\Private\Grid.cpp">
       <Filter>Utility\GameObjects\DefaultGeometry\Grid</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\CylinderMesh.cpp">
+      <Filter>Utility\MeshData\3D\CylinderMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Cylinder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />
