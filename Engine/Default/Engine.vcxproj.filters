@@ -133,8 +133,14 @@
     <Filter Include="Utility\MeshData\3D\CylinderMesh">
       <UniqueIdentifier>{c0c86ebd-fef1-484a-8d30-e8bc76da8f92}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\GameObjects\Cylinder">
+    <Filter Include="Utility\MeshData\3D\SphereMesh">
+      <UniqueIdentifier>{c212e5ae-3d86-4176-b101-5e1ec3ed192c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\GameObjects\DefaultGeometry\Cylinder">
       <UniqueIdentifier>{e2a1b18e-1ac9-4e12-8c77-f8f43879813c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\GameObjects\DefaultGeometry\Sphere">
+      <UniqueIdentifier>{99fd54e5-9723-4356-a3fc-9978f029b3a9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -276,7 +282,13 @@
     <ClInclude Include="..\Public\CylinderMesh.h">
       <Filter>Utility\MeshData\3D\CylinderMesh</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Cylinder.h" />
+    <ClInclude Include="..\Public\Cylinder.h">
+      <Filter>Utility\GameObjects\DefaultGeometry\Cylinder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SphereMesh.h">
+      <Filter>Utility\MeshData\3D\SphereMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Sphere.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -387,7 +399,13 @@
     <ClCompile Include="..\Private\CylinderMesh.cpp">
       <Filter>Utility\MeshData\3D\CylinderMesh</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Cylinder.cpp" />
+    <ClCompile Include="..\Private\Cylinder.cpp">
+      <Filter>Utility\GameObjects\DefaultGeometry\Cylinder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SphereMesh.cpp">
+      <Filter>Utility\MeshData\3D\SphereMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />

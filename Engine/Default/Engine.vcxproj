@@ -301,6 +301,8 @@
     <ClInclude Include="..\Public\PipelineManager.h" />
     <ClInclude Include="..\Public\Renderer.h" />
     <ClInclude Include="..\Public\Shader.h" />
+    <ClInclude Include="..\Public\Sphere.h" />
+    <ClInclude Include="..\Public\SphereMesh.h" />
     <ClInclude Include="..\Public\Texture.h" />
     <ClInclude Include="..\Public\TextureCompo.h" />
     <ClInclude Include="..\Public\Transform.h" />
@@ -340,6 +342,8 @@
     <ClCompile Include="..\Private\PipelineManager.cpp" />
     <ClCompile Include="..\Private\Renderer.cpp" />
     <ClCompile Include="..\Private\Shader.cpp" />
+    <ClCompile Include="..\Private\Sphere.cpp" />
+    <ClCompile Include="..\Private\SphereMesh.cpp" />
     <ClCompile Include="..\Private\Texture.cpp" />
     <ClCompile Include="..\Private\TextureCompo.cpp" />
     <ClCompile Include="..\Private\Transform.cpp" />

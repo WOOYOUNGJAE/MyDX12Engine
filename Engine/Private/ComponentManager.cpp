@@ -16,6 +16,7 @@
 #include "AssetManager.h"
 #include "CylinderMesh.h"
 #include "GridMesh.h"
+#include "SphereMesh.h"
 IMPLEMENT_SINGLETON(CComponentManager)
 
 HRESULT CComponentManager::Initialize()
@@ -72,6 +73,7 @@ HRESULT CComponentManager::Initialize()
 	pAssetManager->Add_MeshDataPrototype(L"Grid_1X1", CGridMesh::Create(1, 1));
 	pAssetManager->Add_MeshDataPrototype(L"Grid_10X10", CGridMesh::Create(10,10));
 	pAssetManager->Add_MeshDataPrototype(L"Cylinder_20_05_05", CCylinderMesh::Create(20,0.5f,0.5f));
+	pAssetManager->Add_MeshDataPrototype(L"Sphere_15X15", CSphereMesh::Create(15, 15));
 
 
 	CGraphic_Device::Get_Instance()->Close_CmdList();

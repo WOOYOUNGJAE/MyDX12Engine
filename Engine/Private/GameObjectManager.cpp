@@ -3,6 +3,7 @@
 #include "Cylinder.h"
 #include "Grid.h"
 #include "ObjLayer.h"
+#include "Sphere.h"
 #include "Triangle.h"
 IMPLEMENT_SINGLETON(CGameObjectManager)
 
@@ -14,6 +15,7 @@ HRESULT CGameObjectManager::Initialize()
 	Add_Prototype(L"Grid_1X1", CGrid::Create(L"Grid_1X1"));
 	Add_Prototype(L"Grid_10X10", CGrid::Create(L"Grid_10X10"));
 	Add_Prototype(L"Cylinder_20_05_05", CCylinder::Create(L"Cylinder_20_05_05"));
+	Add_Prototype(L"Sphere_15X15", CSphere::Create(L"Sphere_15X15"));
 
 #pragma endregion Init_Basic_GameObject
 	return S_OK;

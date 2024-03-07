@@ -79,7 +79,11 @@ HRESULT CMainApp::Initialize()
 	objDesc.vStartScale = Vector3(2, 2, 2);
 	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }*/
-	objDesc.strTag = L"Cylinder_20_05_05";
+	/*objDesc.strTag = L"Cylinder_20_05_05";
+	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }*/
+	objDesc.strTag = L"Sphere_15X15";
+	objDesc.vStartScale = Vector3::One * 0.6f;
 	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
 #pragma endregion InLevel
