@@ -110,7 +110,7 @@ HRESULT CLoadHelper::Load_3DModel(const string& strPath, const string& strAssetN
 		}
 
 		CTexture* pInstance = m_pAssetManager->FindandGet_Texture(wstrAssetName);
-		if (pInstance) // 이미 있다면 텍스처 로드는 건너 뜀
+		if (pInstance) // 이미 있다면 텍스처 로드는 건너 뜀 (다른 메쉬가 같은 텍스처를 가리키는 경우)
 		{
 			iterMesh->Set_CbvSrvUavOffset(pInstance->m_iCbvSrvUavHeapOffset);
 			continue;

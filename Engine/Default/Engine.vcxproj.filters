@@ -142,6 +142,12 @@
     <Filter Include="Utility\GameObjects\DefaultGeometry\Sphere">
       <UniqueIdentifier>{99fd54e5-9723-4356-a3fc-9978f029b3a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\MeshData\1D">
+      <UniqueIdentifier>{268f9a15-c5f7-4119-a4c5-fac7d00809b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\MeshData\1D\SingleVertexMesh">
+      <UniqueIdentifier>{5fb53f02-0064-4720-9aad-be531b16cecc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -291,6 +297,10 @@
     <ClInclude Include="..\Public\Sphere.h">
       <Filter>Utility\GameObjects\DefaultGeometry\Sphere</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\SingleVertexMesh.h">
+      <Filter>Utility\MeshData\1D\SingleVertexMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MeshDataType.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -410,6 +420,10 @@
     <ClCompile Include="..\Private\Sphere.cpp">
       <Filter>Utility\GameObjects\DefaultGeometry\Sphere</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\SingleVertexMesh.cpp">
+      <Filter>Utility\MeshData\1D\SingleVertexMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MeshDataType.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />
@@ -423,6 +437,9 @@
       <Filter>0.Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\skybox.hlsl">
+      <Filter>0.Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\treeBillboard.hlsl">
       <Filter>0.Shaders</Filter>
     </FxCompile>
   </ItemGroup>

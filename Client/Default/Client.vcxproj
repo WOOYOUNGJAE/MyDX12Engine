@@ -242,6 +242,7 @@
     <ClInclude Include="..\Public\Imgui_Struct.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\Skybox.h" />
+    <ClInclude Include="..\Public\TreeBillboard.h" />
     <ClInclude Include="..\Public\ZeldaDemo.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
@@ -263,6 +264,7 @@
     <ClCompile Include="..\Private\Imgui_Struct.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\Skybox.cpp" />
+    <ClCompile Include="..\Private\TreeBillboard.cpp" />
     <ClCompile Include="..\Private\ZeldaDemo.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">

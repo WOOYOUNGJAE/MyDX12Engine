@@ -11,7 +11,6 @@ CMeshData::CMeshData() :
 CMeshData::CMeshData(CMeshData& rhs) : CBase(rhs),
 m_pDevice(rhs.m_pDevice),
 m_pCommandList(rhs.m_pCommandList),
-m_vertexPosArr(rhs.m_vertexPosArr),
 m_vertexBufferCPU(rhs.m_vertexBufferCPU),
 m_indexBufferCPU(rhs.m_indexBufferCPU),
 m_vertexBufferGPU(rhs.m_vertexBufferGPU),
@@ -45,7 +44,7 @@ void CMeshData::Init_VBV_IBV()
 	m_vertexBufferView.SizeInBytes = m_iVertexBufferByteSize;
 
 	m_indexBufferView.BufferLocation = m_indexBufferGPU->GetGPUVirtualAddress();
-	m_indexBufferView.Format = IndexFormat;
+	m_indexBufferView.Format = m_IndexFormat;
 	m_indexBufferView.SizeInBytes = m_iIndexBufferByteSize;
 }
 

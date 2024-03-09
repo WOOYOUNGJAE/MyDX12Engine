@@ -7,7 +7,7 @@ CCubeMesh::CCubeMesh()
 	m_iNumIndices = 6 * 6;
 	m_iVertexByteStride = sizeof(VertexPositionNormalTexture);
 	m_iVertexBufferByteSize = m_iNumVertices * m_iVertexByteStride;
-	IndexFormat = DXGI_FORMAT_R16_UINT;
+	m_IndexFormat = DXGI_FORMAT_R16_UINT;
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(UINT16);
 }
 
@@ -25,7 +25,7 @@ CCubeMesh::CCubeMesh(CCubeMesh& rhs) : CMeshData(rhs)
 	m_iNumIndices = rhs.m_iNumIndices;
 	m_iVertexByteStride = rhs.m_iVertexByteStride;
 	m_iVertexBufferByteSize = rhs.m_iVertexBufferByteSize;
-	IndexFormat = rhs.IndexFormat;
+	m_IndexFormat = rhs.m_IndexFormat;
 	m_iIndexBufferByteSize = rhs.m_iIndexBufferByteSize;
 }
 

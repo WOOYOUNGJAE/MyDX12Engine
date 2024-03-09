@@ -30,7 +30,7 @@ namespace Engine
 
 	struct SHADER_INIT_DESC
 	{
-		enum INPUT_LAYOUT_ENUM { POS_COLOR, POS_TEXCOORD, POS_NORMAL_TEXCOORD, INPUT_LAYOUT_ENUM_END };
+		enum INPUT_LAYOUT_ENUM { POS_COLOR, POS_TEXCOORD, POS_NORMAL_TEXCOORD, POS_SIZE, INPUT_LAYOUT_ENUM_END };
 		INPUT_LAYOUT_ENUM inputLayout;
 		std::wstring filename; // 경로
 		D3D_SHADER_MACRO* defines; // 고급옵션, 일반적으로 nullptr

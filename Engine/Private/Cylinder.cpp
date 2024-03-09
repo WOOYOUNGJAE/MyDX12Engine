@@ -102,7 +102,7 @@ void CCylinder::Late_Tick(_float fDeltaTime)
 void CCylinder::Render_Tick()
 {
 	int a = 0;
-	m_pRendererCom->AddTo_RenderGroup(RENDER_CULLMODE::CW, RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
+	m_pRendererCom->AddTo_RenderGroup(RENDER_CULLMODE::NONE, RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
 }
 
 void CCylinder::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource, UINT iRenderingElementIndex)

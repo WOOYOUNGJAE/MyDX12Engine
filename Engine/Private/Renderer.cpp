@@ -94,7 +94,7 @@ HRESULT CRenderer::Build_FrameResource()
 	{
 		m_vecFrameResource.push_back(new FrameResource(
 			pDevice,
-			2/**/,
+			50/**/,
 			1/**/)
 		);
 	}

@@ -9,7 +9,7 @@ CTriangleMesh::CTriangleMesh()
 	m_iNumIndices = 3;
 	m_iVertexByteStride = sizeof(VertexPositionColor);
 	m_iVertexBufferByteSize = m_iNumVertices * m_iVertexByteStride;
-	IndexFormat = DXGI_FORMAT_R16_UINT;
+	m_IndexFormat = DXGI_FORMAT_R16_UINT;
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(_ushort);
 }
 
@@ -20,7 +20,7 @@ m_vertexData(rhs.m_vertexData)
 	m_iNumIndices = rhs.m_iNumIndices;
 	m_iVertexByteStride = rhs.m_iVertexByteStride;
 	m_iVertexBufferByteSize = rhs.m_iVertexBufferByteSize;
-	IndexFormat = rhs.IndexFormat;
+	m_IndexFormat = rhs.m_IndexFormat;
 	m_iIndexBufferByteSize = rhs.m_iIndexBufferByteSize;
 }
 

@@ -135,7 +135,7 @@ void CTransform::Refresh_MatrixScaled(const Vector3& scale)
 {
 	Set_WorldMatrix(MAT_RIGHT, (Vector3)XMVector3Normalize(m_mWorldMatrix.Right()) * scale.x);
 	Set_WorldMatrix(MAT_UP, (Vector3)XMVector3Normalize(m_mWorldMatrix.Up()) * scale.y);
-	Set_WorldMatrix(MAT_LOOK, (Vector3)XMVector3Normalize(m_mWorldMatrix.Forward()) * scale.z);
+	Set_WorldMatrix(MAT_LOOK, (Vector3)XMVector3Normalize(-m_mWorldMatrix.Forward()) * scale.z); // SimpleMath의 Forward는 카메라 방향임
 }
 
 void CTransform::Rotate(Vector3 vAxis, FLOAT fRotSpeed)

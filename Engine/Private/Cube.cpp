@@ -65,6 +65,8 @@ HRESULT CCube::Initialize(void* pArg)
 
 	m_iTextureSrvOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
 
+	GAMEOBJECT_INIT_DESC* pCastedArg = static_cast<GAMEOBJECT_INIT_DESC*>(pArg);
+
 	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
 	m_pTransformCom->Set_Scale(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartScale);
 
@@ -84,7 +86,7 @@ void CCube::Late_Tick(_float fDeltaTime)
 void CCube::Render_Tick()
 {
 	int a = 0;
-	m_pRendererCom->AddTo_RenderGroup(CW, RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
+	m_pRendererCom->AddTo_RenderGroup(CCW, RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
 }
 
 void CCube::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource, UINT iRenderingElementIndex)

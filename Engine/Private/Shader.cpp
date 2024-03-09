@@ -56,20 +56,19 @@ HRESULT CShader::Initialize_Prototype(const SHADER_INIT_DESC* shaderInputArr, _u
 		{
 			eCurType = TYPE_VERTEX;
 		}
+		else if (shaderInputArr[i].entrypoint == "GS")
+		{
+			eCurType = TYPE_GEO;
+		}
 		else if (shaderInputArr[i].entrypoint == "PS")
 		{
 			eCurType = TYPE_PIXEL;
 		}
-		else
-		{
-			int a = 1;
-		}
-		//else if () {}
 
 		m_shaderByteCodeArr[eCurType] = CDevice_Utils::CompileShader(shaderInputArr[i].filename, shaderInputArr[i].defines, shaderInputArr[i].entrypoint, shaderInputArr[i].target);
 	}
 
-	switch (shaderInputArr->inputLayout)
+	switch (shaderInputArr->inputLayout) // layout 은 index 0만 확인
 	{
 	case SHADER_INIT_DESC::POS_COLOR:
 	{
@@ -100,6 +99,16 @@ HRESULT CShader::Initialize_Prototype(const SHADER_INIT_DESC* shaderInputArr, _u
 			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
 		};
 		m_iInputLayoutSize = 3;
+		break;
+	}
+	case SHADER_INIT_DESC::POS_SIZE:
+	{
+		m_pInputLayoutArr = new D3D12_INPUT_ELEMENT_DESC[3]
+		{
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "SIZE", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		};
+		m_iInputLayoutSize = 2;
 		break;
 	}
 	default:

@@ -258,6 +258,7 @@
     <ClInclude Include="..\Public\Asset.h" />
     <ClInclude Include="..\Public\AssetManager.h" />
     <ClInclude Include="..\Public\Base.h" />
+    <ClInclude Include="..\Public\SingleVertexMesh.h" />
     <ClInclude Include="..\Public\Camera.h" />
     <ClInclude Include="..\Public\CameraManager.h" />
     <ClInclude Include="..\Public\Component.h" />
@@ -294,6 +295,7 @@
     <ClInclude Include="..\Public\LoadHelper.h" />
     <ClInclude Include="..\Public\Material.h" />
     <ClInclude Include="..\Public\MeshData.h" />
+    <ClInclude Include="..\Public\MeshDataType.h" />
     <ClInclude Include="..\Public\MeshObject.h" />
     <ClInclude Include="..\Public\MyMath.h" />
     <ClInclude Include="..\Public\ObjLayer.h" />
@@ -315,6 +317,7 @@
     <ClCompile Include="..\Private\Asset.cpp" />
     <ClCompile Include="..\Private\AssetManager.cpp" />
     <ClCompile Include="..\Private\Base.cpp" />
+    <ClCompile Include="..\Private\SingleVertexMesh.cpp" />
     <ClCompile Include="..\Private\Camera.cpp" />
     <ClCompile Include="..\Private\CameraManager.cpp" />
     <ClCompile Include="..\Private\Component.cpp" />
@@ -336,6 +339,7 @@
     <ClCompile Include="..\Private\LoadHelper.cpp" />
     <ClCompile Include="..\Private\Material.cpp" />
     <ClCompile Include="..\Private\MeshData.cpp" />
+    <ClCompile Include="..\Private\MeshDataType.cpp" />
     <ClCompile Include="..\Private\MeshObject.cpp" />
     <ClCompile Include="..\Private\ObjLayer.cpp" />
     <ClCompile Include="..\Private\ObjMonobehaviour.cpp" />
@@ -369,6 +373,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\skybox.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\treeBillboard.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaderTest.hlsl">

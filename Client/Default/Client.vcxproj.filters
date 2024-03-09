@@ -43,6 +43,12 @@
     <Filter Include="GameObject\Skybox">
       <UniqueIdentifier>{af6f412f-155e-4bd0-a246-997ceee0312c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject\Environment">
+      <UniqueIdentifier>{36a50bd6-f72f-4d64-a8f3-13bb2bd0cba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Environment\TreeBillboard">
+      <UniqueIdentifier>{98806750-198e-4673-99d9-6e9e0a15eafc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -106,6 +112,7 @@
     <ClInclude Include="..\Public\ZeldaDemo.h">
       <Filter>GameObject\Demo\ZeldaDemo</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\TreeBillboard.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -154,6 +161,7 @@
     <ClCompile Include="..\Private\ZeldaDemo.cpp">
       <Filter>GameObject\Demo\ZeldaDemo</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\TreeBillboard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

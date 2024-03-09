@@ -100,7 +100,7 @@ void CZeldaDemo::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFra
 		CMeshData* pMesh = (*m_pMeshObjectCom->Get_vecMeshData())[i];
 		UINT objCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(OBJECT_CB));
 		D3D12_GPU_VIRTUAL_ADDRESS objCBAddress =
-			pFrameResource->pObjectCB->Get_UploadBuffer()->GetGPUVirtualAddress() + (m_iClonedNum - 1) * objCBByteSize;
+			pFrameResource->pObjectCB->Get_UploadBuffer()->GetGPUVirtualAddress() + iRenderingElementIndex * objCBByteSize;
 
 		pCmdList->IASetVertexBuffers(0, 1, pMesh->Get_VertexBufferViewPtr());
 		pCmdList->IASetIndexBuffer(pMesh->Get_IndexBufferViewPtr());

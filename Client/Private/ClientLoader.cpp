@@ -39,6 +39,14 @@ void CClientLoader::Load_Textures()
 	load_Desc.bIsCubeMap = true;
 	m_pHelper->Load_Texture(load_Desc, L"Texture_NightSkybox");
 
+	load_Desc.strPath = m_strTextureRootPath + L"earth.jpg";
+	load_Desc.bIsCubeMap = false;
+	m_pHelper->Load_Texture(load_Desc, L"Texture_Earth");
+
+	load_Desc.strPath = m_strTextureRootPath + L"Tree0.png";
+	load_Desc.bIsCubeMap = false;
+	m_pHelper->Load_Texture(load_Desc, L"Texture_Tree0");
+
 }
 
 void CClientLoader::Load_3DModels()

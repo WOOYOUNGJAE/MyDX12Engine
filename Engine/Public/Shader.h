@@ -6,7 +6,7 @@ using namespace std;
 class ENGINE_DLL CShader : public CComponent
 {
 public: // typedef
-	enum SHADER_TYPE {TYPE_VERTEX, TYPE_PIXEL, SHADER_TYPE_END,};
+	enum SHADER_TYPE {TYPE_VERTEX, TYPE_GEO, TYPE_PIXEL, SHADER_TYPE_END,};
 private:
 	CShader();
 	CShader(CShader& rhs);

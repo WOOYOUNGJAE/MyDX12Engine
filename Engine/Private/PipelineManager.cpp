@@ -159,7 +159,6 @@ HRESULT CPipelineManager::Initialize()
 	/*pso_desc.DepthStencilState.DepthEnable = FALSE;
 	pso_desc.DepthStencilState.StencilEnable = FALSE;*/
 	pso_desc.SampleMask = UINT_MAX; // 그 어떤 표본도 비활성화 하지 않음
-	pso_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	pso_desc.NumRenderTargets = 1;
 	pso_desc.RTVFormats[0] = m_pGraphic_Device->m_BackBufferFormat;
 	pso_desc.SampleDesc.Count = 1;
@@ -187,8 +186,21 @@ HRESULT CPipelineManager::Initialize()
 					case SHADERTYPE_SIMPLE3:
 						strKey = L"Shader_Simple3";
 						break;
+					case SHADERTYPE_TREEBILLBOARD:
+						strKey = L"Shader_treeBillboard";
+						pso_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT; // Triangle이 아닌 경우는 흔치 않기 때문에 특정 Shader은 고유 PTT
+						break;
 					default: // 에러 피하기 위해 임시로 만들어놓기
 						strKey = L"Shader_Simple";
+					}
+
+					if (eShaderTypeEnum == SHADERTYPE_TREEBILLBOARD)
+					{
+						pso_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT; // Triangle이 아닌 경우는 흔치 않기 때문에 특정 Shader은 고유 PTT						
+					}
+					else // 일반적일 떄
+					{
+						pso_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;						
 					}
 
 					// VertexShader ByteCode
@@ -206,6 +218,9 @@ HRESULT CPipelineManager::Initialize()
 					};*/
 					byteCode = pShader->Get_ByteCode(CShader::TYPE_PIXEL);
 					pso_desc.PS = CD3DX12_SHADER_BYTECODE(byteCode.Get());
+
+					byteCode = pShader->Get_ByteCode(CShader::TYPE_GEO);
+					pso_desc.GS = byteCode.Get() ? CD3DX12_SHADER_BYTECODE(byteCode.Get()) : D3D12_SHADER_BYTECODE(); // Optional
 
 					for (UINT eRootSigType = 0; eRootSigType < ROOTSIG_TYPE_END; ++eRootSigType)
 					{

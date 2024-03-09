@@ -5,6 +5,8 @@
 NAMESPACE_(Engine)
 using std::vector;
 	// MeshGeometry는 Prototype만 가능, Clone 비허용.
+	// VertexPositionNormalTexture와 UINT32가 디폴트,
+	// 그 외의 경우는 상속으로
 class ENGINE_DLL CMeshData abstract: public CBase
 {
 protected:
@@ -34,8 +36,7 @@ public: // static util func
 protected:
 	ID3D12Device* m_pDevice = nullptr;
 	ID3D12GraphicsCommandList* m_pCommandList = nullptr;
-	
-	_float3* m_vertexPosArr = nullptr;
+
 	//ComPtr<ID3D12Resource> m_pResource = nullptr;
 	// 임시 저장공간
 	ID3DBlob* m_vertexBufferCPU = nullptr;
@@ -52,7 +53,7 @@ protected: // Data about the buffers.
 	UINT m_iNumIndices = 0;
 	UINT m_iVertexByteStride = 0; 
 	UINT m_iVertexBufferByteSize = 0;
-	DXGI_FORMAT IndexFormat = DXGI_FORMAT_R16_UINT; 
+	DXGI_FORMAT m_IndexFormat = DXGI_FORMAT_R32_UINT; 
 	UINT m_iIndexBufferByteSize = 0;
 	D3D12_PRIMITIVE_TOPOLOGY PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 protected:
