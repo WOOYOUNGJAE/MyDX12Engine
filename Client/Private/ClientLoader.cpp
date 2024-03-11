@@ -46,6 +46,11 @@ void CClientLoader::Load_Textures()
 	load_Desc.strPath = m_strTextureRootPath + L"Tree0.png";
 	load_Desc.bIsCubeMap = false;
 	m_pHelper->Load_Texture(load_Desc, L"Texture_Tree0");
+	
+
+	/*load_Desc.strPath = m_strTextureRootPath + L"Cubemap\\sunsetcube1024.dds";
+	load_Desc.bIsCubeMap = true;
+	m_pHelper->Load_Texture(load_Desc, L"sunsetcube1024");*/
 
 }
 

@@ -72,48 +72,48 @@ HRESULT CMainApp::Initialize()
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }*/
 
-	objDesc.strTag = L"Cube";
+	/*objDesc.strTag = L"Cube";
 	objDesc.vStartPos = Vector3::Zero;
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
-	if (FAILED(hr)) { return hr; }
+	if (FAILED(hr)) { return hr; }*/
 
 	/*objDesc.vStartPos = Vector3(1.f, 1.f, 0.f);
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }*/
 
-	objDesc.strTag = L"ZeldaDemo";
+	/*objDesc.strTag = L"ZeldaDemo";
 	objDesc.vStartPos = Vector3(2.f, 0.f, -5.f);
 	hr = m_pGameInstance->Add_GameObject_InScene(L"ZeldaDemo", OBJ_LAYER_0, &pObjectControlling, &objDesc);
-	if (FAILED(hr)) { return hr; }
+	if (FAILED(hr)) { return hr; }*/
 
-	objDesc.strTag = L"Grid_10X10";
+	/*objDesc.strTag = L"Grid_10X10";
 	objDesc.vStartPos = Vector3(-2.f, 0.f, -5.f);
 	objDesc.vStartScale = Vector3(2, 2, 2);
 	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
-	if (FAILED(hr)) { return hr; }
+	if (FAILED(hr)) { return hr; }*/
 
-	objDesc.strTag = L"Cylinder_20_05_05";
+	/*objDesc.strTag = L"Cylinder_20_05_05";
 	objDesc.vStartPos = Vector3(2.3f, 0.f, 1.5f);
-	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
-	if (FAILED(hr)) { return hr; }
-
-	objDesc.strTag = L"Sphere_15X15";
-	objDesc.vStartPos = Vector3(0, 0, -7);
-	objDesc.vStartScale = Vector3::One * 0.9f;
-	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
-	if (FAILED(hr)) { return hr; }
-
-	/*objDesc.strTag = L"Skybox";
-	objDesc.vStartPos = Vector3::Zero;
-	objDesc.vStartScale = Vector3::One;
 	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }*/
 
-	objDesc.strTag = L"TreeBillboard";
-	objDesc.vStartPos = Vector3(0, 0, 2);
+	/*objDesc.strTag = L"Sphere_15X15";
+	objDesc.vStartPos = Vector3(0, 0, -7);
+	objDesc.vStartScale = Vector3::One * 0.9f;
+	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }*/
+
+	objDesc.strTag = L"Skybox";
+	objDesc.vStartPos = Vector3::Zero;
 	objDesc.vStartScale = Vector3::One;
 	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
+
+	/*objDesc.strTag = L"TreeBillboard";
+	objDesc.vStartPos = Vector3(0, 0, 2);
+	objDesc.vStartScale = Vector3::One;
+	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }*/
 #pragma endregion InLevel
 
 	// Renderer

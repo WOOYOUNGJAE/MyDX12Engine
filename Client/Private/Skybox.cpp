@@ -78,18 +78,17 @@ HRESULT CSkybox::Initialize(void* pArg)
 
 void CSkybox::Tick(_float fDeltaTime)
 {
-	int a = 0;
+
 }
 
 void CSkybox::Late_Tick(_float fDeltaTime)
 {
-	m_pTransformCom->Set_Position(CCameraManager::Get_Instance()->Get_MainCam()->Get_Pos());
+	//m_pTransformCom->Set_Position(CCameraManager::Get_Instance()->Get_MainCam()->Get_Pos());
 }
 
 void CSkybox::Render_Tick()
 {
-	int a = 0;
-	m_pRendererCom->AddTo_RenderGroup( RENDER_CULLMODE::NONE, RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
+	m_pRendererCom->AddTo_RenderGroup( RENDER_CULLMODE::NONE, RENDER_AFTER, NOBLEND, SHADERTYPE_SKYBOX, ROOTSIG_DEFAULT, this);
 }
 
 void CSkybox::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource, UINT iRenderingElementIndex)

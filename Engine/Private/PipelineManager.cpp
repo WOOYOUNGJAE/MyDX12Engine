@@ -108,6 +108,29 @@ HRESULT CPipelineManager::Initialize()
 		rootParameters[1].InitAsConstantBufferView(0); // b0 : Obj
 		rootParameters[2].InitAsConstantBufferView(1); // b1 : Pass (VP, Light)
 
+		CD3DX12_STATIC_SAMPLER_DESC samplerArr[2]{};
+		// SamplerArr[0] : Default
+		samplerArr[0].Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
+		samplerArr[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+		samplerArr[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+		samplerArr[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+		samplerArr[0].MipLODBias = 0;
+		samplerArr[0].MaxAnisotropy = 0;
+		samplerArr[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+		samplerArr[0].BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+		samplerArr[0].MinLOD = 0.0f;
+		samplerArr[0].MaxLOD = D3D12_FLOAT32_MAX;
+		samplerArr[0].ShaderRegister = 0;
+		samplerArr[0].RegisterSpace = 0;
+		samplerArr[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+		// Sampler[1] : linearWrap
+		samplerArr[1].ShaderRegister = 1;
+		samplerArr[1].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+		samplerArr[1].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		samplerArr[1].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		samplerArr[1].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+
 		D3D12_STATIC_SAMPLER_DESC sampler = {};
 		sampler.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
 		sampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
@@ -124,7 +147,12 @@ HRESULT CPipelineManager::Initialize()
 		sampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 		CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
-		rootSignatureDesc.Init_1_1(_countof(rootParameters), rootParameters, 1, &sampler, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+		rootSignatureDesc.Init_1_1(
+			_countof(rootParameters),
+			rootParameters,
+			2,
+			samplerArr,
+			D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
 		ComPtr<ID3DBlob> signature;
 		ComPtr<ID3DBlob> error;
@@ -189,6 +217,9 @@ HRESULT CPipelineManager::Initialize()
 					case SHADERTYPE_TREEBILLBOARD:
 						strKey = L"Shader_treeBillboard";
 						pso_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT; // Triangle이 아닌 경우는 흔치 않기 때문에 특정 Shader은 고유 PTT
+						break;
+					case SHADERTYPE_SKYBOX:
+						strKey = L"Shader_skybox";
 						break;
 					default: // 에러 피하기 위해 임시로 만들어놓기
 						strKey = L"Shader_Simple";

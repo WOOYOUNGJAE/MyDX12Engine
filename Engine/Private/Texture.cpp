@@ -60,7 +60,7 @@ HRESULT CTexture::Initialize(void* pArg)
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.Format = m_pAssetData->GetDesc().Format;
 	srvDesc.ViewDimension = m_bIsCubeMap ? D3D12_SRV_DIMENSION_TEXTURECUBE : D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	//srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE handle(CGraphic_Device::Get_Instance()->Get_CbvSrvUavHeapStart_CPU());

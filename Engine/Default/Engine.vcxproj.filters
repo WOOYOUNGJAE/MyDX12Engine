@@ -300,7 +300,9 @@
     <ClInclude Include="..\Public\SingleVertexMesh.h">
       <Filter>Utility\MeshData\1D\SingleVertexMesh</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\MeshDataType.h" />
+    <ClInclude Include="..\Public\MeshDataType.h">
+      <Filter>System\Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -423,7 +425,6 @@
     <ClCompile Include="..\Private\SingleVertexMesh.cpp">
       <Filter>Utility\MeshData\1D\SingleVertexMesh</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\MeshDataType.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaderTest.hlsl" />

@@ -339,7 +339,6 @@
     <ClCompile Include="..\Private\LoadHelper.cpp" />
     <ClCompile Include="..\Private\Material.cpp" />
     <ClCompile Include="..\Private\MeshData.cpp" />
-    <ClCompile Include="..\Private\MeshDataType.cpp" />
     <ClCompile Include="..\Private\MeshObject.cpp" />
     <ClCompile Include="..\Private\ObjLayer.cpp" />
     <ClCompile Include="..\Private\ObjMonobehaviour.cpp" />
