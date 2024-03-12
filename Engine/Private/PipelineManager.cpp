@@ -4,7 +4,7 @@
 #include "GameObjectManager.h"
 #include "GameObject.h"
 #include "Shader.h"
-#include "Graphic_Device.h"
+#include "DeviceResource.h"
 #include "Transform.h"
 #include "Camera.h"
 IMPLEMENT_SINGLETON(CPipelineManager)
@@ -23,9 +23,9 @@ m_pGameObjectManager(CGameObjectManager::Get_Instance())
 HRESULT CPipelineManager::Initialize()
 {
 	// GraphicDevice들의 멤버들이 초기화 된 후 참조
-	m_pGraphic_Device = CGraphic_Device::Get_Instance();
-	m_pDevice = m_pGraphic_Device->Get_Device();
-	Safe_AddRef(m_pGraphic_Device);
+	m_pDeviceResource = CDeviceResource::Get_Instance();
+	m_pDevice = m_pDeviceResource->Get_Device();
+	Safe_AddRef(m_pDeviceResource);
 
 	HRESULT hr = S_OK;
 #pragma region Build Root Signature
@@ -91,22 +91,25 @@ HRESULT CPipelineManager::Initialize()
 
 
 
-		CD3DX12_DESCRIPTOR_RANGE1 ranges[2]; // Texture, Constant Buffer
-		ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-		ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+		//CD3DX12_DESCRIPTOR_RANGE1 ranges[2]; // Texture, Constant Buffer
+		//ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+		//ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 
-		CD3DX12_DESCRIPTOR_RANGE1 range0;
-		range0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-
-		CD3DX12_DESCRIPTOR_RANGE1 range1[1];
-		range1[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC); // VP_Light
-		//range1[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC); // 
-		//range1[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 2, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+		//CD3DX12_DESCRIPTOR_RANGE1 range1[1];
+		//range1[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC); // VP_Light
+		////range1[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC); // 
+		////range1[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 2, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+		///
+		CD3DX12_DESCRIPTOR_RANGE1 rangeTexture{};
+		rangeTexture.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+		CD3DX12_DESCRIPTOR_RANGE1 rangeCubemap{};
+		rangeCubemap.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 		
 		CD3DX12_ROOT_PARAMETER1 rootParameters[3];
-		rootParameters[0].InitAsDescriptorTable(1, &range0, D3D12_SHADER_VISIBILITY_PIXEL);
+		rootParameters[0].InitAsDescriptorTable(1, &rangeTexture, D3D12_SHADER_VISIBILITY_PIXEL);
 		rootParameters[1].InitAsConstantBufferView(0); // b0 : Obj
 		rootParameters[2].InitAsConstantBufferView(1); // b1 : Pass (VP, Light)
+		//rootParameters[3].InitAsDescriptorTable(1, &rangeCubemap, D3D12_SHADER_VISIBILITY_PIXEL);
 
 		CD3DX12_STATIC_SAMPLER_DESC samplerArr[2]{};
 		// SamplerArr[0] : Default
@@ -150,7 +153,7 @@ HRESULT CPipelineManager::Initialize()
 		rootSignatureDesc.Init_1_1(
 			_countof(rootParameters),
 			rootParameters,
-			2,
+			_countof(samplerArr),
 			samplerArr,
 			D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
@@ -177,6 +180,11 @@ HRESULT CPipelineManager::Initialize()
 #pragma endregion
 
 #pragma region Build PSO
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC pso_Default{};
+	pso_Default.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	pso_Default.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+	pso_Default.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pso_desc{};
 	pso_desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	
@@ -188,10 +196,10 @@ HRESULT CPipelineManager::Initialize()
 	pso_desc.DepthStencilState.StencilEnable = FALSE;*/
 	pso_desc.SampleMask = UINT_MAX; // 그 어떤 표본도 비활성화 하지 않음
 	pso_desc.NumRenderTargets = 1;
-	pso_desc.RTVFormats[0] = m_pGraphic_Device->m_BackBufferFormat;
+	pso_desc.RTVFormats[0] = m_pDeviceResource->m_BackBufferFormat;
 	pso_desc.SampleDesc.Count = 1;
 	pso_desc.SampleDesc.Quality = 0;
-	pso_desc.DSVFormat = m_pGraphic_Device->m_DepthStencilFormat;
+	pso_desc.DSVFormat = m_pDeviceResource->m_DepthStencilFormat;
 
 	for (UINT eCullMode = 0; eCullMode < D3D12_CULL_MODE_END; ++eCullMode)
 	{
@@ -229,8 +237,17 @@ HRESULT CPipelineManager::Initialize()
 					{
 						pso_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT; // Triangle이 아닌 경우는 흔치 않기 때문에 특정 Shader은 고유 PTT						
 					}
+					else if (eShaderTypeEnum == SHADERTYPE_SKYBOX)
+					{
+						// 깊이 판정 통과하도록
+						// LESS(디폴트)면 NDC 좌표에서 항상 탈락하기 때문
+						//pso_desc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_EQUAL; 
+						pso_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;						
+						//pso_desc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS; 
+					}
 					else // 일반적일 떄
 					{
+						pso_desc.DepthStencilState.DepthFunc = pso_Default.DepthStencilState.DepthFunc;
 						pso_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;						
 					}
 
@@ -300,7 +317,7 @@ HRESULT CPipelineManager::Free()
 
 	/*Safe_Release(m_pGameObjectManager);
 	Safe_Release(m_pComponentManager);*/
-	Safe_Release(m_pGraphic_Device);
+	Safe_Release(m_pDeviceResource);
 	return S_OK;
 }
 
@@ -316,7 +333,7 @@ ID3D12RootSignature* CPipelineManager::Get_RootSig(UINT eRootSigType)
 }
 
 
-ID3D12PipelineState* CPipelineManager::Get_PSO(UINT eCullMode, UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigType)
+ID3D12PipelineState* CPipelineManager::Get_PSO(UINT IsFirst, UINT eCullMode, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigType)
 {
 	return m_PSOsArr[eCullMode][IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType];
 }

@@ -44,7 +44,7 @@ public:
 private:
 	HWND* m_pHwndClient  = nullptr;
 private:
-	class CGraphic_Device* m_pGraphic_Device = nullptr;
+	class CDeviceResource* m_pDeviceResource = nullptr;
 	class CComponentManager* m_pComponentManager = nullptr;
 	class CGameObjectManager* m_pGameObjectManager = nullptr;
 	class CPipelineManager* m_pPipelineManager = nullptr;

@@ -1,5 +1,5 @@
 #include "LoadHelper.h"
-#include "Graphic_Device.h"
+#include "DeviceResource.h"
 #include "ResourceUploadBatch.h"
 #include "AssetManager.h"
 #include "AssetMesh.h"
@@ -13,10 +13,10 @@ IMPLEMENT_SINGLETON(CLoadHelper)
 
 HRESULT CLoadHelper::Initialize()
 {
-	m_pDevice = CGraphic_Device::Get_Instance()->Get_Device();
+	m_pDevice = CDeviceResource::Get_Instance()->Get_Device();
 	m_pAssetManager = CAssetManager::Get_Instance();
 
-	m_pNextCbvSrvUavHeapOffset = CGraphic_Device::Get_Instance()->Get_NextCbvSrvUavHeapOffsetPtr();
+	m_pNextCbvSrvUavHeapOffset = CDeviceResource::Get_Instance()->Get_NextCbvSrvUavHeapOffsetPtr();
 
 	Safe_AddRef(m_pDevice);
 	Safe_AddRef(m_pAssetManager);
@@ -31,7 +31,7 @@ HRESULT CLoadHelper::Initialize()
 	m_texture_init_desc.pDevice = m_pDevice;
 	m_texture_init_desc.pResourceUpload = m_pResourceUpload;
 
-	m_iCbvSrvUavDescriptorSize = CGraphic_Device::Get_Instance()->Get_CbvSrvUavDescriptorSize();
+	m_iCbvSrvUavDescriptorSize = CDeviceResource::Get_Instance()->Get_CbvSrvUavDescriptorSize();
 
 	return S_OK;
 }
@@ -40,7 +40,7 @@ void CLoadHelper::StartSign()
 {
 
 	//CD3DResourceManager::Get_Instance()->Set_SrvOffsetStart((*m_pNextCbvSrvUavHeapOffset));
-	CGraphic_Device::Get_Instance()->Reset_CmdList();
+	CDeviceResource::Get_Instance()->Reset_CmdList();
 }
 
 HRESULT CLoadHelper::Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc, const wstring& strAssetName)
@@ -52,7 +52,7 @@ HRESULT CLoadHelper::Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc,
 	m_texture_init_desc.iCbvSrvUavHeapOffset = *m_pNextCbvSrvUavHeapOffset;
 
 	m_pAssetManager->Add_Texture(strAssetName, CTexture::Create(&m_texture_init_desc));
-	auto finish = m_pResourceUpload->End(CGraphic_Device::Get_Instance()->Get_CommandQueue());
+	auto finish = m_pResourceUpload->End(CDeviceResource::Get_Instance()->Get_CommandQueue());
 	finish.wait();
 
 	(*m_pNextCbvSrvUavHeapOffset) += m_iCbvSrvUavDescriptorSize;
@@ -62,8 +62,8 @@ HRESULT CLoadHelper::Load_Texture(const TEXTURE_LOAD_DESC& refTexture_load_desc,
 
 void CLoadHelper::EndSign()
 {
-	CGraphic_Device::Get_Instance()->Close_CmdList();
-	CGraphic_Device::Get_Instance()->Execute_CmdList();
+	CDeviceResource::Get_Instance()->Close_CmdList();
+	CDeviceResource::Get_Instance()->Execute_CmdList();
 	dynamic_cast<CRenderer*>(CComponentManager::Get_Instance()->FindandGet_Prototype(L"Renderer"))->Build_FrameResource();
 	//CD3DResourceManager::Get_Instance()->Set_SrvOffsetEnd((*m_pNextCbvSrvUavHeapOffset));
 }
@@ -132,14 +132,14 @@ HRESULT CLoadHelper::Load_3DModel(const string& strPath, const string& strAssetN
 		}
 		iterMesh->Set_CbvSrvUavOffset(*m_pNextCbvSrvUavHeapOffset);
 
-		auto finish = m_pResourceUpload->End(CGraphic_Device::Get_Instance()->Get_CommandQueue());
+		auto finish = m_pResourceUpload->End(CDeviceResource::Get_Instance()->Get_CommandQueue());
 		finish.wait();
 
 		(*m_pNextCbvSrvUavHeapOffset) += m_iCbvSrvUavDescriptorSize;
 	}
-	CGraphic_Device::Get_Instance()->Close_CmdList();
-	CGraphic_Device::Get_Instance()->Execute_CmdList();
-	CGraphic_Device::Get_Instance()->Reset_CmdList();
+	CDeviceResource::Get_Instance()->Close_CmdList();
+	CDeviceResource::Get_Instance()->Execute_CmdList();
+	CDeviceResource::Get_Instance()->Reset_CmdList();
 
 
 	return hr;

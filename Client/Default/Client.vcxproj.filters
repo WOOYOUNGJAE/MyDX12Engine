@@ -112,7 +112,9 @@
     <ClInclude Include="..\Public\ZeldaDemo.h">
       <Filter>GameObject\Demo\ZeldaDemo</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\TreeBillboard.h" />
+    <ClInclude Include="..\Public\TreeBillboard.h">
+      <Filter>GameObject\Environment\TreeBillboard</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -161,7 +163,9 @@
     <ClCompile Include="..\Private\ZeldaDemo.cpp">
       <Filter>GameObject\Demo\ZeldaDemo</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\TreeBillboard.cpp" />
+    <ClCompile Include="..\Private\TreeBillboard.cpp">
+      <Filter>GameObject\Environment\TreeBillboard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

@@ -1,10 +1,10 @@
 #include "MeshData.h"
-#include "Graphic_Device.h"
+#include "DeviceResource.h"
 #include "UploadBuffer.h"
 
 CMeshData::CMeshData() :
-	m_pDevice(CGraphic_Device::Get_Instance()->Get_Device()),
-	m_pCommandList(CGraphic_Device::Get_Instance()->Get_CommandList())
+	m_pDevice(CDeviceResource::Get_Instance()->Get_Device()),
+	m_pCommandList(CDeviceResource::Get_Instance()->Get_CommandList())
 {
 }
 

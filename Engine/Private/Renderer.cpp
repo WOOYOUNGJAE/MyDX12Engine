@@ -1,7 +1,7 @@
 #include "Renderer.h"
 #include "Camera.h"
 #include "CameraManager.h"
-#include "Graphic_Device.h"
+#include "DeviceResource.h"
 #include "PipelineManager.h"
 #include "GameObject.h"
 #include "MyMath.h"
@@ -27,17 +27,17 @@ CComponent* CRenderer::Clone(void* pArg)
 HRESULT CRenderer::Initialize_Prototype()
 {
 	HRESULT hr = S_OK;
-	m_pGraphic_Device = CGraphic_Device::Get_Instance();
+	m_pDeviceResource = CDeviceResource::Get_Instance();
 	m_pPipelineManager = CPipelineManager::Get_Instance();
-	/*m_pCommandAllocator = m_pGraphic_Device->m_pCmdAllocator.Get();
-	m_pCommandList = m_pGraphic_Device->m_pCommandList.Get();*/
-	m_pCommandQueue = m_pGraphic_Device->m_pCommandQueue.Get(); // CommandQueue는 따로 만들지 않고 공유, 스왑체인이 매치되어야 하기 때문
-	m_pRtvHeap = m_pGraphic_Device->m_pRtvHeap.Get();
-	m_pRenderTargetArr = m_pGraphic_Device->m_pRenderTargets->GetAddressOf();
-	m_iObjCbvDescriptorSize = m_pGraphic_Device->Get_CbvSrvUavDescriptorSize();
-	//m_pFence = m_pGraphic_Device->m_pFence.Get();
+	/*m_pCommandAllocator = m_pDeviceResource->m_pCmdAllocator.Get();
+	m_pCommandList = m_pDeviceResource->m_pCommandList.Get();*/
+	m_pCommandQueue = m_pDeviceResource->m_pCommandQueue.Get(); // CommandQueue는 따로 만들지 않고 공유, 스왑체인이 매치되어야 하기 때문
+	m_pRtvHeap = m_pDeviceResource->m_pRtvHeap.Get();
+	m_pRenderTargetArr = m_pDeviceResource->m_pRenderTargets->GetAddressOf();
+	m_iObjCbvDescriptorSize = m_pDeviceResource->Get_CbvSrvUavDescriptorSize();
+	//m_pFence = m_pDeviceResource->m_pFence.Get();
 
-	ID3D12Device* pDevice = m_pGraphic_Device->m_pDevice.Get();
+	ID3D12Device* pDevice = m_pDeviceResource->m_pDevice.Get();
 
 	// Init Fence
 	hr = pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_pFence));
@@ -88,7 +88,7 @@ HRESULT CRenderer::Build_FrameResource()
 {
 	HRESULT hr = S_OK;
 
-	ID3D12Device* pDevice = m_pGraphic_Device->m_pDevice.Get();
+	ID3D12Device* pDevice = m_pDeviceResource->m_pDevice.Get();
 	// FrameResource
 	for (UINT i = 0; i < g_iNumFrameResource; ++i)
 	{
@@ -103,9 +103,9 @@ HRESULT CRenderer::Build_FrameResource()
 	// Build Obj Constant Buffer
 	UINT objCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(OBJECT_CB));
 	UINT objCount = 1; //
-	UINT iCbvSrvUavDescriptorSize = m_pGraphic_Device->m_iCbvSrvUavDescriptorSize;
-	auto handle = CD3DX12_CPU_DESCRIPTOR_HANDLE(m_pGraphic_Device->Get_CbvSrvUavHeapStart_CPU());
-	m_iObjCBVHeapStartOffset = *m_pGraphic_Device->Get_NextCbvSrvUavHeapOffsetPtr();
+	UINT iCbvSrvUavDescriptorSize = m_pDeviceResource->m_iCbvSrvUavDescriptorSize;
+	auto handle = CD3DX12_CPU_DESCRIPTOR_HANDLE(m_pDeviceResource->Get_CbvSrvUavHeapStart_CPU());
+	m_iObjCBVHeapStartOffset = *m_pDeviceResource->Get_NextCbvSrvUavHeapOffsetPtr();
 	m_iPassCBVHeapStartOffset = m_iObjCBVHeapStartOffset;
 	handle.Offset((INT)m_iObjCBVHeapStartOffset); // SRV 생성 후 Cbv 힙 시작 오프셋
 	for (UINT iFrameIndex = 0; iFrameIndex < g_iNumFrameResource; ++iFrameIndex)
@@ -133,7 +133,7 @@ HRESULT CRenderer::Build_FrameResource()
 	}
 	
 	UINT passCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(PASS_CB_VP));
-	handle.InitOffsetted(m_pGraphic_Device->Get_CbvSrvUavHeapStart_CPU(), 0);
+	handle.InitOffsetted(m_pDeviceResource->Get_CbvSrvUavHeapStart_CPU(), 0);
 	handle.Offset(m_iPassCBVHeapStartOffset);
 	
 
@@ -207,19 +207,19 @@ void CRenderer::BeginRender()
 	m_pCommandAllocator->Reset();
 	m_pCommandList->Reset(m_pCommandAllocator, nullptr);
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHeapHandle(m_pRtvHeap->GetCPUDescriptorHandleForHeapStart(),
-		(INT)m_iFrameIndex, m_pGraphic_Device->m_iRtvDescriptorSize);
-	CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHeapHandle(m_pGraphic_Device->Get_DepthStencilViewHeapStart());
+		(INT)m_iFrameIndex, m_pDeviceResource->m_iRtvDescriptorSize);
+	CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHeapHandle(m_pDeviceResource->Get_DepthStencilViewHeapStart());
 
 	m_pCommandList->ResourceBarrier(1,
 		&CD3DX12_RESOURCE_BARRIER::Transition(m_pRenderTargetArr[m_iFrameIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
 
-	m_pCommandList->RSSetViewports(1, &m_pGraphic_Device->m_screenViewport);
-	m_pCommandList->RSSetScissorRects(1, &m_pGraphic_Device->m_ScissorRect);
+	m_pCommandList->RSSetViewports(1, &m_pDeviceResource->m_screenViewport);
+	m_pCommandList->RSSetScissorRects(1, &m_pDeviceResource->m_ScissorRect);
 
 
-	m_pCommandList->ClearRenderTargetView(m_pGraphic_Device->CurrentBackBufferView(), Colors::DarkGray, 0, nullptr);
-	//m_pCommandList->ClearDepthStencilView(m_pGraphic_Device->Get_DepthStencilViewHeapStart(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	m_pCommandList->ClearRenderTargetView(m_pDeviceResource->CurrentBackBufferView(), Colors::DarkGray, 0, nullptr);
+	//m_pCommandList->ClearDepthStencilView(m_pDeviceResource->Get_DepthStencilViewHeapStart(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	m_pCommandList->ClearDepthStencilView(dsvHeapHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
 	
 	m_pCommandList->OMSetRenderTargets(1, &rtvHeapHandle, true, &dsvHeapHandle);
@@ -228,7 +228,7 @@ void CRenderer::BeginRender()
 void CRenderer::MainRender()
 {
 	UINT iTableTypeIndex = 0;
-	ID3D12DescriptorHeap* pSrvHeap = m_pGraphic_Device->Get_CbvSrvUavHeap();
+	ID3D12DescriptorHeap* pSrvHeap = m_pDeviceResource->Get_CbvSrvUavHeap();
 	ID3D12DescriptorHeap* ppHeaps[] = { pSrvHeap };
 	CD3DX12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle;
 
@@ -239,10 +239,19 @@ void CRenderer::MainRender()
 	XMStoreFloat4x4(&passConstants.mViewMat, XMMatrixTranspose(matView));
 	XMStoreFloat4x4(&passConstants.mViewInvMat, XMMatrixTranspose(matView));*/
 	UINT iRenderingElementIndex = 0;
-	for (UINT eCullMode = 0; eCullMode < D3D12_CULL_MODE_END; ++eCullMode)
+	for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
 	{
-		for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
+		/*if (IsFirst == RENDER_FIRST)
 		{
+			CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHeapHandle(m_pRtvHeap->GetCPUDescriptorHandleForHeapStart(),
+				(INT)m_iFrameIndex, m_pDeviceResource->m_iRtvDescriptorSize);
+			CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHeapHandle(m_pDeviceResource->Get_DepthStencilViewHeapStart());
+			m_pCommandList->ClearDepthStencilView(dsvHeapHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
+
+			m_pCommandList->OMSetRenderTargets(1, &rtvHeapHandle, true, &dsvHeapHandle);
+		}*/
+		for (UINT eCullMode = 0; eCullMode < D3D12_CULL_MODE_END; ++eCullMode)
+		{			
 			for (UINT eBlendModeEnum = 0; eBlendModeEnum < RENDER_BLENDMODE_END; ++eBlendModeEnum)
 			{
 				for (UINT eShaderTypeEnum = 0; eShaderTypeEnum < RENDER_SHADERTYPE_END; ++eShaderTypeEnum)
@@ -254,15 +263,15 @@ void CRenderer::MainRender()
 						{
 							continue;
 						}
-
-						ID3D12PipelineState* pPSO = m_pPipelineManager->Get_PSO(eCullMode, IsFirst, eBlendModeEnum, eShaderTypeEnum, eRootsigType);
+						
+						ID3D12PipelineState* pPSO = m_pPipelineManager->Get_PSO(IsFirst, eCullMode, eBlendModeEnum, eShaderTypeEnum, eRootsigType);
 						if (pPSO == nullptr) { continue; }
 
 						cbvSrvUavHandle.InitOffsetted(pSrvHeap->GetGPUDescriptorHandleForHeapStart(), 0);
 						m_pCommandList->SetGraphicsRootSignature(m_pPipelineManager->Get_RootSig(eRootsigType)); // RootSig객체 세팅
 						if (eShaderTypeEnum != SHADERTYPE_SIMPLE)
 						{
-							pSrvHeap = m_pGraphic_Device->Get_CbvSrvUavHeap();
+							pSrvHeap = m_pDeviceResource->Get_CbvSrvUavHeap();
 							m_pCommandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 						}
 
@@ -272,33 +281,6 @@ void CRenderer::MainRender()
 						for (CGameObject*& iter : m_RenderGroup[eCullMode][IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType])
 						{
 							iter->Render(m_pCommandList, m_pCurFrameResource, iRenderingElementIndex++);
-
-							//// ObjCB
-							//Update_ObjCB(iter);
-
-
-							//m_pCommandList->IASetPrimitiveTopology(iter->PrimitiveType());
-							//m_pCommandList->IASetVertexBuffers(0, 1, &iter->VertexBufferView());
-							//m_pCommandList->IASetIndexBuffer(&iter->IndexBufferView());
-
-
-
-
-							//// Set Descriptor Table
-							//cbvSrvUavHandle.Offset(iter->Get_CbvSrvUavHeapOffset_Texture());
-							//m_pCommandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHandle);
-
-							//cbvSrvUavHandle.InitOffsetted(pSrvHeap->GetGPUDescriptorHandleForHeapStart(), 0);
-							//cbvSrvUavHandle.Offset(m_iObjCBVHeapStartOffset);
-							//m_pCommandList->SetGraphicsRootDescriptorTable(1, cbvSrvUavHandle);
-
-							////m_pCommandList->DrawInstanced(24, 1, 0, 0);
-							//m_pCommandList->DrawIndexedInstanced(
-							//	36,
-							//	1,
-							//	0,
-							//	0,
-							//	0);
 
 							Safe_Release(iter); // Added From AddtoRenderGroup
 						}
@@ -322,14 +304,14 @@ void CRenderer::EndRender()
 void CRenderer::Present()
 {
 	// Swap the back and front buffers
-	HRESULT hr = m_pGraphic_Device->m_pSwapChain->Present(0, 0);
+	HRESULT hr = m_pDeviceResource->m_pSwapChain->Present(0, 0);
 	if (FAILED(hr)) { MSG_BOX("Present Failed"); }
 
-	m_iFrameIndex = (m_pGraphic_Device->m_iCurrBackBuffer + 1) % m_pGraphic_Device->m_iSwapChainBufferCount;
-	m_pGraphic_Device->m_iCurrBackBuffer = (m_pGraphic_Device->m_iCurrBackBuffer + 1) % m_pGraphic_Device->m_iSwapChainBufferCount;
+	m_iFrameIndex = (m_pDeviceResource->m_iCurrBackBuffer + 1) % m_pDeviceResource->m_iSwapChainBufferCount;
+	m_pDeviceResource->m_iCurrBackBuffer = (m_pDeviceResource->m_iCurrBackBuffer + 1) % m_pDeviceResource->m_iSwapChainBufferCount;
 	
 #pragma region Fence and Wait
-	CGraphic_Device::Get_Instance()->Flush_CommandQueue(&m_queue_flush_desc);
+	CDeviceResource::Get_Instance()->Flush_CommandQueue(&m_queue_flush_desc);
 #pragma endregion
 }
 
@@ -375,12 +357,12 @@ HRESULT CRenderer::Free()
 
 D3D12_GPU_DESCRIPTOR_HANDLE CRenderer::Get_CbvSrvUavStart_GPU()
 {
-	return m_pGraphic_Device->Get_CbvSrvUavHeapStart_GPU();
+	return m_pDeviceResource->Get_CbvSrvUavHeapStart_GPU();
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE CRenderer::Get_CbvSrvUavStart_CPU()
 {
-	return m_pGraphic_Device->Get_CbvSrvUavHeapStart_CPU();
+	return m_pDeviceResource->Get_CbvSrvUavHeapStart_CPU();
 }
 
 CD3DX12_GPU_DESCRIPTOR_HANDLE CRenderer::Get_HandleOffsettedGPU(INT iOffset)
@@ -400,11 +382,11 @@ CD3DX12_GPU_DESCRIPTOR_HANDLE CRenderer::Get_PassCbvHandleOffsettedGPU()
 
 void CRenderer::Set_ProjMat(const CAMERA_DESC& camDesc)
 {
-	m_fAspectRatio = CGraphic_Device::Get_Instance()->m_fAspectRatio;
+	m_fAspectRatio = CDeviceResource::Get_Instance()->m_fAspectRatio;
 	m_mProj = XMMatrixPerspectiveFovLH(camDesc.fFovy, camDesc.fAspectRatio, camDesc.fNear, camDesc.fFar);
 }
 
-void CRenderer::AddTo_RenderGroup(UINT eCullMode, UINT IsFirst, UINT eBlendModeEnum, UINT eShaderTypeEnum,
+void CRenderer::AddTo_RenderGroup(UINT IsFirst, UINT eCullMode, UINT eBlendModeEnum, UINT eShaderTypeEnum,
                                   UINT eRootsigTypeEnum, CGameObject* pGameObject)
 {
 	m_RenderGroup[eCullMode][IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigTypeEnum].push_back(pGameObject);
@@ -413,7 +395,7 @@ void CRenderer::AddTo_RenderGroup(UINT eCullMode, UINT IsFirst, UINT eBlendModeE
 
 void CRenderer::Flush_CommandQueue()
 {
-	CGraphic_Device::Get_Instance()->Flush_CommandQueue(&m_queue_flush_desc);
+	CDeviceResource::Get_Instance()->Flush_CommandQueue(&m_queue_flush_desc);
 }
 
 //--------------------------------------------------------------------------------------

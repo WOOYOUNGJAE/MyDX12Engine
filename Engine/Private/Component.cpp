@@ -1,5 +1,5 @@
 #include "Component.h"
-#include "Graphic_Device.h"
+#include "DeviceResource.h"
 
 
 CComponent::CComponent()

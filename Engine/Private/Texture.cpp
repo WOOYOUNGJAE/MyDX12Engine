@@ -1,5 +1,5 @@
 #include "Texture.h"
-#include "Graphic_Device.h"
+#include "DeviceResource.h"
 #include "D3DResourceManager.h"
 #include "WICTextureLoader.h"
 
@@ -49,7 +49,7 @@ HRESULT CTexture::Initialize(void* pArg)
 
 	
 
-	//CGraphic_Device::Get_Instance()->Get_CommandList()->ResourceBarrier(1,
+	//CDeviceResource::Get_Instance()->Get_CommandList()->ResourceBarrier(1,
 	//	&CD3DX12_RESOURCE_BARRIER::Transition(m_pAssetData, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE | D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE));
 
 
@@ -63,7 +63,7 @@ HRESULT CTexture::Initialize(void* pArg)
 	//srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE handle(CGraphic_Device::Get_Instance()->Get_CbvSrvUavHeapStart_CPU());
+	CD3DX12_CPU_DESCRIPTOR_HANDLE handle(CDeviceResource::Get_Instance()->Get_CbvSrvUavHeapStart_CPU());
 	m_iCbvSrvUavHeapOffset = pInitDesc->iCbvSrvUavHeapOffset;
 	handle.Offset(1, m_iCbvSrvUavHeapOffset);
 

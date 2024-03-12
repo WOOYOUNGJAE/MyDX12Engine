@@ -1,7 +1,7 @@
 #include "TriangleMesh.h"
 
 #include "Device_Utils.h"
-#include "Graphic_Device.h"
+#include "DeviceResource.h"
 
 CTriangleMesh::CTriangleMesh()
 {
@@ -66,9 +66,9 @@ HRESULT CTriangleMesh::Initialize_Prototype()
 	m_vertexData = new VertexPositionColor[m_iNumVertices]
 	{
 		// TODO : Color TEMP
-		VertexPositionColor({ _float3(0.f, 0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio, 0.25f), _float4(1.0f, 0.0f, 0.0f, 1.0f) }),
-		VertexPositionColor({ _float3(0.25f, -0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio, 0.25f), _float4(0.0f, 1.0f, 0.0f, 1.0f) }),
-		VertexPositionColor({ _float3(-0.25f, -0.25f * CGraphic_Device::Get_Instance()->m_fAspectRatio, 0.25f), _float4(0.0f, 0.0f, 1.0f, 1.0f) }),
+		VertexPositionColor({ _float3(0.f, 0.25f * CDeviceResource::Get_Instance()->m_fAspectRatio, 0.25f), _float4(1.0f, 0.0f, 0.0f, 1.0f) }),
+		VertexPositionColor({ _float3(0.25f, -0.25f * CDeviceResource::Get_Instance()->m_fAspectRatio, 0.25f), _float4(0.0f, 1.0f, 0.0f, 1.0f) }),
+		VertexPositionColor({ _float3(-0.25f, -0.25f * CDeviceResource::Get_Instance()->m_fAspectRatio, 0.25f), _float4(0.0f, 0.0f, 1.0f, 1.0f) }),
 	};
 
 	_ushort indexData[3]

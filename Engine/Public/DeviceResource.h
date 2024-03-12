@@ -3,14 +3,14 @@
 
 NAMESPACE_(Engine)
 
-class CGraphic_Device : public CBase
+class CDeviceResource : public CBase
 {
-	DECLARE_SINGLETON(CGraphic_Device)
+	DECLARE_SINGLETON(CDeviceResource)
 	friend class CPipelineManager;
 	friend class CRenderer;
 public:
-	CGraphic_Device();
-	virtual ~CGraphic_Device() override = default;
+	CDeviceResource();
+	virtual ~CDeviceResource() override = default;
 
 public: // Init
 	HRESULT Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMode,

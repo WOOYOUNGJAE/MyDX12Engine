@@ -5,7 +5,7 @@
 #include "Component.h"
 #include "Transform.h"
 #include "CubeMesh.h"
-#include "Graphic_Device.h"
+#include "DeviceResource.h"
 #include "Material.h"
 #include "Shader.h"
 #include "Renderer.h"
@@ -23,8 +23,8 @@ IMPLEMENT_SINGLETON(CComponentManager)
 HRESULT CComponentManager::Initialize()
 {
 #pragma region Init_Basic_Components
-	ID3D12Device* pDevice = CGraphic_Device::Get_Instance()->Get_Device();
-	CGraphic_Device::Get_Instance()->Reset_CmdList();
+	ID3D12Device* pDevice = CDeviceResource::Get_Instance()->Get_Device();
+	CDeviceResource::Get_Instance()->Reset_CmdList();
 
 	Add_Prototype(L"Transform", CTransform::Create());
 
@@ -95,8 +95,8 @@ HRESULT CComponentManager::Initialize()
 
 
 
-	CGraphic_Device::Get_Instance()->Close_CmdList();
-	CGraphic_Device::Get_Instance()->Execute_CmdList();
+	CDeviceResource::Get_Instance()->Close_CmdList();
+	CDeviceResource::Get_Instance()->Execute_CmdList();
 
 	return S_OK;
 }
@@ -105,7 +105,7 @@ CComponent* CComponentManager::FindandGet_Prototype(const wstring& strTag)
 {
 	auto iter = m_mapComPrototypes.find(strTag);
 
-	// Á¸ÀçÇÏÁö ¾Ê´Â´Ù¸é
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´Â´Ù¸ï¿½
 	if (iter == m_mapComPrototypes.end())
 	{
 		return nullptr;
@@ -116,7 +116,7 @@ CComponent* CComponentManager::FindandGet_Prototype(const wstring& strTag)
 
 HRESULT CComponentManager::Add_Prototype(const wstring& strTag, CComponent* pComInstance)
 {
-	// ÀÌ¹Ì Á¸ÀçÇÑ´Ù¸é
+	// ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ù¸ï¿½
 	if (FindandGet_Prototype(strTag))
 	{
 		MSG_BOX("ComponentManager: Protype Already Exists");

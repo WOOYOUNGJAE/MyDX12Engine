@@ -98,7 +98,7 @@ void CTreeBillboard::Late_Tick(_float fDeltaTime)
 
 void CTreeBillboard::Render_Tick()
 {
-	m_pRendererCom->AddTo_RenderGroup(RENDER_CULLMODE::NONE, RENDER_AFTER, NOBLEND, SHADERTYPE_TREEBILLBOARD, ROOTSIG_DEFAULT, this);
+	m_pRendererCom->AddTo_RenderGroup(RENDER_AFTER, RENDER_CULLMODE::NONE, NOBLEND, SHADERTYPE_TREEBILLBOARD, ROOTSIG_DEFAULT, this);
 }
 
 void CTreeBillboard::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource, UINT iRenderingElementIndex)

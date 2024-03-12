@@ -1,6 +1,6 @@
 #pragma region Includes
 #include "GameInstance.h"
-#include "Graphic_Device.h"
+#include "DeviceResource.h"
 #include "ComponentManager.h"
 #include "GameObjectManager.h"
 #include "Component.h"
@@ -16,7 +16,7 @@ IMPLEMENT_SINGLETON(CGameInstance)
 
 CGameInstance::CGameInstance() :
 #pragma region Allocate Managers
-	m_pGraphic_Device(CGraphic_Device::Get_Instance()),
+	m_pDeviceResource(CDeviceResource::Get_Instance()),
 	m_pComponentManager(CComponentManager::Get_Instance()),
 	m_pGameObjectManager(CGameObjectManager::Get_Instance()),
 	m_pPipelineManager(CPipelineManager::Get_Instance()),
@@ -27,7 +27,7 @@ CGameInstance::CGameInstance() :
 	m_pLoadHelper(CLoadHelper::Get_Instance())
 #pragma endregion
 {
-	Safe_AddRef(m_pGraphic_Device);
+	Safe_AddRef(m_pDeviceResource);
 	Safe_AddRef(m_pComponentManager);
 	Safe_AddRef(m_pGameObjectManager);
 	Safe_AddRef(m_pPipelineManager);
@@ -47,7 +47,7 @@ HRESULT CGameInstance::Free()
 	Safe_Release(m_pPipelineManager);
 	Safe_Release(m_pGameObjectManager);
 	Safe_Release(m_pComponentManager);
-	Safe_Release(m_pGraphic_Device);
+	Safe_Release(m_pDeviceResource);
 	
 
 	return S_OK;
@@ -55,7 +55,7 @@ HRESULT CGameInstance::Free()
 
 HRESULT CGameInstance::Init_Engine(GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Device** ppDevice)
 {
-	if (FAILED(m_pGraphic_Device->Init_Graphic_Device(GraphicDesc.hWnd, GraphicDesc.eWinMode, GraphicDesc.iSizeX, GraphicDesc.iSizeY, ppDevice)))
+	if (FAILED(m_pDeviceResource->Init_Graphic_Device(GraphicDesc.hWnd, GraphicDesc.eWinMode, GraphicDesc.iSizeX, GraphicDesc.iSizeY, ppDevice)))
 	{
 		return E_FAIL;
 	}
@@ -108,14 +108,14 @@ void CGameInstance::Release_Engine()
 	CPipelineManager::Destroy_Instance();
 	CComponentManager::Destroy_Instance();
 	CGameObjectManager::Destroy_Instance();
-	CGraphic_Device::Destroy_Instance();
+	CDeviceResource::Destroy_Instance();
 	CLoadHelper::Destroy_Instance();
 	CGameInstance::Get_Instance()->Destroy_Instance();
 }
 
 UINT CGameInstance::Get_CbvSrvUavDescriptorSize() const
 {
-	return m_pGraphic_Device->Get_CbvSrvUavDescriptorSize();
+	return m_pDeviceResource->Get_CbvSrvUavDescriptorSize();
 }
 
 HRESULT CGameInstance::Add_ComPrototype(const wstring& strTag, CComponent* pComInstance)

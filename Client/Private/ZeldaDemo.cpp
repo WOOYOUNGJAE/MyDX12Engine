@@ -80,7 +80,7 @@ void CZeldaDemo::Late_Tick(_float fDeltaTime)
 
 void CZeldaDemo::Render_Tick()
 {
-	m_pRendererCom->AddTo_RenderGroup(RENDER_CULLMODE::CCW, RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
+	m_pRendererCom->AddTo_RenderGroup(RENDER_AFTER, RENDER_CULLMODE::CCW, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
 }
 
 void CZeldaDemo::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource, UINT iRenderingElementIndex)

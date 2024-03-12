@@ -1,7 +1,7 @@
 #include "TriangleMesh_PT.h"
 
 #include "Device_Utils.h"
-#include "Graphic_Device.h"
+#include "DeviceResource.h"
 
 CTriangleMesh_PT::CTriangleMesh_PT()
 {

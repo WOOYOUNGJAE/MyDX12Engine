@@ -1,5 +1,5 @@
 #include "D3DResourceManager.h"
-#include "Graphic_Device.h"
+#include "DeviceResource.h"
 IMPLEMENT_SINGLETON(CD3DResourceManager)
 
 void CD3DResourceManager::Register_Resource(UINT eType, ID3D12Resource** ppResource)
@@ -11,7 +11,7 @@ void CD3DResourceManager::Register_Resource(UINT eType, ID3D12Resource** ppResou
 
 void CD3DResourceManager::Initialize()
 {
-	m_iCbvSrvUavDescriptorSize = CGraphic_Device::Get_Instance()->Get_CbvSrvUavDescriptorSize();
+	m_iCbvSrvUavDescriptorSize = CDeviceResource::Get_Instance()->Get_CbvSrvUavDescriptorSize();
 }
 
 HRESULT CD3DResourceManager::Free()

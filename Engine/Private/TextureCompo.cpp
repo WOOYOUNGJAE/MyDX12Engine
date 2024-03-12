@@ -1,7 +1,7 @@
 #include "TextureCompo.h"
 #include "Texture.h"
 #include "AssetManager.h"
-#include "Graphic_Device.h"
+#include "DeviceResource.h"
 
 CTextureCompo::CTextureCompo()
 {

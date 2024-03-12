@@ -287,7 +287,7 @@
     <ClInclude Include="..\Public\GameInstance.h" />
     <ClInclude Include="..\Public\GameObject.h" />
     <ClInclude Include="..\Public\GameObjectManager.h" />
-    <ClInclude Include="..\Public\Graphic_Device.h" />
+    <ClInclude Include="..\Public\DeviceResource.h" />
     <ClInclude Include="..\Public\Grid.h" />
     <ClInclude Include="..\Public\GridMesh.h" />
     <ClInclude Include="..\Public\InputManager.h" />
@@ -331,7 +331,7 @@
     <ClCompile Include="..\Private\GameInstance.cpp" />
     <ClCompile Include="..\Private\GameObject.cpp" />
     <ClCompile Include="..\Private\GameObjectManager.cpp" />
-    <ClCompile Include="..\Private\Graphic_Device.cpp" />
+    <ClCompile Include="..\Private\DeviceResource.cpp" />
     <ClCompile Include="..\Private\Grid.cpp" />
     <ClCompile Include="..\Private\GridMesh.cpp" />
     <ClCompile Include="..\Private\InputManager.cpp" />

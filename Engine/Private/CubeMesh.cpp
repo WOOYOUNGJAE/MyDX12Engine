@@ -102,6 +102,10 @@ HRESULT CCubeMesh::Initialize_Prototype()
 		VertexPositionNormalTexture(Vector3(1, +1, +1), Vector3(1.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f)),
 		VertexPositionNormalTexture(Vector3(1, -1, +1), Vector3(1.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f)),
 	};
+	/*for (auto& iter : tempVertices)
+	{
+		iter.position = iter.position * 0.5f;
+	}*/
 	m_vecVertexData.reserve(24);
 	m_vecVertexData.assign(tempVertices, tempVertices + _countof(tempVertices));
 

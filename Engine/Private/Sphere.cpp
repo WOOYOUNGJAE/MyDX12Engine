@@ -102,7 +102,7 @@ void CSphere::Late_Tick(_float fDeltaTime)
 void CSphere::Render_Tick()
 {
 	int a = 0;
-	m_pRendererCom->AddTo_RenderGroup(RENDER_CULLMODE::NONE, RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
+	m_pRendererCom->AddTo_RenderGroup(RENDER_AFTER, RENDER_CULLMODE::NONE, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
 }
 
 void CSphere::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource, UINT iRenderingElementIndex)

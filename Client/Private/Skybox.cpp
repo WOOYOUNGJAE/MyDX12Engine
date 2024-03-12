@@ -47,6 +47,7 @@ HRESULT CSkybox::Initialize_Prototype()
 HRESULT CSkybox::Initialize(void* pArg)
 {
 	HRESULT hr = S_OK;
+	GAMEOBJECT_INIT_DESC* pCastedInitDesc = reinterpret_cast<GAMEOBJECT_INIT_DESC*>(pArg);
 	// ±âº» ÄÄÆ÷³ÍÆ® ºÎÂø
 	hr = Add_Component(L"Transform", reinterpret_cast<CComponent**>(&m_pTransformCom));
 	if (FAILED(hr)) return hr;
@@ -70,8 +71,8 @@ HRESULT CSkybox::Initialize(void* pArg)
 
 	m_iTextureSrvOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
 
-	m_pTransformCom->Set_Position(Vector3::Zero);
-	m_pTransformCom->Set_Scale(Vector3::One);
+	m_pTransformCom->Set_Position(pCastedInitDesc->vStartPos);
+	m_pTransformCom->Set_Scale(pCastedInitDesc->vStartScale);
 
 	return hr;
 }
@@ -83,12 +84,12 @@ void CSkybox::Tick(_float fDeltaTime)
 
 void CSkybox::Late_Tick(_float fDeltaTime)
 {
-	//m_pTransformCom->Set_Position(CCameraManager::Get_Instance()->Get_MainCam()->Get_Pos());
+	m_pTransformCom->Set_Position(CCameraManager::Get_Instance()->Get_MainCam()->Get_Pos());
 }
 
 void CSkybox::Render_Tick()
 {
-	m_pRendererCom->AddTo_RenderGroup( RENDER_CULLMODE::NONE, RENDER_AFTER, NOBLEND, SHADERTYPE_SKYBOX, ROOTSIG_DEFAULT, this);
+	m_pRendererCom->AddTo_RenderGroup( RENDER_FIRST, RENDER_CULLMODE::NONE, NOBLEND, SHADERTYPE_SKYBOX, ROOTSIG_DEFAULT, this);
 }
 
 void CSkybox::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource, UINT iRenderingElementIndex)

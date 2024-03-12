@@ -1,14 +1,14 @@
-#include "Graphic_Device.h"
+#include "DeviceResource.h"
 #include "PipelineManager.h"
 #include "Renderer.h"
-IMPLEMENT_SINGLETON(CGraphic_Device)
+IMPLEMENT_SINGLETON(CDeviceResource)
 
-CGraphic_Device::CGraphic_Device()
+CDeviceResource::CDeviceResource()
 {
 	
 }
 
-HRESULT CGraphic_Device::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMode, _uint iWinCX, _uint iWinCY,
+HRESULT CDeviceResource::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMode, _uint iWinCX, _uint iWinCY,
 	ID3D12Device** ppDevice)
 {
 	m_hWnd = hWnd;
@@ -94,7 +94,7 @@ HRESULT CGraphic_Device::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 	return S_OK;
 }
 
-HRESULT CGraphic_Device::Init_CommandObjects()
+HRESULT CDeviceResource::Init_CommandObjects()
 {
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
@@ -127,7 +127,7 @@ HRESULT CGraphic_Device::Init_CommandObjects()
 	return S_OK;
 }
 
-HRESULT CGraphic_Device::Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode)
+HRESULT CDeviceResource::Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode)
 {
 	HRESULT hr = S_OK;
 	/* 스왑체인을 생성한다. = 텍스쳐를 생성하는 행위 + 스왑하는 형태  */
@@ -197,7 +197,7 @@ HRESULT CGraphic_Device::Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode)
 	return S_OK;
 }
 
-HRESULT CGraphic_Device::Create_DescriptorHeap()
+HRESULT CDeviceResource::Create_DescriptorHeap()
 {
 	HRESULT hr = S_OK;
 	// Descriptor의 관리를 위한 D-Heap생성
@@ -242,7 +242,7 @@ HRESULT CGraphic_Device::Create_DescriptorHeap()
 	return S_OK;
 }
 
-HRESULT CGraphic_Device::Create_CbvSrvUavDescriptorHeap(UINT iNumDescriptors)
+HRESULT CDeviceResource::Create_CbvSrvUavDescriptorHeap(UINT iNumDescriptors)
 {
 	HRESULT hr = S_OK;
 
@@ -258,7 +258,7 @@ HRESULT CGraphic_Device::Create_CbvSrvUavDescriptorHeap(UINT iNumDescriptors)
 }
 
 
-HRESULT CGraphic_Device::Flush_CommandQueue(const QUEUE_FLUSH_DESC* queue_flush_desc)
+HRESULT CDeviceResource::Flush_CommandQueue(const QUEUE_FLUSH_DESC* queue_flush_desc)
 {
 	UINT64& refCurFenceVal = *queue_flush_desc->pCurFenceVal;
 	ID3D12CommandQueue* pCommandQueue = queue_flush_desc->pCommandQueue;
@@ -289,7 +289,7 @@ HRESULT CGraphic_Device::Flush_CommandQueue(const QUEUE_FLUSH_DESC* queue_flush_
 	return S_OK;
 }
 
-HRESULT CGraphic_Device::Flush_CommandQueue()
+HRESULT CDeviceResource::Flush_CommandQueue()
 {
 	HRESULT hr = S_OK;
 
@@ -315,7 +315,7 @@ HRESULT CGraphic_Device::Flush_CommandQueue()
 	return S_OK;
 }
 
-HRESULT CGraphic_Device::Free()
+HRESULT CDeviceResource::Free()
 {
 	if (m_pDevice)
 	{
@@ -328,7 +328,7 @@ HRESULT CGraphic_Device::Free()
 	return S_OK;
 }
 
-HRESULT CGraphic_Device::On_Resize()
+HRESULT CDeviceResource::On_Resize()
 {
 	// 창 resize 시 필요한 정보들 재정의
 
@@ -464,18 +464,18 @@ HRESULT CGraphic_Device::On_Resize()
 	return S_OK;
 }
 
-HRESULT CGraphic_Device::Reset_CmdList()
+HRESULT CDeviceResource::Reset_CmdList()
 {
 	//m_pCmdAllocator->Reset();
 	return m_pCommandList->Reset(m_pCmdAllocator.Get(), nullptr);
 }
 
-HRESULT CGraphic_Device::Close_CmdList()
+HRESULT CDeviceResource::Close_CmdList()
 {
 	return m_pCommandList->Close();
 }
 
-void CGraphic_Device::Execute_CmdList()
+void CDeviceResource::Execute_CmdList()
 {
 	// Resize Command
 	ID3D12CommandList* cmdsLists[] = { m_pCommandList.Get() };
@@ -485,7 +485,7 @@ void CGraphic_Device::Execute_CmdList()
 	Flush_CommandQueue();
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE CGraphic_Device::CurrentBackBufferView() const
+D3D12_CPU_DESCRIPTOR_HANDLE CDeviceResource::CurrentBackBufferView() const
 {
 	return CD3DX12_CPU_DESCRIPTOR_HANDLE(
 		m_pRtvHeap ->GetCPUDescriptorHandleForHeapStart(),
