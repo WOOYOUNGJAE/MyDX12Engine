@@ -37,9 +37,6 @@
     <Filter Include="System\D3D Graphics">
       <UniqueIdentifier>{2a2d9e89-7411-42c6-8e73-e246818c33bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="System\D3D Graphics\Graphic_Device">
-      <UniqueIdentifier>{1b2545aa-66db-4b8a-bb1d-f325853d2128}</UniqueIdentifier>
-    </Filter>
     <Filter Include="System\D3D Graphics\Pipeline">
       <UniqueIdentifier>{c6534910-263d-48f7-81d2-381c19c0815f}</UniqueIdentifier>
     </Filter>
@@ -148,6 +145,12 @@
     <Filter Include="Utility\MeshData\1D\SingleVertexMesh">
       <UniqueIdentifier>{5fb53f02-0064-4720-9aad-be531b16cecc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System\D3D Graphics\DXRRenderer">
+      <UniqueIdentifier>{3e19260d-b02c-4f9f-9919-636e18dd8c84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\D3D Graphics\DeviceResource">
+      <UniqueIdentifier>{1b2545aa-66db-4b8a-bb1d-f325853d2128}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -180,9 +183,6 @@
     <ClInclude Include="..\Public\MeshData.h">
       <Filter>Utility\MeshData</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\DX12Test.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Device_Utils.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -214,7 +214,7 @@
       <Filter>Utility\Components\TextureCompo</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\DeviceResource.h">
-      <Filter>System\D3D Graphics\Graphic_Device</Filter>
+      <Filter>System\D3D Graphics\DeviceResource</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\PipelineManager.h">
       <Filter>System\D3D Graphics\Pipeline</Filter>
@@ -303,6 +303,9 @@
     <ClInclude Include="..\Public\MeshDataType.h">
       <Filter>System\Interface</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\DXRRenderer.h">
+      <Filter>System\D3D Graphics\DXRRenderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -345,7 +348,7 @@
       <Filter>Utility\Components\TextureCompo</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\DeviceResource.cpp">
-      <Filter>System\D3D Graphics\Graphic_Device</Filter>
+      <Filter>System\D3D Graphics\DeviceResource</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PipelineManager.cpp">
       <Filter>System\D3D Graphics\Pipeline</Filter>
@@ -425,9 +428,11 @@
     <ClCompile Include="..\Private\SingleVertexMesh.cpp">
       <Filter>Utility\MeshData\1D\SingleVertexMesh</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\DXRRenderer.cpp">
+      <Filter>System\D3D Graphics\DXRRenderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="shaderTest.hlsl" />
     <FxCompile Include="..\Bin\Shader\simpleShader.hlsl">
       <Filter>0.Shaders</Filter>
     </FxCompile>

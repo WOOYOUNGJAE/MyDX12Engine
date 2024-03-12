@@ -11,6 +11,7 @@ CDeviceResource::CDeviceResource()
 HRESULT CDeviceResource::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMode, _uint iWinCX, _uint iWinCY,
 	ID3D12Device** ppDevice)
 {
+	HRESULT hr = S_OK;
 	m_hWnd = hWnd;
 
 	m_iClientWinCX = iWinCX;
@@ -26,7 +27,7 @@ HRESULT CDeviceResource::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 
 	m_ScissorRect = { 0, 0, static_cast<LONG>(m_iClientWinCX), static_cast<LONG>(m_iClientWinCY )};
 	
-	CreateDXGIFactory1(IID_PPV_ARGS(&m_pDxgi_Factory));
+	CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG, IID_PPV_ARGS(&m_pDxgi_Factory));
 
 #ifdef _DEBUG // DirectX Debug Layer
 
@@ -37,16 +38,31 @@ HRESULT CDeviceResource::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 	}
 #endif
 
-	// Only Hardware Adapter, No Wrap Adapter
-	if (FAILED(D3D12CreateDevice(
+#ifdef DXR_ON
+	hr = Init_Adapter();
+	if (FAILED(hr))
+	{
+		MSG_BOX("Init Adater Failed");
+		return E_FAIL;
+	}
+
+	hr = D3D12CreateDevice(m_pAdapter.Get(),
+		D3D_FEATURE_LEVEL_12_1,
+		__uuidof(ID3D12Device5),
+		(void**)&m_pDevice);
+#else
+	hr = D3D12CreateDevice(
 		nullptr,
 		D3D_FEATURE_LEVEL_11_0,
 		IID_PPV_ARGS(&m_pDevice)
-	)))
+	);
+#endif
+	if (FAILED(hr))
 	{
 		MSG_BOX("Failed To Create Device");
 		return E_FAIL;
 	}
+
 	*ppDevice = m_pDevice.Get();
 
 
@@ -94,6 +110,58 @@ HRESULT CDeviceResource::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 	return S_OK;
 }
 
+// From Microsoft D3D12Raytracing
+// This method acquires the first high-performance hardware adapter that supports Direct3D 12.
+// If no such adapter can be found, try WARP. Otherwise throw an exception.
+HRESULT CDeviceResource::Init_Adapter()
+{
+	HRESULT hr = S_OK;
+
+	ComPtr<IDXGIAdapter1> adapter;
+	ComPtr<IDXGIFactory6> factory6;
+	hr = m_pDxgi_Factory.As(&factory6);
+	if (FAILED(hr))
+	{
+		MSG_BOX("DXGI 1.6 not supported");
+	}
+	for (UINT adapterID = 0; DXGI_ERROR_NOT_FOUND != factory6->EnumAdapterByGpuPreference(adapterID, DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(&adapter)); ++adapterID)
+	{
+		DXGI_ADAPTER_DESC1 desc;
+		adapter->GetDesc1(&desc);
+
+		if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
+		{
+			// Don't select the Basic Render Driver adapter.
+			continue;
+		}
+
+		m_adapterID = adapterID;
+		m_adapterDescription = desc.Description;
+		// Check to see if the adapter supports Direct3D 12, but don't create the actual device yet.
+		ComPtr<ID3D12Device> pTempInstance = nullptr;
+		hr = D3D12CreateDevice(
+			adapter.Get(),
+			D3D_FEATURE_LEVEL_11_0,
+			_uuidof(ID3D12Device),
+			&pTempInstance);
+		if (SUCCEEDED(hr))
+		{
+			m_adapterID = adapterID;
+			m_adapterDescription = desc.Description;
+#ifdef _DEBUG
+			wchar_t buff[256] = {};
+			swprintf_s(buff, L"Direct3D Adapter (%u): VID:%04X, PID:%04X - %ls\n", adapterID, desc.VendorId, desc.DeviceId, desc.Description);
+			OutputDebugStringW(buff);
+#endif
+		break;
+		}
+	}
+
+	//m_pAdapter = adapter.Detach();
+	m_pAdapter = std::move(adapter.Get());
+	return hr;
+}
+
 HRESULT CDeviceResource::Init_CommandObjects()
 {
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
@@ -133,31 +201,6 @@ HRESULT CDeviceResource::Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode)
 	/* 스왑체인을 생성한다. = 텍스쳐를 생성하는 행위 + 스왑하는 형태  */
 	m_pSwapChain.Reset();
 #pragma region SwapChainDesc
-	//DXGI_SWAP_CHAIN_DESC		SwapChainDesc;
-	//ZeroMemory(&SwapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
-
-	///*텍스쳐(백버퍼)를 생성하는 행위*/
-	//SwapChainDesc.BufferDesc.Width = m_iClientWinCX;
-	//SwapChainDesc.BufferDesc.Height = m_iClientWinCY;
-
-
-	//SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	//SwapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	//SwapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	//SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	//SwapChainDesc.BufferCount = m_iSwapChainBufferCount;
-
-	///*스왑하는 형태*/
-	//SwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
-	//SwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-	//SwapChainDesc.SampleDesc.Quality = 0;
-	//SwapChainDesc.SampleDesc.Count = 1;
-
-	//SwapChainDesc.OutputWindow = m_hWnd;
-	//SwapChainDesc.Windowed = eWinMode;
-	//SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // DX11d은 그냥 Discard
-	//SwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-
 	// Describe and create the swap chain.
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 	swapChainDesc.BufferCount = m_iSwapChainBufferCount;

@@ -258,6 +258,7 @@
     <ClInclude Include="..\Public\Asset.h" />
     <ClInclude Include="..\Public\AssetManager.h" />
     <ClInclude Include="..\Public\Base.h" />
+    <ClInclude Include="..\Public\DXRRenderer.h" />
     <ClInclude Include="..\Public\SingleVertexMesh.h" />
     <ClInclude Include="..\Public\Camera.h" />
     <ClInclude Include="..\Public\CameraManager.h" />
@@ -270,10 +271,6 @@
     <ClInclude Include="..\Public\D3DResourceManager.h" />
     <ClInclude Include="..\Public\d3dx12.h" />
     <ClInclude Include="..\Public\Device_Utils.h" />
-    <ClInclude Include="..\Public\DX12Test.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Tool|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="..\Public\Engine_Enums.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Tool|x64'">false</ExcludedFromBuild>
@@ -317,6 +314,7 @@
     <ClCompile Include="..\Private\Asset.cpp" />
     <ClCompile Include="..\Private\AssetManager.cpp" />
     <ClCompile Include="..\Private\Base.cpp" />
+    <ClCompile Include="..\Private\DXRRenderer.cpp" />
     <ClCompile Include="..\Private\SingleVertexMesh.cpp" />
     <ClCompile Include="..\Private\Camera.cpp" />
     <ClCompile Include="..\Private\CameraManager.cpp" />
@@ -376,12 +374,6 @@
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\treeBillboard.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="shaderTest.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Tool|x64'">true</ExcludedFromBuild>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Tool|x64'">5.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

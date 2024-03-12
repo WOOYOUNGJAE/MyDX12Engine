@@ -21,8 +21,7 @@
 #include <d3d12.h>
 #include <wrl.h>
 #include <d3dcompiler.h>
-//#include <dxgi.h>
-#include <dxgi1_4.h>
+#include <dxgi1_6.h>
 #include <DirectXMath.h>
 #include "SimpleMath.h"
 #include <DirectXPackedVector.h>
@@ -65,7 +64,9 @@ using namespace DirectX::SimpleMath;
 
 #endif // _DEBUG
 
-// My Headers
+// My
+#define DXR_ON
+
 #include "Engine_Typedef.h"
 #include "Engine_Functions.h"
 #include "Engine_Macros.h"

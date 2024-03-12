@@ -15,6 +15,7 @@ public:
 public: // Init
 	HRESULT Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMode,
 		_uint iWinCX, _uint iWinCY, _Inout_ ID3D12Device** ppDevice);
+	HRESULT Init_Adapter();
 	HRESULT Init_CommandObjects();
 	HRESULT Init_SwapChain(GRAPHIC_DESC::WINMODE eWinMode);
 	// RenderTargetView, Get_DepthStencilViewHeapStart
@@ -39,12 +40,18 @@ public: // Getter
 	D3D12_GPU_DESCRIPTOR_HANDLE Get_CbvSrvUavHeapStart_GPU() { return m_pCbvSrvUavHeap.Get()->GetGPUDescriptorHandleForHeapStart(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_CbvSrvUavHeapStart_CPU() { return m_pCbvSrvUavHeap.Get()->GetCPUDescriptorHandleForHeapStart(); }
 	ID3D12DescriptorHeap* Get_CbvSrvUavHeap() { return m_pCbvSrvUavHeap.Get(); }
+	IDXGIAdapter1* Get_Adapter() { return m_pAdapter.Get(); }
 	UINT Get_RtvDescriptorSize() const { return m_iRtvDescriptorSize; }
 	UINT Get_CbvSrvUavDescriptorSize() const { return m_iCbvSrvUavDescriptorSize; }
 	UINT* Get_NextCbvSrvUavHeapOffsetPtr() { return &m_iNextCbvSrvUavHeapOffset; }
 private: // ComPtr
+	ComPtr<IDXGIAdapter1> m_pAdapter;
 	ComPtr<IDXGIFactory4> m_pDxgi_Factory = nullptr;
+#ifdef DXR_ON
+	ComPtr<ID3D12Device5> m_pDevice = nullptr;
+#else
 	ComPtr<ID3D12Device> m_pDevice = nullptr;
+#endif
 	ComPtr<ID3D12CommandQueue> m_pCommandQueue = nullptr;
 	ComPtr<ID3D12CommandAllocator> m_pCmdAllocator = nullptr;
 	ComPtr<ID3D12GraphicsCommandList> m_pCommandList = nullptr;
@@ -81,7 +88,9 @@ public:
 private: // Current
 	UINT64 m_iCurFenceVal = 0;
 	_uint m_iCurrBackBuffer = 0;
-
+private: // adapter
+	UINT                                                m_adapterID;
+	std::wstring                                        m_adapterDescription;
 };
 
 _NAMESPACE

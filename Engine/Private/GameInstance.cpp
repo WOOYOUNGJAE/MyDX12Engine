@@ -11,6 +11,7 @@
 #include "LoadHelper.h"
 #include "D3DResourceManager.h"
 #include "CameraManager.h"
+#include "DXRRenderer.h"
 #pragma endregion
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -71,6 +72,8 @@ HRESULT CGameInstance::Init_Engine(GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Devi
 	}
 	m_pD3DResourceManager->Initialize();
 	m_pLoadHelper->Initialize();
+
+	//CDXRRenderer::Create(ppDevice);
 
 	return S_OK;
 }
