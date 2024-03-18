@@ -32,6 +32,9 @@ public:
 	void Execute_CmdList();
 public: // Getter
 	ID3D12Device* Get_Device() { return m_pDevice.Get(); }
+#ifdef DXR_ON
+	ID3D12Device5* Get_Device5() { return m_pDevice.Get(); }
+#endif
 	ID3D12GraphicsCommandList* Get_CommandList() { return m_pCommandList.Get(); }
 	ID3D12CommandQueue* Get_CommandQueue() { return m_pCommandQueue.Get(); }
 	ID3D12Resource* CurrentBackBuffer() { return m_pRenderTargets[m_iCurrBackBuffer].Get(); }

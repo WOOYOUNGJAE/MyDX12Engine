@@ -8,7 +8,7 @@
 #include "Skybox.h"
 #include "TreeBillboard.h"
 #include "ZeldaDemo.h"
-#ifdef IMGUI_ON
+#if IMGUI_ON
 #include "Client_Imgui.h"
 #endif
 
@@ -126,7 +126,7 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 	}
 
-#ifdef IMGUI_ON
+#if IMGUI_ON
 	m_pClient_Imgui = CClient_Imgui::Create(m_pDevice);
 #endif
 
@@ -141,7 +141,7 @@ void CMainApp::Tick(_float fDeltaTime)
 
 	m_pRenderer->MainRender();
 
-#ifdef IMGUI_ON
+#if IMGUI_ON
 	m_pClient_Imgui->Imgui_Tick();
 	m_pClient_Imgui->Imgui_MainRender();
 	m_pClient_Imgui->IMgui_EndRender();
@@ -156,7 +156,7 @@ void CMainApp::Tick(_float fDeltaTime)
 
 HRESULT CMainApp::Free()
 {
-#ifdef IMGUI_ON
+#if IMGUI_ON
 	Safe_Release(m_pClient_Imgui);
 #endif
 

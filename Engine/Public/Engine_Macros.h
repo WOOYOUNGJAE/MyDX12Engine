@@ -48,3 +48,6 @@ unsigned long  ClassName::Destroy_Instance()			\
 #endif
 
 #define MSG_BOX(MESSAGE)		MessageBox(0, TEXT(MESSAGE), TEXT("System Error"), MB_OK)
+
+// UINT32 크기의 배수 얻기
+#define SizeOfInUint32(obj) ((sizeof(obj) - 1) / sizeof(UINT32) + 1)

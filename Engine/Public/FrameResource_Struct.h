@@ -57,4 +57,15 @@ namespace Engine
 
 		Vector4 padding[5];
 	};
+
+#if DXR_ON
+NAMESPACE_(DXR)
+	struct my_struct
+	{
+		
+	};
+
+_NAMESPACE
+#endif
+
 }

@@ -38,7 +38,7 @@ HRESULT CDeviceResource::Init_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE eW
 	}
 #endif
 
-#ifdef DXR_ON
+#if DXR_ON
 	hr = Init_Adapter();
 	if (FAILED(hr))
 	{

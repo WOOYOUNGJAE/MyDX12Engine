@@ -107,6 +107,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\Bin\</OutDir>
+    <IntDir>..\Bin\Intermediate</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tool|x64'">
     <OutDir>..\Bin\</OutDir>
@@ -196,7 +197,8 @@
     <PostBuildEvent />
     <FxCompile>
       <ShaderModel>4.0_level_9_3</ShaderModel>
-      <AdditionalIncludeDirectories>.\Engine\Bin\Shader\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <EntryPointName />
+      <AdditionalIncludeDirectories>D:\Projects\Git\MyProjects\MyDX12Engine\Engine\Bin\Shader\StaticCompiled;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </FxCompile>
     <PostBuildEvent>
       <Command>
@@ -255,6 +257,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Bin\Shader\HlslCompat.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Bin\Shader\RaytracingHlslCompat.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Public\Asset.h" />
     <ClInclude Include="..\Public\AssetManager.h" />
     <ClInclude Include="..\Public\Base.h" />
@@ -371,6 +379,12 @@
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\skybox.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\StaticCompiled\Raytracing.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Library</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.3</ShaderModel>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">g_p%(Filename)</VariableName>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)CompiledShaders\%(Filename).hlsl.h</HeaderFileOutput>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\treeBillboard.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

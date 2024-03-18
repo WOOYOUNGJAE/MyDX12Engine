@@ -65,7 +65,7 @@ using namespace DirectX::SimpleMath;
 #endif // _DEBUG
 
 // My
-#define DXR_ON
+#define DXR_ON TRUE
 
 #include "Engine_Typedef.h"
 #include "Engine_Functions.h"

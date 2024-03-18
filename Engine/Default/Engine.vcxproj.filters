@@ -151,6 +151,9 @@
     <Filter Include="System\D3D Graphics\DeviceResource">
       <UniqueIdentifier>{1b2545aa-66db-4b8a-bb1d-f325853d2128}</UniqueIdentifier>
     </Filter>
+    <Filter Include="0.Shaders\DXR">
+      <UniqueIdentifier>{62610798-6a01-493b-9ef7-f8aea113e4aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -306,6 +309,12 @@
     <ClInclude Include="..\Public\DXRRenderer.h">
       <Filter>System\D3D Graphics\DXRRenderer</Filter>
     </ClInclude>
+    <ClInclude Include="..\Bin\Shader\RaytracingHlslCompat.h">
+      <Filter>0.Shaders\DXR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Bin\Shader\HlslCompat.h">
+      <Filter>0.Shaders\DXR</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -447,6 +456,9 @@
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\treeBillboard.hlsl">
       <Filter>0.Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\StaticCompiled\Raytracing.hlsl">
+      <Filter>0.Shaders\DXR</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
