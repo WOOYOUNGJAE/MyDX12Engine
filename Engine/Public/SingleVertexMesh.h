@@ -18,7 +18,8 @@ public:
 	HRESULT Initialize(void* pArg) override; // Do Nothing (InitÀº Copy¿ë)
 	HRESULT Free() override;
 
-
+public:
+	DXGI_FORMAT Get_IndexFormat() override;
 };
 
 _NAMESPACE

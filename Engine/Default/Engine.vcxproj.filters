@@ -309,10 +309,10 @@
     <ClInclude Include="..\Public\DXRRenderer.h">
       <Filter>System\D3D Graphics\DXRRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Bin\Shader\RaytracingHlslCompat.h">
+    <ClInclude Include="..\Bin\Shader\StaticCompiled\HlslCompat.h">
       <Filter>0.Shaders\DXR</Filter>
     </ClInclude>
-    <ClInclude Include="..\Bin\Shader\HlslCompat.h">
+    <ClInclude Include="..\Bin\Shader\StaticCompiled\RaytracingHlslCompat.h">
       <Filter>0.Shaders\DXR</Filter>
     </ClInclude>
   </ItemGroup>

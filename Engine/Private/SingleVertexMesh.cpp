@@ -126,3 +126,8 @@ HRESULT CSingleVertexMesh::Free()
 
 	return CMeshData::Free();
 }
+
+DXGI_FORMAT CSingleVertexMesh::Get_IndexFormat()
+{
+	return IMeshDataType::IndexFormat;
+}

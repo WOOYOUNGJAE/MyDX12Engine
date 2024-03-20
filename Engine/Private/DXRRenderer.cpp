@@ -1,6 +1,11 @@
 #include "DXRRenderer.h"
 #include "DeviceResource.h"
+#include "./Shaders/Raytracing.hlsl.h"
 
+const wchar_t* CDXRRenderer::m_tszHitGroupName = L"MyHitGroup";
+const wchar_t* CDXRRenderer::m_tszRaygenShaderName = L"MyRaygenShader";
+const wchar_t* CDXRRenderer::m_tszClosestHitShaderName = L"MyClosestHitShader";
+const wchar_t* CDXRRenderer::m_tszMissShaderName = L"MyMissShader";
 
 CDXRRenderer* CDXRRenderer::Create(ID3D12Device** ppDevice)
 {
@@ -53,6 +58,12 @@ HRESULT CDXRRenderer::Initialize(ID3D12Device** ppDevice)
 		return hr;
 	}
 
+	hr = Create_PSOs();
+	if (FAILED(hr))
+	{
+		MSG_BOX("Create DXR PSOs Failed");
+		return hr;
+	}
 
 	return hr;
 }
@@ -70,11 +81,16 @@ HRESULT CDXRRenderer::Crete_RootSignatures()
 	// Global Root Signature
 	// This is a root signature that is shared across all raytracing shaders invoked during a DispatchRays() call.
 	{
-		CD3DX12_DESCRIPTOR_RANGE UAVDescriptor;
-		UAVDescriptor.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0, 1/*for DXR*/);
-		CD3DX12_ROOT_PARAMETER rootParameterArr[2];
-		rootParameterArr[0].InitAsDescriptorTable(1, &UAVDescriptor);
-		rootParameterArr[1].InitAsShaderResourceView(0);
+		CD3DX12_DESCRIPTOR_RANGE descriptorRange[2];
+		descriptorRange[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0, 1/*for DXR*/); // output texture
+		descriptorRange[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 1, 1); // static index vertex buffer
+
+		CD3DX12_ROOT_PARAMETER rootParameterArr[4];
+		rootParameterArr[0].InitAsDescriptorTable(1, &descriptorRange[0]);
+		rootParameterArr[1].InitAsShaderResourceView(0, 1);
+		rootParameterArr[2].InitAsConstantBufferView(0, 1); // SceneConstant
+		rootParameterArr[3].InitAsDescriptorTable(1, &descriptorRange[1]);
+
 		CD3DX12_ROOT_SIGNATURE_DESC globalRootSignatureDesc(_countof(rootParameterArr), rootParameterArr);
 
 		ComPtr<ID3DBlob> signature;
@@ -97,16 +113,14 @@ HRESULT CDXRRenderer::Crete_RootSignatures()
 			signature->GetBufferSize(),
 			IID_PPV_ARGS(&m_pRootSigArr[DXR_ROOTSIG_GLOBAL]));
 		if (FAILED(hr)) { return hr; }
-
 	}
 
 	// Local Root Signature
 	// This is a root signature that enables a shader to have unique arguments that come from shader tables.
 	{
 		CD3DX12_ROOT_PARAMETER rootParameterArr[1]{};
-		ZeroMemory(rootParameterArr, sizeof(CD3DX12_ROOT_PARAMETER));
-		/*rootParameterArr[0].InitAsConstants(SizeOfInUint32(sizeof(m_rayGenCB), 0, 0));*/
-		CD3DX12_ROOT_SIGNATURE_DESC localRootSignatureDesc(0, rootParameterArr);
+		rootParameterArr[0].InitAsConstants(SizeOfInUint32(DXR::OBJECT_CB), 1, 1);
+		CD3DX12_ROOT_SIGNATURE_DESC localRootSignatureDesc(_countof(rootParameterArr), rootParameterArr);
 		localRootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE;
 
 		ComPtr<ID3DBlob> signature;
@@ -127,7 +141,7 @@ HRESULT CDXRRenderer::Crete_RootSignatures()
 			0,
 			signature->GetBufferPointer(),
 			signature->GetBufferSize(),
-			IID_PPV_ARGS(&m_pRootSigArr[DXR_ROOTSIG_GLOBAL]));
+			IID_PPV_ARGS(&m_pRootSigArr[DXR_ROOTSIG_LOCAL]));
 		if (FAILED(hr)) { return hr; }
 	}
 
@@ -138,11 +152,78 @@ HRESULT CDXRRenderer::Crete_RootSignatures()
 HRESULT CDXRRenderer::Create_PSOs()
 {
 	HRESULT hr = S_OK;
-
+	// SubObject 생성
 	CD3DX12_STATE_OBJECT_DESC psoDesc { D3D12_STATE_OBJECT_TYPE_RAYTRACING_PIPELINE };
 
-	CD3DX12_DXIL_LIBRARY_SUBOBJECT* lib = psoDesc.CreateSubobject<CD3DX12_DXIL_LIBRARY_SUBOBJECT>();
-	//D3D12_SHADER_BYTECODE libdxil = CD3DX12_SHADER_BYTECODE((void*)g_pRaytracing, ARRAYSIZE(g_pRaytracing));
+	// DXIL library
+	{
+		// entry point 지정, shader는 subobject 로 생성하지 않고 라이브러리에 묶음
+		CD3DX12_DXIL_LIBRARY_SUBOBJECT* lib =
+			psoDesc.CreateSubobject<CD3DX12_DXIL_LIBRARY_SUBOBJECT>();
+		D3D12_SHADER_BYTECODE libDXIL = CD3DX12_SHADER_BYTECODE((void*)g_pRaytracing, _countof(g_pRaytracing));
+		lib->SetDXILLibrary(&libDXIL);
+		// Define which shader exports to surface from the library.
+		// If no shader exports are defined for a DXIL library subobject, all shaders will be surfaced.
+		// In this sample, this could be omitted for convenience since the sample uses all shaders in the library. 
+		{
+			// 라이브러리에서 Export 정의 -> PSO에서는 Import[
+			lib->DefineExport(m_tszRaygenShaderName);
+			lib->DefineExport(m_tszClosestHitShaderName);
+			lib->DefineExport(m_tszMissShaderName);
+		}
+	}
+
+	// Triangle HitGroup
+	{
+		CD3DX12_HIT_GROUP_SUBOBJECT* hitGroup = psoDesc.CreateSubobject<CD3DX12_HIT_GROUP_SUBOBJECT>();
+		hitGroup->SetClosestHitShaderImport(m_tszClosestHitShaderName);
+		hitGroup->SetHitGroupExport(m_tszHitGroupName);
+		hitGroup->SetHitGroupType(D3D12_HIT_GROUP_TYPE_TRIANGLES);
+	}
+
+	// Shader config, Attribute에는 무게중심 좌표, Payload는 레이가 진행하면서 데이터 저장하는 공간
+	// Defines the maximum sizes in bytes for the ray payload and attribute structure.
+	{
+		CD3DX12_RAYTRACING_SHADER_CONFIG_SUBOBJECT* shaderConfig =
+			psoDesc.CreateSubobject<CD3DX12_RAYTRACING_SHADER_CONFIG_SUBOBJECT>();
+		UINT payloadSize = sizeof(Vector4);   // float4 color
+		UINT attributeSize = sizeof(Vector2); // float2 barycentrics
+		shaderConfig->Config(payloadSize, attributeSize);
+	}
+
+	// RootSignature SubObject - LOCAL | shader association
+	{
+		// ray gen shader을 위한 Local root signature
+		CD3DX12_LOCAL_ROOT_SIGNATURE_SUBOBJECT* localRootSignature = psoDesc.CreateSubobject<CD3DX12_LOCAL_ROOT_SIGNATURE_SUBOBJECT>();
+		localRootSignature->SetRootSignature(m_pRootSigArr[DXR_ROOTSIG_LOCAL]);
+		// shader association
+		// associaton 객체를 만들어서 루트시그니처 서브오브젝트를 바인딩, 그 후 AddExport로 실제 쉐이더 프로그램에 연결
+		CD3DX12_SUBOBJECT_TO_EXPORTS_ASSOCIATION_SUBOBJECT* rootSignatureAssociation = psoDesc.CreateSubobject<CD3DX12_SUBOBJECT_TO_EXPORTS_ASSOCIATION_SUBOBJECT>();
+		rootSignatureAssociation->SetSubobjectToAssociate(*localRootSignature);
+		rootSignatureAssociation->AddExport(m_tszHitGroupName);
+	}
+
+	// RootSignature SubObject - GLOBAL
+	// This is a root signature that is shared across all raytracing shaders invoked during a DispatchRays() call.
+	{
+		CD3DX12_GLOBAL_ROOT_SIGNATURE_SUBOBJECT* globalRootSignature =
+			psoDesc.CreateSubobject<CD3DX12_GLOBAL_ROOT_SIGNATURE_SUBOBJECT>();
+		globalRootSignature->SetRootSignature(m_pRootSigArr[DXR_ROOTSIG_GLOBAL]);
+	}
+
+	// Pipeline Config - Defines the maximum TraceRay() recursion depth.
+	{
+		CD3DX12_RAYTRACING_PIPELINE_CONFIG_SUBOBJECT* pipelineConfig = 
+			psoDesc.CreateSubobject<CD3DX12_RAYTRACING_PIPELINE_CONFIG_SUBOBJECT>();
+		UINT iMaxRecursionDepth = 1; // ~ primary rays only. 
+		pipelineConfig->Config(iMaxRecursionDepth);
+	}
+
+	hr = m_pDevice->CreateStateObject(psoDesc, IID_PPV_ARGS(&m_pDXR_PSO));
+	if (FAILED(hr))
+	{
+		MSG_BOX("Failed to Create DXR PSO");
+	}
 
 	return hr;
 }

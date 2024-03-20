@@ -23,7 +23,12 @@ private:
 	ID3D12RootSignature* m_pRootSigArr[DXR_ROOTSIG_TYPE_END];
 private: // pointer
 	ID3D12Device5* m_pDevice = nullptr;
-	ID3D12PipelineState* m_pDXR_PSO = nullptr;
+	ID3D12StateObject* m_pDXR_PSO = nullptr; 
+private: // entry point str
+	static const wchar_t* m_tszHitGroupName;
+	static const wchar_t* m_tszRaygenShaderName;
+	static const wchar_t* m_tszClosestHitShaderName;
+	static const wchar_t* m_tszMissShaderName;
 };
 
 _NAMESPACE

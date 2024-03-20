@@ -60,9 +60,9 @@ namespace Engine
 
 #if DXR_ON
 NAMESPACE_(DXR)
-	struct my_struct
+	struct OBJECT_CB
 	{
-		
+		Vector4 albedo; // π›ªÁ¿≤
 	};
 
 _NAMESPACE

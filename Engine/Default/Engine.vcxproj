@@ -257,12 +257,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Bin\Shader\HlslCompat.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\Bin\Shader\RaytracingHlslCompat.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\Bin\Shader\StaticCompiled\HlslCompat.h" />
+    <ClInclude Include="..\Bin\Shader\StaticCompiled\RaytracingHlslCompat.h" />
     <ClInclude Include="..\Public\Asset.h" />
     <ClInclude Include="..\Public\AssetManager.h" />
     <ClInclude Include="..\Public\Base.h" />
