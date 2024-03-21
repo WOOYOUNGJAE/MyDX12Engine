@@ -32,6 +32,7 @@ public: // getter setter
 public: // getter
 	vector<VertexPositionNormalTexture>& Get_vecVertices() { return m_vecVertexData; }
 	vector<UINT32>& Get_vecIndices() { return m_vecIndexData; }
+	virtual size_t Get_SingleVertexSize() { return sizeof(VertexPositionNormalTexture); }
 public: // static util func
 	static void Normalize_Vertices(CMeshData* pMeshData);
 	static void Normalize_Vertices(std::list<CMeshData*>& refMeshList);

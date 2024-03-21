@@ -38,12 +38,14 @@ public: // Manager Function Offer
 	void Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum);
 	// CameraManger
 	void Set_MainCam(wstring strName);
+	// DXR
+	HRESULT Init_DXR();
 public:
 	class CRenderer* Get_Renderer();
 
 private:
 	HWND* m_pHwndClient  = nullptr;
-private:
+private: // Singleton
 	class CDeviceResource* m_pDeviceResource = nullptr;
 	class CComponentManager* m_pComponentManager = nullptr;
 	class CGameObjectManager* m_pGameObjectManager = nullptr;
@@ -53,6 +55,9 @@ private:
 	class CInputManager* m_pInputManager = nullptr;
 	class CCameraManager* m_pCameraManager = nullptr;
 	class CLoadHelper* m_pLoadHelper = nullptr;
+	class CDXRResource* m_pDxrResource = nullptr;
+private:
+	class CDXRRenderer* m_pDxrRenderer = nullptr;
 };
 
 _NAMESPACE

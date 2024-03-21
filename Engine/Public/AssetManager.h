@@ -7,6 +7,7 @@ class CAsset;
 class CTexture;
 class CMeshData;
 
+// Manage MeshData, Texture
 class ENGINE_DLL CAssetManager : public CBase
 {
 	DECLARE_SINGLETON(CAssetManager)
@@ -15,6 +16,9 @@ class ENGINE_DLL CAssetManager : public CBase
 
 public:
 	HRESULT Free() override;
+public: // Getter
+	map<wstring, CMeshData*>& Get_MeshDataMap() { return m_mapMeshData; }
+	map<wstring, list<CMeshData*>>& Get_MeshData_ClusteredMap() { return m_mapMeshData_Clustered; }
 public:
 	HRESULT Add_Texture(const wstring& strAssetName, CTexture* pTextureInstance);
 	CTexture* FindandGet_Texture(const wstring& strAssetName);

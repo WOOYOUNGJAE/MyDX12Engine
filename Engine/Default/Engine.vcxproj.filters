@@ -145,14 +145,20 @@
     <Filter Include="Utility\MeshData\1D\SingleVertexMesh">
       <UniqueIdentifier>{5fb53f02-0064-4720-9aad-be531b16cecc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="System\D3D Graphics\DXRRenderer">
-      <UniqueIdentifier>{3e19260d-b02c-4f9f-9919-636e18dd8c84}</UniqueIdentifier>
-    </Filter>
     <Filter Include="System\D3D Graphics\DeviceResource">
       <UniqueIdentifier>{1b2545aa-66db-4b8a-bb1d-f325853d2128}</UniqueIdentifier>
     </Filter>
     <Filter Include="0.Shaders\DXR">
       <UniqueIdentifier>{62610798-6a01-493b-9ef7-f8aea113e4aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\D3D Graphics\DXR">
+      <UniqueIdentifier>{2ca65baf-a71c-4f06-b6b8-c4c7d0194422}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\D3D Graphics\DXR\DXRRenderer">
+      <UniqueIdentifier>{3e19260d-b02c-4f9f-9919-636e18dd8c84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\D3D Graphics\DXR\DXR">
+      <UniqueIdentifier>{a8a5c5a8-2438-470d-a0b0-ccbf1c85419b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -307,7 +313,7 @@
       <Filter>System\Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\DXRRenderer.h">
-      <Filter>System\D3D Graphics\DXRRenderer</Filter>
+      <Filter>System\D3D Graphics\DXR\DXRRenderer</Filter>
     </ClInclude>
     <ClInclude Include="..\Bin\Shader\StaticCompiled\HlslCompat.h">
       <Filter>0.Shaders\DXR</Filter>
@@ -315,6 +321,7 @@
     <ClInclude Include="..\Bin\Shader\StaticCompiled\RaytracingHlslCompat.h">
       <Filter>0.Shaders\DXR</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\DXRResource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -438,8 +445,9 @@
       <Filter>Utility\MeshData\1D\SingleVertexMesh</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\DXRRenderer.cpp">
-      <Filter>System\D3D Graphics\DXRRenderer</Filter>
+      <Filter>System\D3D Graphics\DXR\DXRRenderer</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\DXRResource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\simpleShader.hlsl">

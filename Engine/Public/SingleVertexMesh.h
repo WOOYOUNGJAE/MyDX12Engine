@@ -20,6 +20,7 @@ public:
 
 public:
 	DXGI_FORMAT Get_IndexFormat() override;
+	size_t Get_SingleVertexSize() override { return sizeof(VertexPositionSize); };
 };
 
 _NAMESPACE

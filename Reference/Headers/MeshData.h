@@ -25,10 +25,14 @@ public: // getter setter
 	virtual D3D12_INDEX_BUFFER_VIEW* Get_IndexBufferViewPtr();
 	virtual UINT Get_CbvSrvUavOffset() { return m_iCbvSrvUavOffset; }
 	virtual _uint Num_Indices() { return m_iNumIndices; }
+	virtual UINT Num_Vertices() { return m_iNumVertices; }
 	void Set_CbvSrvUavOffset(UINT iOffset) { m_iCbvSrvUavOffset = iOffset; }
+	virtual DXGI_FORMAT Get_IndexFormat() { return m_IndexFormat; }
+	UINT64 Get_StrideInBytes() { return m_iVertexByteStride; } // Size Of Vertex
 public: // getter
 	vector<VertexPositionNormalTexture>& Get_vecVertices() { return m_vecVertexData; }
 	vector<UINT32>& Get_vecIndices() { return m_vecIndexData; }
+	virtual size_t Get_SingleVertexSize() { return sizeof(VertexPositionNormalTexture); }
 public: // static util func
 	static void Normalize_Vertices(CMeshData* pMeshData);
 	static void Normalize_Vertices(std::list<CMeshData*>& refMeshList);
@@ -51,8 +55,8 @@ protected: // View
 protected: // Data about the buffers.
 	UINT m_iNumVertices = 0;
 	UINT m_iNumIndices = 0;
-	UINT m_iVertexByteStride = 0; 
-	UINT m_iVertexBufferByteSize = 0;
+	UINT m_iVertexByteStride = 0; // Vertex 하나 당 사이즈
+	UINT m_iVertexBufferByteSize = 0; // V Buffer 총 사이즈
 	DXGI_FORMAT m_IndexFormat = DXGI_FORMAT_R32_UINT; 
 	UINT m_iIndexBufferByteSize = 0;
 	D3D12_PRIMITIVE_TOPOLOGY PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;

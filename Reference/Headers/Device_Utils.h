@@ -2,6 +2,8 @@
 #include "Engine_Defines.h"
 
 NAMESPACE_(Engine)
+class CMeshData;
+
 
 class CDevice_Utils
 {
@@ -31,6 +33,7 @@ public:
 		const std::string& entrypoint,
 		const std::string& target);
 
+	static D3D12_RAYTRACING_GEOMETRY_DESC Generate_AccelerationStructureDesc(CMeshData* pMeshData, ID3D12Resource* pSrvIndex, ID3D12Resource* pSrvVertex);
 };
 
 _NAMESPACE

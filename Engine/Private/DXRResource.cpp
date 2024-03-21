@@ -1,30 +1,22 @@
-#include "DXRRenderer.h"
-#include "DeviceResource.h"
-#include "MeshData.h"
+#include "DXRResource.h"
+#include "Device_Utils.h"
 #include "AssetManager.h"
+#include "DeviceResource.h"
+#include "DXRRenderer.h"
+#include "MeshData.h"
+#include "UploadBuffer.h"
 #include "./Shaders/Raytracing.hlsl.h"
 
-const wchar_t* CDXRRenderer::m_tszHitGroupName = L"MyHitGroup";
-const wchar_t* CDXRRenderer::m_tszRaygenShaderName = L"MyRaygenShader";
-const wchar_t* CDXRRenderer::m_tszClosestHitShaderName = L"MyClosestHitShader";
-const wchar_t* CDXRRenderer::m_tszMissShaderName = L"MyMissShader";
+IMPLEMENT_SINGLETON(CDXRResource)
 
-CDXRRenderer* CDXRRenderer::Create()
+const wchar_t* CDXRResource::m_tszHitGroupName = L"MyHitGroup";
+const wchar_t* CDXRResource::m_tszRaygenShaderName = L"MyRaygenShader";
+const wchar_t* CDXRResource::m_tszClosestHitShaderName = L"MyClosestHitShader";
+const wchar_t* CDXRResource::m_tszMissShaderName = L"MyMissShader";
+
+HRESULT CDXRResource::Initialize()
 {
-	CDXRRenderer* pInstance = new CDXRRenderer;
-
-	/*if (FAILED(pInstance->Initialize(ppDevice)))
-	{
-		MSG_BOX("DXR: Create Failed");
-		Safe_Release(pInstance);
-	}*/
-
-	return pInstance;
-}
-
-HRESULT CDXRRenderer::Initialize(ID3D12Device** ppDevice)
-{
-	HRESULT hr = S_OK;	
+	HRESULT hr = S_OK;
 
 	m_pDevice = CDeviceResource::Get_Instance()->Get_Device5();
 	Safe_AddRef(m_pDevice);
@@ -36,11 +28,11 @@ HRESULT CDXRRenderer::Initialize(ID3D12Device** ppDevice)
 
 	// CommandList
 	hr = m_pDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_pCommandAllocator, nullptr,
-		IID_PPV_ARGS(&m_pDxrCommandList));
+		IID_PPV_ARGS(&m_pCommandList));
 	if (FAILED(hr))
 	{
 		MSG_BOX("DXR: CommandList QueryInterface Failed");
-		return hr;		
+		return hr;
 	}
 
 	// 지원 여부 확인
@@ -51,6 +43,28 @@ HRESULT CDXRRenderer::Initialize(ID3D12Device** ppDevice)
 		MSG_BOX("DXR: Created Device5 Doesn't Support DXR");
 		return hr;
 	}
+
+	// DescriptorHeap
+	D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc = {};
+	// Allocate a heap for 3 descriptors:
+	// 2 - vertex and index buffer SRVs
+	// 1 - raytracing output texture SRV
+	UINT iNumMeshes = CAssetManager::Get_Instance()->Get_MeshDataMap().size();
+	auto& clusteredMeshesMap =  CAssetManager::Get_Instance()->Get_MeshData_ClusteredMap();
+	for (auto& pair : clusteredMeshesMap)
+	{
+		for (auto& iterMeshList : pair.second)
+		{
+			iNumMeshes += iterMeshList->Num_Vertices();			
+		}
+	}
+	descriptorHeapDesc.NumDescriptors = 2 * (iNumMeshes) + 1;
+	descriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	descriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	descriptorHeapDesc.NodeMask = 0;
+	m_pDevice->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(&m_pDescriptorHeap));
+
+	m_iDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	// RootSig
 	hr = Crete_RootSignatures();
@@ -67,16 +81,16 @@ HRESULT CDXRRenderer::Initialize(ID3D12Device** ppDevice)
 		return hr;
 	}
 
+	hr = Build_AccelerationStructures();
+	if (FAILED(hr))
+	{
+		MSG_BOX("Build AS Failed");
+	}
+
 	return hr;
 }
 
-HRESULT CDXRRenderer::Free()
-{
-	Safe_Release(m_pDevice);
-	return S_OK;
-}
-
-HRESULT CDXRRenderer::Crete_RootSignatures()
+HRESULT CDXRResource::Crete_RootSignatures()
 {
 	HRESULT hr = S_OK;
 
@@ -151,11 +165,11 @@ HRESULT CDXRRenderer::Crete_RootSignatures()
 	return hr;
 }
 
-HRESULT CDXRRenderer::Create_PSOs()
+HRESULT CDXRResource::Create_PSOs()
 {
 	HRESULT hr = S_OK;
 	// SubObject 생성
-	CD3DX12_STATE_OBJECT_DESC psoDesc { D3D12_STATE_OBJECT_TYPE_RAYTRACING_PIPELINE };
+	CD3DX12_STATE_OBJECT_DESC psoDesc{ D3D12_STATE_OBJECT_TYPE_RAYTRACING_PIPELINE };
 
 	// DXIL library
 	{
@@ -215,7 +229,7 @@ HRESULT CDXRRenderer::Create_PSOs()
 
 	// Pipeline Config - Defines the maximum TraceRay() recursion depth.
 	{
-		CD3DX12_RAYTRACING_PIPELINE_CONFIG_SUBOBJECT* pipelineConfig = 
+		CD3DX12_RAYTRACING_PIPELINE_CONFIG_SUBOBJECT* pipelineConfig =
 			psoDesc.CreateSubobject<CD3DX12_RAYTRACING_PIPELINE_CONFIG_SUBOBJECT>();
 		UINT iMaxRecursionDepth = 1; // ~ primary rays only. 
 		pipelineConfig->Config(iMaxRecursionDepth);
@@ -230,43 +244,90 @@ HRESULT CDXRRenderer::Create_PSOs()
 	return hr;
 }
 
-HRESULT CDXRRenderer::Build_AccelerationStructures()
+HRESULT CDXRResource::Build_AccelerationStructures()
 {
-	//HRESULT hr = S_OK;
+	HRESULT hr = S_OK;
 
-	//map<wstring, CMeshData*>& refMeshData = CAssetManager::Get_Instance()->Get_MeshDataMap();
-	//map<wstring, list<CMeshData*>>& refMeshData_Clustered =
-	//	CAssetManager::Get_Instance()->Get_MeshData_ClusteredMap();
+	map<wstring, CMeshData*>& refMeshData = CAssetManager::Get_Instance()->Get_MeshDataMap();
+	map<wstring, list<CMeshData*>>& refMeshData_Clustered =
+		CAssetManager::Get_Instance()->Get_MeshData_ClusteredMap();
 
-	//// 메쉬마다 Vertex, Index 들을 SRV로
-	//// Index Srv 만든 후 Vertex Srv 생성
-	//for (auto& pair : refMeshData)
-	//{
-	//	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	// 메쉬마다 Vertex, Index 들을 SRV로
+	// Index Srv 만든 후 Vertex Srv 생성
+	CD3DX12_CPU_DESCRIPTOR_HANDLE cpuHandle(m_pDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
 
-	//	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-	//	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	//	srvDesc.Buffer.NumElements = numElements;
-	//	if (elementSize == 0)
-	//	{
-	//		srvDesc.Format = DXGI_FORMAT_R32_TYPELESS;
-	//		srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW;
-	//		srvDesc.Buffer.StructureByteStride = 0;
-	//	}
-	//	else
-	//	{
-	//		srvDesc.Format = DXGI_FORMAT_UNKNOWN;
-	//		srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-	//		srvDesc.Buffer.StructureByteStride = elementSize;
-	//	}
-	//	UINT descriptorIndex = AllocateDescriptor(&buffer->cpuDescriptorHandle);
-	//	m_pDevice->CreateShaderResourceView(buffer->resource.Get(), &srvDesc, buffer->cpuDescriptorHandle);
+	for (auto& pair : refMeshData)
+	{
+		CMeshData* pMeshData = pair.second;
+		DXR::ACCELERATION_STRUCTURE_CPU as_CPU{};
 
-	//	m_pDevice;
+		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
-	//	DXR::ACCELERATION_STRUCTURE_CPU as_CPU{};
-	//}
+		// Create Index SRV
+		srvDesc.Buffer.NumElements = pMeshData->Num_Indices() / sizeof(UINT32);
+		srvDesc.Format = DXGI_FORMAT_R32_TYPELESS; // for Index Srv
+		srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW; // 인덱스는 단순 정수 나열이므로 raw타입으로
+		srvDesc.Buffer.StructureByteStride = 0; //  D3D12_BUFFER_SRV_FLAG_RAW, 즉 원시 데이터로 접근할 때
+		cpuHandle.Offset(1, m_iDescriptorSize);
+		m_pDevice->CreateShaderResourceView(as_CPU.srv_Index, &srvDesc, cpuHandle); // Index Srv
 
-	//return hr;
+		// Create Vertex SRV
+		srvDesc.Buffer.NumElements = pMeshData->Num_Vertices();
+		srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+		srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+		srvDesc.Buffer.StructureByteStride = UINT(pMeshData->Get_SingleVertexSize());
+		cpuHandle.Offset(1, m_iDescriptorSize);
+		m_pDevice->CreateShaderResourceView(as_CPU.srv_Vertex, &srvDesc, cpuHandle); // Index Srv
+
+		m_mapAS_CPU.emplace(pMeshData, as_CPU);
+	}
+
+	for (auto& pair : refMeshData_Clustered)
+	{
+		for (CMeshData*& refMesh : pair.second)
+		{
+			DXR::ACCELERATION_STRUCTURE_CPU as_CPU{};
+
+			D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+			srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+			srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+			// Create Index SRV
+			srvDesc.Buffer.NumElements = refMesh->Num_Indices() / sizeof(UINT32);
+			srvDesc.Format = DXGI_FORMAT_R32_TYPELESS; // for Index Srv
+			srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW; // 인덱스는 단순 정수 나열이므로 raw타입으로
+			srvDesc.Buffer.StructureByteStride = 0; //  D3D12_BUFFER_SRV_FLAG_RAW, 즉 원시 데이터로 접근할 때
+			cpuHandle.Offset(1, m_iDescriptorSize);
+			m_pDevice->CreateShaderResourceView(as_CPU.srv_Index, &srvDesc, cpuHandle); // Index Srv
+
+			// Create Vertex SRV
+			srvDesc.Buffer.NumElements = refMesh->Num_Vertices();
+			srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+			srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+			srvDesc.Buffer.StructureByteStride = UINT(refMesh->Get_SingleVertexSize());
+			cpuHandle.Offset(1, m_iDescriptorSize);
+			m_pDevice->CreateShaderResourceView(as_CPU.srv_Vertex, &srvDesc, cpuHandle); // Index Srv
+
+			m_mapAS_CPU.emplace(refMesh, as_CPU);
+		}
+	}
+
+	return hr;
+}
+
+HRESULT CDXRResource::Free()
+{
+
+	Safe_Release(m_pDXR_PSO);
+	for (UINT i = 0; i < DXR_ROOTSIG_TYPE_END; ++i)
+	{
+		Safe_Release(m_pRootSigArr[i]);
+	}
+	Safe_Release(m_pDescriptorHeap);
+	Safe_Release(m_pCommandList);
+	Safe_Release(m_pCommandAllocator);
+	Safe_Release(m_pDevice);
 	return S_OK;
 }

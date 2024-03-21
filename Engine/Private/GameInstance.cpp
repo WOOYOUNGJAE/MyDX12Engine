@@ -12,6 +12,7 @@
 #include "D3DResourceManager.h"
 #include "CameraManager.h"
 #include "DXRRenderer.h"
+#include "DXRResource.h"
 #pragma endregion
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -25,7 +26,8 @@ CGameInstance::CGameInstance() :
 	m_pD3DResourceManager(CD3DResourceManager::Get_Instance()),
 	m_pInputManager(CInputManager::Get_Instance()),
 	m_pCameraManager(CCameraManager::Get_Instance()),
-	m_pLoadHelper(CLoadHelper::Get_Instance())
+	m_pLoadHelper(CLoadHelper::Get_Instance()),
+	m_pDxrResource(CDXRResource::Get_Instance())
 #pragma endregion
 {
 	Safe_AddRef(m_pDeviceResource);
@@ -36,10 +38,13 @@ CGameInstance::CGameInstance() :
 	Safe_AddRef(m_pInputManager);
 	Safe_AddRef(m_pCameraManager);
 	Safe_AddRef(m_pAssetManager);
+	Safe_AddRef(m_pDxrResource);
 }
 
 HRESULT CGameInstance::Free()
 {
+	Safe_Release(m_pDxrResource);
+	Safe_Release(m_pDxrRenderer);
 	Safe_Release(m_pLoadHelper);
 	Safe_Release(m_pCameraManager);
 	Safe_Release(m_pInputManager);
@@ -56,24 +61,23 @@ HRESULT CGameInstance::Free()
 
 HRESULT CGameInstance::Init_Engine(GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Device** ppDevice)
 {
-	if (FAILED(m_pDeviceResource->Init_Graphic_Device(GraphicDesc.hWnd, GraphicDesc.eWinMode, GraphicDesc.iSizeX, GraphicDesc.iSizeY, ppDevice)))
-	{
-		return E_FAIL;
-	}
-
+	HRESULT hr = S_OK;
+	hr = m_pDeviceResource->Init_Graphic_Device(GraphicDesc.hWnd, GraphicDesc.eWinMode, GraphicDesc.iSizeX, GraphicDesc.iSizeY, ppDevice);
+	if (FAILED(hr)) { return E_FAIL; }
 	m_pHwndClient = &GraphicDesc.hWnd;
 
-	m_pComponentManager->Initialize();
-	m_pGameObjectManager->Initialize();
+	hr = m_pComponentManager->Initialize();
+	if (FAILED(hr)) { return E_FAIL; }
+	hr = m_pGameObjectManager->Initialize();
+	if (FAILED(hr)) { return E_FAIL; }
 
-	if (FAILED(m_pPipelineManager->Initialize()))
-	{
-		return E_FAIL;
-	}
+	hr = m_pPipelineManager->Initialize();
+	if (FAILED(hr)) { return E_FAIL; }
+
 	m_pD3DResourceManager->Initialize();
-	m_pLoadHelper->Initialize();
 
-	CDXRRenderer::Create(ppDevice);
+	hr = m_pLoadHelper->Initialize();;
+	if (FAILED(hr)) { return E_FAIL; }
 
 	return S_OK;
 }
@@ -104,15 +108,16 @@ void CGameInstance::Engine_Tick(FLOAT fDeltaTime)
 void CGameInstance::Release_Engine()
 {
 	// Destroy Managers or Singletons, 최종 삭제
-	CAssetManager::Destroy_Instance();
+	CDXRResource::Destroy_Instance();
+	CLoadHelper::Destroy_Instance();
 	CCameraManager::Destroy_Instance();
 	CInputManager::Destroy_Instance();
 	CD3DResourceManager::Destroy_Instance();
 	CPipelineManager::Destroy_Instance();
+	CAssetManager::Destroy_Instance();
 	CComponentManager::Destroy_Instance();
 	CGameObjectManager::Destroy_Instance();
 	CDeviceResource::Destroy_Instance();
-	CLoadHelper::Destroy_Instance();
 	CGameInstance::Get_Instance()->Destroy_Instance();
 }
 
@@ -186,6 +191,19 @@ void CGameInstance::Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum
 void CGameInstance::Set_MainCam(wstring strName)
 {
 	m_pCameraManager->Set_MainCam(strName);
+}
+
+HRESULT CGameInstance::Init_DXR()
+{
+	HRESULT hr = S_OK;
+
+	hr = m_pDxrResource->Initialize();
+	if (FAILED(hr)) { return E_FAIL; }
+
+	m_pDxrRenderer = CDXRRenderer::Create();
+	if (m_pDxrRenderer == nullptr) { hr = E_FAIL; }
+
+	return hr;
 }
 
 CRenderer* CGameInstance::Get_Renderer()

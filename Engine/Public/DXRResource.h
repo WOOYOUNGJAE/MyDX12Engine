@@ -1,32 +1,38 @@
 #pragma once
 #include "Base.h"
-// DirectX Raytracing Renderer
 
 NAMESPACE_(Engine)
 class CMeshData;
-class CDXRRenderer : public CBase
+using namespace std;
+class CDXRResource : public CBase
 {
+	DECLARE_SINGLETON(CDXRResource)
+	friend class CXRRenderer;
+
 protected:
-	CDXRRenderer() = default;
-	~CDXRRenderer() override = default;
+	CDXRResource() = default;
+	~CDXRResource() override = default;
 
 public:
-	static CDXRRenderer* Create();
-	HRESULT Initialize(ID3D12Device** _Inout_ ppDevice);
+	HRESULT Initialize();
 	HRESULT Free() override;
-
+public:
 	HRESULT Crete_RootSignatures();
 	HRESULT Create_PSOs();
 	HRESULT Build_AccelerationStructures();
-private:
-	ID3D12GraphicsCommandList4* m_pDxrCommandList = nullptr; // CmdList for Dxr
+private: // D3D Resource
+	ID3D12GraphicsCommandList4* m_pCommandList = nullptr; // CmdList for Dxr
 	ID3D12CommandAllocator* m_pCommandAllocator = nullptr;
+	ID3D12DescriptorHeap* m_pDescriptorHeap = nullptr; // CbvSrvUav Heap
 	ID3D12RootSignature* m_pRootSigArr[DXR_ROOTSIG_TYPE_END];
+	ID3D12StateObject* m_pDXR_PSO = nullptr;
 private: // pointer
 	ID3D12Device5* m_pDevice = nullptr;
-	ID3D12StateObject* m_pDXR_PSO = nullptr;
+private:
+	UINT m_iDescriptorSize = 0;
+	UINT m_iCbvSrvUavOffset = 0;
 private: // Manage
-	std::map<CMeshData*, DXR::ACCELERATION_STRUCTURE_CPU> m_mapAS_CPU;
+	map<CMeshData*, DXR::ACCELERATION_STRUCTURE_CPU> m_mapAS_CPU;
 private: // entry point str
 	static const wchar_t* m_tszHitGroupName;
 	static const wchar_t* m_tszRaygenShaderName;

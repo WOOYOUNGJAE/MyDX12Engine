@@ -42,7 +42,8 @@ HRESULT CMainApp::Initialize()
 	pLoader->Load();
 	Safe_Release(pLoader);
 
-
+	hr = m_pGameInstance->Init_DXR();
+	if (FAILED(hr)) { return hr; }
 
 #pragma region InLevel
 	CGameObject* pObjectControlling = nullptr;

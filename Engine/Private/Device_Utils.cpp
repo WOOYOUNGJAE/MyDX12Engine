@@ -90,17 +90,17 @@ ComPtr<ID3DBlob> CDevice_Utils::CompileShader(const std::wstring& filename, cons
     return byteCode;
 }
 
-D3D12_RAYTRACING_GEOMETRY_DESC CDevice_Utils::Generate_AccelerationStructureDesc(CMeshData* pMeshData)
+D3D12_RAYTRACING_GEOMETRY_DESC CDevice_Utils::Generate_AccelerationStructureDesc(CMeshData* pMeshData, ID3D12Resource* pSrvIndex, ID3D12Resource* pSrvVertex)
 {
     D3D12_RAYTRACING_GEOMETRY_DESC geometryDesc = {};
     geometryDesc.Type = D3D12_RAYTRACING_GEOMETRY_TYPE_TRIANGLES; // Fixed
-    geometryDesc.Triangles.IndexBuffer = pMeshData->Get_IndexBufferViewPtr()->BufferLocation;
+    geometryDesc.Triangles.IndexBuffer = pSrvIndex->GetGPUVirtualAddress();
     geometryDesc.Triangles.IndexCount = pMeshData->Num_Indices();
     geometryDesc.Triangles.IndexFormat = pMeshData->Get_IndexFormat();
     geometryDesc.Triangles.Transform3x4 = 0;
     geometryDesc.Triangles.VertexFormat = DXGI_FORMAT_R32G32B32_FLOAT; // Fixed
     geometryDesc.Triangles.VertexCount = pMeshData->Num_Vertices();
-    geometryDesc.Triangles.VertexBuffer.StartAddress = pMeshData->Get_VertexBufferViewPtr()->BufferLocation;
+    geometryDesc.Triangles.VertexBuffer.StartAddress = pSrvVertex->GetGPUVirtualAddress();
     geometryDesc.Triangles.VertexBuffer.StrideInBytes = pMeshData->Get_StrideInBytes();
 
     return geometryDesc;

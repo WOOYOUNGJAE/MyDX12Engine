@@ -18,7 +18,9 @@ public:
 	HRESULT Initialize(void* pArg) override; // Do Nothing (InitÀº Copy¿ë)
 	HRESULT Free() override;
 
-
+public:
+	DXGI_FORMAT Get_IndexFormat() override;
+	size_t Get_SingleVertexSize() override { return sizeof(VertexPositionSize); };
 };
 
 _NAMESPACE

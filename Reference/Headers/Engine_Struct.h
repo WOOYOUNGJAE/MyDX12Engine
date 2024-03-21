@@ -92,4 +92,15 @@ namespace Engine
 		UINT iFrameIndex = 0;
 	};
 
+#if DXR_ON
+	NAMESPACE_(DXR)
+	// CPU에서 잠깐 관리하는 AS, 메쉬 Vertex Index의 SRV를 보관할 뿐임
+	// Index Srv 만들어진 직후 바로 Vertex Srv 만들어져야 함
+	struct ACCELERATION_STRUCTURE_CPU 
+	{
+		ID3D12Resource* srv_Vertex;
+		ID3D12Resource* srv_Index;
+	};
+	_NAMESPACE
+#endif
 }
