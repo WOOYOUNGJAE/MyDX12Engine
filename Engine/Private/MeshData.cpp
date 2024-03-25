@@ -1,5 +1,6 @@
 #include "MeshData.h"
 #include "DeviceResource.h"
+#include "DXRResource.h"
 #include "UploadBuffer.h"
 
 CMeshData::CMeshData() :
@@ -22,6 +23,9 @@ m_indexBufferView(rhs.m_indexBufferView),
 m_iCbvSrvUavOffset(rhs.m_iCbvSrvUavOffset),
 m_vecVertexData(rhs.m_vecVertexData),
 m_vecIndexData(rhs.m_vecIndexData)
+#if DXR_ON
+,m_AS_CPU(rhs.m_AS_CPU)
+#endif
 {
 
 }
@@ -47,11 +51,85 @@ void CMeshData::Init_VBV_IBV()
 	m_indexBufferView.Format = m_IndexFormat;
 	m_indexBufferView.SizeInBytes = m_iIndexBufferByteSize;
 }
+#if DXR_ON
 
+void CMeshData::Build_BLAS(void* pIndexData, void* pVertexData, UINT64 iIndexDataSize, UINT64 iVertexDataSize)
+{
+	ID3D12Device5* pDevice = CDeviceResource::Get_Instance()->Get_Device5();
+	m_BLAS.indexBuffer = m_indexBufferGPU;
+	m_BLAS.vertexBuffer = m_vertexBufferGPU;
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE& cpuHandle = CDXRResource::Get_Instance()->Get_refHeapHandle_CPU();
+	UINT iDescriptorSize = CDXRResource::Get_Instance()->Get_DescriptorSize();
+
+	D3D12_RAYTRACING_GEOMETRY_TRIANGLES_DESC& refTriangles = m_BLAS.dxrGeometryDesc.Triangles;
+	m_BLAS.dxrGeometryDesc.Type = D3D12_RAYTRACING_GEOMETRY_TYPE_TRIANGLES;
+	m_BLAS.dxrGeometryDesc.Triangles.Transform3x4 = 0;
+	m_BLAS.dxrGeometryDesc.Flags = D3D12_RAYTRACING_GEOMETRY_FLAG_OPAQUE; // 일단 OPAQUE
+
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+#pragma region Create SRV of IB, VB
+	// Create Index SRV
+	srvDesc.Buffer.NumElements = m_iNumIndices / sizeof(UINT32);
+	srvDesc.Format = DXGI_FORMAT_R32_TYPELESS; // for Index Srv
+	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW; // 인덱스는 단순 정수 나열이므로 raw타입으로
+	srvDesc.Buffer.StructureByteStride = 0; //  D3D12_BUFFER_SRV_FLAG_RAW, 즉 원시 데이터로 접근할 때
+	cpuHandle.Offset(1, iDescriptorSize);
+	pDevice->CreateShaderResourceView(m_BLAS.indexBuffer, &srvDesc, cpuHandle); // Index Srv
+
+	refTriangles.IndexFormat = m_IndexFormat;
+	refTriangles.IndexCount = m_iNumIndices;
+	refTriangles.IndexBuffer = m_BLAS.indexBuffer->GetGPUVirtualAddress();
+
+	// Create Vertex SRV
+	srvDesc.Buffer.NumElements = m_iNumVertices;
+	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+	srvDesc.Buffer.StructureByteStride = UINT(Get_SingleVertexSize());
+	cpuHandle.Offset(1, iDescriptorSize);
+	pDevice->CreateShaderResourceView(m_BLAS.vertexBuffer, &srvDesc, cpuHandle); // Index Srv
+
+	refTriangles.VertexFormat = DXGI_FORMAT_R32G32B32_FLOAT; // Fixed
+	refTriangles.VertexCount = m_iNumVertices;
+	refTriangles.VertexBuffer.StartAddress = m_BLAS.vertexBuffer->GetGPUVirtualAddress();
+	refTriangles.VertexBuffer.StrideInBytes = UINT64(Get_SingleVertexSize());
+#pragma endregion
+
+	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC bottomLevelBuildDesc = {};
+	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS& refBottomLevelInputs = bottomLevelBuildDesc.Inputs;
+	refBottomLevelInputs.DescsLayout = D3D12_ELEMENTS_LAYOUT_ARRAY;
+	refBottomLevelInputs.Flags = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_PREFER_FAST_TRACE;
+	refBottomLevelInputs.NumDescs = 1;
+	refBottomLevelInputs.Type = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL;
+	refBottomLevelInputs.pGeometryDescs = &m_BLAS.dxrGeometryDesc;
+
+	D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO bottomLevelPrebuildInfo = {};
+	pDevice->GetRaytracingAccelerationStructurePrebuildInfo(&refBottomLevelInputs, &m_BLAS.prebuildInfo);
+	if (m_BLAS.prebuildInfo.ResultDataMaxSizeInBytes == 0)
+	{
+		MSG_BOX("MeshData : Building BLAS Failed");
+		return;
+	}
+
+	// Allocate UAV Buffer, 실질적인 BLAS
+	AllocateUAVBuffer(pDevice,
+		m_BLAS.prebuildInfo.ResultDataMaxSizeInBytes,
+		&m_BLAS.uav_BLAS,
+		D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE);
+}
+#endif
 HRESULT CMeshData::Free()
 {
 	if (m_bIsPrototype == true)
 	{
+#if DXR_ON
+		/*Safe_Release(m_AS_CPU.srv_Vertex);
+		Safe_Release(m_AS_CPU.srv_Index);*/
+		Safe_Release(m_BLAS.uav_BLAS);
+#endif
 		Safe_Release(m_vertexBufferCPU);
 		Safe_Release(m_indexBufferCPU);
 		Safe_Release(m_vertexBufferGPU);

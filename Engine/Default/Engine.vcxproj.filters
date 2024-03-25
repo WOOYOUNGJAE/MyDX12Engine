@@ -157,7 +157,7 @@
     <Filter Include="System\D3D Graphics\DXR\DXRRenderer">
       <UniqueIdentifier>{3e19260d-b02c-4f9f-9919-636e18dd8c84}</UniqueIdentifier>
     </Filter>
-    <Filter Include="System\D3D Graphics\DXR\DXR">
+    <Filter Include="System\D3D Graphics\DXR\DXRResource">
       <UniqueIdentifier>{a8a5c5a8-2438-470d-a0b0-ccbf1c85419b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -321,7 +321,9 @@
     <ClInclude Include="..\Bin\Shader\StaticCompiled\RaytracingHlslCompat.h">
       <Filter>0.Shaders\DXR</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\DXRResource.h" />
+    <ClInclude Include="..\Public\DXRResource.h">
+      <Filter>System\D3D Graphics\DXR\DXRResource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -447,7 +449,9 @@
     <ClCompile Include="..\Private\DXRRenderer.cpp">
       <Filter>System\D3D Graphics\DXR\DXRRenderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\DXRResource.cpp" />
+    <ClCompile Include="..\Private\DXRResource.cpp">
+      <Filter>System\D3D Graphics\DXR\DXRResource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\simpleShader.hlsl">

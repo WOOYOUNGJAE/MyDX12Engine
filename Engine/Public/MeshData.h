@@ -65,6 +65,18 @@ protected:
 protected:
 	vector<VertexPositionNormalTexture> m_vecVertexData;
 	vector<UINT32> m_vecIndexData; // UINT16 쓰는 메쉬는 자식에 따로 구현
+
+
+#if DXR_ON
+// MeshData 하나당 BLAS 하나 대응
+public:
+	virtual void Build_BLAS(void* pIndexData, void* pVertexData, UINT64 iIndexDataSize, UINT64 iVertexDataSize);
+	DXR::ACCELERATION_STRUCTURE_CPU& Get_refAS_CPU() { return m_AS_CPU; }
+	DXR::BLAS Get_BLAS() { return m_BLAS; }
+protected:
+	DXR::ACCELERATION_STRUCTURE_CPU m_AS_CPU{};
+	DXR::BLAS m_BLAS{};
+#endif
 };
 
 _NAMESPACE

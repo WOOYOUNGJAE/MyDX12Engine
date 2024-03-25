@@ -42,8 +42,8 @@ HRESULT CMainApp::Initialize()
 	pLoader->Load();
 	Safe_Release(pLoader);
 
-	hr = m_pGameInstance->Init_DXR();
-	if (FAILED(hr)) { return hr; }
+	/*hr = m_pGameInstance->Init_DXR();
+	if (FAILED(hr)) { return hr; }*/
 
 #pragma region InLevel
 	CGameObject* pObjectControlling = nullptr;
@@ -78,14 +78,15 @@ HRESULT CMainApp::Initialize()
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
 
-	objDesc.vStartPos = Vector3(1.f, 1.f, 0.f);
-	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
-	if (FAILED(hr)) { return hr; }
-
 	objDesc.strTag = L"ZeldaDemo";
 	objDesc.vStartPos = Vector3(2.f, 0.f, -5.f);
 	hr = m_pGameInstance->Add_GameObject_InScene(L"ZeldaDemo", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
+
+	/*objDesc.vStartPos = Vector3(1.f, 1.f, 0.f);
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }
+
 
 	objDesc.strTag = L"Grid_10X10";
 	objDesc.vStartPos = Vector3(-2.f, 0.f, -5.f);
@@ -102,7 +103,7 @@ HRESULT CMainApp::Initialize()
 	objDesc.vStartPos = Vector3(0, 0, -7);
 	objDesc.vStartScale = Vector3::One * 0.9f;
 	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
-	if (FAILED(hr)) { return hr; }
+	if (FAILED(hr)) { return hr; }*/
 
 	/*objDesc.strTag = L"Skybox";
 	objDesc.vStartPos = Vector3(0,3,0);
@@ -110,11 +111,11 @@ HRESULT CMainApp::Initialize()
 	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }*/
 
-	objDesc.strTag = L"TreeBillboard";
+	/*objDesc.strTag = L"TreeBillboard";
 	objDesc.vStartPos = Vector3(0, 0, 2);
 	objDesc.vStartScale = Vector3::One;
 	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
-	if (FAILED(hr)) { return hr; }
+	if (FAILED(hr)) { return hr; }*/
 #pragma endregion InLevel
 
 	// Renderer

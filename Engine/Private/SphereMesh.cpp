@@ -149,6 +149,10 @@ HRESULT CSphereMesh::Initialize_Prototype()
 	}
 
 	CMeshData::Init_VBV_IBV();
+#if DXR_ON
+	CMeshData::Build_BLAS(vecIndex16Data.data(), m_vecVertexData.data(),
+		iIndexBufferSize, sizeof(VertexPositionNormalTexture) * m_iNumVertices);
+#endif
 	return hr;
 }
 

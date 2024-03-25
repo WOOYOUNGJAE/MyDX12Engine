@@ -15,6 +15,7 @@
 #include "MeshObject.h"
 #include "AssetManager.h"
 #include "CylinderMesh.h"
+#include "DXRResource.h"
 #include "GridMesh.h"
 #include "SingleVertexMesh.h"
 #include "SphereMesh.h"
@@ -83,14 +84,21 @@ HRESULT CComponentManager::Initialize()
 	CAssetManager* pAssetManager = CAssetManager::Get_Instance();
 
 #pragma region MeshData
+#if DXR_ON
+	CDXRResource::Get_Instance()->Reset_CommandList();
 	pAssetManager->Add_MeshDataPrototype(L"CubeMesh", CCubeMesh::Create());
-	pAssetManager->Add_MeshDataPrototype(L"TriangleMesh", CTriangleMesh::Create());
-	pAssetManager->Add_MeshDataPrototype(L"TriangleMesh_PT", CTriangleMesh_PT::Create());
-	pAssetManager->Add_MeshDataPrototype(L"Grid_1X1", CGridMesh::Create(1, 1));
+	/*pAssetManager->Add_MeshDataPrototype(L"TriangleMesh", CTriangleMesh::Create());
+	pAssetManager->Add_MeshDataPrototype(L"TriangleMesh_PT", CTriangleMesh_PT::Create());*/
+
+	/*pAssetManager->Add_MeshDataPrototype(L"Grid_1X1", CGridMesh::Create(1, 1));
 	pAssetManager->Add_MeshDataPrototype(L"Grid_10X10", CGridMesh::Create(10, 10));
 	pAssetManager->Add_MeshDataPrototype(L"Cylinder_20_05_05", CCylinderMesh::Create(20, 0.5f, 0.5f));
 	pAssetManager->Add_MeshDataPrototype(L"Sphere_15X15", CSphereMesh::Create(15, 15));
-	pAssetManager->Add_MeshDataPrototype(L"SingleVertexMesh", CSingleVertexMesh::Create());
+	pAssetManager->Add_MeshDataPrototype(L"SingleVertexMesh", CSingleVertexMesh::Create());*/
+	CDXRResource::Get_Instance()->Close_CommandList();
+	CDXRResource::Get_Instance()->Execute_CommnadList();
+	CDXRResource::Get_Instance()->Flush_CommandQueue();
+#endif
 #pragma endregion
 
 

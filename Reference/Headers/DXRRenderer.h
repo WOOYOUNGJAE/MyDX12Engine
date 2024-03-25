@@ -2,6 +2,8 @@
 #include "Base.h"
 // DirectX Raytracing Renderer
 
+#if DXR_ON
+
 NAMESPACE_(Engine)
 class CMeshData;
 class CDXRRenderer : public CBase
@@ -26,7 +28,7 @@ private: // pointer
 	ID3D12Device5* m_pDevice = nullptr;
 	ID3D12StateObject* m_pDXR_PSO = nullptr;
 private: // Manage
-	std::map<CMeshData*, DXR::ACCELERATION_STRUCTURE_CPU> m_mapAS_CPU;
+	//std::map<CMeshData*, DXR::ACCELERATION_STRUCTURE_CPU> m_mapAS_CPU;
 private: // entry point str
 	static const wchar_t* m_tszHitGroupName;
 	static const wchar_t* m_tszRaygenShaderName;
@@ -35,3 +37,5 @@ private: // entry point str
 };
 
 _NAMESPACE
+
+#endif

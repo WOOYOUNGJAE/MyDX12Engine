@@ -104,6 +104,11 @@ HRESULT CSingleVertexMesh::Initialize_Prototype()
 	}
 
 	CMeshData::Init_VBV_IBV();
+#if DXR_ON
+	// 삼각형 아니기 때문에 AS 빌드 생략
+	/*CMeshData::Build_BLAS(vecIndexData.data(), vecVertexData.data(),
+		iIndexBufferSize, sizeof(VertexPositionSize) * m_iNumVertices);*/
+#endif
 	return hr;
 }
 

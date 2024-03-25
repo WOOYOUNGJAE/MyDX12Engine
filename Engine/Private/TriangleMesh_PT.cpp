@@ -118,7 +118,10 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 	}
 
 	CMeshData::Init_VBV_IBV();
-
+#if DXR_ON
+	CMeshData::Build_BLAS(m_vecIndexData.data(), m_vecVertexData.data(),
+		iIndexBufferSize, sizeof(VertexPositionNormalTexture) * m_iNumVertices);
+#endif
 	return S_OK;
 }
 

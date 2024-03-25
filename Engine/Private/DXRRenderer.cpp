@@ -4,6 +4,8 @@
 #include "AssetManager.h"
 #include "./Shaders/Raytracing.hlsl.h"
 
+#if DXR_ON
+
 const wchar_t* CDXRRenderer::m_tszHitGroupName = L"MyHitGroup";
 const wchar_t* CDXRRenderer::m_tszRaygenShaderName = L"MyRaygenShader";
 const wchar_t* CDXRRenderer::m_tszClosestHitShaderName = L"MyClosestHitShader";
@@ -270,3 +272,4 @@ HRESULT CDXRRenderer::Build_AccelerationStructures()
 	//return hr;
 	return S_OK;
 }
+#endif

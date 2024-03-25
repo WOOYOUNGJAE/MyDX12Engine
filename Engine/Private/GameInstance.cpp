@@ -17,7 +17,6 @@
 IMPLEMENT_SINGLETON(CGameInstance)
 
 CGameInstance::CGameInstance() :
-#pragma region Allocate Managers
 	m_pDeviceResource(CDeviceResource::Get_Instance()),
 	m_pComponentManager(CComponentManager::Get_Instance()),
 	m_pGameObjectManager(CGameObjectManager::Get_Instance()),
@@ -26,9 +25,10 @@ CGameInstance::CGameInstance() :
 	m_pD3DResourceManager(CD3DResourceManager::Get_Instance()),
 	m_pInputManager(CInputManager::Get_Instance()),
 	m_pCameraManager(CCameraManager::Get_Instance()),
-	m_pLoadHelper(CLoadHelper::Get_Instance()),
-	m_pDxrResource(CDXRResource::Get_Instance())
-#pragma endregion
+	m_pLoadHelper(CLoadHelper::Get_Instance())
+#if DXR_ON
+	,m_pDxrResource(CDXRResource::Get_Instance())
+#endif
 {
 	Safe_AddRef(m_pDeviceResource);
 	Safe_AddRef(m_pComponentManager);
@@ -38,13 +38,17 @@ CGameInstance::CGameInstance() :
 	Safe_AddRef(m_pInputManager);
 	Safe_AddRef(m_pCameraManager);
 	Safe_AddRef(m_pAssetManager);
+#if DXR_ON
 	Safe_AddRef(m_pDxrResource);
+#endif
 }
 
 HRESULT CGameInstance::Free()
 {
+#if DXR_ON
 	Safe_Release(m_pDxrResource);
 	Safe_Release(m_pDxrRenderer);
+#endif
 	Safe_Release(m_pLoadHelper);
 	Safe_Release(m_pCameraManager);
 	Safe_Release(m_pInputManager);
@@ -66,6 +70,11 @@ HRESULT CGameInstance::Init_Engine(GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Devi
 	if (FAILED(hr)) { return E_FAIL; }
 	m_pHwndClient = &GraphicDesc.hWnd;
 
+#ifdef DXR_ON
+	hr = Init_DXR();
+	if (FAILED(hr)) { return E_FAIL; }
+#endif
+
 	hr = m_pComponentManager->Initialize();
 	if (FAILED(hr)) { return E_FAIL; }
 	hr = m_pGameObjectManager->Initialize();
@@ -78,6 +87,9 @@ HRESULT CGameInstance::Init_Engine(GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Devi
 
 	hr = m_pLoadHelper->Initialize();;
 	if (FAILED(hr)) { return E_FAIL; }
+
+
+	//hr = Init_DXR();
 
 	return S_OK;
 }
@@ -108,7 +120,9 @@ void CGameInstance::Engine_Tick(FLOAT fDeltaTime)
 void CGameInstance::Release_Engine()
 {
 	// Destroy Managers or Singletons, 최종 삭제
+#if DXR_ON
 	CDXRResource::Destroy_Instance();
+#endif
 	CLoadHelper::Destroy_Instance();
 	CCameraManager::Destroy_Instance();
 	CInputManager::Destroy_Instance();
@@ -193,6 +207,12 @@ void CGameInstance::Set_MainCam(wstring strName)
 	m_pCameraManager->Set_MainCam(strName);
 }
 
+CRenderer* CGameInstance::Get_Renderer()
+{
+	return m_pComponentManager->Get_Instance()->Get_Renderer();
+}
+
+#if DXR_ON
 HRESULT CGameInstance::Init_DXR()
 {
 	HRESULT hr = S_OK;
@@ -205,8 +225,4 @@ HRESULT CGameInstance::Init_DXR()
 
 	return hr;
 }
-
-CRenderer* CGameInstance::Get_Renderer()
-{
-	return m_pComponentManager->Get_Instance()->Get_Renderer();
-}
+#endif
