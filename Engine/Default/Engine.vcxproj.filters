@@ -160,6 +160,15 @@
     <Filter Include="System\D3D Graphics\DXR\DXRResource">
       <UniqueIdentifier>{a8a5c5a8-2438-470d-a0b0-ccbf1c85419b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\Spatial Data Sturture">
+      <UniqueIdentifier>{4860928e-ee56-41f4-b570-ab0283f64c99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Spatial Data Sturture\BVH">
+      <UniqueIdentifier>{300f59d7-4266-4dff-892b-f7484f12f4ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Spatial Data Sturture\BVH\NodeAABB">
+      <UniqueIdentifier>{ba3ecbe3-51ea-478d-a123-74dc563dcea8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -324,6 +333,10 @@
     <ClInclude Include="..\Public\DXRResource.h">
       <Filter>System\D3D Graphics\DXR\DXRResource</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\BVH.h">
+      <Filter>Utility\Spatial Data Sturture\BVH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Node_AABB.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -452,6 +465,10 @@
     <ClCompile Include="..\Private\DXRResource.cpp">
       <Filter>System\D3D Graphics\DXR\DXRResource</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\BVH.cpp">
+      <Filter>Utility\Spatial Data Sturture\BVH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Node_AABB.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\simpleShader.hlsl">

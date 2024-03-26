@@ -50,8 +50,11 @@ HRESULT CMeshObject::Initialize(void* pArg)
 		{
 			m_vecMeshData.emplace_back(pInstance);
 #if DXR_ON
-			m_vecBlas.reserve(1);
-			m_vecBlas.emplace_back(pInstance->Get_BLAS());
+			/*vector<DXR::BLAS> vecTempBLAS;
+			vecTempBLAS.reserve(1);
+			vecTempBLAS.emplace_back(pInstance->Get_BLAS());
+			DXR::BLAS tempBLAS = pInstance->Get_BLAS();*/
+			m_uqpBuiltBLAS = make_unique<DXR::BLAS>(pInstance->Get_BLAS());
 #endif
 		}
 	}

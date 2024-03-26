@@ -97,6 +97,9 @@ void CMeshData::Build_BLAS(void* pIndexData, void* pVertexData, UINT64 iIndexDat
 	refTriangles.VertexBuffer.StartAddress = m_BLAS.vertexBuffer->GetGPUVirtualAddress();
 	refTriangles.VertexBuffer.StrideInBytes = UINT64(Get_SingleVertexSize());
 #pragma endregion
+	D3D12_RAYTRACING_GEOMETRY_AABBS_DESC& refAABBDesc = m_BLAS.dxrGeometryDesc.AABBs;
+
+
 
 	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC bottomLevelBuildDesc = {};
 	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS& refBottomLevelInputs = bottomLevelBuildDesc.Inputs;
@@ -113,6 +116,9 @@ void CMeshData::Build_BLAS(void* pIndexData, void* pVertexData, UINT64 iIndexDat
 		MSG_BOX("MeshData : Building BLAS Failed");
 		return;
 	}
+
+	// Allocate Scratch Buffer if cur Blas ResultDataMaxSizeInBytes is Bigger;
+	::AllocateScratch_IfBigger(pDevice, m_BLAS.prebuildInfo.ResultDataMaxSizeInBytes);	
 
 	// Allocate UAV Buffer, 실질적인 BLAS
 	AllocateUAVBuffer(pDevice,

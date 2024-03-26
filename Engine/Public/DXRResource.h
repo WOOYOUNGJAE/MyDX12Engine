@@ -21,6 +21,8 @@ public:
 public: // getter
 	CD3DX12_CPU_DESCRIPTOR_HANDLE& Get_refHeapHandle_CPU() { return m_curHeapHandle_CPU; }
 	UINT Get_DescriptorSize() { return m_iDescriptorSize; }
+	ID3D12Resource*& Get_ScratchBufferRef() { return m_pScratchBuffer; }
+	ID3D12Resource** Get_ScratchBufferPtr() { return &m_pScratchBuffer; }
 public:
 	HRESULT Crete_RootSignatures();
 	HRESULT Create_PSOs();
@@ -36,6 +38,7 @@ private: // D3D Resource
 	ID3D12DescriptorHeap* m_pDescriptorHeap = nullptr; // CbvSrvUav Heap
 	ID3D12RootSignature* m_pRootSigArr[DXR_ROOTSIG_TYPE_END];
 	ID3D12StateObject* m_pDXR_PSO = nullptr;
+	ID3D12Resource* m_pScratchBuffer = nullptr; // AS 빌드 중 필요한 낙서 버퍼.
 private: // pointer
 	ID3D12Device5* m_pDevice = nullptr;
 	ID3D12CommandQueue* m_pCommandQueue = nullptr; // CommandQueue는 기존거와 공유

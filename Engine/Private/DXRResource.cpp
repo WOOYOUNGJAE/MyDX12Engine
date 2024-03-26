@@ -475,6 +475,7 @@ void CDXRResource::Flush_CommandQueue()
 HRESULT CDXRResource::Free()
 {
 	CloseHandle(m_fenceEvent);
+	Safe_Release(m_pScratchBuffer);
 	Safe_Release(m_pFence);
 
 	Safe_Release(m_pDXR_PSO);

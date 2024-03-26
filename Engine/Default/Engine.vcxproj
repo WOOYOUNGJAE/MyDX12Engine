@@ -262,8 +262,10 @@
     <ClInclude Include="..\Public\Asset.h" />
     <ClInclude Include="..\Public\AssetManager.h" />
     <ClInclude Include="..\Public\Base.h" />
+    <ClInclude Include="..\Public\BVH.h" />
     <ClInclude Include="..\Public\DXRRenderer.h" />
     <ClInclude Include="..\Public\DXRResource.h" />
+    <ClInclude Include="..\Public\Node_AABB.h" />
     <ClInclude Include="..\Public\SingleVertexMesh.h" />
     <ClInclude Include="..\Public\Camera.h" />
     <ClInclude Include="..\Public\CameraManager.h" />
@@ -319,8 +321,10 @@
     <ClCompile Include="..\Private\Asset.cpp" />
     <ClCompile Include="..\Private\AssetManager.cpp" />
     <ClCompile Include="..\Private\Base.cpp" />
+    <ClCompile Include="..\Private\BVH.cpp" />
     <ClCompile Include="..\Private\DXRRenderer.cpp" />
     <ClCompile Include="..\Private\DXRResource.cpp" />
+    <ClCompile Include="..\Private\Node_AABB.cpp" />
     <ClCompile Include="..\Private\SingleVertexMesh.cpp" />
     <ClCompile Include="..\Private\Camera.cpp" />
     <ClCompile Include="..\Private\CameraManager.cpp" />

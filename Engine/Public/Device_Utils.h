@@ -1,4 +1,5 @@
 #pragma once
+#include "DXRResource.h"
 #include "Engine_Defines.h"
 #include "MeshData.h"
 
@@ -122,6 +123,26 @@ inline DXR::ACCELERATION_STRUCTURE_CPU Build_AccelerationStructures_CPU(CMeshDat
 	refTriangles.VertexBuffer.StrideInBytes = UINT64(pMeshData->Get_SingleVertexSize());
 
 	return as_CPU;
+}
+
+inline void AllocateScratch_IfBigger(ID3D12Device5* pDevice, UINT64 newWidth)
+{
+	ID3D12Resource** ppScratchBuffer = CDXRResource::Get_Instance()->Get_ScratchBufferPtr();
+	UINT64 iPrevWidth = 0;
+	if (*ppScratchBuffer)
+	{
+		iPrevWidth = (*ppScratchBuffer)->GetDesc().Width;;
+	}
+	UINT64 iWidth = max(iPrevWidth, newWidth);
+
+	if (iWidth > iPrevWidth)
+	{
+		Safe_Release(*ppScratchBuffer);
+		if (*ppScratchBuffer) { MSG_BOX("MeshData : Releasing Scratch Failed"); }
+
+		AllocateUAVBuffer(pDevice, iWidth, ppScratchBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+	}
 }
 #endif
 
