@@ -1,7 +1,6 @@
 #pragma once
 
 #include "FrameResource_Struct.h"
-
 namespace Engine
 {
 
@@ -109,6 +108,19 @@ namespace Engine
 		ID3D12Resource* uav_BLAS;
 		D3D12_RAYTRACING_GEOMETRY_DESC dxrGeometryDesc;
 		D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO prebuildInfo;
+	};
+
+	struct TLAS
+	{
+		ID3D12Resource* uav_TLAS;
+		ID3D12Resource* pInstanceDesc;
+	};
+
+	struct TLAS_NODE_INIT_DESC
+	{
+		
+		ID3D12Resource* pUAV_BLAS;
+		UINT iNumBlas;
 	};
 	_NAMESPACE
 #endif

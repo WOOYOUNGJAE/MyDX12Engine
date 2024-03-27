@@ -31,6 +31,13 @@ public:
 	HRESULT Reset_CommandList();
 	HRESULT Close_CommandList();
 	HRESULT Execute_CommnadList();
+	static void BuildRaytracingAccelerationStructure(
+		_In_  const D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC* pDesc,
+		_In_  UINT NumPostbuildInfoDescs,
+		_In_reads_opt_(NumPostbuildInfoDescs)  const D3D12_RAYTRACING_ACCELERATION_STRUCTURE_POSTBUILD_INFO_DESC* pPostbuildInfoDescs)
+	{
+		Get_Instance()->m_pCommandList->BuildRaytracingAccelerationStructure(pDesc, NumPostbuildInfoDescs, pPostbuildInfoDescs);
+	}
 	void Flush_CommandQueue();
 private: // D3D Resource
 	ID3D12GraphicsCommandList4* m_pCommandList = nullptr; // CmdList for Dxr

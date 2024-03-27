@@ -78,10 +78,10 @@ HRESULT CMainApp::Initialize()
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
 
-	objDesc.strTag = L"ZeldaDemo";
+	/*objDesc.strTag = L"ZeldaDemo";
 	objDesc.vStartPos = Vector3(2.f, 0.f, -5.f);
 	hr = m_pGameInstance->Add_GameObject_InScene(L"ZeldaDemo", OBJ_LAYER_0, &pObjectControlling, &objDesc);
-	if (FAILED(hr)) { return hr; }
+	if (FAILED(hr)) { return hr; }*/
 
 	/*objDesc.vStartPos = Vector3(1.f, 1.f, 0.f);
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);

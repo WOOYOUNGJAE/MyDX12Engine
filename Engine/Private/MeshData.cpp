@@ -118,13 +118,20 @@ void CMeshData::Build_BLAS(void* pIndexData, void* pVertexData, UINT64 iIndexDat
 	}
 
 	// Allocate Scratch Buffer if cur Blas ResultDataMaxSizeInBytes is Bigger;
-	::AllocateScratch_IfBigger(pDevice, m_BLAS.prebuildInfo.ResultDataMaxSizeInBytes);	
+	::DXR_Util::AllocateScratch_IfBigger(pDevice, m_BLAS.prebuildInfo.ResultDataMaxSizeInBytes);	
 
-	// Allocate UAV Buffer, 실질적인 BLAS
+	// Allocate UAV Buffer, 실질적인 BLAS Allocate
 	AllocateUAVBuffer(pDevice,
 		m_BLAS.prebuildInfo.ResultDataMaxSizeInBytes,
 		&m_BLAS.uav_BLAS,
 		D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE);
+
+	UINT iNumPostBuilds = 0;
+	D3D12_RAYTRACING_ACCELERATION_STRUCTURE_POSTBUILD_INFO_DESC* postBuildArr = nullptr;
+	bottomLevelBuildDesc.ScratchAccelerationStructureData = (*CDXRResource::Get_Instance()->Get_ScratchBufferPtr())->GetGPUVirtualAddress();
+	bottomLevelBuildDesc.DestAccelerationStructureData = m_BLAS.uav_BLAS->GetGPUVirtualAddress();
+	// 진짜로 GPU에서 BLAS Build
+	CDXRResource::BuildRaytracingAccelerationStructure(&bottomLevelBuildDesc, iNumPostBuilds, postBuildArr);
 }
 #endif
 HRESULT CMeshData::Free()

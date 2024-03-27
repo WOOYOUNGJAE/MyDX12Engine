@@ -1,6 +1,7 @@
 #include "Device_Utils.h"
 #include "MeshData.h"
 #include "MeshDataType.h"
+#include "DeviceResource.h"
 
 HRESULT CDevice_Utils::Create_Buffer_Default(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList,
                                              const void* initData, UINT64 byteSize, ID3D12Resource** ppUploadBuffer,
@@ -105,3 +106,53 @@ D3D12_RAYTRACING_GEOMETRY_DESC CDevice_Utils::Generate_AccelerationStructureDesc
 
     return geometryDesc;
 }
+
+#if DXR_ON
+
+void DXR_Util::Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** pUAV_BLASArr, UINT iNumBlas)
+{
+    ID3D12Resource*& pScratch = CDXRResource::Get_Instance()->Get_ScratchBufferRef();
+
+    // Get required sizes for an acceleration structure.
+    D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC topLevelBuildDesc = {};
+    D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS& refTopLevelInputs = topLevelBuildDesc.Inputs;
+    refTopLevelInputs.Type = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL;
+    refTopLevelInputs.DescsLayout = D3D12_ELEMENTS_LAYOUT_ARRAY;
+    refTopLevelInputs.Flags = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_PREFER_FAST_TRACE;
+    refTopLevelInputs.NumDescs = iNumBlas;
+
+    D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO topLevelPrebuildInfo = {};
+    pDevice->GetRaytracingAccelerationStructurePrebuildInfo(&refTopLevelInputs, &topLevelPrebuildInfo);
+    if (topLevelPrebuildInfo.ResultDataMaxSizeInBytes == 0) { MSG_BOX("Failed to Bulid TLAS"); return; }
+
+    ::Engine::DXR_Util::AllocateScratch_IfBigger(pDevice, topLevelPrebuildInfo.ResultDataMaxSizeInBytes);
+
+    // Allocate UAV Buffer, 실질적인 TLAS
+    AllocateUAVBuffer(pDevice, topLevelPrebuildInfo.ResultDataMaxSizeInBytes, ppOutUAV_TLAS, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE);
+
+    // Create instance descs for the bottom-level acceleration structures.
+    ID3D12Resource* instanceDescsResource; // 여기에 모든 InstanceDesc 한번에 저장
+    D3D12_RAYTRACING_INSTANCE_DESC* instanceDescArr = new D3D12_RAYTRACING_INSTANCE_DESC[iNumBlas]{};
+
+    for (UINT i = 0; i < iNumBlas; ++i)
+    {
+        instanceDescArr[i].Transform[0][0] = instanceDescArr[i].Transform[1][1] = instanceDescArr[i].Transform[2][2] = 1;
+        instanceDescArr[i].InstanceMask = 1;
+        instanceDescArr[i].AccelerationStructure = pUAV_BLASArr[i]->GetGPUVirtualAddress();
+    }
+
+    AllocateUploadBuffer(pDevice, instanceDescArr, sizeof(D3D12_RAYTRACING_INSTANCE_DESC) * iNumBlas, &instanceDescsResource);
+
+    // Top-level AS desc
+    {
+        topLevelBuildDesc.DestAccelerationStructureData = (*ppOutUAV_TLAS)->GetGPUVirtualAddress();
+        refTopLevelInputs.InstanceDescs = instanceDescsResource->GetGPUVirtualAddress();
+        topLevelBuildDesc.ScratchAccelerationStructureData = pScratch->GetGPUVirtualAddress();
+    }
+
+    // Build acceleration structure.
+    CDXRResource::BuildRaytracingAccelerationStructure(&topLevelBuildDesc, 0, nullptr);
+    Safe_Delete_Array(instanceDescArr);
+}
+
+#endif

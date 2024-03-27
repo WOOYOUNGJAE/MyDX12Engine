@@ -61,10 +61,10 @@ void CClientLoader::Load_3DModels()
 	std::string strAssetName = "zeldaPosed001.fbx";
 	std::wstring wstrMeshPrototypeTag = L"zeldaPosed001";
 
-	list<CMeshData*> meshList;
-	m_pHelper->Load_3DModel(strPath, strAssetName, &meshList);
-	//CMeshData::Normalize_Vertices(meshList);
-	CAssetManager::Get_Instance()->Add_MeshData_ClusteredPrototype(wstrMeshPrototypeTag, meshList);
+	//list<CMeshData*> meshList;
+	//m_pHelper->Load_3DModel(strPath, strAssetName, &meshList);
+	////CMeshData::Normalize_Vertices(meshList);
+	//CAssetManager::Get_Instance()->Add_MeshData_ClusteredPrototype(wstrMeshPrototypeTag, meshList);
 
 
 }

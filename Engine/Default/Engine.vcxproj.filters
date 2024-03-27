@@ -166,7 +166,10 @@
     <Filter Include="Utility\Spatial Data Sturture\BVH">
       <UniqueIdentifier>{300f59d7-4266-4dff-892b-f7484f12f4ff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\Spatial Data Sturture\BVH\NodeAABB">
+    <Filter Include="Utility\Spatial Data Sturture\SceneNode">
+      <UniqueIdentifier>{1608f808-2af0-4471-a2b7-932d644bb959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Spatial Data Sturture\SceneNode\SceneNodeAABB">
       <UniqueIdentifier>{ba3ecbe3-51ea-478d-a123-74dc563dcea8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -336,7 +339,12 @@
     <ClInclude Include="..\Public\BVH.h">
       <Filter>Utility\Spatial Data Sturture\BVH</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Node_AABB.h" />
+    <ClInclude Include="..\Public\SceneNode_AABB.h">
+      <Filter>Utility\Spatial Data Sturture\SceneNode\SceneNodeAABB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SceneNode.h">
+      <Filter>Utility\Spatial Data Sturture\SceneNode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -468,7 +476,12 @@
     <ClCompile Include="..\Private\BVH.cpp">
       <Filter>Utility\Spatial Data Sturture\BVH</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Node_AABB.cpp" />
+    <ClCompile Include="..\Private\SceneNode_AABB.cpp">
+      <Filter>Utility\Spatial Data Sturture\SceneNode\SceneNodeAABB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SceneNode.cpp">
+      <Filter>Utility\Spatial Data Sturture\SceneNode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\simpleShader.hlsl">

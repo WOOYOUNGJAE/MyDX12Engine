@@ -86,6 +86,7 @@ HRESULT CComponentManager::Initialize()
 #pragma region MeshData
 #if DXR_ON
 	CDXRResource::Get_Instance()->Reset_CommandList();
+#endif
 	pAssetManager->Add_MeshDataPrototype(L"CubeMesh", CCubeMesh::Create());
 	/*pAssetManager->Add_MeshDataPrototype(L"TriangleMesh", CTriangleMesh::Create());
 	pAssetManager->Add_MeshDataPrototype(L"TriangleMesh_PT", CTriangleMesh_PT::Create());*/
@@ -95,6 +96,7 @@ HRESULT CComponentManager::Initialize()
 	pAssetManager->Add_MeshDataPrototype(L"Cylinder_20_05_05", CCylinderMesh::Create(20, 0.5f, 0.5f));
 	pAssetManager->Add_MeshDataPrototype(L"Sphere_15X15", CSphereMesh::Create(15, 15));
 	pAssetManager->Add_MeshDataPrototype(L"SingleVertexMesh", CSingleVertexMesh::Create());*/
+#if DXR_ON
 	CDXRResource::Get_Instance()->Close_CommandList();
 	CDXRResource::Get_Instance()->Execute_CommnadList();
 	CDXRResource::Get_Instance()->Flush_CommandQueue();

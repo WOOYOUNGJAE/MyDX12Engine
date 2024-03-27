@@ -83,6 +83,9 @@ inline HRESULT AllocateUAVBuffer(ID3D12Device* pDevice, UINT64 bufferSize, ID3D1
 }
 
 #if DXR_ON
+
+NAMESPACE_(DXR_Util)
+
 // Build IB, VB SRV
 inline DXR::ACCELERATION_STRUCTURE_CPU Build_AccelerationStructures_CPU(CMeshData* pMeshData, ID3D12Device* pDevice, CD3DX12_CPU_DESCRIPTOR_HANDLE& refCpuHandle, UINT iDescriptorSize)
 {
@@ -144,6 +147,12 @@ inline void AllocateScratch_IfBigger(ID3D12Device5* pDevice, UINT64 newWidth)
 
 	}
 }
-#endif
+
+void Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** pUAV_BLASArr, UINT iNumBlas);
+
+
+_NAMESPACE
+
+#endif DXR_ON
 
 _NAMESPACE

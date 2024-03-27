@@ -45,6 +45,13 @@ protected:
 	wstring m_strPrototypeTag;
 	map<wstring, CComponent*> m_mapComponents;
 	UINT64 m_iTextureSrvOffset = ULONGLONG_MAX; // 일단 오브젝트당 텍스처 1개 가정
+
+#if DXR_ON
+public:
+	DXR::BLAS* Get_BLAS_Ptr() { return m_uqpBlAS.get(); }
+protected:
+	unique_ptr<DXR::BLAS> m_uqpBlAS; // 컴포넌트인 MeshObject에서 소유권 가져옴
+#endif
 };
 
 _NAMESPACE
