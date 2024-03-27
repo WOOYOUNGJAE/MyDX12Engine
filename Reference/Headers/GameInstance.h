@@ -38,6 +38,10 @@ public: // Manager Function Offer
 	void Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum);
 	// CameraManger
 	void Set_MainCam(wstring strName);
+	// Spatial Data Structure Manager
+#if DXR_ON
+	void Build_AccelerationStructureTree(CGameObject** pGameObjArr, UINT iArrSize);
+#endif
 public:
 	class CRenderer* Get_Renderer();
 

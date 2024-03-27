@@ -21,6 +21,21 @@ void CSDSManager::Register_SceneNode(CSceneNode* pNodeInstance, CGameObject* pCo
 	}
 }
 
+CSceneNode* CSDSManager::FindandGet_LeafNode(CGameObject* pKeyObj, UINT eTreeType)
+{
+	auto mapPair = m_mapGameObj_To_LeafNodes.find(pKeyObj);
+
+	// 처음 등록되는 게임오브젝트 키 (없을 때)
+	if (mapPair == m_mapGameObj_To_LeafNodes.end())
+	{
+		return nullptr;
+	}
+	else // 이미 리프노드 배열이 존재할 때
+	{
+		return mapPair->second[eTreeType];
+	}
+}
+
 HRESULT CSDSManager::Free()
 {
 	HRESULT hr = S_OK;
@@ -32,5 +47,11 @@ HRESULT CSDSManager::Free()
 			Safe_Release(mapPair.second[i]);
 		}
 	}
+
+	for (auto& iterBVH : m_vecAccelerationTree)
+	{
+		Safe_Release(iterBVH);
+	}
+
 	return hr;
 }

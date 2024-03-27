@@ -3,6 +3,7 @@
 
 NAMESPACE_(Engine)
 using namespace std;
+class CBVH;
 class CGameObject;
 class CSceneNode;
 // Spatial Data Structure Manager
@@ -15,12 +16,21 @@ protected:
 	~CSDSManager() override = default;
 
 public:
-	void Register_SceneNode(CSceneNode* pNodeInstance, CGameObject* pContainingObj, UINT eTreeType);
 	HRESULT Free() override;
+public:
+	void Register_SceneNode(CSceneNode* pNodeInstance, CGameObject* pContainingObj, UINT eTreeType);
+	CSceneNode* FindandGet_LeafNode(CGameObject* pKeyObj, UINT eTreeType);
 
 private:
 	// GameObj -> Array[LeafNode0, LeafNode1, ...]
 	map<CGameObject*, array<CSceneNode*, SDS_TREE_TYPE_END>> m_mapGameObj_To_LeafNodes;
+
+#if DXR_ON
+public:
+	void Push_AccelerationTree(CBVH* pASTreeInstance) { m_vecAccelerationTree.emplace_back(pASTreeInstance); }
+private:
+	vector<CBVH*> m_vecAccelerationTree; // Acceleration Structure Tree
+#endif
 };
 
 _NAMESPACE

@@ -71,10 +71,8 @@ protected:
 // MeshData 하나당 BLAS 하나 대응
 public:
 	virtual void Build_BLAS(void* pIndexData, void* pVertexData, UINT64 iIndexDataSize, UINT64 iVertexDataSize);
-	DXR::ACCELERATION_STRUCTURE_CPU& Get_refAS_CPU() { return m_AS_CPU; }
 	DXR::BLAS Get_BLAS() { return m_BLAS; }
 protected:
-	DXR::ACCELERATION_STRUCTURE_CPU m_AS_CPU{};
 	DXR::BLAS m_BLAS{};
 #endif
 };

@@ -29,7 +29,7 @@ protected: // Else If Leaf
 	CGameObject* m_pContainingObj = nullptr; // leaf가 아니면 nullptr
 
 #if DXR_ON
-	DXR::TLAS* m_TLAS;
+	DXR::TLAS m_TLAS{};
 #endif
 };
 

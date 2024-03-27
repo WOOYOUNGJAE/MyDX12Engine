@@ -10,7 +10,10 @@ protected:
 	~CBVH() override = default;
 
 public:
+	static CBVH* Create();
 	HRESULT Free() override;
+public:
+	void Set_Root(CSceneNode_AABB* pRoot) { m_pRoot = pRoot; }
 
 private:
 	CSceneNode_AABB* m_pRoot = nullptr;

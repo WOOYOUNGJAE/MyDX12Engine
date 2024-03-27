@@ -28,7 +28,7 @@ private:
 public:
 	DXR::BLAS* Get_BLAS() { return m_pContainingBLAS; }
 private:
-	DXR::BLAS* m_pContainingBLAS = nullptr;
+	DXR::BLAS* m_pContainingBLAS = nullptr; // pointer
 #endif
 };
 

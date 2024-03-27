@@ -109,7 +109,7 @@ D3D12_RAYTRACING_GEOMETRY_DESC CDevice_Utils::Generate_AccelerationStructureDesc
 
 #if DXR_ON
 
-void DXR_Util::Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** pUAV_BLASArr, UINT iNumBlas)
+void DXR_Util::Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** ppOutInstanceDescResource, ID3D12Resource** pUAV_BLASArr, UINT iNumBlas)
 {
     ID3D12Resource*& pScratch = CDXRResource::Get_Instance()->Get_ScratchBufferRef();
 
@@ -131,7 +131,6 @@ void DXR_Util::Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS
     AllocateUAVBuffer(pDevice, topLevelPrebuildInfo.ResultDataMaxSizeInBytes, ppOutUAV_TLAS, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE);
 
     // Create instance descs for the bottom-level acceleration structures.
-    ID3D12Resource* instanceDescsResource; // 여기에 모든 InstanceDesc 한번에 저장
     D3D12_RAYTRACING_INSTANCE_DESC* instanceDescArr = new D3D12_RAYTRACING_INSTANCE_DESC[iNumBlas]{};
 
     for (UINT i = 0; i < iNumBlas; ++i)
@@ -141,12 +140,12 @@ void DXR_Util::Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS
         instanceDescArr[i].AccelerationStructure = pUAV_BLASArr[i]->GetGPUVirtualAddress();
     }
 
-    AllocateUploadBuffer(pDevice, instanceDescArr, sizeof(D3D12_RAYTRACING_INSTANCE_DESC) * iNumBlas, &instanceDescsResource);
+    AllocateUploadBuffer(pDevice, instanceDescArr, sizeof(D3D12_RAYTRACING_INSTANCE_DESC) * iNumBlas, ppOutInstanceDescResource);
 
     // Top-level AS desc
     {
         topLevelBuildDesc.DestAccelerationStructureData = (*ppOutUAV_TLAS)->GetGPUVirtualAddress();
-        refTopLevelInputs.InstanceDescs = instanceDescsResource->GetGPUVirtualAddress();
+        refTopLevelInputs.InstanceDescs = (*ppOutInstanceDescResource)->GetGPUVirtualAddress();
         topLevelBuildDesc.ScratchAccelerationStructureData = pScratch->GetGPUVirtualAddress();
     }
 

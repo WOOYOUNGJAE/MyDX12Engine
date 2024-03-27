@@ -51,6 +51,7 @@ HRESULT CMainApp::Initialize()
 	objDesc.vStartPos = Vector3(0.f, 0.f, 0.f);
 	objDesc.vStartScale = Vector3::One;
 
+
 	hr = m_pGameInstance->Add_GameObjPrototype(L"Camera_Free", CCamera_Free::Create());
 	if (FAILED(hr)) { return hr; }
 	hr = m_pGameInstance->Add_GameObjPrototype(L"ZeldaDemo", CZeldaDemo::Create());
@@ -72,11 +73,22 @@ HRESULT CMainApp::Initialize()
 	objDesc.vStartPos = Vector3(0, 0, 1);
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }*/
+#pragma region Static GameObject
 
+#if DXR_ON
+	vector<CGameObject*> gameObjArr_For_AccelerationTree_Static;
+#endif
 	objDesc.strTag = L"Cube";
 	objDesc.vStartPos = Vector3::Zero;
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
+#if DXR_ON
+	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
+	CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
+#endif DXR_ON
+
+#pragma endregion Static GameObject 
+
 
 	/*objDesc.strTag = L"ZeldaDemo";
 	objDesc.vStartPos = Vector3(2.f, 0.f, -5.f);

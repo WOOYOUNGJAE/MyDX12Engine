@@ -14,6 +14,8 @@
 #include "DXRRenderer.h"
 #include "DXRResource.h"
 #include "SDSManager.h"
+#include "BVH.h"
+#include "SceneNode_AABB.h"
 #pragma endregion
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -211,6 +213,37 @@ void CGameInstance::Set_MainCam(wstring strName)
 {
 	m_pCameraManager->Set_MainCam(strName);
 }
+
+#if DXR_ON
+void CGameInstance::Build_AccelerationStructureTree(CGameObject** pGameObjArr, UINT iArrSize)
+{
+	CBVH* pAccelerationTreeInstance = CBVH::Create(); // Manager에서 삭제
+
+	CSceneNode** pChildNodeArr = new CSceneNode*[iArrSize];
+	for (UINT i = 0; i < iArrSize; ++i)
+	{
+		CSceneNode* pNodeInstance = m_pSDSManager->FindandGet_LeafNode(pGameObjArr[i], SDS_AS);
+		if (pNodeInstance == nullptr)
+		{
+			MSG_BOX("Build AS Tree Failed : Child Node Doesn't Exist or Didn't Registered to Manager");
+			return;
+		}
+		pChildNodeArr[i] = pNodeInstance;
+	}
+
+	m_pDxrResource->Reset_CommandList();
+
+	CSceneNode_AABB* pNodeTLAS = CSceneNode_AABB::Create(pChildNodeArr, iArrSize, true);
+	pAccelerationTreeInstance->Set_Root(pNodeTLAS);
+
+	m_pSDSManager->Push_AccelerationTree(pAccelerationTreeInstance);
+
+	m_pDxrResource->Close_CommandList();
+	m_pDxrResource->Execute_CommnadList();
+
+	Safe_Delete_Array(pChildNodeArr);
+}
+#endif
 
 CRenderer* CGameInstance::Get_Renderer()
 {

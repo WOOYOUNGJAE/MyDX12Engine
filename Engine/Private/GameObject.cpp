@@ -49,7 +49,7 @@ HRESULT CGameObject::Add_Component(const wstring& strComTag, CComponent** ppOutC
 #if DXR_ON
 CSceneNode* CGameObject::Make_NodeBLAS()
 {
-	return CSceneNode_AABB::Create(nullptr, 0, true, this);
+	return CSceneNode_AABB::Create(nullptr, 0, false, this);
 }
 #endif
 

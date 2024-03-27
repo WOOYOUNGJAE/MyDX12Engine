@@ -24,7 +24,7 @@ m_iCbvSrvUavOffset(rhs.m_iCbvSrvUavOffset),
 m_vecVertexData(rhs.m_vecVertexData),
 m_vecIndexData(rhs.m_vecIndexData)
 #if DXR_ON
-,m_AS_CPU(rhs.m_AS_CPU)
+,m_BLAS(rhs.m_BLAS)
 #endif
 {
 

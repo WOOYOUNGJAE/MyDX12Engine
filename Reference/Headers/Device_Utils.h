@@ -148,7 +148,7 @@ inline void AllocateScratch_IfBigger(ID3D12Device5* pDevice, UINT64 newWidth)
 	}
 }
 
-void Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** pUAV_BLASArr, UINT iNumBlas);
+void Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** ppOutInstanceDescResource, ID3D12Resource** pUAV_BLASArr, UINT iNumBlas);
 
 
 _NAMESPACE

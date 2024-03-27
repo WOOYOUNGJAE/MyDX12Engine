@@ -5,9 +5,9 @@ CSceneNode_AABB* CSceneNode_AABB::Create(CSceneNode** pChildNodeArr, UINT iArrSi
 {
 	CSceneNode_AABB* pInstance = new CSceneNode_AABB;
 
-	pInstance->m_pContainingObj = pContainingObj;
+	pInstance->Set_ContainingObj(pContainingObj);
 
-	if (FAILED(pInstance->Initialize(pChildNodeArr, iArrSize)))
+	if (FAILED(pInstance->Initialize(pChildNodeArr, iArrSize, bIsTLAS)))
 	{
 		Safe_Release(pInstance);
 		MSG_BOX("SceneNode : Failed to Init");
@@ -24,8 +24,8 @@ HRESULT CSceneNode_AABB::Initialize(CSceneNode** pChildNodeArr, UINT iChildArrSi
 	hr = CSceneNode::Initialize(pChildNodeArr, iChildArrSize, bIsTLAS);
 	if (FAILED(hr)) { return hr; }
 
-	// TODO: Make AABB
 
+	// TODO: Make AABB
 
 
 	return hr;
@@ -38,6 +38,11 @@ HRESULT CSceneNode_AABB::Free()
 
 void CSceneNode_AABB::Set_ContainingObj(CGameObject* pGameObj)
 {
+	if (pGameObj == nullptr)
+	{
+		return;
+	}
+
 	CSceneNode::Set_ContainingObj(pGameObj);
 
 #if DXR_ON
