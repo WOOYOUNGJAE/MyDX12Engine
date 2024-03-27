@@ -52,6 +52,7 @@ private: // Singleton
 	class CD3DResourceManager* m_pD3DResourceManager = nullptr;
 	class CInputManager* m_pInputManager = nullptr;
 	class CCameraManager* m_pCameraManager = nullptr;
+	class CSDSManager* m_pSDSManager = nullptr;
 	class CLoadHelper* m_pLoadHelper = nullptr;
 #if DXR_ON
 public:

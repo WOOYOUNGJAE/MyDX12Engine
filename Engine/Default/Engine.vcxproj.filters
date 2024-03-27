@@ -172,6 +172,9 @@
     <Filter Include="Utility\Spatial Data Sturture\SceneNode\SceneNodeAABB">
       <UniqueIdentifier>{ba3ecbe3-51ea-478d-a123-74dc563dcea8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\Managers\SpatialDataStructure">
+      <UniqueIdentifier>{f00d9415-fa11-484d-8f10-d7b46388941f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -345,6 +348,7 @@
     <ClInclude Include="..\Public\SceneNode.h">
       <Filter>Utility\Spatial Data Sturture\SceneNode</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\SDSManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -482,6 +486,7 @@
     <ClCompile Include="..\Private\SceneNode.cpp">
       <Filter>Utility\Spatial Data Sturture\SceneNode</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\SDSManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\simpleShader.hlsl">

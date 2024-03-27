@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include "GameInstance.h"
 #include "Renderer.h"
+#include "SceneNode_AABB.h"
 
 HRESULT CGameObject::Free()
 {
@@ -44,3 +45,11 @@ HRESULT CGameObject::Add_Component(const wstring& strComTag, CComponent** ppOutC
 	Safe_Release(pGameInstance);
 	return S_OK;
 }
+
+#if DXR_ON
+CSceneNode* CGameObject::Make_NodeBLAS()
+{
+	return CSceneNode_AABB::Create(nullptr, 0, true, this);
+}
+#endif
+

@@ -1,9 +1,11 @@
 #include "SceneNode_AABB.h"
 #include "GameObject.h"
 
-CSceneNode_AABB* CSceneNode_AABB::Create(CSceneNode** pChildNodeArr, UINT iArrSize, bool bIsTLAS)
+CSceneNode_AABB* CSceneNode_AABB::Create(CSceneNode** pChildNodeArr, UINT iArrSize, bool bIsTLAS, CGameObject* pContainingObj)
 {
 	CSceneNode_AABB* pInstance = new CSceneNode_AABB;
+
+	pInstance->m_pContainingObj = pContainingObj;
 
 	if (FAILED(pInstance->Initialize(pChildNodeArr, iArrSize)))
 	{

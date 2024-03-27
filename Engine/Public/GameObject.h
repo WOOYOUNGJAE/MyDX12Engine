@@ -2,6 +2,7 @@
 #include "Base.h"
 
 NAMESPACE_(Engine)
+class CSceneNode;
 using namespace std;
 // 텍스쳐(SrvOffset)는 텍스쳐컴포넌트로 들고 있을 수도, 메쉬 컴포넌트가 들고 있을 수도 있음
 class ENGINE_DLL CGameObject abstract : public CBase
@@ -48,6 +49,7 @@ protected:
 
 #if DXR_ON
 public:
+	CSceneNode* Make_NodeBLAS();
 	DXR::BLAS* Get_BLAS_Ptr() { return m_uqpBlAS.get(); }
 protected:
 	unique_ptr<DXR::BLAS> m_uqpBlAS; // 컴포넌트인 MeshObject에서 소유권 가져옴

@@ -6,6 +6,7 @@
 #include "Shader.h"
 #include "Material.h"
 #include "MeshData.h"
+#include "SDSManager.h"
 
 CCube* CCube::Create()
 {
@@ -72,6 +73,8 @@ HRESULT CCube::Initialize(void* pArg)
 
 #if DXR_ON
 	m_uqpBlAS = m_pMeshObjectCom->Move_BuiltBLAS();
+
+	CSDSManager::Get_Instance()->Register_SceneNode(CGameObject::Make_NodeBLAS(), this, SDS_AS);
 #endif
 
 	return hr;

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "SceneNode.h"
-class CGameObject;
 NAMESPACE_(Engine)
+class CGameObject;
 // 주로 BVH 용도를 위한 AABB 노드
 // DXR에서는 BLAS을 위해서만 활용
 class CSceneNode_AABB : public CSceneNode
@@ -13,7 +13,7 @@ protected:
 
 public:
 	// If Binary Tree, Left Child Argument First
-	static CSceneNode_AABB* Create(CSceneNode** pChildNodeArr, UINT iArrSize = 2, bool bIsTLAS = false);
+	static CSceneNode_AABB* Create(CSceneNode** pChildNodeArr, UINT iArrSize = 2, bool bIsTLAS = false, CGameObject* pContainingObj = nullptr);
 	HRESULT Initialize(CSceneNode** pChildNodeArr, UINT iChildArrSize = 2, bool bIsTLAS = false);
 	HRESULT Free() override;
 public:

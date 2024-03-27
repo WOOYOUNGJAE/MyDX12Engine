@@ -13,6 +13,7 @@
 #include "CameraManager.h"
 #include "DXRRenderer.h"
 #include "DXRResource.h"
+#include "SDSManager.h"
 #pragma endregion
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -25,6 +26,7 @@ CGameInstance::CGameInstance() :
 	m_pD3DResourceManager(CD3DResourceManager::Get_Instance()),
 	m_pInputManager(CInputManager::Get_Instance()),
 	m_pCameraManager(CCameraManager::Get_Instance()),
+	m_pSDSManager(CSDSManager::Get_Instance()),
 	m_pLoadHelper(CLoadHelper::Get_Instance())
 #if DXR_ON
 	,m_pDxrResource(CDXRResource::Get_Instance())
@@ -34,10 +36,11 @@ CGameInstance::CGameInstance() :
 	Safe_AddRef(m_pComponentManager);
 	Safe_AddRef(m_pGameObjectManager);
 	Safe_AddRef(m_pPipelineManager);
+	Safe_AddRef(m_pAssetManager);
 	Safe_AddRef(m_pD3DResourceManager);
 	Safe_AddRef(m_pInputManager);
 	Safe_AddRef(m_pCameraManager);
-	Safe_AddRef(m_pAssetManager);
+	Safe_AddRef(m_pSDSManager);
 #if DXR_ON
 	Safe_AddRef(m_pDxrResource);
 #endif
@@ -50,6 +53,7 @@ HRESULT CGameInstance::Free()
 	Safe_Release(m_pDxrRenderer);
 #endif
 	Safe_Release(m_pLoadHelper);
+	Safe_Release(m_pSDSManager);
 	Safe_Release(m_pCameraManager);
 	Safe_Release(m_pInputManager);
 	Safe_Release(m_pD3DResourceManager);
@@ -124,6 +128,7 @@ void CGameInstance::Release_Engine()
 	CDXRResource::Destroy_Instance();
 #endif
 	CLoadHelper::Destroy_Instance();
+	CSDSManager::Destroy_Instance();
 	CCameraManager::Destroy_Instance();
 	CInputManager::Destroy_Instance();
 	CD3DResourceManager::Destroy_Instance();

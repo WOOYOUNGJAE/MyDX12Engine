@@ -14,16 +14,18 @@ protected:
 
 public:
 	// If Binary Tree, Left Child Argument First
-	static CSceneNode* Create(CSceneNode_AABB** pChildNodeArr, UINT iArrSize = 2, bool bIsTLAS = false);
-	HRESULT Initialize(CSceneNode_AABB** pChildNodeArr, UINT iChildArrSize = 2, bool bIsTLAS = false);
+	static CSceneNode* Create(CSceneNode** pChildNodeArr, UINT iArrSize = 2, bool bIsTLAS = false, CGameObject* pContainingObj = nullptr);
+	HRESULT Initialize(CSceneNode** pChildNodeArr, UINT iChildArrSize = 2, bool bIsTLAS = false);
 	HRESULT Free() override;
+public:
+	virtual void Set_ContainingObj(CGameObject* pGameObj);
 
 protected: // If Binary Tree
 	CSceneNode* m_pLeftChild = nullptr;
 	CSceneNode* m_pRightChild = nullptr;
-protected: // If NOT Binary Tree
+protected: // Else If NOT Binary Tree
 	std::vector<CSceneNode*> m_vecChildNode;
-protected: // If Leaf
+protected: // Else If Leaf
 	CGameObject* m_pContainingObj = nullptr; // leaf가 아니면 nullptr
 
 #if DXR_ON

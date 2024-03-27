@@ -4,9 +4,11 @@
 #include "DeviceResource.h"
 #include "Device_Utils.h"
 
-CSceneNode* CSceneNode::Create(CSceneNode** pChildNodeArr, UINT iArrSize, bool bIsTLAS)
+CSceneNode* CSceneNode::Create(CSceneNode** pChildNodeArr, UINT iArrSize, bool bIsTLAS, CGameObject* pContainingObj)
 {
 	CSceneNode* pInstance = new CSceneNode;
+
+	pInstance->m_pContainingObj = pContainingObj;
 
 	if (FAILED(pInstance->Initialize(pChildNodeArr, iArrSize)))
 	{

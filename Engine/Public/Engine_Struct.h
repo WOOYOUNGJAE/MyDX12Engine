@@ -15,6 +15,7 @@ namespace Engine
 
 	struct GAMEOBJECT_INIT_DESC
 	{
+		bool bMakeBLAS;
 		Vector3 vStartPos;
 		Vector3 vStartScale;
 		std::wstring strTag;
