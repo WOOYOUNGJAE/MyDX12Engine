@@ -29,6 +29,26 @@ private:
 	std::wstring m_strName;
 	std::vector<TABLE_RECORD_DESC> m_vecRecords;
 
+public:
+    // Pretty-print the shader records.
+    void DebugPrint(std::unordered_map<void*, std::wstring> shaderIdToStringMap)
+    {
+        std::wstringstream wstr;
+        wstr << L"|--------------------------------------------------------------------\n";
+        wstr << L"|Shader table - " << m_strName.c_str() << L": "
+            << m_iSingleRecordSize << L" | "
+            << m_vecRecords.size() * m_iSingleRecordSize << L" bytes\n";
+
+        for (UINT i = 0; i < m_vecRecords.size(); i++)
+        {
+            wstr << L"| [" << i << L"]: ";
+            wstr << shaderIdToStringMap[m_vecRecords[i].pIdentifierData] << L", ";
+            wstr << m_vecRecords[i].iIdentifierSize << L" + " << m_vecRecords[i].iLocalRootArgumentSize << L" bytes \n";
+        }
+        wstr << L"|--------------------------------------------------------------------\n";
+        wstr << L"\n";
+        OutputDebugStringW(wstr.str().c_str());
+    }
 };
 
 _NAMESPACE

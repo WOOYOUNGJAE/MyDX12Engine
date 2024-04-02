@@ -291,8 +291,9 @@ HRESULT CDXRResource::Build_ShaderTable()
 
 	// Get shader identifiers.
 	UINT iShaderIdentifierSize = D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES;
-
-LOCAL_BLOCK_//Ray Gen Shader Table
+	UINT iNumShaderRecords = 1;
+	UINT iSingleRecordSize = iShaderIdentifierSize;
+LOCAL_BLOCK_// Ray Gen Shader Table
 	using DXR::TABLE_RECORD_DESC;
 	TABLE_RECORD_DESC tableRecordDesc = TABLE_RECORD_DESC
 	{ D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
@@ -301,19 +302,77 @@ LOCAL_BLOCK_//Ray Gen Shader Table
 		nullptr
 	};
 
-	UINT iNumShaderRecords = 1;
-	UINT iShaderRecordSize = iShaderIdentifierSize;
+	iNumShaderRecords = 1;
+	iSingleRecordSize = iShaderIdentifierSize;
 
 	CDXRShaderTable* pTableInstance = CDXRShaderTable::Create(
 		m_pDevice,
 		iNumShaderRecords,
-		iShaderRecordSize,
+		iSingleRecordSize,
 		L"RayGenShaderTable");
 
 	// ShaderTable에 Record 등록
 	pTableInstance->Register_Record(tableRecordDesc);
 
 	m_pRayGenShaderTable = pTableInstance->Get_TableResource();
+	Safe_Release(pTableInstance);
+_LOCAL_BLOCK
+
+
+LOCAL_BLOCK_// Miss Shader Table
+	using DXR::TABLE_RECORD_DESC;
+	TABLE_RECORD_DESC tableRecordDesc = TABLE_RECORD_DESC
+	{ D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
+		pMissShaderIdentifier,
+		0,
+		nullptr
+	};
+
+	iNumShaderRecords = 1;
+	iSingleRecordSize = iShaderIdentifierSize;
+
+	CDXRShaderTable* pTableInstance = CDXRShaderTable::Create(
+		m_pDevice,
+		iNumShaderRecords,
+		iSingleRecordSize,
+		L"MissShaderTable");
+
+	// ShaderTable에 Record 등록
+	pTableInstance->Register_Record(tableRecordDesc);
+
+	m_pMissShaderTable = pTableInstance->Get_TableResource();
+	Safe_Release(pTableInstance);
+_LOCAL_BLOCK
+
+
+LOCAL_BLOCK_// Hit Group Shader Table
+	using DXR::TABLE_RECORD_DESC;
+	struct RootArguments
+	{
+		DXR::OBJECT_CB cb;
+	}rootArguments;
+	rootArguments.cb = DXR::OBJECT_CB{ XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) };
+
+	TABLE_RECORD_DESC tableRecordDesc = TABLE_RECORD_DESC
+	{ D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
+		pMissShaderIdentifier,
+		sizeof(RootArguments),
+		&rootArguments
+	};
+
+	iNumShaderRecords = 1;
+	iSingleRecordSize = iShaderIdentifierSize + sizeof(RootArguments);
+
+	CDXRShaderTable* pTableInstance = CDXRShaderTable::Create(
+		m_pDevice,
+		iNumShaderRecords,
+		iSingleRecordSize,
+		L"HitGroupShaderTable");
+
+	// ShaderTable에 Record 등록
+	pTableInstance->Register_Record(tableRecordDesc);
+
+	m_pHitGroupShaderTable = pTableInstance->Get_TableResource();
 	Safe_Release(pTableInstance);
 _LOCAL_BLOCK
 
@@ -345,6 +404,28 @@ _LOCAL_BLOCK
 	//}
 
 	Safe_Release(pStateObjectProperties);
+	return hr;
+}
+
+HRESULT CDXRResource::Create_OutputResource()
+{
+	HRESULT hr = S_OK;
+
+	//// Create the output resource. The dimensions and format should match the swap-chain.
+	//auto uavDesc = CD3DX12_RESOURCE_DESC::Tex2D(backbufferFormat, m_width, m_height, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+
+	//auto defaultHeapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+	//ThrowIfFailed(device->CreateCommittedResource(
+	//	&defaultHeapProperties, D3D12_HEAP_FLAG_NONE, &uavDesc, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, nullptr, IID_PPV_ARGS(&m_raytracingOutput)));
+	//NAME_D3D12_OBJECT(m_raytracingOutput);
+
+	//D3D12_CPU_DESCRIPTOR_HANDLE uavDescriptorHandle;
+	//m_raytracingOutputResourceUAVDescriptorHeapIndex = AllocateDescriptor(&uavDescriptorHandle, m_raytracingOutputResourceUAVDescriptorHeapIndex);
+	//D3D12_UNORDERED_ACCESS_VIEW_DESC UAVDesc = {};
+	//UAVDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
+	//device->CreateUnorderedAccessView(m_raytracingOutput.Get(), nullptr, &UAVDesc, uavDescriptorHandle);
+	//m_raytracingOutputResourceUAVGpuDescriptor = CD3DX12_GPU_DESCRIPTOR_HANDLE(m_descriptorHeap->GetGPUDescriptorHandleForHeapStart(), m_raytracingOutputResourceUAVDescriptorHeapIndex, m_descriptorSize);
+
 	return hr;
 }
 
@@ -381,6 +462,8 @@ void CDXRResource::Flush_CommandQueue()
 HRESULT CDXRResource::Free()
 {
 	Safe_Release(m_pRayGenShaderTable);
+	Safe_Release(m_pMissShaderTable);
+	Safe_Release(m_pHitGroupShaderTable);
 
 	CloseHandle(m_fenceEvent);
 	Safe_Release(m_pScratchBuffer);

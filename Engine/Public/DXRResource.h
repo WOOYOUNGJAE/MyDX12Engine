@@ -23,10 +23,12 @@ public: // getter
 	UINT Get_DescriptorSize() { return m_iDescriptorSize; }
 	ID3D12Resource*& Get_ScratchBufferRef() { return m_pScratchBuffer; }
 	ID3D12Resource** Get_ScratchBufferPtr() { return &m_pScratchBuffer; }
-public:
+private:
 	HRESULT Crete_RootSignatures();
 	HRESULT Create_PSOs();
 	HRESULT Build_ShaderTable();
+	HRESULT Create_OutputResource();
+public:
 	HRESULT Reset_CommandList();
 	HRESULT Close_CommandList();
 	HRESULT Execute_CommnadList();
