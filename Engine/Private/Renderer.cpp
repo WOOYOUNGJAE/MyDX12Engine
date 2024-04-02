@@ -101,7 +101,7 @@ HRESULT CRenderer::Build_FrameResource()
 	m_pCurFrameResource = m_vecFrameResource[0]; // TODO FrameResource 2이상되면 수정
 
 	// Build Obj Constant Buffer
-	UINT objCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(OBJECT_CB));
+	UINT objCBByteSize = MyUtils::Align256(sizeof(OBJECT_CB));
 	UINT objCount = 1; //
 	UINT iCbvSrvUavDescriptorSize = m_pDeviceResource->m_iCbvSrvUavDescriptorSize;
 	auto handle = CD3DX12_CPU_DESCRIPTOR_HANDLE(m_pDeviceResource->Get_CbvSrvUavHeapStart_CPU());
@@ -132,7 +132,7 @@ HRESULT CRenderer::Build_FrameResource()
 		}
 	}
 	
-	UINT passCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(PASS_CB_VP));
+	UINT passCBByteSize = MyUtils::Align256(sizeof(PASS_CB_VP));
 	handle.InitOffsetted(m_pDeviceResource->Get_CbvSrvUavHeapStart_CPU(), 0);
 	handle.Offset(m_iPassCBVHeapStartOffset);
 	
@@ -155,7 +155,7 @@ HRESULT CRenderer::Build_FrameResource()
 		//pDevice->CreateConstantBufferView(&cbvDesc, handle);
 		//}
 
-		passCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(PASS_CB_VP_LIGHT));
+		passCBByteSize = MyUtils::Align256(sizeof(PASS_CB_VP_LIGHT));
 		ID3D12Resource* passCB = m_vecFrameResource[frameIndex]->pPassCB_vp_light->Get_UploadBuffer(); 
 		D3D12_GPU_VIRTUAL_ADDRESS cbAddress = passCB->GetGPUVirtualAddress();
 

@@ -112,7 +112,7 @@ void CCube::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameRes
 	{
 		CMeshData* pMesh = (*m_pMeshObjectCom->Get_vecMeshData())[i];
 
-		UINT objCBByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(OBJECT_CB));
+		UINT objCBByteSize = MyUtils::Align256(sizeof(OBJECT_CB));
 		D3D12_GPU_VIRTUAL_ADDRESS objCBAddress =
 			pFrameResource->pObjectCB->Get_UploadBuffer()->GetGPUVirtualAddress() + iRenderingElementIndex * objCBByteSize;
 

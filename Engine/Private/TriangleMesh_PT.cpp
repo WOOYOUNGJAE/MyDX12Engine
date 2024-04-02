@@ -101,7 +101,7 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 	}
 	memcpy(m_indexBufferCPU->GetBufferPointer(), indexData, iIndexBufferSize);
 
-	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice, m_pCommandList,
+	hr = MyUtils::Create_Buffer_Default(m_pDevice, m_pCommandList,
 	                                          m_vertexData, iVertexBufferSize, &m_vertexUploadBuffer, &m_vertexBufferGPU);
 	if (FAILED(hr))
 	{
@@ -109,7 +109,7 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 		return E_FAIL;
 	}
 
-	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice, m_pCommandList,
+	hr = MyUtils::Create_Buffer_Default(m_pDevice, m_pCommandList,
 	                                          indexData, iIndexBufferSize, &m_indexUploadBuffer, &m_indexBufferGPU);
 	if (FAILED(hr))
 	{

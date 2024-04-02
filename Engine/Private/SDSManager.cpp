@@ -48,10 +48,12 @@ HRESULT CSDSManager::Free()
 		}
 	}
 
+#if DXR_ON
 	for (auto& iterBVH : m_vecAccelerationTree)
 	{
 		Safe_Release(iterBVH);
 	}
+#endif
 
 	return hr;
 }

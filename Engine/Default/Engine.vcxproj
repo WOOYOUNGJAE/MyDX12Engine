@@ -186,7 +186,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>../Public/;..\..\External\imgui-dx12\;D:\Projects\Git\MyProjects\MyDX12Engine\External\Assimp\include\assimp;D:\Projects\Git\MyProjects\MyDX12Engine\External\Assimp\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Public/;..\..\External\imgui-dx12\;..\..\External\Assimp\include\assimp;..\..\External\Assimp\include;..\..\External\MS_SampleCode</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -257,6 +257,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\External\MS_SampleCode\DirectXRaytracingHelper.h" />
+    <ClInclude Include="..\..\External\MS_SampleCode\DXSampleHelper.h" />
     <ClInclude Include="..\Bin\Shader\StaticCompiled\HlslCompat.h" />
     <ClInclude Include="..\Bin\Shader\StaticCompiled\RaytracingHlslCompat.h" />
     <ClInclude Include="..\Public\Asset.h" />
@@ -265,6 +267,7 @@
     <ClInclude Include="..\Public\BVH.h" />
     <ClInclude Include="..\Public\DXRRenderer.h" />
     <ClInclude Include="..\Public\DXRResource.h" />
+    <ClInclude Include="..\Public\DXRShaderTable.h" />
     <ClInclude Include="..\Public\SceneNode_AABB.h" />
     <ClInclude Include="..\Public\SceneNode.h" />
     <ClInclude Include="..\Public\SDSManager.h" />
@@ -326,6 +329,7 @@
     <ClCompile Include="..\Private\BVH.cpp" />
     <ClCompile Include="..\Private\DXRRenderer.cpp" />
     <ClCompile Include="..\Private\DXRResource.cpp" />
+    <ClCompile Include="..\Private\DXRShaderTable.cpp" />
     <ClCompile Include="..\Private\SceneNode_AABB.cpp" />
     <ClCompile Include="..\Private\SceneNode.cpp" />
     <ClCompile Include="..\Private\SDSManager.cpp" />

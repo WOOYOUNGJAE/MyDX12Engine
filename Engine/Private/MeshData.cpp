@@ -121,7 +121,7 @@ void CMeshData::Build_BLAS(void* pIndexData, void* pVertexData, UINT64 iIndexDat
 	::DXR_Util::AllocateScratch_IfBigger(pDevice, m_BLAS.prebuildInfo.ResultDataMaxSizeInBytes);	
 
 	// Allocate UAV Buffer, 실질적인 BLAS Allocate
-	AllocateUAVBuffer(pDevice,
+	MyUtils::AllocateUAVBuffer(pDevice,
 		m_BLAS.prebuildInfo.ResultDataMaxSizeInBytes,
 		&m_BLAS.uav_BLAS,
 		D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE);

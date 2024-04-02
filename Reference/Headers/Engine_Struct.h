@@ -123,6 +123,16 @@ namespace Engine
 		ID3D12Resource* pUAV_BLAS;
 		UINT iNumBlas;
 	};
+
+	struct TABLE_RECORD_DESC
+	{
+		UINT iIdentifierSize;
+		void* pIdentifierData;
+
+		UINT iLocalRootArgumentSize;
+		void* pLocalRootArgumentData;
+	};
+
 	_NAMESPACE
 #endif
 }

@@ -87,7 +87,7 @@ HRESULT CSingleVertexMesh::Initialize_Prototype()
 	}
 	memcpy(m_indexBufferCPU->GetBufferPointer(), vecIndexData.data(), iIndexBufferSize);
 
-	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice, m_pCommandList,
+	hr = MyUtils::Create_Buffer_Default(m_pDevice, m_pCommandList,
 		vecVertexData.data(), iVertexBufferSize, &m_vertexUploadBuffer, &m_vertexBufferGPU);
 	if (FAILED(hr))
 	{
@@ -95,7 +95,7 @@ HRESULT CSingleVertexMesh::Initialize_Prototype()
 		return E_FAIL;
 	}
 
-	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice, m_pCommandList,
+	hr = MyUtils::Create_Buffer_Default(m_pDevice, m_pCommandList,
 		vecIndexData.data(), iIndexBufferSize, &m_indexUploadBuffer, &m_indexBufferGPU);
 	if (FAILED(hr))
 	{

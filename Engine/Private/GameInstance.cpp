@@ -76,7 +76,7 @@ HRESULT CGameInstance::Init_Engine(GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Devi
 	if (FAILED(hr)) { return E_FAIL; }
 	m_pHwndClient = &GraphicDesc.hWnd;
 
-#ifdef DXR_ON
+#if DXR_ON
 	hr = Init_DXR();
 	if (FAILED(hr)) { return E_FAIL; }
 #endif

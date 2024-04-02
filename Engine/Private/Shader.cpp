@@ -65,7 +65,7 @@ HRESULT CShader::Initialize_Prototype(const SHADER_INIT_DESC* shaderInputArr, _u
 			eCurType = TYPE_PIXEL;
 		}
 
-		m_shaderByteCodeArr[eCurType] = CDevice_Utils::CompileShader(shaderInputArr[i].filename, shaderInputArr[i].defines, shaderInputArr[i].entrypoint, shaderInputArr[i].target);
+		m_shaderByteCodeArr[eCurType] = MyUtils::CompileShader(shaderInputArr[i].filename, shaderInputArr[i].defines, shaderInputArr[i].entrypoint, shaderInputArr[i].target);
 	}
 
 	switch (shaderInputArr->inputLayout) // layout 은 index 0만 확인

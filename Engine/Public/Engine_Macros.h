@@ -38,6 +38,9 @@ unsigned long  ClassName::Destroy_Instance()			\
 #define NAMESPACE_(NAME)		namespace NAME {
 #define _NAMESPACE				}
 
+#define LOCAL_BLOCK_ {
+#define _LOCAL_BLOCK }
+
 #ifdef ENGINE_EXPORTS
 #define ENGINE_DLL _declspec(dllexport)
 #else

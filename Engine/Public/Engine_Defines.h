@@ -40,6 +40,11 @@
 #include <assimp/scene.h>
 #pragma comment(lib, "..\\..\\External\\Assimp\\assimp-vc143-mt")
 
+// My
+#define DXR_ON TRUE
+
+#include "DXSampleHelper.h"
+#include "DirectXRaytracingHelper.h"
 
 using namespace DirectX;
 using namespace DirectX::PackedVector;
@@ -65,8 +70,8 @@ using namespace DirectX::SimpleMath;
 
 #endif // _DEBUG
 
-// My
-#define DXR_ON TRUE
+
+
 
 #include "Engine_Typedef.h"
 #include "Engine_Functions.h"

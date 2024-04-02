@@ -26,11 +26,11 @@ public: // getter
 public:
 	HRESULT Crete_RootSignatures();
 	HRESULT Create_PSOs();
-	HRESULT Build_AccelerationStructures_CPU();
-	HRESULT Build_AccelerationStructure_GPU(DXR::ACCELERATION_STRUCTURE_CPU& refAS_CPU);
+	HRESULT Build_ShaderTable();
 	HRESULT Reset_CommandList();
 	HRESULT Close_CommandList();
 	HRESULT Execute_CommnadList();
+	void AssignShaderIdentifiers(ID3D12StateObjectProperties* stateObjectProperties, void** ppRayGenShaderIdentifier, void** ppMissShaderIdentifier, void** ppHitGroupShaderIdentifier);
 	static void BuildRaytracingAccelerationStructure(
 		_In_  const D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC* pDesc,
 		_In_  UINT NumPostbuildInfoDescs,
@@ -46,6 +46,10 @@ private: // D3D Resource
 	ID3D12RootSignature* m_pRootSigArr[DXR_ROOTSIG_TYPE_END];
 	ID3D12StateObject* m_pDXR_PSO = nullptr;
 	ID3D12Resource* m_pScratchBuffer = nullptr; // AS 빌드 중 필요한 낙서 버퍼.
+private: // Shader Table
+	ID3D12Resource* m_pRayGenShaderTable = nullptr;
+	ID3D12Resource* m_pMissShaderTable = nullptr;
+	ID3D12Resource* m_pHitGroupShaderTable = nullptr;
 private: // pointer
 	ID3D12Device5* m_pDevice = nullptr;
 	ID3D12CommandQueue* m_pCommandQueue = nullptr; // CommandQueue는 기존거와 공유

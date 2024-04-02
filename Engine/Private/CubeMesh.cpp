@@ -155,7 +155,7 @@ HRESULT CCubeMesh::Initialize_Prototype()
 	}
 	memcpy(m_indexBufferCPU->GetBufferPointer(), indicesData, iIndexBufferSize);
 
-	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice, m_pCommandList,
+	hr = MyUtils::Create_Buffer_Default(m_pDevice, m_pCommandList,
 		m_vecVertexData.data(), iVertexBufferSize, &m_vertexUploadBuffer, &m_vertexBufferGPU);
 	if (FAILED(hr))
 	{
@@ -163,7 +163,7 @@ HRESULT CCubeMesh::Initialize_Prototype()
 		return E_FAIL;
 	}
 
-	hr = CDevice_Utils::Create_Buffer_Default(m_pDevice, m_pCommandList,
+	hr = MyUtils::Create_Buffer_Default(m_pDevice, m_pCommandList,
 		indicesData, iIndexBufferSize, &m_indexUploadBuffer, &m_indexBufferGPU);
 	if (FAILED(hr))
 	{

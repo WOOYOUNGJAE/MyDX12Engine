@@ -19,7 +19,7 @@ private:
 		// C-buffer일 때만 256 단위로 조절
 		if (isConstantBuffer)
 		{
-			m_iElementByteSize = CDevice_Utils::ConstantBufferByteSize(sizeof(T));
+			m_iElementByteSize = MyUtils::Align256(sizeof(T));
 		}
 
 		CD3DX12_HEAP_PROPERTIES tempHeapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
