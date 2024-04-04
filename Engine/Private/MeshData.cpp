@@ -67,36 +67,37 @@ void CMeshData::Build_BLAS(void* pIndexData, void* pVertexData, UINT64 iIndexDat
 	m_BLAS.dxrGeometryDesc.Triangles.Transform3x4 = 0;
 	m_BLAS.dxrGeometryDesc.Flags = D3D12_RAYTRACING_GEOMETRY_FLAG_OPAQUE; // 일단 OPAQUE
 
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-
 #pragma region Create SRV of IB, VB
-	// Create Index SRV
-	srvDesc.Buffer.NumElements = m_iNumIndices / sizeof(UINT32);
-	srvDesc.Format = DXGI_FORMAT_R32_TYPELESS; // for Index Srv
-	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW; // 인덱스는 단순 정수 나열이므로 raw타입으로
-	srvDesc.Buffer.StructureByteStride = 0; //  D3D12_BUFFER_SRV_FLAG_RAW, 즉 원시 데이터로 접근할 때
-	cpuHandle.Offset(1, iDescriptorSize);
-	pDevice->CreateShaderResourceView(m_BLAS.indexBuffer, &srvDesc, cpuHandle); // Index Srv
+	//D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	//srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+	//srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+	//// Create Index SRV
+	//srvDesc.Buffer.NumElements = m_iNumIndices / sizeof(UINT32);
+	//srvDesc.Format = DXGI_FORMAT_R32_TYPELESS; // for Index Srv
+	//srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW; // 인덱스는 단순 정수 나열이므로 raw타입으로
+	//srvDesc.Buffer.StructureByteStride = 0; //  D3D12_BUFFER_SRV_FLAG_RAW, 즉 원시 데이터로 접근할 때
+	//cpuHandle.Offset(1, iDescriptorSize);
+	//pDevice->CreateShaderResourceView(m_BLAS.indexBuffer, &srvDesc, cpuHandle); // Index Srv
+
+	//// Create Vertex SRV
+	//srvDesc.Buffer.NumElements = m_iNumVertices;
+	//srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+	//srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+	//srvDesc.Buffer.StructureByteStride = UINT(Get_SingleVertexSize());
+	//cpuHandle.Offset(1, iDescriptorSize);
+	//pDevice->CreateShaderResourceView(m_BLAS.vertexBuffer, &srvDesc, cpuHandle); // Index Srv
+#pragma endregion
 
 	refTriangles.IndexFormat = m_IndexFormat;
 	refTriangles.IndexCount = m_iNumIndices;
 	refTriangles.IndexBuffer = m_BLAS.indexBuffer->GetGPUVirtualAddress();
 
-	// Create Vertex SRV
-	srvDesc.Buffer.NumElements = m_iNumVertices;
-	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
-	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-	srvDesc.Buffer.StructureByteStride = UINT(Get_SingleVertexSize());
-	cpuHandle.Offset(1, iDescriptorSize);
-	pDevice->CreateShaderResourceView(m_BLAS.vertexBuffer, &srvDesc, cpuHandle); // Index Srv
-
 	refTriangles.VertexFormat = DXGI_FORMAT_R32G32B32_FLOAT; // Fixed
 	refTriangles.VertexCount = m_iNumVertices;
 	refTriangles.VertexBuffer.StartAddress = m_BLAS.vertexBuffer->GetGPUVirtualAddress();
 	refTriangles.VertexBuffer.StrideInBytes = UINT64(Get_SingleVertexSize());
-#pragma endregion
+
 	D3D12_RAYTRACING_GEOMETRY_AABBS_DESC& refAABBDesc = m_BLAS.dxrGeometryDesc.AABBs;
 
 

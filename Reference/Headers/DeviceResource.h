@@ -44,9 +44,11 @@ public: // Getter
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_CbvSrvUavHeapStart_CPU() { return m_pCbvSrvUavHeap.Get()->GetCPUDescriptorHandleForHeapStart(); }
 	ID3D12DescriptorHeap* Get_CbvSrvUavHeap() { return m_pCbvSrvUavHeap.Get(); }
 	IDXGIAdapter1* Get_Adapter() { return m_pAdapter.Get(); }
+	UINT* Get_NextCbvSrvUavHeapOffsetPtr() { return &m_iNextCbvSrvUavHeapOffset; }
+public: // Simple Getter
 	UINT Get_RtvDescriptorSize() const { return m_iRtvDescriptorSize; }
 	UINT Get_CbvSrvUavDescriptorSize() const { return m_iCbvSrvUavDescriptorSize; }
-	UINT* Get_NextCbvSrvUavHeapOffsetPtr() { return &m_iNextCbvSrvUavHeapOffset; }
+	DXGI_FORMAT Get_BackBufferFormat() { return m_BackBufferFormat; }
 private: // ComPtr
 	ComPtr<IDXGIAdapter1> m_pAdapter;
 	ComPtr<IDXGIFactory4> m_pDxgi_Factory = nullptr;
@@ -84,6 +86,7 @@ private:
 	DXGI_FORMAT m_DepthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 private: // From Client
 	HWND m_hWnd = nullptr;
+public:
 	_uint m_iClientWinCX = 0;
 	_uint m_iClientWinCY = 0;
 public:

@@ -5,7 +5,7 @@
 #if DXR_ON
 
 NAMESPACE_(Engine)
-class CMeshData;
+class CDXRResource;
 class CDXRRenderer : public CBase
 {
 protected:
@@ -14,26 +14,19 @@ protected:
 
 public:
 	static CDXRRenderer* Create();
-	HRESULT Initialize(ID3D12Device** _Inout_ ppDevice);
+	HRESULT Initialize();
 	HRESULT Free() override;
+	void Do_RayTracing();
+public:
+	void DispatchRay();
+	void Set_ComputeRootDescriptorTable_Global(); // Global루트시그니쳐가 바인딩된 상태에서 테이블 바인딩
 
-	HRESULT Crete_RootSignatures();
-	HRESULT Create_PSOs();
-	HRESULT Build_AccelerationStructures();
-private:
-	ID3D12GraphicsCommandList4* m_pDxrCommandList = nullptr; // CmdList for Dxr
-	ID3D12CommandAllocator* m_pCommandAllocator = nullptr;
-	ID3D12RootSignature* m_pRootSigArr[DXR_ROOTSIG_TYPE_END];
-private: // pointer
-	ID3D12Device5* m_pDevice = nullptr;
+private: // Pointers
+	CDXRResource* m_pDXRResources = nullptr;
+	ID3D12GraphicsCommandList4* m_pCommandList = nullptr;
 	ID3D12StateObject* m_pDXR_PSO = nullptr;
-private: // Manage
-	//std::map<CMeshData*, DXR::ACCELERATION_STRUCTURE_CPU> m_mapAS_CPU;
-private: // entry point str
-	static const wchar_t* m_tszHitGroupName;
-	static const wchar_t* m_tszRaygenShaderName;
-	static const wchar_t* m_tszClosestHitShaderName;
-	static const wchar_t* m_tszMissShaderName;
+private:
+	D3D12_DISPATCH_RAYS_DESC m_disptchRaysDesc{};
 };
 
 _NAMESPACE

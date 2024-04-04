@@ -42,4 +42,12 @@ namespace Engine
 
 	enum SDS_TREE_TYPE {SDS_AS, SDS_TREE_TYPE_END};
 
+#if DXR_ON
+	namespace GlobalRootSigSlot
+	{
+		enum SLOT_INDEX {OUTPUT_VIEW, AS, SCENE_CONSTANT, IB_VB_SRV};
+		
+	}
+#endif
+
 }

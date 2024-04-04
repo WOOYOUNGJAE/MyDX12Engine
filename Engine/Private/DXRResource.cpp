@@ -70,16 +70,7 @@ HRESULT CDXRResource::Initialize()
 	// Allocate a heap for 3 descriptors:
 	// 2 - vertex and index buffer SRVs
 	// 1 - raytracing output texture SRV
-	/*UINT iNumMeshes = CAssetManager::Get_Instance()->Get_MeshDataMap().size();
-	auto& clusteredMeshesMap =  CAssetManager::Get_Instance()->Get_MeshData_ClusteredMap();
-	for (auto& pair : clusteredMeshesMap)
-	{
-		for (auto& iterMeshList : pair.second)
-		{
-			iNumMeshes += iterMeshList->Num_Vertices();			
-		}
-	}*/
-	descriptorHeapDesc.NumDescriptors = 4000;
+	descriptorHeapDesc.NumDescriptors = 4000/*DXR생성시엔 오브젝트 개수 모르기 때문에*/;
 	descriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	descriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	descriptorHeapDesc.NodeMask = 0;
@@ -110,6 +101,13 @@ HRESULT CDXRResource::Initialize()
 		return hr;
 	}
 
+	hr = Create_OutputResource();
+	if (FAILED(hr))
+	{
+		MSG_BOX("Creating Output Resource Failed");
+		return hr;
+	}
+
 	return hr;
 }
 
@@ -125,10 +123,10 @@ HRESULT CDXRResource::Crete_RootSignatures()
 		descriptorRange[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 1, 1); // static index vertex buffer
 
 		CD3DX12_ROOT_PARAMETER rootParameterArr[4];
-		rootParameterArr[0].InitAsDescriptorTable(1, &descriptorRange[0]);
-		rootParameterArr[1].InitAsShaderResourceView(0, 1);
-		rootParameterArr[2].InitAsConstantBufferView(0, 1); // SceneConstant
-		rootParameterArr[3].InitAsDescriptorTable(1, &descriptorRange[1]);
+		rootParameterArr[GlobalRootSigSlot::OUTPUT_VIEW].InitAsDescriptorTable(1, &descriptorRange[0]);
+		rootParameterArr[GlobalRootSigSlot::AS].InitAsShaderResourceView(0, 1);
+		rootParameterArr[GlobalRootSigSlot::SCENE_CONSTANT].InitAsConstantBufferView(0, 1); // SceneConstant
+		rootParameterArr[GlobalRootSigSlot::IB_VB_SRV].InitAsDescriptorTable(1, &descriptorRange[1]);
 
 		CD3DX12_ROOT_SIGNATURE_DESC globalRootSignatureDesc(_countof(rootParameterArr), rootParameterArr);
 
@@ -376,33 +374,6 @@ LOCAL_BLOCK_// Hit Group Shader Table
 	Safe_Release(pTableInstance);
 _LOCAL_BLOCK
 
-
-
-
-
-	//// Miss shader table
-	//{
-	//	UINT numShaderRecords = 1;
-	//	UINT shaderRecordSize = iShaderIdentifierSize;
-	//	ShaderTable missShaderTable(device, numShaderRecords, shaderRecordSize, L"MissShaderTable");
-	//	missShaderTable.push_back(ShaderRecord(pMissShaderIdentifier, iShaderIdentifierSize));
-	//	m_missShaderTable = missShaderTable.GetResource();
-	//}
-
-	//// Hit group shader table
-	//{
-	//	struct RootArguments {
-	//		CubeConstantBuffer cb;
-	//	} rootArguments;
-	//	rootArguments.cb = m_cubeCB;
-
-	//	UINT numShaderRecords = 1;
-	//	UINT shaderRecordSize = iShaderIdentifierSize + sizeof(rootArguments);
-	//	ShaderTable hitGroupShaderTable(device, numShaderRecords, shaderRecordSize, L"HitGroupShaderTable");
-	//	hitGroupShaderTable.push_back(ShaderRecord(pHitGroupShaderIdentifier, iShaderIdentifierSize, &rootArguments, sizeof(rootArguments)));
-	//	m_hitGroupShaderTable = hitGroupShaderTable.GetResource();
-	//}
-
 	Safe_Release(pStateObjectProperties);
 	return hr;
 }
@@ -411,20 +382,44 @@ HRESULT CDXRResource::Create_OutputResource()
 {
 	HRESULT hr = S_OK;
 
-	//// Create the output resource. The dimensions and format should match the swap-chain.
-	//auto uavDesc = CD3DX12_RESOURCE_DESC::Tex2D(backbufferFormat, m_width, m_height, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+	m_iScreenWidth = CDeviceResource::Get_Instance()->m_iClientWinCX;
+	m_iScreenHeight = CDeviceResource::Get_Instance()->m_iClientWinCY;
 
-	//auto defaultHeapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-	//ThrowIfFailed(device->CreateCommittedResource(
-	//	&defaultHeapProperties, D3D12_HEAP_FLAG_NONE, &uavDesc, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, nullptr, IID_PPV_ARGS(&m_raytracingOutput)));
-	//NAME_D3D12_OBJECT(m_raytracingOutput);
+	// Create the output resource. The dimensions and format should match the swap-chain.
+	CD3DX12_RESOURCE_DESC uavDesc = CD3DX12_RESOURCE_DESC::Tex2D(
+		CDeviceResource::Get_Instance()->Get_BackBufferFormat(),
+		m_iScreenWidth,
+		m_iScreenHeight,
+		1,
+		1,
+		1,
+		0,
+		D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 
-	//D3D12_CPU_DESCRIPTOR_HANDLE uavDescriptorHandle;
-	//m_raytracingOutputResourceUAVDescriptorHeapIndex = AllocateDescriptor(&uavDescriptorHandle, m_raytracingOutputResourceUAVDescriptorHeapIndex);
-	//D3D12_UNORDERED_ACCESS_VIEW_DESC UAVDesc = {};
-	//UAVDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
-	//device->CreateUnorderedAccessView(m_raytracingOutput.Get(), nullptr, &UAVDesc, uavDescriptorHandle);
-	//m_raytracingOutputResourceUAVGpuDescriptor = CD3DX12_GPU_DESCRIPTOR_HANDLE(m_descriptorHeap->GetGPUDescriptorHandleForHeapStart(), m_raytracingOutputResourceUAVDescriptorHeapIndex, m_descriptorSize);
+	hr = m_pDevice->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		&uavDesc,
+		D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
+		nullptr,
+		IID_PPV_ARGS(&m_pDXROutput));
+	if (FAILED(hr)) { return hr; }
+
+	m_pDXROutput->SetName(L"m_pDXROutput");
+
+	D3D12_UNORDERED_ACCESS_VIEW_DESC UAVDesc = {};
+	UAVDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
+	m_pDevice->CreateUnorderedAccessView(
+		m_pDXROutput,
+		nullptr,
+		&UAVDesc,
+		m_curHeapHandle_CPU);
+
+	INT iHeapOffsetGPU = INT(m_curHeapHandle_CPU.ptr - m_pDescriptorHeap->GetCPUDescriptorHandleForHeapStart().ptr);
+	m_DXROutputHeapHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(
+	m_pDescriptorHeap->GetGPUDescriptorHandleForHeapStart(),1, iHeapOffsetGPU);
+
+	m_curHeapHandle_CPU.Offset(m_iDescriptorSize);
 
 	return hr;
 }
@@ -461,6 +456,8 @@ void CDXRResource::Flush_CommandQueue()
 
 HRESULT CDXRResource::Free()
 {
+	Safe_Release(m_pDXROutput);
+
 	Safe_Release(m_pRayGenShaderTable);
 	Safe_Release(m_pMissShaderTable);
 	Safe_Release(m_pHitGroupShaderTable);

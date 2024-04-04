@@ -9,7 +9,7 @@ using namespace std;
 class CDXRResource : public CBase
 {
 	DECLARE_SINGLETON(CDXRResource)
-	friend class CXRRenderer;
+	friend class CDXRRenderer;
 
 protected:
 	CDXRResource() = default;
@@ -48,6 +48,7 @@ private: // D3D Resource
 	ID3D12RootSignature* m_pRootSigArr[DXR_ROOTSIG_TYPE_END];
 	ID3D12StateObject* m_pDXR_PSO = nullptr;
 	ID3D12Resource* m_pScratchBuffer = nullptr; // AS ºôµå Áß ÇÊ¿äÇÑ ³«¼­ ¹öÆÛ.
+	ID3D12Resource* m_pDXROutput = nullptr;
 private: // Shader Table
 	ID3D12Resource* m_pRayGenShaderTable = nullptr;
 	ID3D12Resource* m_pMissShaderTable = nullptr;
@@ -58,14 +59,16 @@ private: // pointer
 private:
 	UINT m_iDescriptorSize = 0;
 	CD3DX12_CPU_DESCRIPTOR_HANDLE m_curHeapHandle_CPU; // CbvSrvUav Handle Cpu
+	CD3DX12_GPU_DESCRIPTOR_HANDLE m_DXROutputHeapHandle; // CbvSrvUav Handle Cpu
+
 private: //Fence
 	ID3D12Fence* m_pFence = nullptr;
 	UINT64 m_iFenceValue = 0;
 	HANDLE m_fenceEvent;
 	QUEUE_FLUSH_DESC m_queue_flush_desc{};
-private: // Manage
-	/*map<CMeshData*, DXR::ACCELERATION_STRUCTURE_CPU> m_mapAS_CPU;
-	map<CMeshData*, D3D12_RAYTRACING_GEOMETRY_DESC> m_mapDXRGeometryDesc;*/
+private: 
+	UINT m_iScreenWidth = 0;
+	UINT m_iScreenHeight = 0;
 private: // entry point str
 	static const wchar_t* m_tszHitGroupName;
 	static const wchar_t* m_tszRaygenShaderName;
