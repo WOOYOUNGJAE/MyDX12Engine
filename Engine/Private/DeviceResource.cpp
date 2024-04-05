@@ -1,6 +1,7 @@
 #include "DeviceResource.h"
 #include "PipelineManager.h"
 #include "Renderer.h"
+#include "FrameResourceManager.h"
 #if DXR_ON
 #include "DXRRenderer.h"
 #endif

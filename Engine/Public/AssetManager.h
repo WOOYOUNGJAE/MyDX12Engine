@@ -11,6 +11,7 @@ class CMeshData;
 class ENGINE_DLL CAssetManager : public CBase
 {
 	DECLARE_SINGLETON(CAssetManager)
+protected:
 	CAssetManager() = default;
 	~CAssetManager() override = default;
 

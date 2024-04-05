@@ -5,6 +5,7 @@
 #include "PipelineManager.h"
 #include "GameObject.h"
 #include "FrameResource.h"
+#include "FrameResourceManager.h"
 #include "MyMath.h"
 
 CRenderer* CRenderer::Create()
@@ -99,7 +100,7 @@ HRESULT CRenderer::Build_FrameResource()
 			1/**/)
 		);
 	}
-	m_pCurFrameResource = m_vecFrameResource[0]; // TODO FrameResource 2이상되면 수정
+	m_pCurFrameResource = CFrameResourceManager::Get_Instance()->m_vecFrameResource[0]; // TODO FrameResource 2이상되면 수정
 
 	// Build Obj Constant Buffer
 	UINT objCBByteSize = MyUtils::Align256(sizeof(OBJECT_CB));
@@ -140,22 +141,6 @@ HRESULT CRenderer::Build_FrameResource()
 
 	for (INT frameIndex = 0; frameIndex < g_iNumFrameResource; ++frameIndex)
 	{
-
-		//{
-		//	
-		//ID3D12Resource* passCB = m_vecFrameResource[frameIndex]->pPassCB->Get_UploadBuffer(); 
-		//D3D12_GPU_VIRTUAL_ADDRESS cbAddress = passCB->GetGPUVirtualAddress();
-
-		//// Offset to the pass cbv in the descriptor heap.
-		//// 서술자 힙 안에서 Pass CBV의 오프셋
-		//INT heapIndex = m_iPassCBVHeapStartOffset + frameIndex;
-
-		//D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
-		//cbvDesc.BufferLocation = cbAddress;
-		//cbvDesc.SizeInBytes = passCBByteSize;
-		//pDevice->CreateConstantBufferView(&cbvDesc, handle);
-		//}
-
 		passCBByteSize = MyUtils::Align256(sizeof(PASS_CB_VP_LIGHT));
 		ID3D12Resource* passCB = m_vecFrameResource[frameIndex]->pPassCB_vp_light->Get_UploadBuffer(); 
 		D3D12_GPU_VIRTUAL_ADDRESS cbAddress = passCB->GetGPUVirtualAddress();

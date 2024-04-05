@@ -7,6 +7,7 @@
 #include "Renderer.h"
 #include "Texture.h"
 //#include "D3DResourceManager.h"
+#include "FrameResourceManager.h"
 #include "MeshData.h"
 
 IMPLEMENT_SINGLETON(CLoadHelper)
@@ -65,6 +66,7 @@ void CLoadHelper::EndSign()
 	CDeviceResource::Get_Instance()->Close_CmdList();
 	CDeviceResource::Get_Instance()->Execute_CmdList();
 	dynamic_cast<CRenderer*>(CComponentManager::Get_Instance()->FindandGet_Prototype(L"Renderer"))->Build_FrameResource();
+	CFrameResourceManager::Get_Instance()->Build_FrameResource();
 	//CD3DResourceManager::Get_Instance()->Set_SrvOffsetEnd((*m_pNextCbvSrvUavHeapOffset));
 }
 

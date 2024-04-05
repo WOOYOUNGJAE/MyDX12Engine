@@ -2,7 +2,7 @@
 #include "Component.h"
 
 NAMESPACE_(Engine)
-	struct FrameResource;
+struct FrameResource;
 // 렌더링을 직접 수행, 게임오브젝트에 컴포넌트로 부착될 때는 클론되는 것이 아닌 참조만
 // 컴포넌트 형식인 의도 : 자기 자신을 쉽게 특정 렌더 그룹에 넣기 위해
 using namespace std;
@@ -40,8 +40,7 @@ public: // Component Functions for GameObject
 	void AddTo_RenderGroup(UINT IsFirst, UINT eCullMode, UINT eBlendModeEnum, UINT eShaderTypeEnum, UINT eRootsigTypeEnum, class CGameObject* pGameObject);
 	void Flush_CommandQueue();
 	
-public: // FrameResource
-	OBJECT_CB m_objectConstants{};
+private: // FrameResource
 	vector<FrameResource*> m_vecFrameResource;
 	FrameResource* m_pCurFrameResource = nullptr;
 	UINT m_iCurFrameResourceIndex = 0;

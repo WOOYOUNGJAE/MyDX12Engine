@@ -55,6 +55,7 @@ private: // Singleton
 	class CCameraManager* m_pCameraManager = nullptr;
 	class CSDSManager* m_pSDSManager = nullptr;
 	class CLoadHelper* m_pLoadHelper = nullptr;
+	class CFrameResourceManager* m_pFrameResourceManager = nullptr;
 #if DXR_ON
 public:
 	HRESULT Init_DXR();

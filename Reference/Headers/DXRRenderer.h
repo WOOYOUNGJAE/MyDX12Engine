@@ -7,6 +7,7 @@
 NAMESPACE_(Engine)
 class CDXRResource;
 class CDeviceResource;
+struct FrameResource;
 class CDXRRenderer : public CBase
 {
 protected:
@@ -17,6 +18,7 @@ public:
 	static CDXRRenderer* Create();
 	HRESULT Initialize();
 	HRESULT Free() override;
+
 public: // Rendering
 	void BeginRender();
 	void MainRender();
@@ -36,6 +38,10 @@ private: // Pointers
 	ID3D12Resource** m_pRenderTargetArr = nullptr;
 private:
 	UINT m_iFrameIndex = 0; // Equal with DeviceResource's
+private: // FrameResource
+	std::vector<FrameResource*> m_vecFrameResource;
+	FrameResource* m_pCurFrameResource = nullptr;
+	UINT m_iCurFrameResourceIndex = 0;
 private:
 	D3D12_DISPATCH_RAYS_DESC m_disptchRaysDesc{};
 

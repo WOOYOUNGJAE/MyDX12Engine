@@ -16,6 +16,7 @@
 #include "SDSManager.h"
 #include "BVH.h"
 #include "SceneNode_AABB.h"
+#include "FrameResourceManager.h"
 #pragma endregion
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -29,6 +30,7 @@ CGameInstance::CGameInstance() :
 	m_pInputManager(CInputManager::Get_Instance()),
 	m_pCameraManager(CCameraManager::Get_Instance()),
 	m_pSDSManager(CSDSManager::Get_Instance()),
+	m_pFrameResourceManager(CFrameResourceManager::Get_Instance()),
 	m_pLoadHelper(CLoadHelper::Get_Instance())
 #if DXR_ON
 	,m_pDxrResource(CDXRResource::Get_Instance())
@@ -43,6 +45,7 @@ CGameInstance::CGameInstance() :
 	Safe_AddRef(m_pInputManager);
 	Safe_AddRef(m_pCameraManager);
 	Safe_AddRef(m_pSDSManager);
+	Safe_AddRef(m_pFrameResourceManager);
 #if DXR_ON
 	Safe_AddRef(m_pDxrResource);
 #endif
@@ -55,6 +58,7 @@ HRESULT CGameInstance::Free()
 	Safe_Release(m_pDxrRenderer);
 #endif
 	Safe_Release(m_pLoadHelper);
+	Safe_Release(m_pFrameResourceManager);
 	Safe_Release(m_pSDSManager);
 	Safe_Release(m_pCameraManager);
 	Safe_Release(m_pInputManager);
@@ -75,6 +79,9 @@ HRESULT CGameInstance::Init_Engine(GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Devi
 	hr = m_pDeviceResource->Init_Graphic_Device(GraphicDesc.hWnd, GraphicDesc.eWinMode, GraphicDesc.iSizeX, GraphicDesc.iSizeY, ppDevice);
 	if (FAILED(hr)) { return E_FAIL; }
 	m_pHwndClient = &GraphicDesc.hWnd;
+
+	hr = m_pFrameResourceManager->Initialize();
+	if (FAILED(hr)) { return E_FAIL; }
 
 #if DXR_ON
 	hr = Init_DXR();
@@ -130,6 +137,7 @@ void CGameInstance::Release_Engine()
 	CDXRResource::Destroy_Instance();
 #endif
 	CLoadHelper::Destroy_Instance();
+	CFrameResourceManager::Destroy_Instance();
 	CSDSManager::Destroy_Instance();
 	CCameraManager::Destroy_Instance();
 	CInputManager::Destroy_Instance();

@@ -8,6 +8,7 @@ class CDeviceResource : public CBase
 	DECLARE_SINGLETON(CDeviceResource)
 	friend class CPipelineManager;
 	friend class CRenderer;
+	friend class CFrameResourceManager;
 #if DXR_ON
 	friend class CDXRRenderer;
 #endif

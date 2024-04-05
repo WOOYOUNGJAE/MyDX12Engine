@@ -4,6 +4,7 @@
 #include "MeshData.h"
 #include "DeviceResource.h"
 #include "AssetManager.h"
+#include "FrameResource.h"
 #include "./Shaders/Raytracing.hlsl.h"
 
 #if DXR_ON
@@ -53,6 +54,7 @@ HRESULT CDXRRenderer::Free()
 {
 	return S_OK;
 }
+
 
 void CDXRRenderer::BeginRender()
 {

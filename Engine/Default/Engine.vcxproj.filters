@@ -181,6 +181,9 @@
     <Filter Include="System\D3D Graphics\DXR\DXRShaderTable">
       <UniqueIdentifier>{cb7af360-5901-4c10-a0c7-9362a0aedf81}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\Managers\FrameResource">
+      <UniqueIdentifier>{f350e2c6-865f-4c76-8df7-e33821d1fb46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Typedef.h">
@@ -351,7 +354,6 @@
     <ClInclude Include="..\Public\SceneNode.h">
       <Filter>Utility\Spatial Data Sturture\SceneNode</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\SDSManager.h" />
     <ClInclude Include="..\..\External\MS_SampleCode\DirectXRaytracingHelper.h">
       <Filter>Headers\External</Filter>
     </ClInclude>
@@ -367,6 +369,10 @@
     <ClInclude Include="..\Public\FrameResource.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\SDSManager.h">
+      <Filter>Utility\Managers\SpatialDataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FrameResourceManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -504,10 +510,13 @@
     <ClCompile Include="..\Private\SceneNode.cpp">
       <Filter>Utility\Spatial Data Sturture\SceneNode</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\SDSManager.cpp" />
     <ClCompile Include="..\Private\DXRShaderTable.cpp">
       <Filter>System\D3D Graphics\DXR\DXRShaderTable</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\SDSManager.cpp">
+      <Filter>Utility\Managers\SpatialDataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\FrameResourceManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\simpleShader.hlsl">

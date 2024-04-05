@@ -79,14 +79,14 @@ HRESULT CMainApp::Initialize()
 #if DXR_ON
 	vector<CGameObject*> gameObjArr_For_AccelerationTree_Static;
 #endif
-//	objDesc.strTag = L"Cube";
-//	objDesc.vStartPos = Vector3::Zero;
-//	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
-//	if (FAILED(hr)) { return hr; }
-//#if DXR_ON
-//	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
-//	//CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
-//#endif DXR_ON
+	objDesc.strTag = L"Cube";
+	objDesc.vStartPos = Vector3::Zero;
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }
+#if DXR_ON
+	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
+	//CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
+#endif DXR_ON
 
 
 	objDesc.strTag = L"Triangle";

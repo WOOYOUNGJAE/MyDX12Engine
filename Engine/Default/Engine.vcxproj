@@ -269,6 +269,7 @@
     <ClInclude Include="..\Public\DXRResource.h" />
     <ClInclude Include="..\Public\DXRShaderTable.h" />
     <ClInclude Include="..\Public\FrameResource.h" />
+    <ClInclude Include="..\Public\FrameResourceManager.h" />
     <ClInclude Include="..\Public\SceneNode_AABB.h" />
     <ClInclude Include="..\Public\SceneNode.h" />
     <ClInclude Include="..\Public\SDSManager.h" />
@@ -331,6 +332,7 @@
     <ClCompile Include="..\Private\DXRRenderer.cpp" />
     <ClCompile Include="..\Private\DXRResource.cpp" />
     <ClCompile Include="..\Private\DXRShaderTable.cpp" />
+    <ClCompile Include="..\Private\FrameResourceManager.cpp" />
     <ClCompile Include="..\Private\SceneNode_AABB.cpp" />
     <ClCompile Include="..\Private\SceneNode.cpp" />
     <ClCompile Include="..\Private\SDSManager.cpp" />
