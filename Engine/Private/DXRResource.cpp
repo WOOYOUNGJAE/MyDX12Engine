@@ -25,13 +25,16 @@ HRESULT CDXRResource::Initialize()
 	m_pCommandQueue = CDeviceResource::Get_Instance()->Get_CommandQueue();
 	Safe_AddRef(m_pDevice);
 
-	hr = m_pDevice->CreateCommandAllocator(
-		D3D12_COMMAND_LIST_TYPE_DIRECT,
-		IID_PPV_ARGS(&m_pCommandAllocator));
-	if (FAILED(hr)) { return E_FAIL; }
+	for (UINT i = 0; i < m_iBackBufferCount; ++i)
+	{
+		hr = m_pDevice->CreateCommandAllocator(
+			D3D12_COMMAND_LIST_TYPE_DIRECT,
+			IID_PPV_ARGS(&(m_pCommandAllocatorArr[i])));
+		if (FAILED(hr)) { return E_FAIL; }
+	}
 
 	// CommandList
-	hr = m_pDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_pCommandAllocator, nullptr,
+	hr = m_pDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_pCommandAllocatorArr[0], nullptr,
 		IID_PPV_ARGS(&m_pCommandList));
 	if (FAILED(hr))
 	{
@@ -426,7 +429,7 @@ HRESULT CDXRResource::Create_OutputResource()
 
 HRESULT CDXRResource::Reset_CommandList()
 {
-	return m_pCommandList->Reset(m_pCommandAllocator, nullptr);
+	return m_pCommandList->Reset(m_pCommandAllocatorArr[0], nullptr);
 }
 
 HRESULT CDXRResource::Close_CommandList()
@@ -473,7 +476,11 @@ HRESULT CDXRResource::Free()
 	}
 	Safe_Release(m_pDescriptorHeap);
 	Safe_Release(m_pCommandList);
-	Safe_Release(m_pCommandAllocator);
+	for (UINT i = 0; i < m_iBackBufferCount; ++i)
+	{
+		Safe_Release(m_pCommandAllocatorArr[i]);		
+	}
+	Safe_Delete_Array(m_pCommandAllocatorArr);
 	Safe_Release(m_pDevice);
 	return S_OK;
 }

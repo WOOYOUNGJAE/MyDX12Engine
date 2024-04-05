@@ -39,9 +39,6 @@ public: // Manager Function Offer
 	// CameraManger
 	void Set_MainCam(wstring strName);
 	// Spatial Data Structure Manager
-#if DXR_ON
-	void Build_AccelerationStructureTree(CGameObject** pGameObjArr, UINT iArrSize);
-#endif
 public:
 	class CRenderer* Get_Renderer();
 
@@ -61,6 +58,8 @@ private: // Singleton
 #if DXR_ON
 public:
 	HRESULT Init_DXR();
+	void Build_AccelerationStructureTree(CGameObject** pGameObjArr, UINT iArrSize);
+	class CDXRRenderer* Get_DXRRenderer();
 private:
 	class CDXRResource* m_pDxrResource = nullptr;
 	class CDXRRenderer* m_pDxrRenderer = nullptr;

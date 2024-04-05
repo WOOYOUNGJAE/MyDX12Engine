@@ -29,7 +29,7 @@ HRESULT CRenderer::Initialize_Prototype()
 	HRESULT hr = S_OK;
 	m_pDeviceResource = CDeviceResource::Get_Instance();
 	m_pPipelineManager = CPipelineManager::Get_Instance();
-	/*m_pCommandAllocator = m_pDeviceResource->m_pCmdAllocator.Get();
+	/*m_pCommandAllocatorArr = m_pDeviceResource->m_pCmdAllocator.Get();
 	m_pCommandList = m_pDeviceResource->m_pCommandList.Get();*/
 	m_pCommandQueue = m_pDeviceResource->m_pCommandQueue.Get(); // CommandQueue는 따로 만들지 않고 공유, 스왑체인이 매치되어야 하기 때문
 	m_pRtvHeap = m_pDeviceResource->m_pRtvHeap.Get();

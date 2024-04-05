@@ -1,6 +1,9 @@
 #include "DeviceResource.h"
 #include "PipelineManager.h"
 #include "Renderer.h"
+#if DXR_ON
+#include "DXRRenderer.h"
+#endif
 IMPLEMENT_SINGLETON(CDeviceResource)
 
 CDeviceResource::CDeviceResource()

@@ -8,6 +8,9 @@ class CDeviceResource : public CBase
 	DECLARE_SINGLETON(CDeviceResource)
 	friend class CPipelineManager;
 	friend class CRenderer;
+#if DXR_ON
+	friend class CDXRRenderer;
+#endif
 public:
 	CDeviceResource();
 	virtual ~CDeviceResource() override = default;

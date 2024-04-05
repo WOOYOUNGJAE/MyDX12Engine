@@ -8,6 +8,10 @@
 #include "Skybox.h"
 #include "TreeBillboard.h"
 #include "ZeldaDemo.h"
+#if DXR_ON
+#include "DXRRenderer.h"
+#endif
+
 #if IMGUI_ON
 #include "Client_Imgui.h"
 #endif
@@ -69,10 +73,7 @@ HRESULT CMainApp::Initialize()
 
 	m_pGameInstance->Set_MainCam(objDesc.strTag);
 
-	/*objDesc.strTag = L"Triangle";
-	objDesc.vStartPos = Vector3(0, 0, 1);
-	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling, &objDesc);
-	if (FAILED(hr)) { return hr; }*/
+
 #pragma region Static GameObject
 
 #if DXR_ON
@@ -84,8 +85,19 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(hr)) { return hr; }
 #if DXR_ON
 	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
+	//CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
+#endif DXR_ON
+
+
+	objDesc.strTag = L"Triangle";
+	objDesc.vStartPos = Vector3(0, 0, 1);
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }
+#if DXR_ON
+	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
 	CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
 #endif DXR_ON
+
 
 #pragma endregion Static GameObject 
 
@@ -143,13 +155,23 @@ HRESULT CMainApp::Initialize()
 #if IMGUI_ON
 	m_pClient_Imgui = CClient_Imgui::Create(m_pDevice);
 #endif
+#if DXR_ON
+	m_pDXRRenderer = m_pGameInstance->Get_DXRRenderer();
+	Safe_AddRef(m_pDXRRenderer);
+#endif
 
 
 	return S_OK;
 }
 void CMainApp::Tick(_float fDeltaTime)
 {
+#if DXR_ON
+	m_pDXRRenderer;
 	m_pRenderer->BeginRender();
+#else
+	m_pRenderer->BeginRender();
+#endif
+
 
 	m_pGameInstance->Engine_Tick(fDeltaTime);
 
@@ -172,6 +194,9 @@ HRESULT CMainApp::Free()
 {
 #if IMGUI_ON
 	Safe_Release(m_pClient_Imgui);
+#endif
+#if DXR_ON
+	Safe_Release(m_pDXRRenderer);
 #endif
 
 	Safe_Release(m_pRenderer);

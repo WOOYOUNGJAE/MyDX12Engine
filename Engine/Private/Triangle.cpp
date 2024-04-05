@@ -5,6 +5,8 @@
 #include "Renderer.h"
 #include "Shader.h"
 #include "TextureCompo.h"
+#include "MeshObject.h"
+#include "SDSManager.h"
 
 CTriangle* CTriangle::Create()
 {
@@ -47,7 +49,8 @@ HRESULT CTriangle::Initialize(void* pArg)
 	if (FAILED(hr)) return hr;
 	/*hr = Add_Component(L"TriangleMesh", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
 	if (FAILED(hr)) return hr;*/
-	hr = Add_Component(L"TriangleMesh_PT", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
+	MESHOBJ_INIT_DESC meshObjDesc{ true, L"TriangleMesh_PT" };
+	hr = Add_Component(L"MeshObject", reinterpret_cast<CComponent**>(&m_pMeshObjectCom), &meshObjDesc);
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));
 	if (FAILED(hr)) return hr;
@@ -61,6 +64,11 @@ HRESULT CTriangle::Initialize(void* pArg)
 
 	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
 
+#if DXR_ON
+	m_uqpBlAS = m_pMeshObjectCom->Move_BuiltBLAS();
+
+	CSDSManager::Get_Instance()->Register_SceneNode(CGameObject::Make_NodeBLAS(), this, SDS_AS);
+#endif
 	return hr;
 }
 
@@ -87,7 +95,7 @@ HRESULT CTriangle::Free()
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);
-	Safe_Release(m_pTriangleMeshCom);
+	Safe_Release(m_pMeshObjectCom);
 	Safe_Release(m_pTransformCom);
 
 	return CGameObject::Free();

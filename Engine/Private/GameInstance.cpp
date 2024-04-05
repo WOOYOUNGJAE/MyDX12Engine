@@ -243,6 +243,11 @@ void CGameInstance::Build_AccelerationStructureTree(CGameObject** pGameObjArr, U
 
 	Safe_Delete_Array(pChildNodeArr);
 }
+
+CDXRRenderer* CGameInstance::Get_DXRRenderer()
+{
+	return m_pDxrRenderer;
+}
 #endif
 
 CRenderer* CGameInstance::Get_Renderer()

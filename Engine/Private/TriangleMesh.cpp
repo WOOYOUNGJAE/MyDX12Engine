@@ -13,9 +13,15 @@ CTriangleMesh::CTriangleMesh()
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(_ushort);
 }
 
-CTriangleMesh::CTriangleMesh(CTriangleMesh& rhs) : CMeshData(rhs),
-m_vertexData(rhs.m_vertexData)
+CTriangleMesh::CTriangleMesh(CTriangleMesh& rhs) : CMeshData(rhs)
 {
+	Safe_AddRef(m_vertexBufferCPU);
+	Safe_AddRef(m_indexBufferCPU);
+	Safe_AddRef(m_vertexBufferGPU);
+	Safe_AddRef(m_indexBufferGPU);
+	Safe_AddRef(m_vertexUploadBuffer);
+	Safe_AddRef(m_indexUploadBuffer);
+
 	m_iNumVertices = rhs.m_iNumVertices;
 	m_iNumIndices = rhs.m_iNumIndices;
 	m_iVertexByteStride = rhs.m_iVertexByteStride;
@@ -54,7 +60,7 @@ CMeshData* CTriangleMesh::Clone(void* pArg)
 HRESULT CTriangleMesh::Initialize_Prototype()
 {
 	HRESULT hr = S_OK;
-	if (m_pDevice == nullptr || m_pCommandList == nullptr)
+	/*if (m_pDevice == nullptr || m_pCommandList == nullptr)
 	{
 		MSG_BOX("TriangleMesh: Device Null");
 		return E_FAIL;
@@ -63,12 +69,11 @@ HRESULT CTriangleMesh::Initialize_Prototype()
 	hr = CMeshData::Initialize_Prototype();
 	if (FAILED(hr)) { return E_FAIL; }
 
-	m_vertexData = new VertexPositionColor[m_iNumVertices]
+	VertexPositionNormalTexture tempVertices[]
 	{
-		// TODO : Color TEMP
-		VertexPositionColor({ _float3(0.f, 0.25f * CDeviceResource::Get_Instance()->m_fAspectRatio, 0.25f), _float4(1.0f, 0.0f, 0.0f, 1.0f) }),
-		VertexPositionColor({ _float3(0.25f, -0.25f * CDeviceResource::Get_Instance()->m_fAspectRatio, 0.25f), _float4(0.0f, 1.0f, 0.0f, 1.0f) }),
-		VertexPositionColor({ _float3(-0.25f, -0.25f * CDeviceResource::Get_Instance()->m_fAspectRatio, 0.25f), _float4(0.0f, 0.0f, 1.0f, 1.0f) }),
+		{Vector3(0.0f, 0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.5f, 0.0f)},
+		{Vector3(0.25f, -0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f),Vector2(1.0f, 1.0f)},
+		{Vector3(-0.25f, -0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f),Vector2(0.0f, 1.0f)}
 	};
 
 	_ushort indexData[3]
@@ -110,7 +115,7 @@ HRESULT CTriangleMesh::Initialize_Prototype()
 	{
 		MSG_BOX("TriangleMesh : Failed to Create Buffer");
 		return E_FAIL;
-	}
+	}*/
 
 	return S_OK;
 }
@@ -124,7 +129,7 @@ HRESULT CTriangleMesh::Free()
 {
 	if (m_bIsPrototype == true)
 	{
-		Safe_Delete_Array(m_vertexData); // Prototype 경우에만 해제
+		//Safe_Delete_Array(m_vertexData); // Prototype 경우에만 해제
 	}
 	if (FAILED(CMeshData::Free()))
 	{

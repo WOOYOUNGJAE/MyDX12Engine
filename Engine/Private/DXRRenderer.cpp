@@ -2,6 +2,7 @@
 #include "DXRResource.h"
 #include "DeviceResource.h"
 #include "MeshData.h"
+#include "DeviceResource.h"
 #include "AssetManager.h"
 #include "./Shaders/Raytracing.hlsl.h"
 
@@ -25,9 +26,11 @@ HRESULT CDXRRenderer::Initialize()
 
     // set pointers
     m_pDXRResources = CDXRResource::Get_Instance();
+    m_pDeviceResource = CDeviceResource::Get_Instance();
+    m_pCommandAllocatorArr = m_pDXRResources->m_pCommandAllocatorArr;
     m_pCommandList = m_pDXRResources->m_pCommandList;
     m_pDXR_PSO = m_pDXRResources->m_pDXR_PSO;
-
+    m_pRenderTargetArr = CDeviceResource::Get_Instance()->m_pRenderTargets->GetAddressOf();
 
     // Since each shader table has only one shader record, the stride is same as the size. 임시로 레코드 1개일 떄
     ZeroMemory(&m_disptchRaysDesc, sizeof(D3D12_DISPATCH_RAYS_DESC));
@@ -49,6 +52,48 @@ HRESULT CDXRRenderer::Initialize()
 HRESULT CDXRRenderer::Free()
 {
 	return S_OK;
+}
+
+void CDXRRenderer::BeginRender()
+{
+    m_pCommandAllocatorArr[m_pDeviceResource->m_iCurrBackBuffer]->Reset();
+    m_pCommandList->Reset(m_pCommandAllocatorArr[m_pDeviceResource->m_iCurrBackBuffer], nullptr);
+    //
+    D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+        m_pDeviceResource->m_pRenderTargets[m_pDeviceResource->m_iCurrBackBuffer].Get(),
+        D3D12_RESOURCE_STATE_PRESENT,
+        D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+    m_pCommandList->ResourceBarrier(1, &barrier);
+
+}
+
+void CDXRRenderer::MainRender()
+{
+    static bool initComplete = false;
+if (initComplete == false)
+{
+    VertexPositionNormalTexture tempVertices[]
+    {
+        VertexPositionNormalTexture(Vector3(0,1,0), Vector3(0,0,-1), Vector2(0.0)),
+        VertexPositionNormalTexture(Vector3(0.866f, -0.5f, 0), Vector3(0,0,-1), Vector2(0.0)),
+        VertexPositionNormalTexture(Vector3(-0.866f, -0.5f, 0), Vector3(0,0,-1), Vector2(0.0))
+    };
+
+
+
+
+
+    initComplete = true;
+}
+}
+
+void CDXRRenderer::EndRender()
+{
+} 
+
+void CDXRRenderer::Present()
+{
 }
 
 void CDXRRenderer::Do_RayTracing()

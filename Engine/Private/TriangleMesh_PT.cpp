@@ -10,12 +10,18 @@ CTriangleMesh_PT::CTriangleMesh_PT()
 	m_iVertexByteStride = sizeof(VertexPositionNormalTexture);
 	m_iVertexBufferByteSize = m_iNumVertices * m_iVertexByteStride;
 	m_IndexFormat = DXGI_FORMAT_R16_UINT;
-	m_iIndexBufferByteSize = m_iNumIndices * sizeof(UINT32);
+	m_iIndexBufferByteSize = m_iNumIndices * sizeof(UINT16);
 }
 
-CTriangleMesh_PT::CTriangleMesh_PT(CTriangleMesh_PT& rhs) : CMeshData(rhs),
-m_vertexData(rhs.m_vertexData)
+CTriangleMesh_PT::CTriangleMesh_PT(CTriangleMesh_PT& rhs) : CMeshData(rhs)
 {
+	Safe_AddRef(m_vertexBufferCPU);
+	Safe_AddRef(m_indexBufferCPU);
+	Safe_AddRef(m_vertexBufferGPU);
+	Safe_AddRef(m_indexBufferGPU);
+	Safe_AddRef(m_vertexUploadBuffer);
+	Safe_AddRef(m_indexUploadBuffer);
+
 	m_iNumVertices = rhs.m_iNumVertices;
 	m_iNumIndices = rhs.m_iNumIndices;
 	m_iVertexByteStride = rhs.m_iVertexByteStride;
@@ -63,26 +69,23 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 	hr = CMeshData::Initialize_Prototype();
 	if (FAILED(hr)) { return E_FAIL; }
 
-	m_vertexData = new VertexPositionNormalTexture[]
+	
+	VertexPositionNormalTexture tempVertices[]
 	{
 		{Vector3(0.0f, 0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.5f, 0.0f)},
 		{Vector3(0.25f, -0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f),Vector2(1.0f, 1.0f)},
-		{Vector3(- 0.25f, -0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f),Vector2(0.0f, 1.0f)}
+		{Vector3(-0.25f, -0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f),Vector2(0.0f, 1.0f)}
 	};
-	/*m_vertexData = new VertexPositionTexture[]
-	{
-		{Vector3(0.0f, 0.25f, 0.0f), Vector2(0.5f, 0.0f)},
-		{Vector3(0.25f, -0.25f, 0.0f), Vector2(1.0f, 1.0f)},
-		{Vector3(- 0.25f, -0.25f, 0.0f), Vector2(0.0f, 1.0f)}
-	};*/
+	m_vecVertexData.reserve(3);
+	m_vecVertexData.assign(tempVertices, tempVertices + _countof(tempVertices));
 
-	UINT32 indexData[3]
+	UINT16 indicesData[3]
 	{
 		0, 1, 2,
 	};
 
-	const _uint iVertexBufferSize = sizeof(VertexPositionNormalTexture) * 3;
-	const _uint iIndexBufferSize = sizeof(UINT32) * 3;
+	const _uint iVertexBufferSize = sizeof(VertexPositionNormalTexture) * m_iNumVertices;
+	const _uint iIndexBufferSize = sizeof(UINT16) * m_iNumIndices;
 
 
 	hr = D3DCreateBlob(iVertexBufferSize, &m_vertexBufferCPU);
@@ -91,7 +94,7 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 		MSG_BOX("TriangleMesh_PT : Failed to Create Blob");
 		return E_FAIL;
 	}
-	memcpy(m_vertexBufferCPU->GetBufferPointer(), m_vertexData, iVertexBufferSize);
+	memcpy(m_vertexBufferCPU->GetBufferPointer(), m_vecVertexData.data(), iVertexBufferSize);
 
 	hr = D3DCreateBlob(iIndexBufferSize, &m_indexBufferCPU);
 	if (FAILED(hr))
@@ -99,10 +102,10 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 		MSG_BOX("TriangleMesh_PT : Failed to Create Blob");
 		return E_FAIL;
 	}
-	memcpy(m_indexBufferCPU->GetBufferPointer(), indexData, iIndexBufferSize);
+	memcpy(m_indexBufferCPU->GetBufferPointer(), indicesData, iIndexBufferSize);
 
 	hr = MyUtils::Create_Buffer_Default(m_pDevice, m_pCommandList,
-	                                          m_vertexData, iVertexBufferSize, &m_vertexUploadBuffer, &m_vertexBufferGPU);
+		m_vecVertexData.data(), iVertexBufferSize, &m_vertexUploadBuffer, &m_vertexBufferGPU);
 	if (FAILED(hr))
 	{
 		MSG_BOX("TriangleMesh_PT : Failed to Create Buffer");
@@ -110,7 +113,7 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 	}
 
 	hr = MyUtils::Create_Buffer_Default(m_pDevice, m_pCommandList,
-	                                          indexData, iIndexBufferSize, &m_indexUploadBuffer, &m_indexBufferGPU);
+	                                          indicesData, iIndexBufferSize, &m_indexUploadBuffer, &m_indexBufferGPU);
 	if (FAILED(hr))
 	{
 		MSG_BOX("TriangleMesh_PT : Failed to Create Buffer");
@@ -119,7 +122,7 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 
 	CMeshData::Init_VBV_IBV();
 #if DXR_ON
-	CMeshData::Build_BLAS(m_vecIndexData.data(), m_vecVertexData.data(),
+	CMeshData::Build_BLAS(indicesData, m_vecVertexData.data(),
 		iIndexBufferSize, sizeof(VertexPositionNormalTexture) * m_iNumVertices);
 #endif
 	return S_OK;
@@ -132,15 +135,15 @@ HRESULT CTriangleMesh_PT::Initialize(void* pArg)
 
 HRESULT CTriangleMesh_PT::Free()
 {
-	if (m_bIsPrototype == true)
+	if (m_bIsPrototype == false)
 	{
-		Safe_Delete_Array(m_vertexData); // Prototype 경우에만 해제
+		Safe_Release(m_vertexBufferCPU);
+		Safe_Release(m_indexBufferCPU);
+		Safe_Release(m_vertexBufferGPU);
+		Safe_Release(m_indexBufferGPU);
+		Safe_Release(m_vertexUploadBuffer);
+		Safe_Release(m_indexUploadBuffer);
 	}
 
-	if (FAILED(CMeshData::Free()))
-	{
-		return E_FAIL;
-	}
-
-	return S_OK;
+	return CMeshData::Free();
 }

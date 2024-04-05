@@ -4,6 +4,7 @@
 NAMESPACE_(Engine)
 class CGameInstance;
 class CRenderer;
+class CDXRRenderer;
 _NAMESPACE
 
 NAMESPACE_(Client)
@@ -24,6 +25,9 @@ private:
 	ID3D12Device* m_pDevice = nullptr;
 	CGameInstance* m_pGameInstance = nullptr;
 	CRenderer* m_pRenderer = nullptr;
+#if DXR_ON
+	CDXRRenderer* m_pDXRRenderer = nullptr;
+#endif
 
 #if IMGUI_ON
 	CClient_Imgui* m_pClient_Imgui = nullptr;

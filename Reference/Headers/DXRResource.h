@@ -12,7 +12,10 @@ class CDXRResource : public CBase
 	friend class CDXRRenderer;
 
 protected:
-	CDXRResource() = default;
+	CDXRResource()
+	{
+		m_pCommandAllocatorArr = new ID3D12CommandAllocator * [m_iBackBufferCount];
+	}
 	~CDXRResource() override = default;
 
 public:
@@ -23,6 +26,7 @@ public: // getter
 	UINT Get_DescriptorSize() { return m_iDescriptorSize; }
 	ID3D12Resource*& Get_ScratchBufferRef() { return m_pScratchBuffer; }
 	ID3D12Resource** Get_ScratchBufferPtr() { return &m_pScratchBuffer; }
+	ID3D12CommandAllocator*** Get_CommandAllocatorArrPtr() { return &m_pCommandAllocatorArr; }
 private:
 	HRESULT Crete_RootSignatures();
 	HRESULT Create_PSOs();
@@ -43,7 +47,7 @@ public:
 	void Flush_CommandQueue();
 private: // D3D Resource
 	ID3D12GraphicsCommandList4* m_pCommandList = nullptr; // CmdList for Dxr
-	ID3D12CommandAllocator* m_pCommandAllocator = nullptr;
+	ID3D12CommandAllocator** m_pCommandAllocatorArr = nullptr;
 	ID3D12DescriptorHeap* m_pDescriptorHeap = nullptr; // CbvSrvUav Heap
 	ID3D12RootSignature* m_pRootSigArr[DXR_ROOTSIG_TYPE_END];
 	ID3D12StateObject* m_pDXR_PSO = nullptr;
@@ -66,7 +70,8 @@ private: //Fence
 	UINT64 m_iFenceValue = 0;
 	HANDLE m_fenceEvent;
 	QUEUE_FLUSH_DESC m_queue_flush_desc{};
-private: 
+private:
+	UINT m_iBackBufferCount = 2;
 	UINT m_iScreenWidth = 0;
 	UINT m_iScreenHeight = 0;
 private: // entry point str

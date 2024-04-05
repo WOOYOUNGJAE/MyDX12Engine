@@ -28,7 +28,7 @@ public: // getter setter
 protected:
 	class CTransform* m_pTransformCom = nullptr;
 	//class CTriangleMesh* m_pTriangleMeshCom = nullptr;
-	class CTriangleMesh_PT* m_pTriangleMeshCom = nullptr;
+	class CMeshObject* m_pMeshObjectCom = nullptr;
 	class CShader* m_pShaderCom = nullptr;
 	class CRenderer* m_pRendererCom = nullptr;
 	class CTextureCompo* m_pTextureCom = nullptr;
