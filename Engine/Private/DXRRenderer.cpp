@@ -73,13 +73,6 @@ void CDXRRenderer::MainRender()
     static bool initComplete = false;
 if (initComplete == false)
 {
-    VertexPositionNormalTexture tempVertices[]
-    {
-        VertexPositionNormalTexture(Vector3(0,1,0), Vector3(0,0,-1), Vector2(0.0)),
-        VertexPositionNormalTexture(Vector3(0.866f, -0.5f, 0), Vector3(0,0,-1), Vector2(0.0)),
-        VertexPositionNormalTexture(Vector3(-0.866f, -0.5f, 0), Vector3(0,0,-1), Vector2(0.0))
-    };
-
 
 
 
@@ -112,7 +105,7 @@ void CDXRRenderer::Set_ComputeRootDescriptorTable_Global()
     m_pCommandList->SetDescriptorHeaps(1, &m_pDXRResources->m_pDescriptorHeap);
     // indexBuffer과 VertexBuffer가 연속적이라 index만 세팅
     //m_pCommandList->SetComputeRootDescriptorTable(GlobalRootSigSlot::IB_VB_SRV, m_indexBuffer.gpuDescriptorHandle);
-    //m_pCommandList->SetComputeRootDescriptorTable(GlobalRootSigSlot::OUTPUT_VIEW, m_raytracingOutputResourceUAVGpuDescriptor);
+    //m_pCommandList->SetComputeRootDescriptorTable(GlobalRootSigSlot::RENDER_TARGET, m_raytracingOutputResourceUAVGpuDescriptor);
 }
 
 #endif

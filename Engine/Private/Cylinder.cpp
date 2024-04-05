@@ -6,7 +6,7 @@
 #include "Shader.h"
 #include "Material.h"
 #include "MeshData.h"
-
+#include "FrameResource.h"
 CCylinder::CCylinder(CCylinder& rhs) : CGameObject(rhs),
 m_strCylinderMeshTag(rhs.m_strCylinderMeshTag)
 {

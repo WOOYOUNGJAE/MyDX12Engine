@@ -1,7 +1,7 @@
 #pragma once
-
 namespace Engine
 {
+
 	
 	struct PASS_CB_VP
 	{
@@ -57,6 +57,8 @@ namespace Engine
 
 		Vector4 padding[5];
 	};
+
+
 
 #if DXR_ON
 NAMESPACE_(DXR)

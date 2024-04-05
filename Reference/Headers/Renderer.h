@@ -1,9 +1,8 @@
 #pragma once
 #include "Component.h"
-#include "UploadBuffer.h"
 
 NAMESPACE_(Engine)
-struct FrameResource;
+	struct FrameResource;
 // 렌더링을 직접 수행, 게임오브젝트에 컴포넌트로 부착될 때는 클론되는 것이 아닌 참조만
 // 컴포넌트 형식인 의도 : 자기 자신을 쉽게 특정 렌더 그룹에 넣기 위해
 using namespace std;
@@ -75,22 +74,4 @@ private: // Pass Info
 private:
 };
 
-struct FrameResource
-{
-	NO_COPY(FrameResource);
-	FrameResource(ID3D12Device * pDevice, UINT iObjectCount, UINT iPassCount = 0);
-	~FrameResource();
-
-	// GPU가 명령을 다 처리한후 할당자를 재설정해야 하기 때문에 프레임마다 할당자 필요
-	ID3D12CommandAllocator* pCmdListAlloc;
-
-	// 상수 버퍼는 GPU가 명령 다 처리한 후 갱신해야 해서 매 프레임 새로운 상수버퍼 필요
-	CUploadBuffer<OBJECT_CB>* pObjectCB = nullptr;
-	CUploadBuffer<PASS_CB_VP>* pPassCB = nullptr;
-	CUploadBuffer<PASS_CB_VP_LIGHT>* pPassCB_vp_light = nullptr;
-	//std::unique_ptr<UploadBuffer<PassConstants>> PassCB = nullptr;
-
-	// Command 어디까지 해야 있는지 체크
-	UINT64 Fence = 0;
-};
 _NAMESPACE

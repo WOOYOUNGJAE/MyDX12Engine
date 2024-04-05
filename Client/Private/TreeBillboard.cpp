@@ -3,7 +3,7 @@
 
 #include <Camera.h>
 
-
+#include "FrameResource.h"
 #include "TextureCompo.h"
 #include "MeshObject.h"
 #include "Transform.h"

@@ -7,7 +7,7 @@
 #include "TextureCompo.h"
 #include "MeshObject.h"
 #include "SDSManager.h"
-
+#include "FrameResource.h"
 CTriangle* CTriangle::Create()
 {
 	CTriangle* pInstance = new CTriangle;
@@ -62,7 +62,9 @@ HRESULT CTriangle::Initialize(void* pArg)
 
 	m_iTextureSrvOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
 
+
 	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
+	m_pTransformCom->Set_Scale(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartScale);
 
 #if DXR_ON
 	m_uqpBlAS = m_pMeshObjectCom->Move_BuiltBLAS();
@@ -87,7 +89,48 @@ void CTriangle::Render_Tick()
 {
 	// Bind Resource
 	//m_pRendererCom->AddTo_RenderGroup(RENDER_AFTER, NOBLEND, SHADERTYPE_SIMPLE, ROOTSIG_DEFAULT, this);
-	m_pRendererCom->AddTo_RenderGroup(RENDER_AFTER, CW, NOBLEND, SHADERTYPE_SIMPLE2, ROOTSIG_DEFAULT, this);
+	m_pRendererCom->AddTo_RenderGroup(RENDER_AFTER, CCW, NOBLEND, SHADERTYPE_SIMPLE3, ROOTSIG_DEFAULT, this);
+}
+
+void CTriangle::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFrameResource, UINT iRenderingElementIndex)
+{
+	// Update CB
+	OBJECT_CB objConstants;
+	objConstants.mWorldMat = Get_WorldMatrix().Transpose();
+	objConstants.mInvTranspose = Get_WorldMatrix().Invert(); // Transpose µÎ¹ø
+	objConstants.material = Get_MaterialInfo();
+	pFrameResource->pObjectCB->CopyData(iRenderingElementIndex, objConstants);
+
+	pCmdList->IASetPrimitiveTopology(PrimitiveType());
+
+	// for each meshes
+	for (UINT i = 0; i < m_pMeshObjectCom->Get_vecMeshData()->size(); ++i)
+	{
+		CMeshData* pMesh = (*m_pMeshObjectCom->Get_vecMeshData())[i];
+
+		UINT objCBByteSize = MyUtils::Align256(sizeof(OBJECT_CB));
+		D3D12_GPU_VIRTUAL_ADDRESS objCBAddress =
+			pFrameResource->pObjectCB->Get_UploadBuffer()->GetGPUVirtualAddress() + iRenderingElementIndex * objCBByteSize;
+
+		pCmdList->IASetVertexBuffers(0, 1, pMesh->Get_VertexBufferViewPtr());
+		pCmdList->IASetIndexBuffer(pMesh->Get_IndexBufferViewPtr());
+
+		// Set Descriptor Tables
+		pCmdList->SetGraphicsRootDescriptorTable(0, m_pRendererCom->Get_HandleOffsettedGPU(Get_CbvSrvUavHeapOffset_Texture()));
+		pCmdList->SetGraphicsRootConstantBufferView(1, objCBAddress);
+		/*pCmdList->SetGraphicsRootDescriptorTable(1,
+			m_pRendererCom->Get_ObjCbvHandleOffsettedGPU(
+				(m_iClonedNum - 1) * m_pRendererCom->Get_ObjCbvDescriptorSize()
+			));*/
+
+		pCmdList->DrawIndexedInstanced(
+			pMesh->Num_Indices(),
+			1,
+			0,
+			0,
+			0);
+	}
+
 }
 
 HRESULT CTriangle::Free()

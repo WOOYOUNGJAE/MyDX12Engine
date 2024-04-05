@@ -6,6 +6,7 @@
 #include "Shader.h"
 #include "Material.h"
 #include "MeshData.h"
+#include "FrameResource.h"
 CZeldaDemo::CZeldaDemo(CZeldaDemo& rhs) : CGameObject(rhs)
 {
 }

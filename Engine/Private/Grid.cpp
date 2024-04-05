@@ -6,7 +6,7 @@
 #include "Shader.h"
 #include "Material.h"
 #include "MeshData.h"
-
+#include "FrameResource.h"
 CGrid::CGrid(CGrid& rhs) : CGameObject(rhs),
 m_strGridMeshTag(rhs.m_strGridMeshTag)
 {

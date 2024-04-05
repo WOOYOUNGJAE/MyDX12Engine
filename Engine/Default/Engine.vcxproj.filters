@@ -282,9 +282,6 @@
     <ClInclude Include="..\Public\CameraManager.h">
       <Filter>Utility\Managers\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\FrameResource_Struct.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\CubeMesh.h">
       <Filter>Utility\MeshData\3D\CubeMesh</Filter>
     </ClInclude>
@@ -363,6 +360,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\DXRShaderTable.h">
       <Filter>System\D3D Graphics\DXR\DXRShaderTable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FrameResource_Struct.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FrameResource.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

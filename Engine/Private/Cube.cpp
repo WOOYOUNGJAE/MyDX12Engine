@@ -7,7 +7,7 @@
 #include "Material.h"
 #include "MeshData.h"
 #include "SDSManager.h"
-
+#include "FrameResource.h"
 CCube* CCube::Create()
 {
 	CCube* pInstance = new CCube;

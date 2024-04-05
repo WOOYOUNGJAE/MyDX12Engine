@@ -70,9 +70,6 @@ HRESULT CDXRResource::Initialize()
 
 	// DescriptorHeap
 	D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc = {};
-	// Allocate a heap for 3 descriptors:
-	// 2 - vertex and index buffer SRVs
-	// 1 - raytracing output texture SRV
 	descriptorHeapDesc.NumDescriptors = 4000/*DXR생성시엔 오브젝트 개수 모르기 때문에*/;
 	descriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	descriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
@@ -126,9 +123,9 @@ HRESULT CDXRResource::Crete_RootSignatures()
 		descriptorRange[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 1, 1); // static index vertex buffer
 
 		CD3DX12_ROOT_PARAMETER rootParameterArr[4];
-		rootParameterArr[GlobalRootSigSlot::OUTPUT_VIEW].InitAsDescriptorTable(1, &descriptorRange[0]);
+		rootParameterArr[GlobalRootSigSlot::RENDER_TARGET].InitAsDescriptorTable(1, &descriptorRange[0]);
 		rootParameterArr[GlobalRootSigSlot::AS].InitAsShaderResourceView(0, 1);
-		rootParameterArr[GlobalRootSigSlot::SCENE_CONSTANT].InitAsConstantBufferView(0, 1); // SceneConstant
+		rootParameterArr[GlobalRootSigSlot::PASS_CONSTANT].InitAsConstantBufferView(0, 1); // SceneConstant
 		rootParameterArr[GlobalRootSigSlot::IB_VB_SRV].InitAsDescriptorTable(1, &descriptorRange[1]);
 
 		CD3DX12_ROOT_SIGNATURE_DESC globalRootSignatureDesc(_countof(rootParameterArr), rootParameterArr);
@@ -297,7 +294,8 @@ HRESULT CDXRResource::Build_ShaderTable()
 LOCAL_BLOCK_// Ray Gen Shader Table
 	using DXR::TABLE_RECORD_DESC;
 	TABLE_RECORD_DESC tableRecordDesc = TABLE_RECORD_DESC
-	{ D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
+	{
+		D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
 		pRayGenShaderIdentifier,
 		0,
 		nullptr
@@ -323,7 +321,8 @@ _LOCAL_BLOCK
 LOCAL_BLOCK_// Miss Shader Table
 	using DXR::TABLE_RECORD_DESC;
 	TABLE_RECORD_DESC tableRecordDesc = TABLE_RECORD_DESC
-	{ D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
+	{
+		D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
 		pMissShaderIdentifier,
 		0,
 		nullptr
@@ -355,7 +354,8 @@ LOCAL_BLOCK_// Hit Group Shader Table
 	rootArguments.cb = DXR::OBJECT_CB{ XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) };
 
 	TABLE_RECORD_DESC tableRecordDesc = TABLE_RECORD_DESC
-	{ D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
+	{
+		D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
 		pMissShaderIdentifier,
 		sizeof(RootArguments),
 		&rootArguments

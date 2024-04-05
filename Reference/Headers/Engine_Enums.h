@@ -45,7 +45,7 @@ namespace Engine
 #if DXR_ON
 	namespace GlobalRootSigSlot
 	{
-		enum SLOT_INDEX {OUTPUT_VIEW, AS, SCENE_CONSTANT, IB_VB_SRV};
+		enum SLOT_INDEX {RENDER_TARGET, AS, PASS_CONSTANT, IB_VB_SRV};
 		
 	}
 #endif

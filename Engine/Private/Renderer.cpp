@@ -4,6 +4,7 @@
 #include "DeviceResource.h"
 #include "PipelineManager.h"
 #include "GameObject.h"
+#include "FrameResource.h"
 #include "MyMath.h"
 
 CRenderer* CRenderer::Create()
@@ -398,24 +399,3 @@ void CRenderer::Flush_CommandQueue()
 	CDeviceResource::Get_Instance()->Flush_CommandQueue(&m_queue_flush_desc);
 }
 
-//--------------------------------------------------------------------------------------
-
-FrameResource::FrameResource(ID3D12Device * pDevice, UINT iObjectCount, UINT iPassCount)
-{
-	pDevice->CreateCommandAllocator(
-		D3D12_COMMAND_LIST_TYPE_DIRECT,
-		IID_PPV_ARGS(&pCmdListAlloc));
-
-	//PassCB = std::make_unique<UploadBuffer<PassConstants>>(device, passCount, true);
-	pObjectCB = CUploadBuffer<OBJECT_CB>::Create(pDevice, iObjectCount, true);
-	pPassCB = CUploadBuffer<PASS_CB_VP>::Create(pDevice, iPassCount, true);
-	pPassCB_vp_light = CUploadBuffer<PASS_CB_VP_LIGHT>::Create(pDevice, iPassCount, true);
-}
-
-FrameResource::~FrameResource()
-{
-	Safe_Release(pPassCB_vp_light);
-	Safe_Release(pPassCB);
-	Safe_Release(pObjectCB);
-	Safe_Release(pCmdListAlloc);
-}

@@ -1,0 +1,1 @@
+#include "FrameResource_Struct.h"

@@ -6,7 +6,7 @@
 #include "Shader.h"
 #include "Material.h"
 #include "MeshData.h"
-
+#include "FrameResource.h"
 CSphere::CSphere(CSphere& rhs) : CGameObject(rhs),
 m_strSphereMeshTag(rhs.m_strSphereMeshTag)
 {

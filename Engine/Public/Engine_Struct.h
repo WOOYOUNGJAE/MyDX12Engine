@@ -1,8 +1,9 @@
 #pragma once
-
 #include "FrameResource_Struct.h"
+
 namespace Engine
 {
+
 
 #pragma region Init_Desc
 	struct GRAPHIC_DESC
