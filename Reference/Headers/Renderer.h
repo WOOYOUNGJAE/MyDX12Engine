@@ -19,7 +19,7 @@ public:
 	CComponent* Clone(void* pArg) override; // return this
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override;
-	HRESULT Build_FrameResource(); // Build FrameResource, Build CBV inside, SRV로드 후 실행
+	HRESULT Build_FrameResource(UINT inNumAllRenderingObject = 30); // Build FrameResource, Build CBV inside, SRV로드 후 실행
 	void Update_PassCB();
 	void Update_ObjCB(class CGameObject* pGameObj);
 	void BeginRender();

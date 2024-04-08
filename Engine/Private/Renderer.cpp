@@ -86,25 +86,29 @@ HRESULT CRenderer::Initialize(void* pArg)
 	return CComponent::Initialize(pArg);
 }
 
-HRESULT CRenderer::Build_FrameResource()
+HRESULT CRenderer::Build_FrameResource(UINT inNumAllRenderingObject)
 {
 	HRESULT hr = S_OK;
 
 	ID3D12Device* pDevice = m_pDeviceResource->m_pDevice.Get();
-	// FrameResource
+
+	UINT iNumAllRenderingObject = inNumAllRenderingObject; // 
+
+	// FrameResource, 업로드 버퍼 생성
 	for (UINT i = 0; i < g_iNumFrameResource; ++i)
 	{
 		m_vecFrameResource.push_back(new FrameResource(
 			pDevice,
-			50/**/,
+			iNumAllRenderingObject/**/, // UploadBuffer를 n조각으로 쪼갬
 			1/**/)
 		);
 	}
 	m_pCurFrameResource = CFrameResourceManager::Get_Instance()->m_vecFrameResource[0]; // TODO FrameResource 2이상되면 수정
 
-	// Build Obj Constant Buffer
+	// Build Obj Constant Buffer, 업로드 버퍼를 CBV화
 	UINT objCBByteSize = MyUtils::Align256(sizeof(OBJECT_CB));
 	UINT objCount = 1; //
+	objCount = iNumAllRenderingObject; //
 	UINT iCbvSrvUavDescriptorSize = m_pDeviceResource->m_iCbvSrvUavDescriptorSize;
 	auto handle = CD3DX12_CPU_DESCRIPTOR_HANDLE(m_pDeviceResource->Get_CbvSrvUavHeapStart_CPU());
 	m_iObjCBVHeapStartOffset = *m_pDeviceResource->Get_NextCbvSrvUavHeapOffsetPtr();
@@ -134,11 +138,11 @@ HRESULT CRenderer::Build_FrameResource()
 		}
 	}
 	
+	
+
 	UINT passCBByteSize = MyUtils::Align256(sizeof(PASS_CB_VP));
 	handle.InitOffsetted(m_pDeviceResource->Get_CbvSrvUavHeapStart_CPU(), 0);
 	handle.Offset(m_iPassCBVHeapStartOffset);
-	
-
 	for (INT frameIndex = 0; frameIndex < g_iNumFrameResource; ++frameIndex)
 	{
 		passCBByteSize = MyUtils::Align256(sizeof(PASS_CB_VP_LIGHT));
@@ -227,15 +231,6 @@ void CRenderer::MainRender()
 	UINT iRenderingElementIndex = 0;
 	for (UINT IsFirst = 0; IsFirst < RENDER_PRIORITY_END; ++IsFirst)
 	{
-		/*if (IsFirst == RENDER_FIRST)
-		{
-			CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHeapHandle(m_pRtvHeap->GetCPUDescriptorHandleForHeapStart(),
-				(INT)m_iFrameIndex, m_pDeviceResource->m_iRtvDescriptorSize);
-			CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHeapHandle(m_pDeviceResource->Get_DepthStencilViewHeapStart());
-			m_pCommandList->ClearDepthStencilView(dsvHeapHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
-
-			m_pCommandList->OMSetRenderTargets(1, &rtvHeapHandle, true, &dsvHeapHandle);
-		}*/
 		for (UINT eCullMode = 0; eCullMode < D3D12_CULL_MODE_END; ++eCullMode)
 		{			
 			for (UINT eBlendModeEnum = 0; eBlendModeEnum < RENDER_BLENDMODE_END; ++eBlendModeEnum)

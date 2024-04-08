@@ -17,6 +17,7 @@
 #include "BVH.h"
 #include "SceneNode_AABB.h"
 #include "FrameResourceManager.h"
+#include "Renderer.h"
 #pragma endregion
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -101,7 +102,6 @@ HRESULT CGameInstance::Init_Engine(GRAPHIC_DESC& GraphicDesc, _Inout_ ID3D12Devi
 	hr = m_pLoadHelper->Initialize();;
 	if (FAILED(hr)) { return E_FAIL; }
 
-
 	//hr = Init_DXR();
 
 	return S_OK;
@@ -178,6 +178,27 @@ CComponent* CGameInstance::Clone_ComPrototype(const wstring& strTag, void* pArg)
 	}
 
 	return pInstnace;
+}
+
+HRESULT CGameInstance::Build_FrameResource_After_Loading_GameScene_Finished(UINT iNumAllRenderingObject)
+{
+	HRESULT hr = S_OK;
+	CRenderer* pCastedRenderer = dynamic_cast<CRenderer*>(m_pComponentManager->FindandGet_Prototype(L"Renderer"));
+	if (pCastedRenderer)
+	{
+		hr = pCastedRenderer->Build_FrameResource(iNumAllRenderingObject);
+	}
+	else
+	{
+		hr = E_FAIL;
+	}
+
+	if (FAILED(hr))
+	{
+		MSG_BOX("Building FrameResource Failed");
+	}
+
+	return hr;
 }
 
 HRESULT CGameInstance::Add_GameObjPrototype(const wstring& strTag, CGameObject* pInstance)

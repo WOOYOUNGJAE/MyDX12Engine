@@ -142,6 +142,11 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(hr)) { return hr; }*/
 #pragma endregion InLevel
 
+	hr = m_pGameInstance->Build_FrameResource_After_Loading_GameScene_Finished(
+		/*TODO Clone된(프로토타입제외) 모든 렌더링해야 하는 오브젝트 개수*/
+		15);
+	if (FAILED(hr)) { return hr; }
+
 	// Renderer
 	m_pRenderer = m_pGameInstance->Get_Instance()->Get_Renderer();
 	Safe_AddRef(m_pRenderer);

@@ -46,7 +46,7 @@ protected:
 	wstring m_strPrototypeTag;
 	map<wstring, CComponent*> m_mapComponents;
 	UINT64 m_iTextureSrvOffset = ULONGLONG_MAX; // 일단 오브젝트당 텍스처 1개 가정
-
+	UINT m_iRenderingElementIndex = 0; // 
 #if DXR_ON
 public:
 	CSceneNode* Make_NodeBLAS();
