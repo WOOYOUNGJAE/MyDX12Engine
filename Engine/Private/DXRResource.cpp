@@ -470,6 +470,8 @@ void CDXRResource::Flush_CommandQueue()
 
 HRESULT CDXRResource::Free()
 {
+	Flush_CommandQueue();
+
 	Safe_Release(m_pDXROutput);
 
 	Safe_Release(m_pRayGenShaderTable);

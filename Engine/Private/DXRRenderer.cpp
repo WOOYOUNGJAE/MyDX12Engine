@@ -81,10 +81,37 @@ void CDXRRenderer::MainRender()
 
 void CDXRRenderer::EndRender()
 {
+
+#pragma region Copy DXR Output to Back Buffer
+    D3D12_RESOURCE_BARRIER preCopyBarriers[2];
+    // 렌더 타겟 쓸 수 있도록
+    preCopyBarriers[0] = CD3DX12_RESOURCE_BARRIER::Transition(m_pRenderTargetArr[m_iFrameIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COPY_DEST);
+    // DXR 결과물 Copy Src로
+    preCopyBarriers[1] = CD3DX12_RESOURCE_BARRIER::Transition(m_pDXRResources->m_pDXROutput, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COPY_SOURCE);
+    m_pCommandList->ResourceBarrier(ARRAYSIZE(preCopyBarriers), preCopyBarriers);
+
+    m_pCommandList->CopyResource(m_pRenderTargetArr[m_iFrameIndex], m_pDXRResources->m_pDXROutput);
+
+    D3D12_RESOURCE_BARRIER postCopyBarriers[2]; // 위의 역순
+    postCopyBarriers[0] = CD3DX12_RESOURCE_BARRIER::Transition(m_pRenderTargetArr[m_iFrameIndex], D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PRESENT);
+    postCopyBarriers[1] = CD3DX12_RESOURCE_BARRIER::Transition(m_pDXRResources->m_pDXROutput, D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+    m_pCommandList->ResourceBarrier(ARRAYSIZE(postCopyBarriers), postCopyBarriers);
+#pragma endregion
+
+    m_pCommandList->Close(); // 기록 중단
+    m_pDXRResources->Execute_CommnadList();
 } 
 
 void CDXRRenderer::Present()
 {
+    // Swap the back and front buffers
+    HRESULT hr = m_pDeviceResource->m_pSwapChain->Present(0, 0);
+    if (FAILED(hr)) { MSG_BOX("Present Failed"); }
+
+    m_iFrameIndex = (m_pDeviceResource->m_iCurrBackBuffer + 1) % m_pDeviceResource->m_iSwapChainBufferCount;
+    m_pDeviceResource->m_iCurrBackBuffer = (m_pDeviceResource->m_iCurrBackBuffer + 1) % m_pDeviceResource->m_iSwapChainBufferCount;
+    m_pDXRResources->Flush_CommandQueue();
 }
 
 void CDXRRenderer::Do_RayTracing()

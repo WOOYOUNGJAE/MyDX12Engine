@@ -79,14 +79,14 @@ HRESULT CMainApp::Initialize()
 #if DXR_ON
 	vector<CGameObject*> gameObjArr_For_AccelerationTree_Static;
 #endif
-	objDesc.strTag = L"Cube";
-	objDesc.vStartPos = Vector3::Zero;
-	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
-	if (FAILED(hr)) { return hr; }
-#if DXR_ON
-	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
-	//CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
-#endif DXR_ON
+//	objDesc.strTag = L"Cube";
+//	objDesc.vStartPos = Vector3::Zero;
+//	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+//	if (FAILED(hr)) { return hr; }
+//#if DXR_ON
+//	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
+//	//CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
+//#endif DXR_ON
 
 
 	objDesc.strTag = L"Triangle";
@@ -179,8 +179,7 @@ HRESULT CMainApp::Initialize()
 void CMainApp::Tick(_float fDeltaTime)
 {
 #if DXR_ON
-	m_pDXRRenderer->BeginRender();
-	m_pDXRRenderer->MainRender();
+	//m_pDXRRenderer->BeginRender();
 	//m_pRenderer->BeginRender();
 #else
 	m_pRenderer->BeginRender();
@@ -189,7 +188,8 @@ void CMainApp::Tick(_float fDeltaTime)
 
 	m_pGameInstance->Engine_Tick(fDeltaTime);
 
-	m_pRenderer->MainRender();
+	//m_pDXRRenderer->MainRender();
+	//m_pRenderer->MainRender();
 
 #if IMGUI_ON
 	m_pClient_Imgui->Imgui_Tick();
@@ -197,8 +197,10 @@ void CMainApp::Tick(_float fDeltaTime)
 	m_pClient_Imgui->IMgui_EndRender();
 	m_pClient_Imgui->Imgui_Present();
 #else
-	m_pRenderer->EndRender();
-	m_pRenderer->Present();
+	/*m_pRenderer->EndRender();
+	m_pRenderer->Present();*/
+	/*m_pDXRRenderer->EndRender();
+	m_pDXRRenderer->Present();*/
 #endif
 
 }
