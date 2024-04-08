@@ -228,6 +228,16 @@ CGameObject* CGameInstance::FindandGet_GameObj_Cloned(const wstring& strPrototyp
 	return m_pGameObjectManager->FindandGet_Cloned(strPrototypeTag, eLayerEnum, iClonedNum);
 }
 
+void CGameInstance::Add_ClonedObj_To_Array_For_ShaderTable(CGameObject* pObjInstance)
+{
+	m_pGameObjectManager->Add_ClonedObj_To_Array_For_ShaderTable(pObjInstance);
+}
+
+void CGameInstance::Clear_ClonedObjArray()
+{
+	m_pGameObjectManager->Clear_ClonedObjArr();
+}
+
 void CGameInstance::Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum)
 {
 	if (pObject == nullptr)
@@ -269,6 +279,7 @@ void CGameInstance::Build_AccelerationStructureTree(CGameObject** pGameObjArr, U
 
 	m_pDxrResource->Close_CommandList();
 	m_pDxrResource->Execute_CommnadList();
+	m_pDxrResource->Flush_CommandQueue();
 
 	Safe_Delete_Array(pChildNodeArr);
 }

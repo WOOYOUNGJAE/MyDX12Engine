@@ -93,6 +93,7 @@ HRESULT CMainApp::Initialize()
 	objDesc.vStartPos = Vector3::Zero;
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
+	m_pGameInstance->Add_ClonedObj_To_Array_For_ShaderTable(pObjectControlling);
 #if DXR_ON
 	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
 	CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
@@ -143,9 +144,16 @@ HRESULT CMainApp::Initialize()
 #pragma endregion InLevel
 
 	hr = m_pGameInstance->Build_FrameResource_After_Loading_GameScene_Finished(
-		/*TODO Clone된(프로토타입제외) 모든 렌더링해야 하는 오브젝트 개수*/
+		/*TODO Clone된(프로토타입제외) 모든 렌더링해야 하는 오브젝트 개수, Factory패턴으로 수집한 정보 대입 예정*/
 		15);
 	if (FAILED(hr)) { return hr; }
+
+
+	// Build DXR Shader Table
+#if DXR_ON
+
+#endif
+	m_pGameInstance->Clear_ClonedObjArray();
 
 	// Renderer
 	m_pRenderer = m_pGameInstance->Get_Instance()->Get_Renderer();
@@ -171,8 +179,9 @@ HRESULT CMainApp::Initialize()
 void CMainApp::Tick(_float fDeltaTime)
 {
 #if DXR_ON
-	m_pDXRRenderer;
-	m_pRenderer->BeginRender();
+	m_pDXRRenderer->BeginRender();
+	m_pDXRRenderer->MainRender();
+	//m_pRenderer->BeginRender();
 #else
 	m_pRenderer->BeginRender();
 #endif

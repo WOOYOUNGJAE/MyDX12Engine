@@ -28,6 +28,7 @@ private:
 #if DXR_ON
 public:
 	void Push_AccelerationTree(CBVH* pASTreeInstance) { m_vecAccelerationTree.emplace_back(pASTreeInstance); }
+	const vector<CBVH*>& Get_vecAccelerationTree() { return m_vecAccelerationTree; }
 private:
 	vector<CBVH*> m_vecAccelerationTree; // Acceleration Structure Tree
 #endif

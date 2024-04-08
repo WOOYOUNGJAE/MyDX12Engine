@@ -5,18 +5,20 @@
 #include "DeviceResource.h"
 #include "AssetManager.h"
 #include "FrameResource.h"
-#include "./Shaders/Raytracing.hlsl.h"
+#include "BVH.h"
+#include "SceneNode_AABB.h"
+#include "SDSManager.h"
 
 #if DXR_ON
 CDXRRenderer* CDXRRenderer::Create()
 {
 	CDXRRenderer* pInstance = new CDXRRenderer;
 
-	/*if (FAILED(pInstance->Initialize(ppDevice)))
+	if (FAILED(pInstance->Initialize()))
 	{
 		MSG_BOX("DXR: Create Failed");
 		Safe_Release(pInstance);
-	}*/
+	}
 
 	return pInstance;
 }
@@ -72,15 +74,9 @@ void CDXRRenderer::BeginRender()
 
 void CDXRRenderer::MainRender()
 {
-    static bool initComplete = false;
-if (initComplete == false)
-{
+    Set_ComputeRootDescriptorTable_Global();
 
-
-
-
-    initComplete = true;
-}
+    DispatchRay();
 }
 
 void CDXRRenderer::EndRender()
@@ -104,10 +100,15 @@ void CDXRRenderer::DispatchRay()
 
 void CDXRRenderer::Set_ComputeRootDescriptorTable_Global()
 {
+    std::vector<CBVH*> refVecAccelerationTree = CSDSManager::Get_Instance()->Get_vecAccelerationTree();
+
+    D3D12_GPU_VIRTUAL_ADDRESS TLAS_GPU_Adress = refVecAccelerationTree[0]->Get_Root()->Get_TLAS().uav_TLAS->GetGPUVirtualAddress();
+
+
     m_pCommandList->SetDescriptorHeaps(1, &m_pDXRResources->m_pDescriptorHeap);
-    // indexBuffer과 VertexBuffer가 연속적이라 index만 세팅
-    //m_pCommandList->SetComputeRootDescriptorTable(GlobalRootSigSlot::IB_VB_SRV, m_indexBuffer.gpuDescriptorHandle);
-    //m_pCommandList->SetComputeRootDescriptorTable(GlobalRootSigSlot::RENDER_TARGET, m_raytracingOutputResourceUAVGpuDescriptor);
+    m_pCommandList->SetComputeRootSignature(m_pDXRResources->m_pRootSigArr[DXR_ROOTSIG_GLOBAL]);
+    m_pCommandList->SetComputeRootDescriptorTable(GlobalRootSigSlot::RENDER_TARGET, m_pDXRResources->m_DXROutputHeapHandle);
+    m_pCommandList->SetComputeRootShaderResourceView(GlobalRootSigSlot::AS, TLAS_GPU_Adress); // 빌드할 때는 UAV였는데??
 }
 
 #endif

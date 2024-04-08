@@ -14,7 +14,7 @@ public:
 	HRESULT Free() override;
 public:
 	void Set_Root(CSceneNode_AABB* pRoot) { m_pRoot = pRoot; }
-
+	CSceneNode_AABB* Get_Root() { return m_pRoot; }
 private:
 	CSceneNode_AABB* m_pRoot = nullptr;
 

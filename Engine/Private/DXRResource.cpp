@@ -31,6 +31,7 @@ HRESULT CDXRResource::Initialize()
 			D3D12_COMMAND_LIST_TYPE_DIRECT,
 			IID_PPV_ARGS(&(m_pCommandAllocatorArr[i])));
 		if (FAILED(hr)) { return E_FAIL; }
+		m_pCommandAllocatorArr[i]->SetName(L"DXR_CommandAlloc");
 	}
 
 	// CommandList
@@ -118,15 +119,25 @@ HRESULT CDXRResource::Crete_RootSignatures()
 	// Global Root Signature
 	// This is a root signature that is shared across all raytracing shaders invoked during a DispatchRays() call.
 	{
-		CD3DX12_DESCRIPTOR_RANGE descriptorRange[2];
-		descriptorRange[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0, 1/*for DXR*/); // output texture
-		descriptorRange[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 1, 1); // static index vertex buffer
+		//CD3DX12_DESCRIPTOR_RANGE descriptorRange[2];
+		//descriptorRange[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0, 1/*for DXR*/); // output texture
+		//descriptorRange[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 1, 1); // static index vertex buffer
 
-		CD3DX12_ROOT_PARAMETER rootParameterArr[4];
+		//CD3DX12_ROOT_PARAMETER rootParameterArr[4];
+		//rootParameterArr[GlobalRootSigSlot::RENDER_TARGET].InitAsDescriptorTable(1, &descriptorRange[0]);
+		//rootParameterArr[GlobalRootSigSlot::AS].InitAsShaderResourceView(0, 1);
+		//rootParameterArr[GlobalRootSigSlot::PASS_CONSTANT].InitAsConstantBufferView(0, 1); // SceneConstant
+		//rootParameterArr[GlobalRootSigSlot::IB_VB_SRV].InitAsDescriptorTable(1, &descriptorRange[1]);
+
+
+		CD3DX12_DESCRIPTOR_RANGE descriptorRange[1];
+		descriptorRange[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0, 1/*for DXR*/); // output texture
+
+		CD3DX12_ROOT_PARAMETER rootParameterArr[2];
 		rootParameterArr[GlobalRootSigSlot::RENDER_TARGET].InitAsDescriptorTable(1, &descriptorRange[0]);
 		rootParameterArr[GlobalRootSigSlot::AS].InitAsShaderResourceView(0, 1);
-		rootParameterArr[GlobalRootSigSlot::PASS_CONSTANT].InitAsConstantBufferView(0, 1); // SceneConstant
-		rootParameterArr[GlobalRootSigSlot::IB_VB_SRV].InitAsDescriptorTable(1, &descriptorRange[1]);
+		//rootParameterArr[GlobalRootSigSlot::PASS_CONSTANT].InitAsConstantBufferView(0, 1); // SceneConstant
+		//rootParameterArr[GlobalRootSigSlot::IB_VB_SRV].InitAsDescriptorTable(1, &descriptorRange[1]);
 
 		CD3DX12_ROOT_SIGNATURE_DESC globalRootSignatureDesc(_countof(rootParameterArr), rootParameterArr);
 
@@ -155,31 +166,31 @@ HRESULT CDXRResource::Crete_RootSignatures()
 	// Local Root Signature
 	// This is a root signature that enables a shader to have unique arguments that come from shader tables.
 	{
-		CD3DX12_ROOT_PARAMETER rootParameterArr[1]{};
-		rootParameterArr[0].InitAsConstants(SizeOfInUint32(DXR::OBJECT_CB), 1, 1);
-		CD3DX12_ROOT_SIGNATURE_DESC localRootSignatureDesc(_countof(rootParameterArr), rootParameterArr);
-		localRootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE;
+		//CD3DX12_ROOT_PARAMETER rootParameterArr[1]{};
+		//rootParameterArr[0].InitAsConstants(SizeOfInUint32(DXR::OBJECT_CB), 1, 1);
+		//CD3DX12_ROOT_SIGNATURE_DESC localRootSignatureDesc(_countof(rootParameterArr), rootParameterArr);
+		//localRootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE;
 
-		ComPtr<ID3DBlob> signature;
-		ComPtr<ID3DBlob> error;
+		//ComPtr<ID3DBlob> signature;
+		//ComPtr<ID3DBlob> error;
 
-		hr = D3D12SerializeRootSignature(
-			&localRootSignatureDesc,
-			D3D_ROOT_SIGNATURE_VERSION_1,
-			&signature,
-			&error);
-		if (FAILED(hr))
-		{
-			OutputDebugStringA((char*)error->GetBufferPointer());
-			return hr;
-		}
+		//hr = D3D12SerializeRootSignature(
+		//	&localRootSignatureDesc,
+		//	D3D_ROOT_SIGNATURE_VERSION_1,
+		//	&signature,
+		//	&error);
+		//if (FAILED(hr))
+		//{
+		//	OutputDebugStringA((char*)error->GetBufferPointer());
+		//	return hr;
+		//}
 
-		hr = m_pDevice->CreateRootSignature(
-			0,
-			signature->GetBufferPointer(),
-			signature->GetBufferSize(),
-			IID_PPV_ARGS(&m_pRootSigArr[DXR_ROOTSIG_LOCAL]));
-		if (FAILED(hr)) { return hr; }
+		//hr = m_pDevice->CreateRootSignature(
+		//	0,
+		//	signature->GetBufferPointer(),
+		//	signature->GetBufferSize(),
+		//	IID_PPV_ARGS(&m_pRootSigArr[DXR_ROOTSIG_LOCAL]));
+		//if (FAILED(hr)) { return hr; }
 	}
 
 

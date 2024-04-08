@@ -193,3 +193,17 @@ HRESULT CGameObjectManager::Add_GameObject_InScene(const wstring& strPrototypeTa
 
 	return S_OK;
 }
+
+void CGameObjectManager::Add_ClonedObj_To_Array_For_ShaderTable(CGameObject* pObjInstance)
+{
+	m_vecTempClonedObj.push_back(pObjInstance);
+}
+
+void CGameObjectManager::Clear_ClonedObjArr()
+{
+	for (auto iter = m_vecTempClonedObj.begin(); iter != m_vecTempClonedObj.end();)
+	{
+		iter = m_vecTempClonedObj.erase(iter);
+	}
+	m_vecTempClonedObj.clear();
+}

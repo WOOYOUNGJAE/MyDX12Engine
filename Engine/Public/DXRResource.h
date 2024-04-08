@@ -14,7 +14,7 @@ class CDXRResource : public CBase
 protected:
 	CDXRResource()
 	{
-		m_pCommandAllocatorArr = new ID3D12CommandAllocator * [m_iBackBufferCount];
+		m_pCommandAllocatorArr = new ID3D12CommandAllocator * [m_iBackBufferCount]{};
 	}
 	~CDXRResource() override = default;
 
@@ -49,7 +49,7 @@ private: // D3D Resource
 	ID3D12GraphicsCommandList4* m_pCommandList = nullptr; // CmdList for Dxr
 	ID3D12CommandAllocator** m_pCommandAllocatorArr = nullptr;
 	ID3D12DescriptorHeap* m_pDescriptorHeap = nullptr; // CbvSrvUav Heap
-	ID3D12RootSignature* m_pRootSigArr[DXR_ROOTSIG_TYPE_END];
+	ID3D12RootSignature* m_pRootSigArr[DXR_ROOTSIG_TYPE_END]{};
 	ID3D12StateObject* m_pDXR_PSO = nullptr;
 	ID3D12Resource* m_pScratchBuffer = nullptr; // AS ºôµå Áß ÇÊ¿äÇÑ ³«¼­ ¹öÆÛ.
 	ID3D12Resource* m_pDXROutput = nullptr;
@@ -63,7 +63,7 @@ private: // pointer
 private:
 	UINT m_iDescriptorSize = 0;
 	CD3DX12_CPU_DESCRIPTOR_HANDLE m_curHeapHandle_CPU; // CbvSrvUav Handle Cpu
-	CD3DX12_GPU_DESCRIPTOR_HANDLE m_DXROutputHeapHandle; // CbvSrvUav Handle Cpu
+	CD3DX12_GPU_DESCRIPTOR_HANDLE m_DXROutputHeapHandle;
 
 private: //Fence
 	ID3D12Fence* m_pFence = nullptr;

@@ -35,6 +35,8 @@ public: // Manager Function Offer
 	HRESULT Add_GameObject_InScene(const wstring& strPrototypeTag, UINT eLayerEnum, void* pArg = nullptr);
 	HRESULT Add_GameObject_InScene(const wstring& strPrototypeTag, UINT eLayerEnum, CGameObject** pOutObj, void* pArg = nullptr);
 	CGameObject* FindandGet_GameObj_Cloned(const wstring& strPrototypeTag, UINT eLayerEnum = OBJ_LAYER_0, UINT iClonedNum = 1);
+	void Add_ClonedObj_To_Array_For_ShaderTable(CGameObject* pObjInstance);
+	void Clear_ClonedObjArray(); // DXR ShaderTable 빌드에 필요 했던 ClonedList 삭제
 	// Pipeline manager
 	void Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum);
 	// CameraManger

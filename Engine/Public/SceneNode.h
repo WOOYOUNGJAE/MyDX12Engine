@@ -18,6 +18,7 @@ public:
 	HRESULT Initialize(CSceneNode** pChildNodeArr, UINT iChildArrSize = 2, bool bIsTLAS = false);
 	HRESULT Free() override;
 public:
+	const DXR::TLAS& Get_TLAS() { return m_TLAS; }
 	virtual void Set_ContainingObj(CGameObject* pGameObj);
 
 protected: // If Binary Tree

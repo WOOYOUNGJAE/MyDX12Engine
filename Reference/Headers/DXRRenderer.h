@@ -8,7 +8,7 @@ NAMESPACE_(Engine)
 class CDXRResource;
 class CDeviceResource;
 struct FrameResource;
-class CDXRRenderer : public CBase
+class ENGINE_DLL CDXRRenderer : public CBase
 {
 protected:
 	CDXRRenderer() = default;
@@ -36,7 +36,8 @@ private: // Pointers
 	ID3D12GraphicsCommandList4* m_pCommandList = nullptr;
 	ID3D12StateObject* m_pDXR_PSO = nullptr;
 	ID3D12Resource** m_pRenderTargetArr = nullptr;
-private:
+	//std::vector<class CBVH*>* m_pVecAccelerationTree = nullptr;
+public:
 	UINT m_iFrameIndex = 0; // Equal with DeviceResource's
 private: // FrameResource
 	std::vector<FrameResource*> m_vecFrameResource;
