@@ -70,7 +70,7 @@ protected:
 #if DXR_ON
 // MeshData 하나당 BLAS 하나 대응
 public:
-	virtual void Build_BLAS(void* pIndexData, void* pVertexData, UINT64 iIndexDataSize, UINT64 iVertexDataSize);
+	virtual void Build_BLAS(UINT64 iIndexDataSize, UINT64 iVertexDataSize);
 	DXR::BLAS Get_BLAS() { return m_BLAS; }
 protected:
 	DXR::BLAS m_BLAS{};

@@ -44,6 +44,7 @@ public:
 	{
 		Get_Instance()->m_pCommandList->BuildRaytracingAccelerationStructure(pDesc, NumPostbuildInfoDescs, pPostbuildInfoDescs);
 	}
+	static void ResourceBarrierUAV(ID3D12Resource* pResource) { 1, & CD3DX12_RESOURCE_BARRIER::UAV(pResource); }
 	void Flush_CommandQueue();
 private: // D3D Resource
 	ID3D12GraphicsCommandList4* m_pCommandList = nullptr; // CmdList for Dxr

@@ -179,7 +179,7 @@ HRESULT CMainApp::Initialize()
 void CMainApp::Tick(_float fDeltaTime)
 {
 #if DXR_ON
-	//m_pDXRRenderer->BeginRender();
+	m_pDXRRenderer->BeginRender();
 	//m_pRenderer->BeginRender();
 #else
 	m_pRenderer->BeginRender();
@@ -188,7 +188,7 @@ void CMainApp::Tick(_float fDeltaTime)
 
 	m_pGameInstance->Engine_Tick(fDeltaTime);
 
-	//m_pDXRRenderer->MainRender();
+	m_pDXRRenderer->MainRender();
 	//m_pRenderer->MainRender();
 
 #if IMGUI_ON
@@ -197,10 +197,10 @@ void CMainApp::Tick(_float fDeltaTime)
 	m_pClient_Imgui->IMgui_EndRender();
 	m_pClient_Imgui->Imgui_Present();
 #else
-	/*m_pRenderer->EndRender();
-	m_pRenderer->Present();*/
-	/*m_pDXRRenderer->EndRender();
-	m_pDXRRenderer->Present();*/
+	//m_pRenderer->EndRender();
+	//m_pRenderer->Present();
+	m_pDXRRenderer->EndRender();
+	m_pDXRRenderer->Present();
 #endif
 
 }
@@ -219,7 +219,6 @@ HRESULT CMainApp::Free()
 	Safe_Release(m_pGameInstance);
 
 	CGameInstance::Release_Engine();
-
 
 	
 	return S_OK;

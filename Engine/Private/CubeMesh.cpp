@@ -173,8 +173,7 @@ HRESULT CCubeMesh::Initialize_Prototype()
 
 	CMeshData::Init_VBV_IBV();
 #if DXR_ON
-	CMeshData::Build_BLAS(indicesData, m_vecVertexData.data(),
-		sizeof(UINT16)* _countof(indicesData), sizeof(VertexPositionNormalTexture)* m_iNumVertices);
+	CMeshData::Build_BLAS(sizeof(UINT16)* _countof(indicesData), sizeof(VertexPositionNormalTexture)* m_iNumVertices);
 #endif
 	return hr;
 }

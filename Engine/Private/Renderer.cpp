@@ -262,8 +262,6 @@ void CRenderer::MainRender()
 						for (CGameObject*& iter : m_RenderGroup[eCullMode][IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType])
 						{
 							iter->Render(m_pCommandList, m_pCurFrameResource, iRenderingElementIndex++);
-
-							Safe_Release(iter); // Added From AddtoRenderGroup
 						}
 						m_RenderGroup[eCullMode][IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigType].clear();
 					}
@@ -371,7 +369,6 @@ void CRenderer::AddTo_RenderGroup(UINT IsFirst, UINT eCullMode, UINT eBlendModeE
                                   UINT eRootsigTypeEnum, CGameObject* pGameObject)
 {
 	m_RenderGroup[eCullMode][IsFirst][eBlendModeEnum][eShaderTypeEnum][eRootsigTypeEnum].push_back(pGameObject);
-	Safe_AddRef(pGameObject);
 }
 
 void CRenderer::Flush_CommandQueue()

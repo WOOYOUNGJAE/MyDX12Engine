@@ -53,7 +53,7 @@ void CMeshData::Init_VBV_IBV()
 }
 #if DXR_ON
 
-void CMeshData::Build_BLAS(void* pIndexData, void* pVertexData, UINT64 iIndexDataSize, UINT64 iVertexDataSize)
+void CMeshData::Build_BLAS(UINT64 iIndexDataSize, UINT64 iVertexDataSize)
 {
 	ID3D12Device5* pDevice = CDeviceResource::Get_Instance()->Get_Device5();
 	m_BLAS.indexBuffer = m_indexBufferGPU;
@@ -61,11 +61,6 @@ void CMeshData::Build_BLAS(void* pIndexData, void* pVertexData, UINT64 iIndexDat
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE& cpuHandle = CDXRResource::Get_Instance()->Get_refHeapHandle_CPU();
 	UINT iDescriptorSize = CDXRResource::Get_Instance()->Get_DescriptorSize();
-
-	D3D12_RAYTRACING_GEOMETRY_TRIANGLES_DESC& refTriangles = m_BLAS.dxrGeometryDesc.Triangles;
-	m_BLAS.dxrGeometryDesc.Type = D3D12_RAYTRACING_GEOMETRY_TYPE_TRIANGLES;
-	m_BLAS.dxrGeometryDesc.Triangles.Transform3x4 = 0;
-	m_BLAS.dxrGeometryDesc.Flags = D3D12_RAYTRACING_GEOMETRY_FLAG_OPAQUE; // 일단 OPAQUE
 
 #pragma region Create SRV of IB, VB
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
@@ -89,21 +84,22 @@ void CMeshData::Build_BLAS(void* pIndexData, void* pVertexData, UINT64 iIndexDat
 	pDevice->CreateShaderResourceView(m_BLAS.vertexBuffer, &srvDesc, cpuHandle); // Index Srv
 #pragma endregion
 
-	refTriangles.IndexFormat = m_IndexFormat;
-	refTriangles.IndexCount = m_iNumIndices;
-	refTriangles.IndexBuffer = m_BLAS.indexBuffer->GetGPUVirtualAddress();
 
-	refTriangles.VertexFormat = DXGI_FORMAT_R32G32B32_FLOAT; // Fixed
-	refTriangles.VertexCount = m_iNumVertices;
-	refTriangles.VertexBuffer.StartAddress = m_BLAS.vertexBuffer->GetGPUVirtualAddress();
-	refTriangles.VertexBuffer.StrideInBytes = UINT64(Get_SingleVertexSize());
+	// DXR Geometry Desc
+	m_BLAS.dxrGeometryDesc.Type = D3D12_RAYTRACING_GEOMETRY_TYPE_TRIANGLES;
+	m_BLAS.dxrGeometryDesc.Triangles.Transform3x4 = 0;
+	m_BLAS.dxrGeometryDesc.Flags = D3D12_RAYTRACING_GEOMETRY_FLAG_OPAQUE; // 일단 OPAQUE
 
-	D3D12_RAYTRACING_GEOMETRY_AABBS_DESC& refAABBDesc = m_BLAS.dxrGeometryDesc.AABBs;
+	m_BLAS.dxrGeometryDesc.Triangles.IndexFormat = m_IndexFormat;
+	m_BLAS.dxrGeometryDesc.Triangles.IndexCount = m_iNumIndices;
+	m_BLAS.dxrGeometryDesc.Triangles.IndexBuffer = m_BLAS.indexBuffer->GetGPUVirtualAddress();
 
+	m_BLAS.dxrGeometryDesc.Triangles.VertexFormat = DXGI_FORMAT_R32G32B32_FLOAT; // Fixed
+	m_BLAS.dxrGeometryDesc.Triangles.VertexCount = m_iNumVertices;
+	m_BLAS.dxrGeometryDesc.Triangles.VertexBuffer.StartAddress = m_BLAS.vertexBuffer->GetGPUVirtualAddress();
+	m_BLAS.dxrGeometryDesc.Triangles.VertexBuffer.StrideInBytes = UINT64(Get_SingleVertexSize());
 
-
-	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC bottomLevelBuildDesc = {};
-	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS& refBottomLevelInputs = bottomLevelBuildDesc.Inputs;
+	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS& refBottomLevelInputs = m_BLAS.accelerationStructureDesc.Inputs;
 	refBottomLevelInputs.DescsLayout = D3D12_ELEMENTS_LAYOUT_ARRAY;
 	refBottomLevelInputs.Flags = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_PREFER_FAST_TRACE;
 	refBottomLevelInputs.NumDescs = 1;
@@ -127,12 +123,12 @@ void CMeshData::Build_BLAS(void* pIndexData, void* pVertexData, UINT64 iIndexDat
 		&m_BLAS.uav_BLAS,
 		D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE);
 
-	UINT iNumPostBuilds = 0;
-	D3D12_RAYTRACING_ACCELERATION_STRUCTURE_POSTBUILD_INFO_DESC* postBuildArr = nullptr;
-	bottomLevelBuildDesc.ScratchAccelerationStructureData = (*CDXRResource::Get_Instance()->Get_ScratchBufferPtr())->GetGPUVirtualAddress();
-	bottomLevelBuildDesc.DestAccelerationStructureData = m_BLAS.uav_BLAS->GetGPUVirtualAddress();
-	// 진짜로 GPU에서 BLAS Build
-	CDXRResource::BuildRaytracingAccelerationStructure(&bottomLevelBuildDesc, iNumPostBuilds, postBuildArr);
+	m_BLAS.accelerationStructureDesc.ScratchAccelerationStructureData = (*CDXRResource::Get_Instance()->Get_ScratchBufferPtr())->GetGPUVirtualAddress();
+	m_BLAS.accelerationStructureDesc.DestAccelerationStructureData = m_BLAS.uav_BLAS->GetGPUVirtualAddress();
+	//UINT iNumPostBuilds = 0;
+	//D3D12_RAYTRACING_ACCELERATION_STRUCTURE_POSTBUILD_INFO_DESC* postBuildArr = nullptr;
+	//// 진짜로 GPU에서 BLAS Build
+	////CDXRResource::BuildRaytracingAccelerationStructure(&m_BLAS.accelerationStructureDesc, iNumPostBuilds, postBuildArr);
 }
 #endif
 HRESULT CMeshData::Free()

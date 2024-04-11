@@ -6,7 +6,8 @@
 #include "DXRRenderer.h"
 #include "MeshData.h"
 #include "DXRShaderTable.h"
-#include "./Shaders/Raytracing.hlsl.h"
+//#include "./Shaders/Raytracing.hlsl.h"
+#include "D:\\Projects\\Git\\MyProjects\\MyDX12Engine\\Engine\\Bin\\Intermediate\\CompiledShaders\Raytracing.hlsl.h"
 
 #if DXR_ON
 
@@ -367,13 +368,16 @@ LOCAL_BLOCK_// Hit Group Shader Table
 	TABLE_RECORD_DESC tableRecordDesc = TABLE_RECORD_DESC
 	{
 		D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
-		pMissShaderIdentifier,
-		sizeof(RootArguments),
-		&rootArguments
+		pHitGroupShaderIdentifier,
+		/*sizeof(RootArguments),
+		&rootArguments*/
+		0,
+		nullptr
 	};
 
 	iNumShaderRecords = 1;
-	iSingleRecordSize = iShaderIdentifierSize + sizeof(RootArguments);
+	iSingleRecordSize = iShaderIdentifierSize;
+	//iSingleRecordSize = iShaderIdentifierSize + sizeof(RootArguments);
 
 	CDXRShaderTable* pTableInstance = CDXRShaderTable::Create(
 		m_pDevice,

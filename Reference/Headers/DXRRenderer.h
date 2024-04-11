@@ -24,7 +24,7 @@ public: // Rendering
 	void MainRender();
 	void EndRender();
 	void Present();
-	void Do_RayTracing();
+
 public:
 	void DispatchRay();
 	void Set_ComputeRootDescriptorTable_Global(); // Global루트시그니쳐가 바인딩된 상태에서 테이블 바인딩

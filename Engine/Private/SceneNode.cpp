@@ -49,7 +49,14 @@ HRESULT CSceneNode::Initialize(CSceneNode** pChildNodeArr, UINT iChildArrSize, b
 	vecUAV_BLAS.resize(iChildArrSize);
 	for (UINT i = 0; i < iChildArrSize; ++i)
 	{
-		vecUAV_BLAS[i] = (dynamic_cast<CSceneNode_AABB*>(pChildNodeArr[i])->Get_BLAS()->uav_BLAS);
+		DXR::BLAS* pBlas = (dynamic_cast<CSceneNode_AABB*>(pChildNodeArr[i])->Get_BLAS());
+		vecUAV_BLAS[i] = pBlas->uav_BLAS;
+
+		UINT iNumPostBuilds = 0;
+		D3D12_RAYTRACING_ACCELERATION_STRUCTURE_POSTBUILD_INFO_DESC* postBuildArr = nullptr;
+		// 진짜로 GPU에서 BLAS Build
+		CDXRResource::BuildRaytracingAccelerationStructure(&pBlas->accelerationStructureDesc, iNumPostBuilds, postBuildArr);
+		CDXRResource::ResourceBarrierUAV(pBlas->uav_BLAS);
 	}
 	::Engine::DXR_Util::Build_TLAS(pDevice, &m_TLAS.uav_TLAS, &m_TLAS.pInstanceDesc, vecUAV_BLAS.data(), iChildArrSize);
 #endif

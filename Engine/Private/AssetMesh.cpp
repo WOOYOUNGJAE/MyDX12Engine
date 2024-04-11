@@ -94,8 +94,7 @@ HRESULT CAssetMesh::ReInit_Prototype()
 
 	CMeshData::Init_VBV_IBV();
 #if DXR_ON
-	CMeshData::Build_BLAS(m_vecIndexData.data(), m_vecVertexData.data(),
-		sizeof(UINT32) * Num_Indices(), sizeof(VertexPositionNormalTexture) * m_iNumVertices);
+	CMeshData::Build_BLAS(sizeof(UINT32) * Num_Indices(), sizeof(VertexPositionNormalTexture) * m_iNumVertices);
 #endif
 	return hr;
 }

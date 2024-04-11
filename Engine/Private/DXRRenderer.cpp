@@ -39,12 +39,12 @@ HRESULT CDXRRenderer::Initialize()
     ZeroMemory(&m_disptchRaysDesc, sizeof(D3D12_DISPATCH_RAYS_DESC));
     m_disptchRaysDesc.RayGenerationShaderRecord.StartAddress = m_pDXRResources->m_pRayGenShaderTable->GetGPUVirtualAddress();
     m_disptchRaysDesc.RayGenerationShaderRecord.SizeInBytes = m_pDXRResources->m_pRayGenShaderTable->GetDesc().Width;
-    m_disptchRaysDesc.MissShaderTable.StartAddress = m_pDXRResources->m_pMissShaderTable->GetGPUVirtualAddress();
-    m_disptchRaysDesc.MissShaderTable.SizeInBytes = m_pDXRResources->m_pMissShaderTable->GetDesc().Width;
-    m_disptchRaysDesc.MissShaderTable.StrideInBytes = m_disptchRaysDesc.MissShaderTable.SizeInBytes; //
     m_disptchRaysDesc.HitGroupTable.StartAddress = m_pDXRResources->m_pHitGroupShaderTable->GetGPUVirtualAddress();
     m_disptchRaysDesc.HitGroupTable.SizeInBytes = m_pDXRResources->m_pHitGroupShaderTable->GetDesc().Width;
     m_disptchRaysDesc.HitGroupTable.StrideInBytes = m_disptchRaysDesc.HitGroupTable.SizeInBytes; // 
+    m_disptchRaysDesc.MissShaderTable.StartAddress = m_pDXRResources->m_pMissShaderTable->GetGPUVirtualAddress();
+    m_disptchRaysDesc.MissShaderTable.SizeInBytes = m_pDXRResources->m_pMissShaderTable->GetDesc().Width;
+    m_disptchRaysDesc.MissShaderTable.StrideInBytes = m_disptchRaysDesc.MissShaderTable.SizeInBytes; //
     m_disptchRaysDesc.Width = m_pDXRResources->m_iScreenWidth;
     m_disptchRaysDesc.Height = m_pDXRResources->m_iScreenHeight;
     m_disptchRaysDesc.Depth = 1;
@@ -114,11 +114,6 @@ void CDXRRenderer::Present()
     m_pDXRResources->Flush_CommandQueue();
 }
 
-void CDXRRenderer::Do_RayTracing()
-{
-
-}
-
 void CDXRRenderer::DispatchRay()
 {
     m_pCommandList->SetPipelineState1(m_pDXR_PSO);
@@ -130,7 +125,6 @@ void CDXRRenderer::Set_ComputeRootDescriptorTable_Global()
     std::vector<CBVH*> refVecAccelerationTree = CSDSManager::Get_Instance()->Get_vecAccelerationTree();
 
     D3D12_GPU_VIRTUAL_ADDRESS TLAS_GPU_Adress = refVecAccelerationTree[0]->Get_Root()->Get_TLAS().uav_TLAS->GetGPUVirtualAddress();
-
 
     m_pCommandList->SetDescriptorHeaps(1, &m_pDXRResources->m_pDescriptorHeap);
     m_pCommandList->SetComputeRootSignature(m_pDXRResources->m_pRootSigArr[DXR_ROOTSIG_GLOBAL]);

@@ -77,9 +77,9 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 		{Vector3(-0.25f, -0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f),Vector2(0.0f, 1.0f)}
 	};*/
 	{
-		{Vector3(0.0f, 0.25f, 0.5f), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.5f, 0.0f)},
-		{Vector3(0.25f, -0.25f, 0.5f), Vector3(0.0f, 0.0f, -1.0f),Vector2(1.0f, 1.0f)},
-		{Vector3(-0.25f, -0.25f, 0.5f), Vector3(0.0f, 0.0f, -1.0f),Vector2(0.0f, 1.0f)}
+		{Vector3(0.f, 100.f, 1.5f), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.5f, 0.0f)},
+		{Vector3(100.f, -100.f, 1.5f), Vector3(0.0f, 0.0f, -1.0f),Vector2(1.0f, 1.0f)},
+		{Vector3(-100.f, -100.f, 1.5f), Vector3(0.0f, 0.0f, -1.0f),Vector2(0.0f, 1.0f)}
 	};
 	m_vecVertexData.reserve(3);
 	m_vecVertexData.assign(tempVertices, tempVertices + _countof(tempVertices));
@@ -127,8 +127,7 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 
 	CMeshData::Init_VBV_IBV();
 #if DXR_ON
-	CMeshData::Build_BLAS(indicesData, m_vecVertexData.data(),
-		iIndexBufferSize, sizeof(VertexPositionNormalTexture) * m_iNumVertices);
+	CMeshData::Build_BLAS(iIndexBufferSize, sizeof(VertexPositionNormalTexture) * m_iNumVertices);
 #endif
 	return S_OK;
 }
