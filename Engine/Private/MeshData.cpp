@@ -5,8 +5,15 @@
 
 CMeshData::CMeshData() :
 	m_pDevice(CDeviceResource::Get_Instance()->Get_Device()),
+#if DXR_ON
+	m_pCommandList(CDXRResource::Get_Instance()->Get_CommandList4())
+#else
 	m_pCommandList(CDeviceResource::Get_Instance()->Get_CommandList())
+#endif
 {
+#if DXR_ON
+	ZeroMemory(&m_BLAS, sizeof(DXR::BLAS));
+#endif
 }
 
 CMeshData::CMeshData(CMeshData& rhs) : CBase(rhs),
@@ -106,8 +113,7 @@ void CMeshData::Build_BLAS(UINT64 iIndexDataSize, UINT64 iVertexDataSize)
 	refBottomLevelInputs.Type = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL;
 	refBottomLevelInputs.pGeometryDescs = &m_BLAS.dxrGeometryDesc;
 
-	D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO bottomLevelPrebuildInfo = {};
-	pDevice->GetRaytracingAccelerationStructurePrebuildInfo(&refBottomLevelInputs, &m_BLAS.prebuildInfo);
+	pDevice->GetRaytracingAccelerationStructurePrebuildInfo(&m_BLAS.accelerationStructureDesc.Inputs, &m_BLAS.prebuildInfo);
 	if (m_BLAS.prebuildInfo.ResultDataMaxSizeInBytes == 0)
 	{
 		MSG_BOX("MeshData : Building BLAS Failed");
@@ -118,17 +124,18 @@ void CMeshData::Build_BLAS(UINT64 iIndexDataSize, UINT64 iVertexDataSize)
 	::DXR_Util::AllocateScratch_IfBigger(pDevice, m_BLAS.prebuildInfo.ResultDataMaxSizeInBytes);	
 
 	// Allocate UAV Buffer, 실질적인 BLAS Allocate
-	MyUtils::AllocateUAVBuffer(pDevice,
+	HRESULT hr = MyUtils::AllocateUAVBuffer(pDevice,
 		m_BLAS.prebuildInfo.ResultDataMaxSizeInBytes,
+		//&m_BLAS.uav_BLAS,
 		&m_BLAS.uav_BLAS,
 		D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE);
+	if (FAILED(hr)) { MSG_BOX("Allocate Failed"); }
 
 	m_BLAS.accelerationStructureDesc.ScratchAccelerationStructureData = (*CDXRResource::Get_Instance()->Get_ScratchBufferPtr())->GetGPUVirtualAddress();
 	m_BLAS.accelerationStructureDesc.DestAccelerationStructureData = m_BLAS.uav_BLAS->GetGPUVirtualAddress();
-	//UINT iNumPostBuilds = 0;
-	//D3D12_RAYTRACING_ACCELERATION_STRUCTURE_POSTBUILD_INFO_DESC* postBuildArr = nullptr;
-	//// 진짜로 GPU에서 BLAS Build
-	////CDXRResource::BuildRaytracingAccelerationStructure(&m_BLAS.accelerationStructureDesc, iNumPostBuilds, postBuildArr);
+
+	m_pCommandList->BuildRaytracingAccelerationStructure(&m_BLAS.accelerationStructureDesc, 0, nullptr);
+	m_pCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::UAV(m_BLAS.uav_BLAS));
 }
 #endif
 HRESULT CMeshData::Free()

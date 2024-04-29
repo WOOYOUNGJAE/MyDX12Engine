@@ -39,7 +39,12 @@ public: // static util func
 	static void Normalize_Vertices(std::vector<CMeshData*>& refVecMesh);
 protected:
 	ID3D12Device* m_pDevice = nullptr;
+#if DXR_ON
+	ID3D12GraphicsCommandList4* m_pCommandList = nullptr;
+#else
 	ID3D12GraphicsCommandList* m_pCommandList = nullptr;
+#endif
+
 
 	//ComPtr<ID3D12Resource> m_pResource = nullptr;
 	// 임시 저장공간
@@ -70,10 +75,11 @@ protected:
 #if DXR_ON
 // MeshData 하나당 BLAS 하나 대응
 public:
+	//D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC 정보만 기록
 	virtual void Build_BLAS(UINT64 iIndexDataSize, UINT64 iVertexDataSize);
 	DXR::BLAS Get_BLAS() { return m_BLAS; }
 protected:
-	DXR::BLAS m_BLAS{};
+	DXR::BLAS m_BLAS;
 #endif
 };
 

@@ -2,9 +2,10 @@
 #include "DXRResource.h"
 #include "Engine_Defines.h"
 #include "MeshData.h"
+#include "SceneNode_AABB.h"
 
 NAMESPACE_(Engine)
-class CMeshData;
+	class CMeshData;
 
 NAMESPACE_(MyUtils)
 // iSize를 iAlignment 배수로 올림
@@ -171,50 +172,7 @@ _NAMESPACE
 #if DXR_ON
 
 NAMESPACE_(DXR_Util)
-
-// Build IB, VB SRV
-inline DXR::ACCELERATION_STRUCTURE_CPU Build_AccelerationStructures_CPU(CMeshData* pMeshData, ID3D12Device* pDevice, CD3DX12_CPU_DESCRIPTOR_HANDLE& refCpuHandle, UINT iDescriptorSize)
-{
-	DXR::ACCELERATION_STRUCTURE_CPU as_CPU{};
-	D3D12_RAYTRACING_GEOMETRY_TRIANGLES_DESC& refTriangles = as_CPU.dxrGeometryDesc.Triangles;
-	as_CPU.dxrGeometryDesc.Type = D3D12_RAYTRACING_GEOMETRY_TYPE_TRIANGLES;
-	as_CPU.dxrGeometryDesc.Triangles.Transform3x4 = 0;
-	as_CPU.dxrGeometryDesc.Flags = D3D12_RAYTRACING_GEOMETRY_FLAG_OPAQUE; // 일단 OPAQUE
-
-
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-
-	// Create Index SRV
-	srvDesc.Buffer.NumElements = pMeshData->Num_Indices() / sizeof(UINT32);
-	srvDesc.Format = DXGI_FORMAT_R32_TYPELESS; // for Index Srv
-	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW; // 인덱스는 단순 정수 나열이므로 raw타입으로
-	srvDesc.Buffer.StructureByteStride = 0; //  D3D12_BUFFER_SRV_FLAG_RAW, 즉 원시 데이터로 접근할 때
-	refCpuHandle.Offset(1, iDescriptorSize);
-	pDevice->CreateShaderResourceView(as_CPU.srv_Index, &srvDesc, refCpuHandle); // Index Srv
-
-	refTriangles.IndexFormat = pMeshData->Get_IndexFormat();
-	refTriangles.IndexCount = pMeshData->Num_Indices();
-	refTriangles.IndexBuffer = as_CPU.srv_Index->GetGPUVirtualAddress();
-
-	// Create Vertex SRV
-	srvDesc.Buffer.NumElements = pMeshData->Num_Vertices();
-	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
-	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-	srvDesc.Buffer.StructureByteStride = UINT(pMeshData->Get_SingleVertexSize());
-	refCpuHandle.Offset(1, iDescriptorSize);
-	pDevice->CreateShaderResourceView(as_CPU.srv_Vertex, &srvDesc, refCpuHandle); // Index Srv
-
-	refTriangles.VertexFormat = DXGI_FORMAT_R32G32B32_FLOAT; // Fixed
-	refTriangles.VertexCount = pMeshData->Num_Vertices();
-	refTriangles.VertexBuffer.StartAddress = as_CPU.srv_Vertex->GetGPUVirtualAddress();
-	refTriangles.VertexBuffer.StrideInBytes = UINT64(pMeshData->Get_SingleVertexSize());
-
-	return as_CPU;
-}
-
-inline void AllocateScratch_IfBigger(ID3D12Device5* pDevice, UINT64 newWidth)
+	inline void AllocateScratch_IfBigger(ID3D12Device5* pDevice, UINT64 newWidth)
 {
 	ID3D12Resource** ppScratchBuffer = CDXRResource::Get_Instance()->Get_ScratchBufferPtr();
 	UINT64 iPrevWidth = 0;
@@ -234,7 +192,8 @@ inline void AllocateScratch_IfBigger(ID3D12Device5* pDevice, UINT64 newWidth)
 	}
 }
 
-inline void Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** ppOutInstanceDescResource, ID3D12Resource** pUAV_BLASArr, UINT iNumBlas)
+inline void Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** ppOutInstanceDescResource, ID3D12Resource***
+                       ppUAV_BLASArr, UINT iNumBlas)
 {
 	ID3D12Resource*& pScratch = CDXRResource::Get_Instance()->Get_ScratchBufferRef();
 
@@ -262,7 +221,7 @@ inline void Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS, I
 	{
 		instanceDescArr[i].Transform[0][0] = instanceDescArr[i].Transform[1][1] = instanceDescArr[i].Transform[2][2] = 1;
 		instanceDescArr[i].InstanceMask = 1;
-		instanceDescArr[i].AccelerationStructure = pUAV_BLASArr[i]->GetGPUVirtualAddress();
+		instanceDescArr[i].AccelerationStructure = (*ppUAV_BLASArr[i])->GetGPUVirtualAddress();
 	}
 
 	MyUtils::AllocateUploadBuffer(pDevice, instanceDescArr, sizeof(D3D12_RAYTRACING_INSTANCE_DESC) * iNumBlas, ppOutInstanceDescResource);
@@ -279,6 +238,42 @@ inline void Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS, I
 	Safe_Delete_Array(instanceDescArr);
 }
 
+inline void Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** ppOutInstanceDescResource, DXR::BLAS** pBlassArr, UINT iNumBlas)
+{
+	// TLAS
+	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS topLevelInputs = {};
+	topLevelInputs.DescsLayout = D3D12_ELEMENTS_LAYOUT_ARRAY;
+	topLevelInputs.Flags = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_PREFER_FAST_TRACE;
+	topLevelInputs.NumDescs = 1;
+	topLevelInputs.Type = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL;
+
+	D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO topLevelPrebuildInfo = {};
+	pDevice->GetRaytracingAccelerationStructurePrebuildInfo(&topLevelInputs, &topLevelPrebuildInfo);
+	DXR_Util::AllocateScratch_IfBigger(pDevice, topLevelPrebuildInfo.ScratchDataSizeInBytes);
+	MyUtils::AllocateUAVBuffer(pDevice, topLevelPrebuildInfo.ResultDataMaxSizeInBytes, ppOutUAV_TLAS, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, L"TopLevelAccelerationStructure");
+
+	ID3D12Resource* instanceDescs;
+	D3D12_RAYTRACING_INSTANCE_DESC* instanceDescArr = new D3D12_RAYTRACING_INSTANCE_DESC[1]{};
+	for (UINT i = 0; i < iNumBlas; ++i)
+	{
+		instanceDescArr[i].Transform[0][0] = instanceDescArr[i].Transform[1][1] = instanceDescArr[i].Transform[2][2] = 1;
+		instanceDescArr[i].InstanceMask = 1;
+		instanceDescArr[i].AccelerationStructure = pBlassArr[i]->uav_BLAS->GetGPUVirtualAddress();
+	}
+	MyUtils::AllocateUploadBuffer(pDevice, instanceDescArr, sizeof(D3D12_RAYTRACING_INSTANCE_DESC) * 1, ppOutInstanceDescResource);
+	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC topLevelBuildDesc = {};
+	{
+		topLevelInputs.InstanceDescs = (*ppOutInstanceDescResource)->GetGPUVirtualAddress();
+		topLevelBuildDesc.Inputs = topLevelInputs;
+		topLevelBuildDesc.DestAccelerationStructureData = (*ppOutUAV_TLAS)->GetGPUVirtualAddress();
+		topLevelBuildDesc.ScratchAccelerationStructureData = (*CDXRResource::Get_Instance()->Get_ScratchBufferPtr())->GetGPUVirtualAddress();
+	}
+	pCommandList->BuildRaytracingAccelerationStructure(&topLevelBuildDesc, 0, nullptr);
+	pCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::UAV(*ppOutUAV_TLAS));
+
+
+	Safe_Delete_Array(instanceDescArr);
+}
 
 _NAMESPACE//DXR_Util
 

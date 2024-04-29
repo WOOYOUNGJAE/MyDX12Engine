@@ -45,7 +45,8 @@ private: // FrameResource
 	UINT m_iCurFrameResourceIndex = 0;
 private:
 	D3D12_DISPATCH_RAYS_DESC m_disptchRaysDesc{};
-
+public:
+	static ID3D12Resource* m_bottomLevelAccelerationStructure;
 };
 
 _NAMESPACE

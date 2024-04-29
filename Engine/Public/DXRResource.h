@@ -27,6 +27,8 @@ public: // getter
 	ID3D12Resource*& Get_ScratchBufferRef() { return m_pScratchBuffer; }
 	ID3D12Resource** Get_ScratchBufferPtr() { return &m_pScratchBuffer; }
 	ID3D12CommandAllocator*** Get_CommandAllocatorArrPtr() { return &m_pCommandAllocatorArr; }
+	ID3D12GraphicsCommandList4* Get_CommandList4() { return m_pCommandList; }
+	ID3D12CommandQueue* Get_CommandQueue() { return m_pCommandQueue; }
 private:
 	HRESULT Crete_RootSignatures();
 	HRESULT Create_PSOs();
