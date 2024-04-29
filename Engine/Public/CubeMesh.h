@@ -19,7 +19,7 @@ public:
 	HRESULT Free() override;
 
 private:
-	//VertexPositionNormalTexture* m_vertexData = nullptr; // Array
+	//VertexPositionNormalColorTexture* m_vertexData = nullptr; // Array
 
 };
 

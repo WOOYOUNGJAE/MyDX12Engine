@@ -82,7 +82,7 @@ HRESULT CSceneNode::Initialize(CSceneNode** pChildNodeArr, UINT iChildArrSize, b
 
  //  /* static ID3D12Resource* m_vertexBuffer = nullptr;
  //   static ID3D12Resource* m_indexBuffer = nullptr;*/
- //   /*MyUtils::Create_Buffer_Default(device, commandList, vertices, sizeof(VertexPositionNormalTexture) * 3, &intermediateBufferVertex, &m_vertexBuffer);
+ //   /*MyUtils::Create_Buffer_Default(device, commandList, vertices, sizeof(VertexPositionNormalColorTexture) * 3, &intermediateBufferVertex, &m_vertexBuffer);
  //   MyUtils::Create_Buffer_Default(device, commandList, indices, sizeof(UINT16) * 3, &intermediateBufferIndex, &m_indexBuffer);*/
  //   DXR::BLAS*& pBlas = (dynamic_cast<CSceneNode_AABB*>(pChildNodeArr[0])->Get_BLAS());
  //   /*m_vertexBuffer = pBlas->vertexBuffer;

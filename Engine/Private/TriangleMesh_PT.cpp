@@ -7,7 +7,7 @@ CTriangleMesh_PT::CTriangleMesh_PT()
 {
 	m_iNumVertices = 3;
 	m_iNumIndices = 3;
-	m_iVertexByteStride = sizeof(VertexPositionNormalTexture);
+	m_iVertexByteStride = sizeof(VertexPositionNormalColorTexture);
 	m_iVertexBufferByteSize = m_iNumVertices * m_iVertexByteStride;
 	m_IndexFormat = DXGI_FORMAT_R16_UINT;
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(UINT16);
@@ -70,11 +70,11 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 	if (FAILED(hr)) { return E_FAIL; }
 
 	
-	VertexPositionNormalTexture tempVertices[]
+	VertexPositionNormalColorTexture tempVertices[]
 	{
-		{Vector3(0.f, -1, 1.5f), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.5f, 0.0f)},
-		{Vector3(-1, 1, 1.5f), Vector3(0.0f, 0.0f, -1.0f),Vector2(1.0f, 1.0f)},
-		{Vector3(1, 1, 1.5f), Vector3(0.0f, 0.0f, -1.0f),Vector2(0.0f, 1.0f)}
+		{Vector3(0.f, -1, 1.5f), Vector3(0.0f, 0.0f, -1.0f),Color(0,0,0,1),  Vector2(0.5f, 0.0f)},
+		{Vector3(-1, 1, 1.5f), Vector3(0.0f, 0.0f, -1.0f),Color(0,0,0,1),Vector2(1.0f, 1.0f)},
+		{Vector3(1, 1, 1.5f), Vector3(0.0f, 0.0f, -1.0f),Color(0,0,0,1),Vector2(0.0f, 1.0f)}
 	};
 	/*{
 		{Vector3(0.0f, 0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.5f, 0.0f)},
@@ -89,7 +89,7 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 		0, 1, 2,
 	};
 
-	const _uint iVertexBufferSize = sizeof(VertexPositionNormalTexture) * m_iNumVertices;
+	const _uint iVertexBufferSize = sizeof(VertexPositionNormalColorTexture) * m_iNumVertices;
 	const _uint iIndexBufferSize = sizeof(UINT16) * m_iNumIndices;
 
 
@@ -127,7 +127,7 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 
 	CMeshData::Init_VBV_IBV();
 #if DXR_ON
-	CMeshData::Build_BLAS(iIndexBufferSize, sizeof(VertexPositionNormalTexture) * m_iNumVertices);
+	CMeshData::Build_BLAS(iIndexBufferSize, sizeof(VertexPositionNormalColorTexture) * m_iNumVertices);
 #endif
 	return S_OK;
 }

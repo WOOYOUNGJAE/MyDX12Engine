@@ -5,7 +5,7 @@
 NAMESPACE_(Engine)
 using std::vector;
 	// MeshGeometry는 Prototype만 가능, Clone 비허용.
-	// VertexPositionNormalTexture와 UINT32가 디폴트,
+	// VertexPositionNormalColorTexture와 UINT32가 디폴트,
 	// 그 외의 경우는 상속으로
 class ENGINE_DLL CMeshData abstract: public CBase
 {
@@ -30,9 +30,9 @@ public: // getter setter
 	virtual DXGI_FORMAT Get_IndexFormat() { return m_IndexFormat; }
 	UINT64 Get_StrideInBytes() { return m_iVertexByteStride; } // Size Of Vertex
 public: // getter
-	vector<VertexPositionNormalTexture>& Get_vecVertices() { return m_vecVertexData; }
+	vector<VertexPositionNormalColorTexture>& Get_vecVertices() { return m_vecVertexData; }
 	vector<UINT32>& Get_vecIndices() { return m_vecIndexData; }
-	virtual size_t Get_SingleVertexSize() { return sizeof(VertexPositionNormalTexture); }
+	virtual size_t Get_SingleVertexSize() { return sizeof(VertexPositionNormalColorTexture); }
 public: // static util func
 	static void Normalize_Vertices(CMeshData* pMeshData);
 	static void Normalize_Vertices(std::list<CMeshData*>& refMeshList);
@@ -68,7 +68,7 @@ protected: // Data about the buffers.
 protected:
 	UINT m_iCbvSrvUavOffset = UINT32_MAX; // 모든 메쉬 오브젝트가 텍스트를 필수로 들고 있지 않음
 protected:
-	vector<VertexPositionNormalTexture> m_vecVertexData;
+	vector<VertexPositionNormalColorTexture> m_vecVertexData;
 	vector<UINT32> m_vecIndexData; // UINT16 쓰는 메쉬는 자식에 따로 구현
 
 

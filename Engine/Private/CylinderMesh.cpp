@@ -4,7 +4,7 @@
 
 CCylinderMesh::CCylinderMesh()
 {
-	m_iVertexByteStride = sizeof(VertexPositionNormalTexture);
+	m_iVertexByteStride = sizeof(VertexPositionNormalColorTexture);
 	m_IndexFormat = DXGI_FORMAT_R16_UINT;
 }
 
@@ -74,7 +74,7 @@ HRESULT CCylinderMesh::Initialize_Prototype()
 	// 밑면 구성하는 버텍스
 	for (UINT i = 0; i <= m_iNumSlices; ++i)
 	{
-		VertexPositionNormalTexture v;
+		VertexPositionNormalColorTexture v;
 		v.position = Vector3::Transform(
 			Vector3(m_fBottomRadius, -0.5f, 0.f),
 			Matrix::CreateRotationY(dTheta * FLOAT(i)));
@@ -89,7 +89,7 @@ HRESULT CCylinderMesh::Initialize_Prototype()
 	// 윗면
 	for (UINT i = 0; i <= m_iNumSlices; ++i)
 	{
-		VertexPositionNormalTexture v;
+		VertexPositionNormalColorTexture v;
 		v.position = Vector3::Transform(
 			Vector3(m_fBottomRadius, 0.5f, 0.f),
 			Matrix::CreateRotationY(dTheta * FLOAT(i)));
@@ -121,7 +121,7 @@ HRESULT CCylinderMesh::Initialize_Prototype()
 #pragma endregion
 
 
-	const UINT iVertexBufferSize = sizeof(VertexPositionNormalTexture) * m_iNumVertices;
+	const UINT iVertexBufferSize = sizeof(VertexPositionNormalColorTexture) * m_iNumVertices;
 	const UINT iIndexBufferSize = sizeof(UINT16) * m_iNumIndices;
 
 	hr = D3DCreateBlob(iVertexBufferSize, &m_vertexBufferCPU);
@@ -158,7 +158,7 @@ HRESULT CCylinderMesh::Initialize_Prototype()
 
 	CMeshData::Init_VBV_IBV();
 #if DXR_ON
-	CMeshData::Build_BLAS(iIndexBufferSize, sizeof(VertexPositionNormalTexture) * m_iNumVertices);
+	CMeshData::Build_BLAS(iIndexBufferSize, sizeof(VertexPositionNormalColorTexture) * m_iNumVertices);
 #endif
 	return hr;
 }

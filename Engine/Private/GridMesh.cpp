@@ -4,7 +4,7 @@
 
 CGridMesh::CGridMesh()
 {
-	m_iVertexByteStride = sizeof(VertexPositionNormalTexture);
+	m_iVertexByteStride = sizeof(VertexPositionNormalColorTexture);
 	m_IndexFormat = DXGI_FORMAT_R16_UINT;
 }
 
@@ -80,7 +80,7 @@ HRESULT CGridMesh::Initialize_Prototype()
 
 		for (UINT j = 0; j <= m_iNumSlices; ++j)
 		{
-			VertexPositionNormalTexture v;
+			VertexPositionNormalColorTexture v;
 
 			v.position = Vector3::Transform(
 				vStackStartPoint,
@@ -119,7 +119,7 @@ HRESULT CGridMesh::Initialize_Prototype()
 #pragma endregion
 
 
-	const UINT iVertexBufferSize = sizeof(VertexPositionNormalTexture) * m_iNumVertices;
+	const UINT iVertexBufferSize = sizeof(VertexPositionNormalColorTexture) * m_iNumVertices;
 	const UINT iIndexBufferSize = sizeof(UINT16) * m_iNumIndices;
 
 	hr = D3DCreateBlob(iVertexBufferSize, &m_vertexBufferCPU);
@@ -156,7 +156,7 @@ HRESULT CGridMesh::Initialize_Prototype()
 
 	CMeshData::Init_VBV_IBV();
 #if DXR_ON
-	CMeshData::Build_BLAS(iIndexBufferSize, sizeof(VertexPositionNormalTexture) * m_iNumVertices);
+	CMeshData::Build_BLAS(iIndexBufferSize, sizeof(VertexPositionNormalColorTexture) * m_iNumVertices);
 #endif
 	return hr;
 }

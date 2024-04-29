@@ -162,7 +162,7 @@ void CLoadHelper::Recur_ProcessNode(aiNode* pNode, const aiScene* pScene, Matrix
 		aiMesh* pAiMesh = pScene->mMeshes[pNode->mMeshes[i]];
 		CMeshData* pGeneratedMesh = this->Recur_ProcessMesh(pAiMesh, pScene);
 
-		for (VertexPositionNormalTexture& v : dynamic_cast<CAssetMesh*>(pGeneratedMesh)->Get_vecVertices())
+		for (VertexPositionNormalColorTexture& v : dynamic_cast<CAssetMesh*>(pGeneratedMesh)->Get_vecVertices())
 		{
 			v.position = Vector3::Transform(v.position, m);
 		}
@@ -178,12 +178,12 @@ void CLoadHelper::Recur_ProcessNode(aiNode* pNode, const aiScene* pScene, Matrix
 
 CMeshData* CLoadHelper::Recur_ProcessMesh(aiMesh* pAiMesh, const aiScene* pScene)
 {
-	std::vector<VertexPositionNormalTexture> vertices;
+	std::vector<VertexPositionNormalColorTexture> vertices;
 	std::vector<UINT32> indices;
 
 	// Walk through each of the mesh's vertices
 	for (UINT i = 0; i < pAiMesh->mNumVertices; i++) {
-		VertexPositionNormalTexture vertex;
+		VertexPositionNormalColorTexture vertex;
 
 		vertex.position.x = pAiMesh->mVertices[i].x;
 		vertex.position.y = pAiMesh->mVertices[i].y;

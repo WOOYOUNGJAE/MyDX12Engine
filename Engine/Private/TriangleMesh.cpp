@@ -69,7 +69,7 @@ HRESULT CTriangleMesh::Initialize_Prototype()
 	hr = CMeshData::Initialize_Prototype();
 	if (FAILED(hr)) { return E_FAIL; }
 
-	VertexPositionNormalTexture tempVertices[]
+	VertexPositionNormalColorTexture tempVertices[]
 	{
 		{Vector3(0.0f, 0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.5f, 0.0f)},
 		{Vector3(0.25f, -0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f),Vector2(1.0f, 1.0f)},

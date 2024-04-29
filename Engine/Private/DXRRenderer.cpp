@@ -64,7 +64,7 @@ HRESULT CDXRRenderer::Initialize()
 //    float depthValue = 1.0;
 //    float offset = 0.7f;
 //
-//    VertexPositionNormalTexture vertices[]
+//    VertexPositionNormalColorTexture vertices[]
 //    { {Vector3(0.f, 100.f, 1.5f), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.5f, 0.0f)},
 //        {Vector3(100.f, -100.f, 1.5f), Vector3(0.0f, 0.0f, -1.0f),Vector2(1.0f, 1.0f)},
 //        {Vector3(-100.f, -100.f, 1.5f), Vector3(0.0f, 0.0f, -1.0f),Vector2(0.0f, 1.0f)}
@@ -92,7 +92,7 @@ HRESULT CDXRRenderer::Initialize()
 //
 //    ID3D12Resource* intermediateBufferVertex = nullptr;
 //    ID3D12Resource* intermediateBufferIndex = nullptr;
-//    MyUtils::Create_Buffer_Default(device, commandList, vertices, sizeof(VertexPositionNormalTexture) * 3, &intermediateBufferVertex, &m_vertexBuffer);
+//    MyUtils::Create_Buffer_Default(device, commandList, vertices, sizeof(VertexPositionNormalColorTexture) * 3, &intermediateBufferVertex, &m_vertexBuffer);
 //    MyUtils::Create_Buffer_Default(device, commandList, indices, sizeof(UINT16) * 3, &intermediateBufferIndex, &m_indexBuffer);
 //
 //
@@ -103,9 +103,9 @@ HRESULT CDXRRenderer::Initialize()
 //    geometryDesc.Triangles.IndexFormat = DXGI_FORMAT_R16_UINT;
 //    geometryDesc.Triangles.Transform3x4 = 0;
 //    geometryDesc.Triangles.VertexFormat = DXGI_FORMAT_R32G32B32_FLOAT;
-//    geometryDesc.Triangles.VertexCount = static_cast<UINT>(m_vertexBuffer->GetDesc().Width) / sizeof(VertexPositionNormalTexture);
+//    geometryDesc.Triangles.VertexCount = static_cast<UINT>(m_vertexBuffer->GetDesc().Width) / sizeof(VertexPositionNormalColorTexture);
 //    geometryDesc.Triangles.VertexBuffer.StartAddress = m_vertexBuffer->GetGPUVirtualAddress();
-//    geometryDesc.Triangles.VertexBuffer.StrideInBytes = sizeof(VertexPositionNormalTexture);
+//    geometryDesc.Triangles.VertexBuffer.StrideInBytes = sizeof(VertexPositionNormalColorTexture);
 //    geometryDesc.Flags = D3D12_RAYTRACING_GEOMETRY_FLAG_OPAQUE;
 //
 //    D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS bottomLevelInputs{};

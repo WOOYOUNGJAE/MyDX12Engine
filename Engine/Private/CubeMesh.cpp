@@ -5,7 +5,7 @@ CCubeMesh::CCubeMesh()
 {
 	m_iNumVertices = 6 * 4;
 	m_iNumIndices = 6 * 6;
-	m_iVertexByteStride = sizeof(VertexPositionNormalTexture);
+	m_iVertexByteStride = sizeof(VertexPositionNormalColorTexture);
 	m_iVertexBufferByteSize = m_iNumVertices * m_iVertexByteStride;
 	m_IndexFormat = DXGI_FORMAT_R16_UINT;
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(UINT16);
@@ -64,43 +64,43 @@ HRESULT CCubeMesh::Initialize_Prototype()
 	if (FAILED(hr)) { return E_FAIL; }
 
 
-	VertexPositionNormalTexture tempVertices[]
+	VertexPositionNormalColorTexture tempVertices[]
 	{
 		// front
-		VertexPositionNormalTexture(Vector3(-1, -1, -1), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.0f, 1.0f)),
-		VertexPositionNormalTexture(Vector3(-1, +1, -1), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.0f, 0.0f)),
-		VertexPositionNormalTexture(Vector3(+1, +1, -1), Vector3(0.0f, 0.0f, -1.0f), Vector2(1.0f, 0.0f)),
-		VertexPositionNormalTexture(Vector3(+1, -1, -1), Vector3(0.0f, 0.0f, -1.0f), Vector2(1.0f, 1.0f)),
+		VertexPositionNormalColorTexture(Vector3(-1, -1, -1), Vector3(0.0f, 0.0f, -1.0f),Color(0,0,0,1), Vector2(0.0f, 1.0f)),
+		VertexPositionNormalColorTexture(Vector3(-1, +1, -1), Vector3(0.0f, 0.0f, -1.0f),Color(0,0,0,1), Vector2(0.0f, 0.0f)),
+		VertexPositionNormalColorTexture(Vector3(+1, +1, -1), Vector3(0.0f, 0.0f, -1.0f),Color(0,0,0,1), Vector2(1.0f, 0.0f)),
+		VertexPositionNormalColorTexture(Vector3(+1, -1, -1), Vector3(0.0f, 0.0f, -1.0f),Color(0,0,0,1), Vector2(1.0f, 1.0f)),
 
 		// back
-		VertexPositionNormalTexture(Vector3(-1, -1, +1), Vector3(0.0f, 0.0f, 1.0f),  Vector2(1.0f, 1.0f)),
-		VertexPositionNormalTexture(Vector3(-1, +1, +1), Vector3(0.0f, 0.0f, 1.0f),  Vector2(1.0f, 0.0f)),
-		VertexPositionNormalTexture(Vector3(+1, +1, +1), Vector3(0.0f, 0.0f, 1.0f),  Vector2(0.0f, 0.0f)),
-		VertexPositionNormalTexture(Vector3(+1, -1, +1), Vector3(0.0f, 0.0f, 1.0f),  Vector2(0.0f, 1.0f)),
+		VertexPositionNormalColorTexture(Vector3(-1, -1, +1), Vector3(0.0f, 0.0f, 1.0f),Color(0,0,0,1),  Vector2(1.0f, 1.0f)),
+		VertexPositionNormalColorTexture(Vector3(-1, +1, +1), Vector3(0.0f, 0.0f, 1.0f),Color(0,0,0,1),  Vector2(1.0f, 0.0f)),
+		VertexPositionNormalColorTexture(Vector3(+1, +1, +1), Vector3(0.0f, 0.0f, 1.0f),Color(0,0,0,1),  Vector2(0.0f, 0.0f)),
+		VertexPositionNormalColorTexture(Vector3(+1, -1, +1), Vector3(0.0f, 0.0f, 1.0f),Color(0,0,0,1),  Vector2(0.0f, 1.0f)),
 
 		// top
-		VertexPositionNormalTexture(Vector3(-1, +1, -1), Vector3(0.0f, 1.0f, 0.0f), Vector2(0.0f, 1.0f)),
-		VertexPositionNormalTexture(Vector3(-1, +1, +1), Vector3(0.0f, 1.0f, 0.0f), Vector2(0.0f, 0.0f)),
-		VertexPositionNormalTexture(Vector3(+1, +1, +1), Vector3(0.0f, 1.0f, 0.0f), Vector2(1.0f, 0.0f)),
-		VertexPositionNormalTexture(Vector3(+1, +1, -1), Vector3(0.0f, 1.0f, 0.0f), Vector2(1.0f, 1.0f)),
+		VertexPositionNormalColorTexture(Vector3(-1, +1, -1), Vector3(0.0f, 1.0f, 0.0f),Color(0,0,0,1), Vector2(0.0f, 1.0f)),
+		VertexPositionNormalColorTexture(Vector3(-1, +1, +1), Vector3(0.0f, 1.0f, 0.0f),Color(0,0,0,1), Vector2(0.0f, 0.0f)),
+		VertexPositionNormalColorTexture(Vector3(+1, +1, +1), Vector3(0.0f, 1.0f, 0.0f),Color(0,0,0,1), Vector2(1.0f, 0.0f)),
+		VertexPositionNormalColorTexture(Vector3(+1, +1, -1), Vector3(0.0f, 1.0f, 0.0f),Color(0,0,0,1), Vector2(1.0f, 1.0f)),
 
 		// bottom
-		VertexPositionNormalTexture(Vector3(-1, -1, -1), Vector3(0.0f, -1.0f, 0.0f),  Vector2(1.0f, 1.0f)),
-		VertexPositionNormalTexture(Vector3(-1, -1, +1), Vector3(0.0f, -1.0f, 0.0f),  Vector2(1.0f, 0.0f)),
-		VertexPositionNormalTexture(Vector3(+1, -1, +1), Vector3(0.0f, -1.0f, 0.0f),  Vector2(0.0f, 0.0f)),
-		VertexPositionNormalTexture(Vector3(+1, -1, -1), Vector3(0.0f, -1.0f, 0.0f),  Vector2(0.0f, 1.0f)),
+		VertexPositionNormalColorTexture(Vector3(-1, -1, -1), Vector3(0.0f, -1.0f, 0.0f),Color(0,0,0,1),  Vector2(1.0f, 1.0f)),
+		VertexPositionNormalColorTexture(Vector3(-1, -1, +1), Vector3(0.0f, -1.0f, 0.0f),Color(0,0,0,1),  Vector2(1.0f, 0.0f)),
+		VertexPositionNormalColorTexture(Vector3(+1, -1, +1), Vector3(0.0f, -1.0f, 0.0f),Color(0,0,0,1),  Vector2(0.0f, 0.0f)),
+		VertexPositionNormalColorTexture(Vector3(+1, -1, -1), Vector3(0.0f, -1.0f, 0.0f),Color(0,0,0,1),  Vector2(0.0f, 1.0f)),
 
 		// left
-		VertexPositionNormalTexture(Vector3(-1, -1, +1), Vector3(-1.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f)),
-		VertexPositionNormalTexture(Vector3(-1, +1, +1), Vector3(-1.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f)),
-		VertexPositionNormalTexture(Vector3(-1, +1, -1), Vector3(-1.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f)),
-		VertexPositionNormalTexture(Vector3(-1, -1, -1), Vector3(-1.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f)),
+		VertexPositionNormalColorTexture(Vector3(-1, -1, +1), Vector3(-1.0f, 0.0f, 0.0f),Color(0,0,0,1), Vector2(0.0f, 1.0f)),
+		VertexPositionNormalColorTexture(Vector3(-1, +1, +1), Vector3(-1.0f, 0.0f, 0.0f),Color(0,0,0,1), Vector2(0.0f, 0.0f)),
+		VertexPositionNormalColorTexture(Vector3(-1, +1, -1), Vector3(-1.0f, 0.0f, 0.0f),Color(0,0,0,1), Vector2(1.0f, 0.0f)),
+		VertexPositionNormalColorTexture(Vector3(-1, -1, -1), Vector3(-1.0f, 0.0f, 0.0f),Color(0,0,0,1), Vector2(1.0f, 1.0f)),
 
 		// right
-		VertexPositionNormalTexture(Vector3(1, -1, -1), Vector3(1.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f)),
-		VertexPositionNormalTexture(Vector3(1, +1, -1), Vector3(1.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f)),
-		VertexPositionNormalTexture(Vector3(1, +1, +1), Vector3(1.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f)),
-		VertexPositionNormalTexture(Vector3(1, -1, +1), Vector3(1.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f)),
+		VertexPositionNormalColorTexture(Vector3(1, -1, -1), Vector3(1.0f, 0.0f, 0.0f),Color(0,0,0,1), Vector2(0.0f, 1.0f)),
+		VertexPositionNormalColorTexture(Vector3(1, +1, -1), Vector3(1.0f, 0.0f, 0.0f),Color(0,0,0,1), Vector2(0.0f, 0.0f)),
+		VertexPositionNormalColorTexture(Vector3(1, +1, +1), Vector3(1.0f, 0.0f, 0.0f),Color(0,0,0,1), Vector2(1.0f, 0.0f)),
+		VertexPositionNormalColorTexture(Vector3(1, -1, +1), Vector3(1.0f, 0.0f, 0.0f),Color(0,0,0,1), Vector2(1.0f, 1.0f)),
 	};
 	/*for (auto& iter : tempVertices)
 	{
@@ -136,7 +136,7 @@ HRESULT CCubeMesh::Initialize_Prototype()
 		20, 22, 23,
 	};
 
-	const UINT iVertexBufferSize = sizeof(VertexPositionNormalTexture) * m_iNumVertices;
+	const UINT iVertexBufferSize = sizeof(VertexPositionNormalColorTexture) * m_iNumVertices;
 	const UINT iIndexBufferSize = sizeof(UINT16) * m_iNumIndices;
 
 	hr = D3DCreateBlob(iVertexBufferSize, &m_vertexBufferCPU);
@@ -173,7 +173,7 @@ HRESULT CCubeMesh::Initialize_Prototype()
 
 	CMeshData::Init_VBV_IBV();
 #if DXR_ON
-	CMeshData::Build_BLAS(sizeof(UINT16)* _countof(indicesData), sizeof(VertexPositionNormalTexture)* m_iNumVertices);
+	CMeshData::Build_BLAS(sizeof(UINT16)* _countof(indicesData), sizeof(VertexPositionNormalColorTexture)* m_iNumVertices);
 #endif
 	return hr;
 }

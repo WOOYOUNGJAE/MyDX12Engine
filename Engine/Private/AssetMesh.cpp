@@ -52,12 +52,12 @@ HRESULT CAssetMesh::ReInit_Prototype()
 
 	m_iNumVertices = m_vecVertexData.size();
 	m_iNumIndices = m_vecIndexData.size();
-	m_iVertexByteStride = sizeof(VertexPositionNormalTexture);
+	m_iVertexByteStride = sizeof(VertexPositionNormalColorTexture);
 	m_iVertexBufferByteSize = m_iNumVertices * m_iVertexByteStride;
 	m_IndexFormat = DXGI_FORMAT_R32_UINT;
 	m_iIndexBufferByteSize = m_iNumIndices * sizeof(UINT32);
 
-	const UINT iVertexBufferSize = sizeof(VertexPositionNormalTexture) * m_iNumVertices;
+	const UINT iVertexBufferSize = sizeof(VertexPositionNormalColorTexture) * m_iNumVertices;
 	const UINT iIndexBufferSize = sizeof(UINT32) * m_iNumIndices;
 
 	hr = D3DCreateBlob(iVertexBufferSize, &m_vertexBufferCPU);
@@ -94,7 +94,7 @@ HRESULT CAssetMesh::ReInit_Prototype()
 
 	CMeshData::Init_VBV_IBV();
 #if DXR_ON
-	CMeshData::Build_BLAS(sizeof(UINT32) * Num_Indices(), sizeof(VertexPositionNormalTexture) * m_iNumVertices);
+	CMeshData::Build_BLAS(sizeof(UINT32) * Num_Indices(), sizeof(VertexPositionNormalColorTexture) * m_iNumVertices);
 #endif
 	return hr;
 }
