@@ -2,6 +2,7 @@
 
 #include "Device_Utils.h"
 
+#if DXR_ON
 CDXRShaderTable* CDXRShaderTable::Create(ID3D12Device* pDevice, UINT iNumShaderRecords, UINT iRecordSize,
                                          LPCWSTR resourceName)
 {
@@ -56,3 +57,4 @@ void CDXRShaderTable::Register_Record(const TABLE_RECORD_DESC& inRecord)
 
 	m_pRecordingData += m_iSingleRecordSize;
 }
+#endif

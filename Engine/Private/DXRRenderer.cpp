@@ -256,7 +256,6 @@ void CDXRRenderer::Set_ComputeRootDescriptorTable_Global()
     std::vector<CBVH*> refVecAccelerationTree = CSDSManager::Get_Instance()->Get_vecAccelerationTree();
 
     D3D12_GPU_VIRTUAL_ADDRESS TLAS_GPU_Adress = refVecAccelerationTree[0]->Get_Root()->Get_TLAS().uav_TLAS->GetGPUVirtualAddress();
-    
 
     CD3DX12_GPU_DESCRIPTOR_HANDLE IB_VB_SRV_Handle_GPU =
         m_pDXRResources->Get_HeapHandleGPU(refVecAccelerationTree[0]->Get_Root()->Get_TLAS().IB_VB_SRV_startOffsetInDescriptors);

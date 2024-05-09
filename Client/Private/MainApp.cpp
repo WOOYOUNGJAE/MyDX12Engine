@@ -96,7 +96,7 @@ HRESULT CMainApp::Initialize()
 	m_pGameInstance->Add_ClonedObj_To_Array_For_ShaderTable(pObjectControlling);
 #if DXR_ON
 	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
-	CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
+	//CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
 #endif DXR_ON
 
 
@@ -179,28 +179,34 @@ HRESULT CMainApp::Initialize()
 void CMainApp::Tick(_float fDeltaTime)
 {
 #if DXR_ON
-	m_pDXRRenderer->BeginRender();
-	//m_pRenderer->BeginRender();
+	//m_pDXRRenderer->BeginRender();
+	m_pRenderer->BeginRender();
 #else
 	m_pRenderer->BeginRender();
 #endif
 
 
 	m_pGameInstance->Engine_Tick(fDeltaTime);
-
-	m_pDXRRenderer->MainRender();
+#if DXR_ON
+	//m_pDXRRenderer->MainRender();
+	m_pRenderer->MainRender();
+#else
 	//m_pRenderer->MainRender();
+#endif
 
 #if IMGUI_ON
 	m_pClient_Imgui->Imgui_Tick();
 	m_pClient_Imgui->Imgui_MainRender();
 	m_pClient_Imgui->IMgui_EndRender();
 	m_pClient_Imgui->Imgui_Present();
+#elif DXR_ON
+	//m_pDXRRenderer->EndRender();
+	//m_pDXRRenderer->Present();
+	m_pRenderer->EndRender();
+	m_pRenderer->Present();
 #else
 	//m_pRenderer->EndRender();
 	//m_pRenderer->Present();
-	m_pDXRRenderer->EndRender();
-	m_pDXRRenderer->Present();
 #endif
 
 }

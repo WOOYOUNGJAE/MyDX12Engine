@@ -41,6 +41,7 @@
 #pragma comment(lib, "..\\..\\External\\Assimp\\assimp-vc143-mt")
 
 // My
+//#define DXR_ON FALSE
 #define DXR_ON TRUE
 
 #include "DXSampleHelper.h"

@@ -141,7 +141,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
-    BYTE* a = new BYTE; //
+    BYTE* leakTest = new BYTE; //
 
     return (int) msg.wParam;
 }

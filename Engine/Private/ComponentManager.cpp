@@ -87,7 +87,7 @@ HRESULT CComponentManager::Initialize()
 #if DXR_ON
 	CDXRResource::Get_Instance()->Reset_CommandList();
 #endif
-	//pAssetManager->Add_MeshDataPrototype(L"CubeMesh", CCubeMesh::Create());
+	pAssetManager->Add_MeshDataPrototype(L"CubeMesh", CCubeMesh::Create());
 	pAssetManager->Add_MeshDataPrototype(L"TriangleMesh_PT", CTriangleMesh_PT::Create());
 	/*pAssetManager->Add_MeshDataPrototype(L"TriangleMesh", CTriangleMesh::Create());*/
 

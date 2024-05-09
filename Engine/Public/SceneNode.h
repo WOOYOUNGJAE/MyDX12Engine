@@ -17,8 +17,6 @@ public:
 	static CSceneNode* Create(CSceneNode** pChildNodeArr, UINT iArrSize = 2, bool bIsTLAS = false, CGameObject* pContainingObj = nullptr);
 	HRESULT Initialize(CSceneNode** pChildNodeArr, UINT iChildArrSize = 2, bool bIsTLAS = false);
 	HRESULT Free() override;
-public:
-	const DXR::TLAS& Get_TLAS() { return m_TLAS; }
 	virtual void Set_ContainingObj(CGameObject* pGameObj);
 
 protected: // If Binary Tree
@@ -30,6 +28,9 @@ protected: // Else If Leaf
 	CGameObject* m_pContainingObj = nullptr; // leaf가 아니면 nullptr
 
 #if DXR_ON
+public:
+	const DXR::TLAS& Get_TLAS() { return m_TLAS; }
+protected:
 	DXR::TLAS m_TLAS{};
 #endif
 };
