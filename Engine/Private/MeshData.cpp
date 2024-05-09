@@ -66,32 +66,30 @@ void CMeshData::Build_BLAS(UINT64 iIndexDataSize, UINT64 iVertexDataSize)
 	m_BLAS.indexBuffer = m_indexBufferGPU;
 	m_BLAS.vertexBuffer = m_vertexBufferGPU;
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE& cpuHandle = CDXRResource::Get_Instance()->Get_refHeapHandle_CPU();
-	UINT iDescriptorSize = CDXRResource::Get_Instance()->Get_DescriptorSize();
-
 #pragma region Create SRV of IB, VB
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	//CD3DX12_CPU_DESCRIPTOR_HANDLE& cpuHandle = CDXRResource::Get_Instance()->Get_refHeapHandle_CPU();
+	//UINT iDescriptorSize = CDXRResource::Get_Instance()->Get_DescriptorSize();
 
-	// Create Index SRV
-	srvDesc.Buffer.NumElements = iIndexDataSize / sizeof(UINT32);
-	srvDesc.Format = DXGI_FORMAT_R32_TYPELESS; // for Index Srv
-	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW; // 인덱스는 단순 정수 나열이므로 raw타입으로
-	srvDesc.Buffer.StructureByteStride = 0; //  D3D12_BUFFER_SRV_FLAG_RAW, 즉 원시 데이터로 접근할 때
-	cpuHandle.Offset(1, iDescriptorSize);
-	pDevice->CreateShaderResourceView(m_BLAS.indexBuffer, &srvDesc, cpuHandle); // Index Srv
+	//D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	//srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+	//srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
-	// Create Vertex SRV
-	srvDesc.Buffer.NumElements = m_iNumVertices;
-	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
-	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-	srvDesc.Buffer.StructureByteStride = UINT(Get_SingleVertexSize());
-	cpuHandle.Offset(1, iDescriptorSize);
-	pDevice->CreateShaderResourceView(m_BLAS.vertexBuffer, &srvDesc, cpuHandle); // Index Srv
+	//// Create Index SRV
+	//srvDesc.Buffer.NumElements = iIndexDataSize / sizeof(UINT32);
+	//srvDesc.Format = DXGI_FORMAT_R32_TYPELESS; // for Index Srv
+	//srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW; // 인덱스는 단순 정수 나열이므로 raw타입으로
+	//srvDesc.Buffer.StructureByteStride = 0; //  D3D12_BUFFER_SRV_FLAG_RAW, 즉 원시 데이터로 접근할 때
+	//cpuHandle.Offset(1, iDescriptorSize);
+	//pDevice->CreateShaderResourceView(m_BLAS.indexBuffer, &srvDesc, cpuHandle); // Index Srv
+
+	//// Create Vertex SRV
+	//srvDesc.Buffer.NumElements = m_iNumVertices;
+	//srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+	//srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+	//srvDesc.Buffer.StructureByteStride = UINT(Get_SingleVertexSize());
+	//cpuHandle.Offset(1, iDescriptorSize);
+	//pDevice->CreateShaderResourceView(m_BLAS.vertexBuffer, &srvDesc, cpuHandle); // Index Srv
 #pragma endregion
-
-
 	// DXR Geometry Desc
 	m_BLAS.dxrGeometryDesc.Type = D3D12_RAYTRACING_GEOMETRY_TYPE_TRIANGLES;
 	m_BLAS.dxrGeometryDesc.Triangles.Transform3x4 = 0;

@@ -23,6 +23,8 @@ public:
 	HRESULT Free() override;
 public: // getter
 	CD3DX12_CPU_DESCRIPTOR_HANDLE& Get_refHeapHandle_CPU() { return m_curHeapHandle_CPU; }
+	D3D12_CPU_DESCRIPTOR_HANDLE Get_HeapHandleStart_CPU() { return m_pDescriptorHeap->GetCPUDescriptorHandleForHeapStart(); }
+	D3D12_GPU_DESCRIPTOR_HANDLE Get_HeapHandleStart_GPU() { return m_pDescriptorHeap->GetGPUDescriptorHandleForHeapStart(); }
 	UINT Get_DescriptorSize() { return m_iDescriptorSize; }
 	ID3D12Resource*& Get_ScratchBufferRef() { return m_pScratchBuffer; }
 	ID3D12Resource** Get_ScratchBufferPtr() { return &m_pScratchBuffer; }

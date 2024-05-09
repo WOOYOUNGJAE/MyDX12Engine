@@ -117,6 +117,7 @@ namespace Engine
 	{
 		ID3D12Resource* uav_TLAS;
 		ID3D12Resource* pInstanceDesc;
+		UINT64 IB_VB_SRV_startOffsetInDescriptors;
 	};
 
 	struct TLAS_NODE_INIT_DESC

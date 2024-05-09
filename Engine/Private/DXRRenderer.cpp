@@ -256,12 +256,20 @@ void CDXRRenderer::Set_ComputeRootDescriptorTable_Global()
     std::vector<CBVH*> refVecAccelerationTree = CSDSManager::Get_Instance()->Get_vecAccelerationTree();
 
     D3D12_GPU_VIRTUAL_ADDRESS TLAS_GPU_Adress = refVecAccelerationTree[0]->Get_Root()->Get_TLAS().uav_TLAS->GetGPUVirtualAddress();
+    
+
+    CD3DX12_GPU_DESCRIPTOR_HANDLE IB_VB_SRV_Handle_GPU =
+        CD3DX12_GPU_DESCRIPTOR_HANDLE(m_pDXRResources->Get_HeapHandleStart_GPU(), refVecAccelerationTree[0]->Get_Root()->Get_TLAS().IB_VB_SRV_startOffsetInDescriptors, m_pDXRResources->Get_DescriptorSize());
 
     m_pCommandList->SetDescriptorHeaps(1, &m_pDXRResources->m_pDescriptorHeap);
     m_pCommandList->SetComputeRootSignature(m_pDXRResources->m_pRootSigArr[DXR_ROOTSIG_GLOBAL]);
     m_pCommandList->SetComputeRootDescriptorTable(GlobalRootSigSlot::RENDER_TARGET, m_pDXRResources->m_DXROutputHeapHandle);
     m_pCommandList->SetComputeRootShaderResourceView(GlobalRootSigSlot::AS, TLAS_GPU_Adress); // 빌드할 때는 UAV였는데??
-    //m_pCommandList->SetComputeRootShaderResourceView(GlobalRootSigSlot::AS, m_topLevelAccelerationStructure->GetGPUVirtualAddress()); // 빌드할 때는 UAV였는데??
+
+    //m_pCommandList->SetComputeRootDescriptorTable(GlobalRootSigSlot::IB_VB_SRV, IB_VB_SRV_Handle_GPU);
+    m_pCommandList->SetComputeRootDescriptorTable(3, IB_VB_SRV_Handle_GPU);
+    //m_pCommandList->SetComputeRootDescriptorTable(4, IB_VB_SRV_Handle_GPU);
+    m_pCommandList->SetComputeRootDescriptorTable(4, IB_VB_SRV_Handle_GPU.Offset(INT(m_pDXRResources->Get_DescriptorSize())));
 }
 
 #endif
