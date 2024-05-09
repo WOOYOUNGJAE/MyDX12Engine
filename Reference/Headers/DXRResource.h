@@ -22,9 +22,11 @@ public:
 	HRESULT Initialize();
 	HRESULT Free() override;
 public: // getter
+	UINT64 Get_CurOffsetInDescriptors() { return m_iCurOffsetInDescriptors; }
 	CD3DX12_CPU_DESCRIPTOR_HANDLE& Get_refHeapHandle_CPU() { return m_curHeapHandle_CPU; }
 	D3D12_CPU_DESCRIPTOR_HANDLE Get_HeapHandleStart_CPU() { return m_pDescriptorHeap->GetCPUDescriptorHandleForHeapStart(); }
 	D3D12_GPU_DESCRIPTOR_HANDLE Get_HeapHandleStart_GPU() { return m_pDescriptorHeap->GetGPUDescriptorHandleForHeapStart(); }
+	CD3DX12_GPU_DESCRIPTOR_HANDLE Get_HeapHandleGPU(UINT64 iOffsetInDescriptors);
 	UINT Get_DescriptorSize() { return m_iDescriptorSize; }
 	ID3D12Resource*& Get_ScratchBufferRef() { return m_pScratchBuffer; }
 	ID3D12Resource** Get_ScratchBufferPtr() { return &m_pScratchBuffer; }
@@ -50,6 +52,7 @@ public:
 	}
 	static void ResourceBarrierUAV(ID3D12Resource* pResource) { 1, & CD3DX12_RESOURCE_BARRIER::UAV(pResource); }
 	void Flush_CommandQueue();
+	UINT64 Apply_DescriptorHandleOffset();
 private: // D3D Resource
 	ID3D12GraphicsCommandList4* m_pCommandList = nullptr; // CmdList for Dxr
 	ID3D12CommandAllocator** m_pCommandAllocatorArr = nullptr;
@@ -69,7 +72,7 @@ private:
 	UINT m_iDescriptorSize = 0;
 	CD3DX12_CPU_DESCRIPTOR_HANDLE m_curHeapHandle_CPU; // CbvSrvUav Handle Cpu
 	CD3DX12_GPU_DESCRIPTOR_HANDLE m_DXROutputHeapHandle;
-
+	UINT64 m_iCurOffsetInDescriptors = 0; // 디스크립터 힙에서 몇 번째 디스크립터냐
 private: //Fence
 	ID3D12Fence* m_pFence = nullptr;
 	UINT64 m_iFenceValue = 0;

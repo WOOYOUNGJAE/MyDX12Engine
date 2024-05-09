@@ -120,29 +120,15 @@ HRESULT CDXRResource::Crete_RootSignatures()
 	// Global Root Signature
 	// This is a root signature that is shared across all raytracing shaders invoked during a DispatchRays() call.
 	{
-
-		CD3DX12_DESCRIPTOR_RANGE descriptorRange[3];
+		CD3DX12_DESCRIPTOR_RANGE descriptorRange[2];
 		descriptorRange[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0, 1/*for DXR*/); // output texture
-		descriptorRange[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1, 1); // static index buffer
-		descriptorRange[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 2, 1); // static vertex buffer
+		descriptorRange[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 1, 1); // static index vertex buffer
 
-		CD3DX12_ROOT_PARAMETER rootParameterArr[5];
+		CD3DX12_ROOT_PARAMETER rootParameterArr[4];
 		rootParameterArr[GlobalRootSigSlot::RENDER_TARGET].InitAsDescriptorTable(1, &descriptorRange[0]);
 		rootParameterArr[GlobalRootSigSlot::AS].InitAsShaderResourceView(0, 1);
 		rootParameterArr[GlobalRootSigSlot::PASS_CONSTANT].InitAsConstantBufferView(0, 1); // SceneConstant
-		rootParameterArr[3].InitAsDescriptorTable(1, &descriptorRange[1]);
-		rootParameterArr[4].InitAsDescriptorTable(1, &descriptorRange[2]);
-		//rootParameterArr[4].InitAsDescriptorTable(1, &descriptorRange[1]);
-		//
-		//CD3DX12_DESCRIPTOR_RANGE descriptorRange[2];
-		//descriptorRange[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0, 1/*for DXR*/); // output texture
-		//descriptorRange[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 1, 1); // static index vertex buffer
-
-		//CD3DX12_ROOT_PARAMETER rootParameterArr[4];
-		//rootParameterArr[GlobalRootSigSlot::RENDER_TARGET].InitAsDescriptorTable(1, &descriptorRange[0]);
-		//rootParameterArr[GlobalRootSigSlot::AS].InitAsShaderResourceView(0, 1);
-		//rootParameterArr[GlobalRootSigSlot::PASS_CONSTANT].InitAsConstantBufferView(0, 1); // SceneConstant
-		//rootParameterArr[GlobalRootSigSlot::IB_VB_SRV].InitAsDescriptorTable(1, &descriptorRange[1]);
+		rootParameterArr[GlobalRootSigSlot::IB_VB_SRV].InitAsDescriptorTable(1, &descriptorRange[1]);
 
 		CD3DX12_ROOT_SIGNATURE_DESC globalRootSignatureDesc(_countof(rootParameterArr), rootParameterArr);
 
@@ -410,7 +396,7 @@ HRESULT CDXRResource::Create_OutputResource()
 	m_DXROutputHeapHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(
 	m_pDescriptorHeap->GetGPUDescriptorHandleForHeapStart(),1, iHeapOffsetGPU);
 
-	m_curHeapHandle_CPU.Offset(m_iDescriptorSize);
+	Apply_DescriptorHandleOffset();
 
 	return hr;
 }
@@ -445,6 +431,14 @@ void CDXRResource::Flush_CommandQueue()
 	CDeviceResource::Get_Instance()->Flush_CommandQueue(&m_queue_flush_desc);
 }
 
+UINT64 CDXRResource::Apply_DescriptorHandleOffset()
+{
+	m_curHeapHandle_CPU.Offset(INT(m_iDescriptorSize));
+	++m_iCurOffsetInDescriptors;
+
+	return m_iCurOffsetInDescriptors;
+}
+
 HRESULT CDXRResource::Free()
 {
 	Flush_CommandQueue();
@@ -474,4 +468,10 @@ HRESULT CDXRResource::Free()
 	Safe_Release(m_pDevice);
 	return S_OK;
 }
+
+CD3DX12_GPU_DESCRIPTOR_HANDLE CDXRResource::Get_HeapHandleGPU(UINT64 iOffsetInDescriptors)
+{
+	return CD3DX12_GPU_DESCRIPTOR_HANDLE(Get_HeapHandleStart_GPU(), iOffsetInDescriptors, m_iDescriptorSize);
+}
+
 #endif

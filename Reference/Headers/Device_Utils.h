@@ -242,10 +242,12 @@ inline void Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS, I
 	CDXRResource::BuildRaytracingAccelerationStructure(&topLevelBuildDesc, 0, nullptr);
 	Safe_Delete_Array(instanceDescArr);
 }
-inline void Create_IB_VB_SRV_Serialized(ID3D12Device5* pDevice, DXR::BLAS** pBlassArr, UINT iNumBlas)
+inline void Create_IB_VB_SRV_Serialized(ID3D12Device5* pDevice, DXR::BLAS** pBlassArr, UINT iNumBlas, UINT64* pOutIBStartOffsetInDescriptors)
 {
-// 모든 BLAS에 대한 Index SRV를 연속적으로 만든 후 Vertex SRV 만들기
-	CD3DX12_CPU_DESCRIPTOR_HANDLE& cpuHandle = CDXRResource::Get_Instance()->Get_refHeapHandle_CPU();
+	// 모든 BLAS에 대한 Index SRV를 연속적으로 만든 후 Vertex SRV 만들기
+	CDXRResource* pDXRResource = CDXRResource::Get_Instance();
+	*pOutIBStartOffsetInDescriptors = pDXRResource->Get_CurOffsetInDescriptors();
+	CD3DX12_CPU_DESCRIPTOR_HANDLE& cpuHandle = pDXRResource->Get_refHeapHandle_CPU();
 	UINT iDescriptorSize = CDXRResource::Get_Instance()->Get_DescriptorSize();
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
@@ -263,8 +265,9 @@ inline void Create_IB_VB_SRV_Serialized(ID3D12Device5* pDevice, DXR::BLAS** pBla
 		srvDesc.Format = DXGI_FORMAT_R32_TYPELESS; // for Index Srv
 		srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW; // 인덱스는 단순 정수 나열이므로 raw타입으로
 		srvDesc.Buffer.StructureByteStride = 0; //  D3D12_BUFFER_SRV_FLAG_RAW, 즉 원시 데이터로 접근할 때
-		cpuHandle.Offset(1, iDescriptorSize);
+		//cpuHandle.Offset(1, iDescriptorSize);
 		pDevice->CreateShaderResourceView(pBlassArr[i]->indexBuffer, &srvDesc, cpuHandle); // Index Srv
+		pDXRResource->Apply_DescriptorHandleOffset();
 	}
 #pragma endregion Create Serial SRV of IB
 #pragma region Create Serial SRV of VB
@@ -275,16 +278,15 @@ inline void Create_IB_VB_SRV_Serialized(ID3D12Device5* pDevice, DXR::BLAS** pBla
 		srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 		srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 		srvDesc.Buffer.StructureByteStride = pBlassArr[i]->dxrGeometryDesc.Triangles.VertexBuffer.StrideInBytes;
-		cpuHandle.Offset(1, iDescriptorSize);
+		//cpuHandle.Offset(1, iDescriptorSize);
 		pDevice->CreateShaderResourceView(pBlassArr[i]->vertexBuffer, &srvDesc, cpuHandle); // Vertex Srv
+		pDXRResource->Apply_DescriptorHandleOffset();
 	}
 #pragma endregion Create Serial SRV of VB	
 }
 
 inline void Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** ppOutInstanceDescResource, DXR::BLAS** pBlassArr, UINT iNumBlas)
 {
-	Create_IB_VB_SRV_Serialized(pDevice, pBlassArr, iNumBlas);
-
 	// TLAS
 	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS topLevelInputs = {};
 	topLevelInputs.DescsLayout = D3D12_ELEMENTS_LAYOUT_ARRAY;
