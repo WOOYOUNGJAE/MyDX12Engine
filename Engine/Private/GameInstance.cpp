@@ -198,6 +198,10 @@ HRESULT CGameInstance::Build_FrameResource_After_Loading_GameScene_Finished(UINT
 		MSG_BOX("Building FrameResource Failed");
 	}
 
+#if DXR_ON
+	m_pDxrRenderer->Set_FrameResource();
+#endif
+
 	return hr;
 }
 
@@ -250,7 +254,11 @@ void CGameInstance::Update_ObjPipelineLayer(CGameObject* pObject, _uint ePsoEnum
 
 void CGameInstance::Set_MainCam(wstring strName)
 {
+#if DXR_ON
+	m_pCameraManager->Set_MainCam(strName, m_pDxrRenderer);
+#else
 	m_pCameraManager->Set_MainCam(strName);
+#endif
 }
 
 #if DXR_ON

@@ -67,7 +67,6 @@ private: //Fence
 	HANDLE m_fenceEvent;
 	QUEUE_FLUSH_DESC m_queue_flush_desc{};
 private: // Pass Info
-	class CCamera* m_pActiveCam = nullptr;
 	Matrix m_mProj;
 	FLOAT m_fAspectRatio = 0.f;
 private:

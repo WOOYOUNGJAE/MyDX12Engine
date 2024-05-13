@@ -6,8 +6,11 @@
 #include "AssetManager.h"
 #include "FrameResource.h"
 #include "BVH.h"
+#include "CameraManager.h"
 #include "SceneNode_AABB.h"
 #include "SDSManager.h"
+#include "Camera.h"
+#include "FrameResourceManager.h"
 
 #if DXR_ON
 CDXRRenderer* CDXRRenderer::Create()
@@ -188,6 +191,34 @@ HRESULT CDXRRenderer::Free()
 	return S_OK;
 }
 
+void CDXRRenderer::Set_FrameResource()
+{
+    m_pCurFrameResource = CFrameResourceManager::Get_Instance()->m_vecFrameResource[0]; // TODO : FrameResource 여러개 변경 예정
+}
+
+void CDXRRenderer::Update_Static_PassCB(const CAMERA_DESC& camDesc)
+{
+    m_mProj = XMMatrixPerspectiveFovLH(camDesc.fFovy, camDesc.fAspectRatio, camDesc.fNear, camDesc.fFar);
+
+    // Light Info
+    curSceneCB.lightPosition = Vector4(0.0f, 18.0f, -20.0f, 0.0f);
+    curSceneCB.lightAmbientColor = Vector4(0.25f, 0.25f, 0.25f, 1.0f);
+    curSceneCB.lightDiffuseColor = Vector4(0.6f, 0.6f, 0.6f, 1.f);
+}
+
+void CDXRRenderer::Update_Dynamic_PassCB()
+{
+    CCamera* pMainCam = CCameraManager::Get_Instance()->Get_MainCam();
+
+    Vector3 vCamPos = pMainCam->Get_Pos();
+    curSceneCB.cameraPosition = Vector4(vCamPos.x, vCamPos.y, vCamPos.z, 1);
+
+    Matrix viewMat = pMainCam->Get_WorldMatrix().Invert();
+    curSceneCB.projectionToWorld = XMMatrixInverse(nullptr, viewMat * m_mProj);
+
+    m_pCurFrameResource->pPassCB_DXR_scene->CopyData(0, curSceneCB);
+}
+
 
 void CDXRRenderer::BeginRender()
 {
@@ -205,6 +236,8 @@ void CDXRRenderer::BeginRender()
 
 void CDXRRenderer::MainRender()
 {
+    Update_Dynamic_PassCB();
+
     Set_ComputeRootDescriptorTable_Global();
 
     DispatchRay();
@@ -266,6 +299,8 @@ void CDXRRenderer::Set_ComputeRootDescriptorTable_Global()
     m_pCommandList->SetComputeRootShaderResourceView(GlobalRootSigSlot::AS, TLAS_GPU_Adress); // 빌드할 때는 UAV였는데??
 
     m_pCommandList->SetComputeRootDescriptorTable(GlobalRootSigSlot::IB_VB_SRV, IB_VB_SRV_Handle_GPU);
+
+    m_pCommandList->SetComputeRootConstantBufferView(GlobalRootSigSlot::PASS_CONSTANT, m_pCurFrameResource->pPassCB_vp_light->Get_UploadBuffer()->GetGPUVirtualAddress());
 }
 
 #endif

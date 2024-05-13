@@ -14,7 +14,11 @@ protected:
 public:
 	HRESULT Free() override;
 	CCamera* Get_MainCam() { return m_pMainCam; }
+#if DXR_ON
+	void Set_MainCam(wstring strName, class CDXRRenderer* pDXRRenderer);
+#else
 	void Set_MainCam(wstring strName);
+#endif
 	CCamera* FindandGet(wstring strName);
 	void Register(wstring strName, CCamera* pInstance);
 private:

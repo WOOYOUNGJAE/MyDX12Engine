@@ -1,8 +1,6 @@
 #pragma once
 namespace Engine
 {
-
-	
 	struct PASS_CB_VP
 	{
 		Matrix mViewMat;
@@ -65,6 +63,15 @@ NAMESPACE_(DXR)
 	struct OBJECT_CB
 	{
 		Vector4 albedo; // π›ªÁ¿≤
+	};
+
+	struct SCENE_CB
+	{
+		Matrix projectionToWorld;
+		Vector4 cameraPosition;
+		Vector4 lightPosition;
+		Vector4 lightAmbientColor;
+		Vector4 lightDiffuseColor;
 	};
 
 _NAMESPACE

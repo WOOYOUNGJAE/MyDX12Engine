@@ -1,5 +1,6 @@
 #pragma once
 #include "Base.h"
+#include "UploadBuffer.h"
 // DirectX Raytracing Renderer
 
 #if DXR_ON
@@ -20,6 +21,9 @@ public:
 	HRESULT Free() override;
 
 public: // Rendering
+	void Set_FrameResource(); // FrameResourceMgr 생성 후 호출
+	void Update_Static_PassCB(const CAMERA_DESC& camDesc); // static pass data
+	void Update_Dynamic_PassCB(); // dynamic pass data
 	void BeginRender();
 	void MainRender();
 	void EndRender();
@@ -43,6 +47,9 @@ private: // FrameResource
 	std::vector<FrameResource*> m_vecFrameResource;
 	FrameResource* m_pCurFrameResource = nullptr;
 	UINT m_iCurFrameResourceIndex = 0;
+private: // Pass Info
+	DXR::SCENE_CB curSceneCB{};
+	Matrix m_mProj;
 private:
 	D3D12_DISPATCH_RAYS_DESC m_disptchRaysDesc{};
 public:

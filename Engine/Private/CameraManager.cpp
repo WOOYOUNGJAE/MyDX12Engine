@@ -1,6 +1,7 @@
 #include "CameraManager.h"
 #include "Camera.h"
 #include "ComponentManager.h"
+#include "DXRRenderer.h"
 #include "Renderer.h"
 
 
@@ -17,6 +18,23 @@ HRESULT CCameraManager::Free()
 	return S_OK;
 }
 
+#if DXR_ON
+void CCameraManager::Set_MainCam(wstring strName, CDXRRenderer* pDXRRenderer)
+{
+	m_pMainCam = FindandGet(strName);
+
+	CRenderer* pRenderer = CComponentManager::Get_Instance()->Get_Renderer();
+
+	if (pRenderer == nullptr)
+	{
+		MSG_BOX("CamManager : SetMainCam Failed, renderer nullptr");
+	}
+
+	pRenderer->Set_ProjMat(m_pMainCam->Get_CamDesc());
+
+	pDXRRenderer->Update_Static_PassCB(m_pMainCam->Get_CamDesc());
+}
+#else
 void CCameraManager::Set_MainCam(wstring strName)
 {
 	m_pMainCam = FindandGet(strName);
@@ -30,6 +48,7 @@ void CCameraManager::Set_MainCam(wstring strName)
 
 	pRenderer->Set_ProjMat(m_pMainCam->Get_CamDesc());
 }
+#endif
 
 CCamera* CCameraManager::FindandGet(wstring strName)
 {
