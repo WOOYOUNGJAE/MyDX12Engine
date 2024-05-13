@@ -210,11 +210,13 @@ void CDXRRenderer::Update_Dynamic_PassCB()
 {
     CCamera* pMainCam = CCameraManager::Get_Instance()->Get_MainCam();
 
+    Matrix vCamWorldMat = pMainCam->Get_WorldMatrix();
     Vector3 vCamPos = pMainCam->Get_Pos();
     curSceneCB.cameraPosition = Vector4(vCamPos.x, vCamPos.y, vCamPos.z, 1);
 
     Matrix viewMat = pMainCam->Get_WorldMatrix().Invert();
-    curSceneCB.projectionToWorld = XMMatrixInverse(nullptr, viewMat * m_mProj);
+
+    curSceneCB.viewProjectionInv = XMMatrixTranspose(XMMatrixInverse(nullptr, viewMat * m_mProj));
 
     m_pCurFrameResource->pPassCB_DXR_scene->CopyData(0, curSceneCB);
 }
@@ -300,7 +302,7 @@ void CDXRRenderer::Set_ComputeRootDescriptorTable_Global()
 
     m_pCommandList->SetComputeRootDescriptorTable(GlobalRootSigSlot::IB_VB_SRV, IB_VB_SRV_Handle_GPU);
 
-    m_pCommandList->SetComputeRootConstantBufferView(GlobalRootSigSlot::PASS_CONSTANT, m_pCurFrameResource->pPassCB_vp_light->Get_UploadBuffer()->GetGPUVirtualAddress());
+    m_pCommandList->SetComputeRootConstantBufferView(GlobalRootSigSlot::PASS_CONSTANT, m_pCurFrameResource->pPassCB_DXR_scene->Get_UploadBuffer()->GetGPUVirtualAddress());
 }
 
 #endif

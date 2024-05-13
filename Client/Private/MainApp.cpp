@@ -67,7 +67,7 @@ HRESULT CMainApp::Initialize()
 
 
 	objDesc.strTag = L"Camera_Free";
-	objDesc.vStartPos = Vector3(0.f, 1.f, -5.f);
+	objDesc.vStartPos = Vector3(0.f, 0.f, -5.f);
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Camera_Free", OBJ_LAYER_DEFAULT,	&objDesc);
 	if (FAILED(hr)) { return hr; }
 
@@ -79,17 +79,18 @@ HRESULT CMainApp::Initialize()
 #if DXR_ON
 	vector<CGameObject*> gameObjArr_For_AccelerationTree_Static;
 #endif
-//	objDesc.strTag = L"Cube";
-//	objDesc.vStartPos = Vector3::Zero;
-//	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
-//	if (FAILED(hr)) { return hr; }
-//#if DXR_ON
-//	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
-//	//CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
-//#endif DXR_ON
+
+	objDesc.strTag = L"Cube";
+	objDesc.vStartPos = Vector3::Zero;
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }
+#if DXR_ON
+	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
+	CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
+#endif DXR_ON
 
 
-	objDesc.strTag = L"Triangle";
+	/*objDesc.strTag = L"Triangle";
 	objDesc.vStartPos = Vector3::Zero;
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
@@ -97,7 +98,7 @@ HRESULT CMainApp::Initialize()
 #if DXR_ON
 	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
 	CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
-#endif DXR_ON
+#endif DXR_ON*/
 
 
 #pragma endregion Static GameObject 

@@ -67,7 +67,7 @@ NAMESPACE_(DXR)
 
 	struct SCENE_CB
 	{
-		Matrix projectionToWorld;
+		Matrix viewProjectionInv;
 		Vector4 cameraPosition;
 		Vector4 lightPosition;
 		Vector4 lightAmbientColor;
