@@ -201,9 +201,10 @@ void CDXRRenderer::Update_Static_PassCB(const CAMERA_DESC& camDesc)
     m_mProj = XMMatrixPerspectiveFovLH(camDesc.fFovy, camDesc.fAspectRatio, camDesc.fNear, camDesc.fFar);
 
     // Light Info
-    curSceneCB.lightPosition = Vector4(0.0f, 18.0f, -20.0f, 0.0f);
-    curSceneCB.lightAmbientColor = Vector4(0.25f, 0.25f, 0.25f, 1.0f);
-    curSceneCB.lightDiffuseColor = Vector4(0.6f, 0.6f, 0.6f, 1.f);
+    curSceneCB.lightPosition = Vector4(10.0f, 18.0f, -20.0f, 0.0f);
+    curSceneCB.lightAmbientColor = Vector4::One * 0.25f;
+    curSceneCB.lightDiffuseColor = Vector4::One;
+    //curSceneCB.lightDiffuseColor = Vector4(0.6f, 0.6f, 0.6f, 1.f);
 }
 
 void CDXRRenderer::Update_Dynamic_PassCB()

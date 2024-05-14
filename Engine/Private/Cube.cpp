@@ -70,7 +70,6 @@ HRESULT CCube::Initialize(void* pArg)
 
 	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
 	m_pTransformCom->Set_Scale(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartScale);
-
 #if DXR_ON
 	m_uqpBlAS = m_pMeshObjectCom->Move_BuiltBLAS();
 
