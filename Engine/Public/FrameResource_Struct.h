@@ -60,7 +60,7 @@ namespace Engine
 
 #if DXR_ON
 NAMESPACE_(DXR)
-	struct OBJECT_CB
+	struct OBJECT_CB_DYNAMIC
 	{
 		Vector4 albedo; // 반사율
 	};
@@ -74,6 +74,10 @@ NAMESPACE_(DXR)
 		Vector4 lightDiffuseColor;
 	};
 
+	struct OBJECT_CB_STATIC
+	{
+		Vector4 albedo; // 반사율
+	};
 _NAMESPACE
 #endif
 

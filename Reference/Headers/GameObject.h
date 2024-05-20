@@ -15,7 +15,7 @@ protected:
 public: // LifeCycle
 	virtual HRESULT Initialize_Prototype() = 0;
 	virtual HRESULT Initialize(void* pArg = nullptr) = 0;
-	virtual CGameObject* Clone(void* pArg = nullptr) = 0;
+	virtual CGameObject* Clone(UINT* pInOutRenderNumbering, void* pArg = nullptr) = 0;
 	virtual void Tick(_float fDeltaTime) = 0;
 	virtual void Late_Tick(_float fDeltaTime) = 0;
 	virtual void Render_Tick(){};
@@ -24,6 +24,8 @@ public: // LifeCycle
 public: // getter setter, abstract
 	virtual D3D12_PRIMITIVE_TOPOLOGY PrimitiveType()const {	return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;} // Default;
 	virtual MATERIAL_INFO Get_MaterialInfo() { return MATERIAL_INFO(); }
+	virtual class CMaterial* Get_Material() = 0;
+	UINT Get_RenderNumbering() { return m_iRenderNumbering_ZeroIfNotRendered; }
 	//Offset, Handle
 	virtual UINT64 Get_CbvSrvUavHeapOffset_Texture() { return m_iTextureSrvOffset; }
 	UINT64* Get_CbvSrvUavHeapOffsetPtr_Texture() { return &m_iTextureSrvOffset; }
@@ -46,7 +48,7 @@ protected:
 	wstring m_strPrototypeTag;
 	map<wstring, CComponent*> m_mapComponents;
 	UINT64 m_iTextureSrvOffset = ULONGLONG_MAX; // 일단 오브젝트당 텍스처 1개 가정
-	UINT m_iRenderingElementIndex = 0; // 
+	UINT m_iRenderNumbering_ZeroIfNotRendered = 0; // 모든 렌더 대상 오브젝트 중에서 몇 번째인가?, dxr 오브젝트 넘버링에 사용
 #if DXR_ON
 public:
 	CSceneNode* Make_NodeBLAS();

@@ -123,7 +123,7 @@ CGameObject* CGameObjectManager::Clone_GameObject(const wstring& strTag, void* p
 		return nullptr;
 	}
 
-	return pPrototype->Clone(pArg);
+	return Clone_GameObject_From_Factory(pPrototype, pArg);
 }
 
 HRESULT CGameObjectManager::Add_GameObject_InScene(const wstring& strPrototypeTag, UINT eLayerEnum,
@@ -138,7 +138,7 @@ HRESULT CGameObjectManager::Add_GameObject_InScene(const wstring& strPrototypeTa
 		return E_FAIL;
 	}
 
-	CGameObject* pGameObject = prototypePair->second->Clone(pArg);
+	CGameObject* pGameObject = Clone_GameObject_From_Factory(prototypePair->second, pArg);
 
 	CObjLayer* pLayer = Find_Layer(eLayerEnum);
 
@@ -169,8 +169,8 @@ HRESULT CGameObjectManager::Add_GameObject_InScene(const wstring& strPrototypeTa
 		MSG_BOX("GameObjectMananger : Prototype Doesn't Exist");
 		return E_FAIL;
 	}
-
-	CGameObject* pGameObject = prototypePair->second->Clone(pArg);
+	
+	CGameObject* pGameObject = Clone_GameObject_From_Factory(prototypePair->second, pArg);
 
 	CObjLayer* pLayer = Find_Layer(eLayerEnum);
 
@@ -206,4 +206,12 @@ void CGameObjectManager::Clear_ClonedObjArr()
 		iter = m_vecTempClonedObj.erase(iter);
 	}
 	m_vecTempClonedObj.clear();
+}
+
+CGameObject* CGameObjectManager::Clone_GameObject_From_Factory(CGameObject* pPrototype, void* pArg)
+{
+	static UINT iGameObjectNumbering = 0; // clone 함수에 보내고, 렌더링 오브젝트라면 할당 후 값 증가
+	CGameObject* pClonedInstance = pPrototype->Clone(&iGameObjectNumbering, pArg);
+
+	return pClonedInstance;
 }

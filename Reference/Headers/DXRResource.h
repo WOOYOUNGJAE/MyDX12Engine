@@ -41,7 +41,7 @@ private:
 public:
 	HRESULT Reset_CommandList();
 	HRESULT Close_CommandList();
-	HRESULT Execute_CommnadList();
+	HRESULT Execute_CommandList();
 	void AssignShaderIdentifiers(ID3D12StateObjectProperties* stateObjectProperties, void** ppRayGenShaderIdentifier, void** ppMissShaderIdentifier, void** ppHitGroupShaderIdentifier);
 	static void BuildRaytracingAccelerationStructure(
 		_In_  const D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC* pDesc,

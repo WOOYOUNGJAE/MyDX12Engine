@@ -160,18 +160,6 @@
     <Filter Include="System\D3D Graphics\DXR\DXRResource">
       <UniqueIdentifier>{a8a5c5a8-2438-470d-a0b0-ccbf1c85419b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\Spatial Data Sturture">
-      <UniqueIdentifier>{4860928e-ee56-41f4-b570-ab0283f64c99}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\Spatial Data Sturture\BVH">
-      <UniqueIdentifier>{300f59d7-4266-4dff-892b-f7484f12f4ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\Spatial Data Sturture\SceneNode">
-      <UniqueIdentifier>{1608f808-2af0-4471-a2b7-932d644bb959}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\Spatial Data Sturture\SceneNode\SceneNodeAABB">
-      <UniqueIdentifier>{ba3ecbe3-51ea-478d-a123-74dc563dcea8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility\Managers\SpatialDataStructure">
       <UniqueIdentifier>{f00d9415-fa11-484d-8f10-d7b46388941f}</UniqueIdentifier>
     </Filter>
@@ -183,6 +171,21 @@
     </Filter>
     <Filter Include="Utility\Managers\FrameResource">
       <UniqueIdentifier>{f350e2c6-865f-4c76-8df7-e33821d1fb46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Scene &amp; Spatial Data Sturture">
+      <UniqueIdentifier>{4860928e-ee56-41f4-b570-ab0283f64c99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Scene &amp; Spatial Data Sturture\BVH">
+      <UniqueIdentifier>{300f59d7-4266-4dff-892b-f7484f12f4ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Scene &amp; Spatial Data Sturture\SceneNode">
+      <UniqueIdentifier>{1608f808-2af0-4471-a2b7-932d644bb959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Scene &amp; Spatial Data Sturture\SceneNode\SceneNodeAABB">
+      <UniqueIdentifier>{ba3ecbe3-51ea-478d-a123-74dc563dcea8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Scene &amp; Spatial Data Sturture\Scene">
+      <UniqueIdentifier>{67d2e335-e349-4b0a-82e6-865193c7cc41}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -346,13 +349,13 @@
       <Filter>System\D3D Graphics\DXR\DXRResource</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\BVH.h">
-      <Filter>Utility\Spatial Data Sturture\BVH</Filter>
+      <Filter>Utility\Scene &amp; Spatial Data Sturture\BVH</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SceneNode_AABB.h">
-      <Filter>Utility\Spatial Data Sturture\SceneNode\SceneNodeAABB</Filter>
+      <Filter>Utility\Scene &amp; Spatial Data Sturture\SceneNode\SceneNodeAABB</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SceneNode.h">
-      <Filter>Utility\Spatial Data Sturture\SceneNode</Filter>
+      <Filter>Utility\Scene &amp; Spatial Data Sturture\SceneNode</Filter>
     </ClInclude>
     <ClInclude Include="..\..\External\MS_SampleCode\DirectXRaytracingHelper.h">
       <Filter>Headers\External</Filter>
@@ -502,13 +505,13 @@
       <Filter>System\D3D Graphics\DXR\DXRResource</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\BVH.cpp">
-      <Filter>Utility\Spatial Data Sturture\BVH</Filter>
+      <Filter>Utility\Scene &amp; Spatial Data Sturture\BVH</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SceneNode_AABB.cpp">
-      <Filter>Utility\Spatial Data Sturture\SceneNode\SceneNodeAABB</Filter>
+      <Filter>Utility\Scene &amp; Spatial Data Sturture\SceneNode\SceneNodeAABB</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SceneNode.cpp">
-      <Filter>Utility\Spatial Data Sturture\SceneNode</Filter>
+      <Filter>Utility\Scene &amp; Spatial Data Sturture\SceneNode</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\DXRShaderTable.cpp">
       <Filter>System\D3D Graphics\DXR\DXRShaderTable</Filter>

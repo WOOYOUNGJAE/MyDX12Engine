@@ -2,6 +2,7 @@
 #include "GameInstance.h"
 #include "Renderer.h"
 #include "SceneNode_AABB.h"
+#include "Material.h"
 
 HRESULT CGameObject::Free()
 {
@@ -49,7 +50,7 @@ HRESULT CGameObject::Add_Component(const wstring& strComTag, CComponent** ppOutC
 #if DXR_ON
 CSceneNode* CGameObject::Make_NodeBLAS()
 {
-	return CSceneNode_AABB::Create(nullptr, 0, false, this);
+	return CSceneNode_AABB::Create(nullptr, nullptr, 0, false, this);
 }
 #endif
 

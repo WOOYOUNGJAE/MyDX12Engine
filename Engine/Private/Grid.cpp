@@ -34,12 +34,14 @@ CGrid* CGrid::Create(const wstring& strGridMeshTag)
 	return pInstance;
 }
 
-CGameObject* CGrid::Clone(void* pArg)
+CGameObject* CGrid::Clone(UINT* pInOutRenderNumbering, void* pArg)
 {
 	CGrid* pInstance = new CGrid(*this);
 
 	if (pInstance)
 	{
+		++(*pInOutRenderNumbering);
+		pInstance->m_iRenderNumbering_ZeroIfNotRendered = *pInOutRenderNumbering;
 		if (FAILED(pInstance->Initialize(pArg)))
 		{
 			Safe_Release(pInstance);

@@ -48,6 +48,10 @@ namespace Engine
 		enum SLOT_INDEX {RENDER_TARGET, AS, PASS_CONSTANT, IB_VB_SRV};
 		
 	}
+	namespace LocalRootSigSlot
+	{
+		enum SLOT_INDEX {OBJECT_CB_STATIC};
+	}
 #endif
 
 }

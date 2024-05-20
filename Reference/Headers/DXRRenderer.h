@@ -24,6 +24,8 @@ public: // Rendering
 	void Set_FrameResource(); // FrameResourceMgr 생성 후 호출
 	void Update_Static_PassCB(const CAMERA_DESC& camDesc); // static pass data
 	void Update_Dynamic_PassCB(); // dynamic pass data
+	void Update_Static_Object_CB();
+	void Update_Dynamic_Object_CB();
 	void BeginRender();
 	void MainRender();
 	void EndRender();
@@ -52,6 +54,8 @@ private: // Pass Info
 	Matrix m_mProj;
 private:
 	D3D12_DISPATCH_RAYS_DESC m_disptchRaysDesc{};
+private:
+	map<UINT, class CObjLayer*>* pAllObjLayers = nullptr;
 public:
 	static ID3D12Resource* m_bottomLevelAccelerationStructure;
 };

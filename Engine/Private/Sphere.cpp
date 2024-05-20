@@ -34,12 +34,14 @@ CSphere* CSphere::Create(const wstring& strGridMeshTag)
 	return pInstance;
 }
 
-CGameObject* CSphere::Clone(void* pArg)
+CGameObject* CSphere::Clone(UINT* pInOutRenderNumbering, void* pArg)
 {
 	CSphere* pInstance = new CSphere(*this);
 
 	if (pInstance)
 	{
+		++(*pInOutRenderNumbering);
+		pInstance->m_iRenderNumbering_ZeroIfNotRendered = *pInOutRenderNumbering;
 		if (FAILED(pInstance->Initialize(pArg)))
 		{
 			Safe_Release(pInstance);

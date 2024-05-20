@@ -18,7 +18,7 @@ CCamera_Free* CCamera_Free::Create()
 	return pInstance;
 }
 
-CGameObject* CCamera_Free::Clone(void* pArg)
+CGameObject* CCamera_Free::Clone(UINT* iObjectNumbering, void* pArg)
 {
 	CCamera_Free* pInstance = new CCamera_Free(*this);
 

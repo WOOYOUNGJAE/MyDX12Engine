@@ -67,6 +67,7 @@ public:
 	}
 public:
 	ID3D12Resource* Get_UploadBuffer() const { return m_pUploadBuffer; }
+	//UINT64 Get_BufferSizeInBytes() {return UINT64(m_iElementByteSize * mie) }
 	void CopyData(_int iElementIndex, const T& data)
 	{
 		memcpy(&m_byMappedDataArr[iElementIndex * m_iElementByteSize], &data, sizeof(T));

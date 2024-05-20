@@ -23,7 +23,7 @@ CZeldaDemo* CZeldaDemo::Create()
 	return pInstance;
 }
 
-CGameObject* CZeldaDemo::Clone(void* pArg)
+CGameObject* CZeldaDemo::Clone(UINT* pInOutRenderNumbering, void* pArg)
 {
 	CZeldaDemo* pInstance = new CZeldaDemo(*this);
 

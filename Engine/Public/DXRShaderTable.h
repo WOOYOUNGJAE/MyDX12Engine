@@ -6,6 +6,9 @@
 NAMESPACE_(Engine)
 using DXR::TABLE_RECORD_DESC;
 
+/// ||-IDSize-|----LocalArgumentSize----||-IDSize-|----LocalArgumentSize----||-IDSize-|----LocalArgumentSize----|...
+///  -------------Record0-------------     -------------Record1-------------   -------------Record2-------------    
+///
 class CDXRShaderTable : public CBase
 {
 protected:

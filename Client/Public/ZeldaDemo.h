@@ -21,7 +21,7 @@ protected:
 
 public:
 	static CZeldaDemo* Create();
-	CGameObject* Clone(void* pArg) override;
+	CGameObject* Clone(UINT* pInOutRenderNumbering, void* pArg) override;
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override;
 	void Tick(_float fDeltaTime) override;
@@ -31,6 +31,7 @@ public:
 	HRESULT Free() override;
 public: // getter setter
 	MATERIAL_INFO Get_MaterialInfo() override;
+	CMaterial* Get_Material() override { return m_pMaterialCom; }
 	// Transform
 	Matrix Get_WorldMatrix() override;
 	Vector3 Get_Pos() override;

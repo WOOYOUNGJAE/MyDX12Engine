@@ -119,40 +119,64 @@ HRESULT CDXRResource::Crete_RootSignatures()
 
 	// Global Root Signature
 	// This is a root signature that is shared across all raytracing shaders invoked during a DispatchRays() call.
+LOCAL_BLOCK_
+	CD3DX12_DESCRIPTOR_RANGE descriptorRange[2];
+	descriptorRange[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0, 1/*for DXR*/); // output texture
+	descriptorRange[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 1, 1); // static index vertex buffer
+
+	CD3DX12_ROOT_PARAMETER rootParameterArr[4];
+	rootParameterArr[GlobalRootSigSlot::RENDER_TARGET].InitAsDescriptorTable(1, &descriptorRange[0]);
+	rootParameterArr[GlobalRootSigSlot::AS].InitAsShaderResourceView(0, 1);
+	rootParameterArr[GlobalRootSigSlot::PASS_CONSTANT].InitAsConstantBufferView(0, 1); // SceneConstant
+	rootParameterArr[GlobalRootSigSlot::IB_VB_SRV].InitAsDescriptorTable(1, &descriptorRange[1]);
+
+	CD3DX12_ROOT_SIGNATURE_DESC globalRootSignatureDesc(_countof(rootParameterArr), rootParameterArr);
+
+	ComPtr<ID3DBlob> signature;
+	ComPtr<ID3DBlob> error;
+
+	hr = D3D12SerializeRootSignature(
+		&globalRootSignatureDesc,
+		D3D_ROOT_SIGNATURE_VERSION_1,
+		&signature,
+		&error);
+	if (FAILED(hr))
 	{
-		CD3DX12_DESCRIPTOR_RANGE descriptorRange[2];
-		descriptorRange[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0, 1/*for DXR*/); // output texture
-		descriptorRange[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 1, 1); // static index vertex buffer
-
-		CD3DX12_ROOT_PARAMETER rootParameterArr[4];
-		rootParameterArr[GlobalRootSigSlot::RENDER_TARGET].InitAsDescriptorTable(1, &descriptorRange[0]);
-		rootParameterArr[GlobalRootSigSlot::AS].InitAsShaderResourceView(0, 1);
-		rootParameterArr[GlobalRootSigSlot::PASS_CONSTANT].InitAsConstantBufferView(0, 1); // SceneConstant
-		rootParameterArr[GlobalRootSigSlot::IB_VB_SRV].InitAsDescriptorTable(1, &descriptorRange[1]);
-
-		CD3DX12_ROOT_SIGNATURE_DESC globalRootSignatureDesc(_countof(rootParameterArr), rootParameterArr);
-
-		ComPtr<ID3DBlob> signature;
-		ComPtr<ID3DBlob> error;
-
-		hr = D3D12SerializeRootSignature(
-			&globalRootSignatureDesc,
-			D3D_ROOT_SIGNATURE_VERSION_1,
-			&signature,
-			&error);
-		if (FAILED(hr))
-		{
-			OutputDebugStringA((char*)error->GetBufferPointer());
-			return hr;
-		}
-
-		hr = m_pDevice->CreateRootSignature(
-			0,
-			signature->GetBufferPointer(),
-			signature->GetBufferSize(),
-			IID_PPV_ARGS(&m_pRootSigArr[DXR_ROOTSIG_GLOBAL]));
-		if (FAILED(hr)) { return hr; }
+		OutputDebugStringA((char*)error->GetBufferPointer());
+		return hr;
 	}
+
+	hr = m_pDevice->CreateRootSignature(
+		0,
+		signature->GetBufferPointer(),
+		signature->GetBufferSize(),
+		IID_PPV_ARGS(&m_pRootSigArr[DXR_ROOTSIG_GLOBAL]));
+	if (FAILED(hr)) { return hr; }
+_LOCAL_BLOCK
+
+LOCAL_BLOCK_
+	// Local RootSignature
+	CD3DX12_ROOT_PARAMETER rootParameters[1];
+	rootParameters[LocalRootSigSlot::OBJECT_CB_STATIC].InitAsConstants(SizeOfInUint32(DXR::OBJECT_CB_STATIC) * 10/*TODO °³¼ö TEMP*/, 1, 1);
+	CD3DX12_ROOT_SIGNATURE_DESC localRootSignatureDesc(ARRAYSIZE(rootParameters), rootParameters);
+	localRootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE;
+
+	ComPtr<ID3DBlob> blob;
+	ComPtr<ID3DBlob> error;
+
+	hr = D3D12SerializeRootSignature(
+		&localRootSignatureDesc,
+		D3D_ROOT_SIGNATURE_VERSION_1,
+		&blob, &error);
+	if (FAILED(hr))
+	{
+		OutputDebugStringA((char*)error->GetBufferPointer());
+		return hr;
+	}
+
+	hr = m_pDevice->CreateRootSignature(1, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&m_pRootSigArr[DXR_ROOTSIG_LOCAL]));
+	if (FAILED(hr)) { return hr; }
+_LOCAL_BLOCK
 
 	return hr;
 }
@@ -320,23 +344,20 @@ LOCAL_BLOCK_// Hit Group Shader Table
 	using DXR::TABLE_RECORD_DESC;
 	struct RootArguments
 	{
-		DXR::OBJECT_CB cb;
+		DXR::OBJECT_CB_STATIC cb{};
 	}rootArguments;
-	rootArguments.cb = DXR::OBJECT_CB{ XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) };
+	//rootArguments.cb = DXR::OBJECT_CB_STATIC{ XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) };
 
 	TABLE_RECORD_DESC tableRecordDesc = TABLE_RECORD_DESC
 	{
 		D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
 		pHitGroupShaderIdentifier,
-		/*sizeof(RootArguments),
-		&rootArguments*/
-		0,
-		nullptr
+		 MyUtils::Align256(sizeof(DXR::OBJECT_CB_STATIC)),
+		&rootArguments
 	};
 
-	iNumShaderRecords = 1;
-	iSingleRecordSize = iShaderIdentifierSize;
-	//iSingleRecordSize = iShaderIdentifierSize + sizeof(RootArguments);
+	iNumShaderRecords = NUM_OBJECTS;
+	iSingleRecordSize = iShaderIdentifierSize + sizeof(RootArguments);
 
 	CDXRShaderTable* pTableInstance = CDXRShaderTable::Create(
 		m_pDevice,
@@ -349,6 +370,7 @@ LOCAL_BLOCK_// Hit Group Shader Table
 
 	m_pHitGroupShaderTable = pTableInstance->Get_TableResource();
 	Safe_Release(pTableInstance);
+
 _LOCAL_BLOCK
 
 	Safe_Release(pStateObjectProperties);
@@ -411,7 +433,7 @@ HRESULT CDXRResource::Close_CommandList()
 	return m_pCommandList->Close();
 }
 
-HRESULT CDXRResource::Execute_CommnadList()
+HRESULT CDXRResource::Execute_CommandList()
 {
 	ID3D12CommandList* pCommandListArr[] = { m_pCommandList, };
 	m_pCommandQueue->ExecuteCommandLists(_countof(pCommandListArr), pCommandListArr);

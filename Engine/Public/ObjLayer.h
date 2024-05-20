@@ -18,6 +18,8 @@ public:
 	virtual void Render_Tick();
 	HRESULT Free() override;
 public:
+	const std::list<CGameObject*>& Get_ObjList() const { return m_GameObjList; }
+public:
 	HRESULT Add_GameObject(CGameObject* pInstance);
 	CGameObject* Find_Obj(const wstring& strPrototypeTag, UINT iClonedNum = 1);
 public:

@@ -18,7 +18,7 @@ HRESULT CFrameResourceManager::Initialize()
 	{
 		m_vecFrameResource.push_back(new FrameResource(
 			pDevice,
-			50/**/,
+			NUM_OBJECTS/**/,
 			1/**/)
 		);
 	}

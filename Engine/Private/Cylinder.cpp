@@ -34,12 +34,14 @@ CCylinder* CCylinder::Create(const wstring& strGridMeshTag)
 	return pInstance;
 }
 
-CGameObject* CCylinder::Clone(void* pArg)
+CGameObject* CCylinder::Clone(UINT* pInOutRenderNumbering, void* pArg)
 {
 	CCylinder* pInstance = new CCylinder(*this);
 
 	if (pInstance)
 	{
+		++(*pInOutRenderNumbering);
+		pInstance->m_iRenderNumbering_ZeroIfNotRendered = *pInOutRenderNumbering;
 		if (FAILED(pInstance->Initialize(pArg)))
 		{
 			Safe_Release(pInstance);

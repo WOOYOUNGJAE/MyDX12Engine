@@ -11,6 +11,9 @@
 #include "SDSManager.h"
 #include "Camera.h"
 #include "FrameResourceManager.h"
+#include "GameObjectManager.h"
+#include "Material.h"
+#include "ObjLayer.h"
 
 #if DXR_ON
 CDXRRenderer* CDXRRenderer::Create()
@@ -41,6 +44,7 @@ HRESULT CDXRRenderer::Initialize()
     m_pCommandList = m_pDXRResources->m_pCommandList;
     m_pDXR_PSO = m_pDXRResources->m_pDXR_PSO;
     m_pRenderTargetArr = CDeviceResource::Get_Instance()->m_pRenderTargets->GetAddressOf();
+    pAllObjLayers = CGameObjectManager::Get_Instance()->Get_AllObjLayers();
 
     // Since each shader table has only one shader record, the stride is same as the size. 임시로 레코드 1개일 떄
     ZeroMemory(&m_disptchRaysDesc, sizeof(D3D12_DISPATCH_RAYS_DESC));
@@ -176,7 +180,7 @@ HRESULT CDXRRenderer::Initialize()
 //
 //    // Kick off acceleration structure construction.
 //    m_pDXRResources->Close_CommandList();
-//    m_pDXRResources->Execute_CommnadList();
+//    m_pDXRResources->Execute_CommandList();
 //    m_pDXRResources->Flush_CommandQueue();
 //
 //#pragma endregion TempTest
@@ -222,6 +226,43 @@ void CDXRRenderer::Update_Dynamic_PassCB()
     m_pCurFrameResource->pPassCB_DXR_scene->CopyData(0, curSceneCB);
 }
 
+void CDXRRenderer::Update_Static_Object_CB()
+{
+    for (auto& pair : *pAllObjLayers)
+    {
+        // pair.second == 오브젝트 리스트 관리하는 레이어
+	    for(auto& iterGameObject : pair.second->Get_ObjList())
+	    {
+            UINT iRenderNumbering_ZeroIfNotRendered = iterGameObject->Get_RenderNumbering();
+		    if (iRenderNumbering_ZeroIfNotRendered > 0)
+		    {
+                CMaterial* pMaterial = iterGameObject->Get_Material();
+                if (pMaterial == nullptr)
+                {
+                    continue;
+                }
+                DXR::OBJECT_CB_STATIC objectCB_Static{};
+                objectCB_Static.albedo = pMaterial->Get_DXR_MaterialInfo().albedo;
+                
+                m_pCurFrameResource->pObjectCB_Static_DXR->CopyData(iRenderNumbering_ZeroIfNotRendered - 1, objectCB_Static);
+		    }
+	    }
+    }
+    auto a = m_pCurFrameResource->pObjectCB_Static_DXR->Get_UploadBuffer()->GetDesc().Width;
+    auto b = m_pDXRResources->m_pHitGroupShaderTable->GetDesc().Width;
+    DXR_Util::Update_ShaderRecord(m_pCommandList,
+                                  m_pCurFrameResource->pObjectCB_Static_DXR->Get_UploadBuffer(),
+                                  m_pDXRResources->m_pHitGroupShaderTable,
+        D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES + sizeof(DXR::OBJECT_CB_STATIC),
+        NUM_OBJECTS, sizeof(DXR::OBJECT_CB_STATIC));
+}
+
+void CDXRRenderer::Update_Dynamic_Object_CB()
+{
+    
+    m_pCurFrameResource->pObjectCB_Dynamic_DXR;
+}
+
 
 void CDXRRenderer::BeginRender()
 {
@@ -239,8 +280,6 @@ void CDXRRenderer::BeginRender()
 
 void CDXRRenderer::MainRender()
 {
-    Update_Dynamic_PassCB();
-
     Set_ComputeRootDescriptorTable_Global();
 
     DispatchRay();
@@ -267,7 +306,7 @@ void CDXRRenderer::EndRender()
 #pragma endregion
 
     m_pCommandList->Close(); // 기록 중단
-    m_pDXRResources->Execute_CommnadList();
+    m_pDXRResources->Execute_CommandList();
 } 
 
 void CDXRRenderer::Present()

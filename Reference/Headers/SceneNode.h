@@ -14,8 +14,8 @@ protected:
 
 public:
 	// If Binary Tree, Left Child Argument First
-	static CSceneNode* Create(CSceneNode** pChildNodeArr, UINT iArrSize = 2, bool bIsTLAS = false, CGameObject* pContainingObj = nullptr);
-	HRESULT Initialize(CSceneNode** pChildNodeArr, UINT iChildArrSize = 2, bool bIsTLAS = false);
+	static CSceneNode* Create(CSceneNode** pChildNodeArr, UINT* iNumberingArr = nullptr, UINT iArrSize = 2, bool bIsTLAS = false, CGameObject* pContainingObj = nullptr);
+	HRESULT Initialize(CSceneNode** pChildNodeArr, UINT* iNumberingArr = nullptr, UINT iChildArrSize = 2, bool bIsTLAS = false);
 	HRESULT Free() override;
 	virtual void Set_ContainingObj(CGameObject* pGameObj);
 

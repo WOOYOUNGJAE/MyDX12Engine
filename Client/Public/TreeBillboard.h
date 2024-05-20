@@ -24,7 +24,7 @@ protected:
 
 public:
 	static CTreeBillboard* Create();
-	CGameObject* Clone(void* pArg) override;
+	CGameObject* Clone(UINT* pInOutRenderNumbering, void* pArg) override;
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override;
 	void Tick(_float fDeltaTime) override;
@@ -35,6 +35,7 @@ public:
 public: // getter setter
 	D3D12_PRIMITIVE_TOPOLOGY PrimitiveType()const override {return D3D_PRIMITIVE_TOPOLOGY_POINTLIST;}
 	MATERIAL_INFO Get_MaterialInfo() override;
+	CMaterial* Get_Material() override { return m_pMaterialCom; }
 	// Transform
 	Matrix Get_WorldMatrix() override;
 	Vector3 Get_Pos() override;

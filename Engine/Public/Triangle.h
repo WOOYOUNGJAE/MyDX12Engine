@@ -12,7 +12,7 @@ protected:
 
 public: // LifeCycle
 	static CTriangle* Create();
-	CGameObject* Clone(void* pArg) override;
+	CGameObject* Clone(UINT* pInOutRenderNumbering, void* pArg) override;
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override;
 	void Tick(_float fDeltaTime) override;
@@ -24,6 +24,7 @@ public: // getter setter
 	Matrix Get_WorldMatrix() override;
 	Vector3 Get_Pos() override;
 	Vector3 Get_ScaleXYZ() override;
+	CMaterial* Get_Material() override { return m_pMaterialCom; }
 	void Set_Position(const Vector3& vPos) override;
 	void Set_Scale(const Vector3& vScale) override;
 protected:
@@ -33,6 +34,7 @@ protected:
 	class CShader* m_pShaderCom = nullptr;
 	class CRenderer* m_pRendererCom = nullptr;
 	class CTextureCompo* m_pTextureCom = nullptr;
+	class CMaterial* m_pMaterialCom = nullptr;
 };
 
 _NAMESPACE

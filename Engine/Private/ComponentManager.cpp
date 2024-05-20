@@ -98,7 +98,7 @@ HRESULT CComponentManager::Initialize()
 	pAssetManager->Add_MeshDataPrototype(L"SingleVertexMesh", CSingleVertexMesh::Create());*/
 #if DXR_ON
 	CDXRResource::Get_Instance()->Close_CommandList();
-	CDXRResource::Get_Instance()->Execute_CommnadList();
+	CDXRResource::Get_Instance()->Execute_CommandList();
 	CDXRResource::Get_Instance()->Flush_CommandQueue();
 #endif
 #pragma endregion

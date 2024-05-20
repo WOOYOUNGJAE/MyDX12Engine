@@ -285,7 +285,8 @@ inline void Create_IB_VB_SRV_Serialized(ID3D12Device5* pDevice, DXR::BLAS** pBla
 #pragma endregion Create Serial SRV of VB	
 }
 
-inline void Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** ppOutInstanceDescResource, DXR::BLAS** pBlassArr, UINT iNumBlas)
+inline void Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** ppOutInstanceDescResource, DXR::BLAS** pBlassArr, UINT
+                        * iNumberingArr, UINT iNumBlas)
 {
 	// TLAS
 	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS topLevelInputs = {};
@@ -302,6 +303,7 @@ inline void Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCom
 	D3D12_RAYTRACING_INSTANCE_DESC* instanceDescArr = new D3D12_RAYTRACING_INSTANCE_DESC[1]{};
 	for (UINT i = 0; i < iNumBlas; ++i)
 	{
+		instanceDescArr[i].InstanceID = iNumberingArr[i];
 		instanceDescArr[i].Transform[0][0] = instanceDescArr[i].Transform[1][1] = instanceDescArr[i].Transform[2][2] = 1;
 		instanceDescArr[i].InstanceMask = 1;
 		instanceDescArr[i].AccelerationStructure = pBlassArr[i]->uav_BLAS->GetGPUVirtualAddress();
@@ -319,6 +321,19 @@ inline void Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCom
 
 
 	Safe_Delete_Array(instanceDescArr);
+}
+
+inline void Update_ShaderRecord(ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource* pSrcResource, ID3D12Resource* pDstShaderTable, UINT64 iSingleRecordSize, UINT
+                                iNumRecords, UINT iLocalArgumentSize)
+{
+	for (UINT iRecordIndex = 0; iRecordIndex < iNumRecords; ++iRecordIndex)
+	{
+		pCommandList->CopyBufferRegion(pDstShaderTable,
+			iSingleRecordSize * iRecordIndex + D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
+			pSrcResource,
+			 MyUtils::Align256(iLocalArgumentSize) * iRecordIndex,
+			iLocalArgumentSize);
+	}
 }
 
 _NAMESPACE//DXR_Util

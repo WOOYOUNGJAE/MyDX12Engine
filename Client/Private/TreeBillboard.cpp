@@ -26,7 +26,7 @@ CTreeBillboard* CTreeBillboard::Create()
 	return pInstance;
 }
 
-CGameObject* CTreeBillboard::Clone(void* pArg)
+CGameObject* CTreeBillboard::Clone(UINT* pInOutRenderNumbering, void* pArg)
 {
 	CTreeBillboard* pInstance = new CTreeBillboard(*this);
 

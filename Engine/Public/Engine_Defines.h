@@ -43,6 +43,7 @@
 // My
 //#define DXR_ON FALSE
 #define DXR_ON TRUE
+#define NUM_OBJECTS 10
 
 #include "DXSampleHelper.h"
 #include "DirectXRaytracingHelper.h"

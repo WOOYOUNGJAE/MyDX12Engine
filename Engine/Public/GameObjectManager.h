@@ -24,6 +24,7 @@ public:
 public: // getter
 	const map<wstring, CGameObject*>& Get_ObjPrototypeMap() { return m_mapObjPrototypes; }
 	const vector<CGameObject*>& Get_vecTempClonedObj() { return m_vecTempClonedObj; }
+	map<UINT, CObjLayer*>* Get_AllObjLayers() { return &m_mapLayer; }
 public:
 	CGameObject* FindandGet_Prototype(const wstring& strTag);
 	CGameObject* FindandGet_Cloned(const wstring& strProtoTag, UINT eLayerEnum = OBJ_LAYER_0, UINT iClonedNum = 1);
@@ -36,6 +37,8 @@ public:
 	HRESULT Add_GameObject_InScene(const wstring& strPrototypeTag, UINT eLayerEnum, CGameObject** pOutObj, void* pArg = nullptr);
 	void Add_ClonedObj_To_Array_For_ShaderTable(CGameObject* pObjInstance);
 	void Clear_ClonedObjArr(); // DXR ShaderTable 빌드에 필요 했던 ClonedList 삭제
+public:// Factory
+	CGameObject* Clone_GameObject_From_Factory(CGameObject* pPrototype, void* pArg);
 private:
 	map<wstring, CGameObject*> m_mapObjPrototypes;
 	map<UINT, CObjLayer*> m_mapLayer; // L"LayerTag"

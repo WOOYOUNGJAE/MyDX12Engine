@@ -28,7 +28,7 @@ public: // Manager Function Offer
 	// ComponentManager
 	HRESULT Add_ComPrototype(const wstring& strTag, class CComponent* pComInstance);
 	CComponent* Clone_ComPrototype(const wstring& strTag, void* pArg = nullptr);
-	HRESULT Build_FrameResource_After_Loading_GameScene_Finished(UINT iNumAllRenderingObject); // 씬 게임오브젝트 모두 생성 후 파악된 게임오브젝트 개수 바탕 F-Resource 빌드
+	HRESULT Scene_Start(UINT iNumAllRenderingObject); // 씬 게임오브젝트 모두 생성 후 파악된 게임오브젝트 개수 바탕 F-Resource 빌드
 	// GameObjManager
 	HRESULT Add_GameObjPrototype(const wstring& strTag, class CGameObject* pInstance);
 	CGameObject* Clone_GameObject(const wstring& strPrototypeTag, void* pArg = nullptr);
@@ -59,9 +59,11 @@ private: // Singleton
 	class CSDSManager* m_pSDSManager = nullptr;
 	class CLoadHelper* m_pLoadHelper = nullptr;
 	class CFrameResourceManager* m_pFrameResourceManager = nullptr;
+	//class 
 #if DXR_ON
 public:
 	HRESULT Init_DXR();
+	// GameObject 배열은 렌더링 오브젝트만 들고 옴
 	void Build_AccelerationStructureTree(CGameObject** pGameObjArr, UINT iArrSize);
 	class CDXRRenderer* Get_DXRRenderer();
 private:

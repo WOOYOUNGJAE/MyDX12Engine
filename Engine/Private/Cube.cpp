@@ -20,12 +20,14 @@ CCube* CCube::Create()
 	return pInstance;
 }
 
-CGameObject* CCube::Clone(void* pArg)
+CGameObject* CCube::Clone(UINT* pInOutRenderNumbering, void* pArg)
 {
 	CCube* pInstance = new CCube(*this);
 
 	if (pInstance)
 	{
+		++(*pInOutRenderNumbering);
+		pInstance->m_iRenderNumbering_ZeroIfNotRendered = *pInOutRenderNumbering;
 		if (FAILED(pInstance->Initialize(pArg)))
 		{
 			Safe_Release(pInstance);

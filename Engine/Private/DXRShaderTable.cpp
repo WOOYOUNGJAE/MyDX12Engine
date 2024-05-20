@@ -33,7 +33,7 @@ HRESULT CDXRShaderTable::Initialize(ID3D12Device* pDevice, UINT iNumShaderRecord
 	hr = m_pTableData->Map(0, &readRange, reinterpret_cast<void**>(&m_pRecordingData));
 	if (FAILED(hr)) { return hr; }
 	
-
+	
 	return hr;
 }
 
@@ -49,7 +49,6 @@ void CDXRShaderTable::Register_Record(const TABLE_RECORD_DESC& inRecord)
 	m_vecRecords.emplace_back(inRecord);
 
 	memcpy(m_pRecordingData, inRecord.pIdentifierData, inRecord.iIdentifierSize);
-	
 	if (inRecord.pLocalRootArgumentData)
 	{
 		memcpy(m_pRecordingData + inRecord.iIdentifierSize, inRecord.pLocalRootArgumentData, inRecord.iLocalRootArgumentSize);

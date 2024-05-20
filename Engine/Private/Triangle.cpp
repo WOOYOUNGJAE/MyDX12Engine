@@ -8,6 +8,8 @@
 #include "MeshObject.h"
 #include "SDSManager.h"
 #include "FrameResource.h"
+#include "material.h"
+
 CTriangle* CTriangle::Create()
 {
 	CTriangle* pInstance = new CTriangle;
@@ -20,12 +22,14 @@ CTriangle* CTriangle::Create()
 	return pInstance;
 }
 
-CGameObject* CTriangle::Clone(void* pArg)
+CGameObject* CTriangle::Clone(UINT* pInOutRenderNumbering, void* pArg)
 {
 	CTriangle* pInstance = new CTriangle(*this);
 
 	if (pInstance)
 	{
+		++(*pInOutRenderNumbering);
+		pInstance->m_iRenderNumbering_ZeroIfNotRendered = *pInOutRenderNumbering;
 		if (FAILED(pInstance->Initialize(pArg)))
 		{
 			Safe_Release(pInstance);
@@ -59,6 +63,9 @@ HRESULT CTriangle::Initialize(void* pArg)
 	hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_Checkboard"));
 	//hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_ice"));
 	if (FAILED(hr)) return hr;
+
+	MATERIAL_INFO matInfo{ Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f };
+	hr = Add_Component(L"Material", reinterpret_cast<CComponent**>(&m_pMaterialCom), &matInfo);
 
 	m_iTextureSrvOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
 
@@ -135,6 +142,7 @@ void CTriangle::Render(ID3D12GraphicsCommandList* pCmdList, FrameResource* pFram
 
 HRESULT CTriangle::Free()
 {
+	Safe_Release(m_pMaterialCom);
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);

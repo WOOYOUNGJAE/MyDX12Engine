@@ -5,13 +5,13 @@
 #include "Device_Utils.h"
 #include "DXRRenderer.h"
 
-CSceneNode* CSceneNode::Create(CSceneNode** pChildNodeArr, UINT iArrSize, bool bIsTLAS, CGameObject* pContainingObj)
+CSceneNode* CSceneNode::Create(CSceneNode** pChildNodeArr, UINT* iNumberingArr, UINT iArrSize, bool bIsTLAS, CGameObject* pContainingObj)
 {
 	CSceneNode* pInstance = new CSceneNode;
 
 	pInstance->Set_ContainingObj(pContainingObj);
 
-	if (FAILED(pInstance->Initialize(pChildNodeArr, iArrSize)))
+	if (FAILED(pInstance->Initialize(pChildNodeArr, iNumberingArr, iArrSize)))
 	{
 		Safe_Release(pInstance);
 		MSG_BOX("SceneNode : Failed to Init");
@@ -22,7 +22,7 @@ CSceneNode* CSceneNode::Create(CSceneNode** pChildNodeArr, UINT iArrSize, bool b
 }
 
 //static ID3D12Resource* m_bottomLevelAccelerationStructure = nullptr;
-HRESULT CSceneNode::Initialize(CSceneNode** pChildNodeArr, UINT iChildArrSize, bool bIsTLAS)
+HRESULT CSceneNode::Initialize(CSceneNode** pChildNodeArr, UINT* iNumberingArr, UINT iChildArrSize, bool bIsTLAS)
 {
 	HRESULT hr = S_OK;
 
@@ -56,7 +56,7 @@ HRESULT CSceneNode::Initialize(CSceneNode** pChildNodeArr, UINT iChildArrSize, b
 	}
 	
 	DXR_Util::Create_IB_VB_SRV_Serialized(pDevice, pBlasArr, iChildArrSize, &m_TLAS.IB_VB_SRV_startOffsetInDescriptors);
-	DXR_Util::Build_TLAS0(pDevice, pCommandList, &m_TLAS.uav_TLAS, &m_TLAS.pInstanceDesc, pBlasArr, iChildArrSize);
+	DXR_Util::Build_TLAS0(pDevice, pCommandList, &m_TLAS.uav_TLAS, &m_TLAS.pInstanceDesc, pBlasArr, iNumberingArr, iChildArrSize);
 
 	Safe_Delete_Array(pBlasArr);
 

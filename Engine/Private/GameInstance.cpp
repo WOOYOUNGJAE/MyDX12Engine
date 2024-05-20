@@ -17,6 +17,7 @@
 #include "BVH.h"
 #include "SceneNode_AABB.h"
 #include "FrameResourceManager.h"
+#include "GameObject.h"
 #include "Renderer.h"
 #pragma endregion
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -121,6 +122,10 @@ void CGameInstance::Late_Tick(_float fDeltaTime)
 void CGameInstance::Render_Tick()
 {
 	m_pGameObjectManager->Render_Tick();
+#if DXR_ON
+	m_pDxrRenderer->Update_Dynamic_PassCB();
+	m_pDxrRenderer->Update_Dynamic_Object_CB();
+#endif
 }
 
 void CGameInstance::Engine_Tick(FLOAT fDeltaTime)
@@ -180,8 +185,9 @@ CComponent* CGameInstance::Clone_ComPrototype(const wstring& strTag, void* pArg)
 	return pInstnace;
 }
 
-HRESULT CGameInstance::Build_FrameResource_After_Loading_GameScene_Finished(UINT iNumAllRenderingObject)
+HRESULT CGameInstance::Scene_Start(UINT iNumAllRenderingObject)
 {
+// Building_FrameResource
 	HRESULT hr = S_OK;
 	CRenderer* pCastedRenderer = dynamic_cast<CRenderer*>(m_pComponentManager->FindandGet_Prototype(L"Renderer"));
 	if (pCastedRenderer)
@@ -199,7 +205,12 @@ HRESULT CGameInstance::Build_FrameResource_After_Loading_GameScene_Finished(UINT
 	}
 
 #if DXR_ON
+	m_pDxrResource->Reset_CommandList();
 	m_pDxrRenderer->Set_FrameResource();
+	m_pDxrRenderer->Update_Static_Object_CB();
+	m_pDxrResource->Close_CommandList();
+	m_pDxrResource->Execute_CommandList();
+	m_pDxrResource->Flush_CommandQueue();
 #endif
 
 	return hr;
@@ -267,6 +278,7 @@ void CGameInstance::Build_AccelerationStructureTree(CGameObject** pGameObjArr, U
 	CBVH* pAccelerationTreeInstance = CBVH::Create(); // Manager에서 삭제
 
 	CSceneNode** pChildNodeArr = new CSceneNode*[iArrSize];
+	UINT* iRenderNumberingArr = new UINT[iArrSize];
 	for (UINT i = 0; i < iArrSize; ++i)
 	{
 		CSceneNode* pNodeInstance = m_pSDSManager->FindandGet_LeafNode(pGameObjArr[i], SDS_AS);
@@ -276,19 +288,21 @@ void CGameInstance::Build_AccelerationStructureTree(CGameObject** pGameObjArr, U
 			return;
 		}
 		pChildNodeArr[i] = pNodeInstance;
+		iRenderNumberingArr[i] = pGameObjArr[i]->Get_RenderNumbering();
 	}
 
 	m_pDxrResource->Reset_CommandList();
 
-	CSceneNode_AABB* pNodeTLAS = CSceneNode_AABB::Create(pChildNodeArr, iArrSize, true);
-	pAccelerationTreeInstance->Set_Root(pNodeTLAS);
+	CSceneNode_AABB* pSceneRootNode = CSceneNode_AABB::Create(pChildNodeArr, iRenderNumberingArr, iArrSize, true);
+	pAccelerationTreeInstance->Set_Root(pSceneRootNode);
 
 	m_pSDSManager->Push_AccelerationTree(pAccelerationTreeInstance);
 
 	m_pDxrResource->Close_CommandList();
-	m_pDxrResource->Execute_CommnadList();
+	m_pDxrResource->Execute_CommandList();
 	m_pDxrResource->Flush_CommandQueue();
 
+	Safe_Delete_Array(iRenderNumberingArr);
 	Safe_Delete_Array(pChildNodeArr);
 }
 
