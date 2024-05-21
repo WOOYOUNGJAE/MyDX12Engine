@@ -53,8 +53,10 @@ protected:
 public:
 	CSceneNode* Make_NodeBLAS();
 	DXR::BLAS* Get_BLAS_Ptr() { return m_uqpBlAS.get(); }
+	ID3D12Resource* Get_BLAS_Resource() { return m_pUav_BLAS; }
 protected:
 	unique_ptr<DXR::BLAS> m_uqpBlAS; // 컴포넌트인 MeshObject에서 소유권 가져옴
+	ID3D12Resource* m_pUav_BLAS;
 #endif
 };
 

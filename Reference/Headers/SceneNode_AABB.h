@@ -28,8 +28,10 @@ private:
 #if DXR_ON
 public:
 	DXR::BLAS*& Get_BLAS() { return m_pContainingBLAS; }
+	ID3D12Resource* Get_BLAS_Resource() { return m_pContainingBLAS_Resource; }
 private:
 	DXR::BLAS* m_pContainingBLAS = nullptr; // pointer
+	ID3D12Resource* m_pContainingBLAS_Resource = nullptr;
 #endif
 };
 

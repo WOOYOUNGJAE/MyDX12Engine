@@ -1,8 +1,9 @@
 #pragma once
 #include "Base.h"
+#include "GameObject.h"
 
 NAMESPACE_(Engine)
-class CSceneNode_AABB;
+	class CSceneNode_AABB;
 class CBVH : public CBase
 {
 protected:
@@ -18,6 +19,10 @@ public:
 private:
 	CSceneNode_AABB* m_pRoot = nullptr;
 
+#if DXR_ON
+public:
+	void Rebuild_Root_TLAS();
+#endif
 };
 
 _NAMESPACE

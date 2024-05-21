@@ -1,4 +1,6 @@
 #include "CubeMesh.h"
+
+#include "DeviceResource.h"
 #include "Device_Utils.h"
 
 CCubeMesh::CCubeMesh()
@@ -174,7 +176,17 @@ HRESULT CCubeMesh::Initialize_Prototype()
 
 	CMeshData::Init_VBV_IBV();
 #if DXR_ON
-	CMeshData::Build_BLAS(sizeof(UINT16)* _countof(indicesData), sizeof(VertexPositionNormalColorTexture)* m_iNumVertices);
+	DXR_Util::Build_BLAS(
+		CDeviceResource::Get_Instance()->Get_Device5(),
+		m_pCommandList,
+		&m_BLAS,
+		m_indexBufferGPU,
+		m_vertexBufferGPU,
+		m_IndexFormat,
+		m_iNumIndices,
+		m_iNumVertices,
+		UINT64(Get_SingleVertexSize()));
+	//CMeshData::Build_BLAS(sizeof(UINT16)* _countof(indicesData), sizeof(VertexPositionNormalColorTexture)* m_iNumVertices);
 #endif
 	return hr;
 }

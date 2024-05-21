@@ -123,6 +123,8 @@ void CGameInstance::Render_Tick()
 {
 	m_pGameObjectManager->Render_Tick();
 #if DXR_ON
+	// Rebuild TLAS as BLAS Transform changed
+	m_pSDSManager->Get_vecAccelerationTree()[SDS_AS]->Rebuild_Root_TLAS();
 	m_pDxrRenderer->Update_Dynamic_PassCB();
 	m_pDxrRenderer->Update_Dynamic_Object_CB();
 #endif

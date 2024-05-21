@@ -259,7 +259,7 @@ void CDXRRenderer::Update_Static_Object_CB()
 
 void CDXRRenderer::Update_Dynamic_Object_CB()
 {
-    
+
     m_pCurFrameResource->pObjectCB_Dynamic_DXR;
 }
 
@@ -330,10 +330,10 @@ void CDXRRenderer::Set_ComputeRootDescriptorTable_Global()
 {
     std::vector<CBVH*> refVecAccelerationTree = CSDSManager::Get_Instance()->Get_vecAccelerationTree();
 
-    D3D12_GPU_VIRTUAL_ADDRESS TLAS_GPU_Adress = refVecAccelerationTree[0]->Get_Root()->Get_TLAS().uav_TLAS->GetGPUVirtualAddress();
+    D3D12_GPU_VIRTUAL_ADDRESS TLAS_GPU_Adress = refVecAccelerationTree[SDS_AS]->Get_Root()->Get_TLAS().uav_TLAS->GetGPUVirtualAddress();
 
     CD3DX12_GPU_DESCRIPTOR_HANDLE IB_VB_SRV_Handle_GPU =
-        m_pDXRResources->Get_HeapHandleGPU(refVecAccelerationTree[0]->Get_Root()->Get_TLAS().IB_VB_SRV_startOffsetInDescriptors);
+        m_pDXRResources->Get_HeapHandleGPU(refVecAccelerationTree[SDS_AS]->Get_Root()->Get_TLAS().IB_VB_SRV_startOffsetInDescriptors);
 
     m_pCommandList->SetDescriptorHeaps(1, &m_pDXRResources->m_pDescriptorHeap);
     m_pCommandList->SetComputeRootSignature(m_pDXRResources->m_pRootSigArr[DXR_ROOTSIG_GLOBAL]);

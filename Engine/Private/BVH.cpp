@@ -14,3 +14,8 @@ HRESULT CBVH::Free()
 
 	return hr;
 }
+
+void CBVH::Rebuild_Root_TLAS()
+{
+	m_pRoot->ReBuild_TLAS();
+}

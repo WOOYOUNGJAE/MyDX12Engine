@@ -1,6 +1,7 @@
 # MyDX12Engine
  
-마지막 결과물 스크린샷 : 24.05.14
-[DXR] 글로벌 상수 버퍼만 적용하여 라이트 쉐이딩
+마지막 결과물 스크린샷 : 24.05.21
+[DXR] 실시간 BLAS 트랜스폼 적용 (매 프레임 TLAS 리빌드)
 
-![Alt text](OutputScreenshot.png)
+![Example GIF](OutputGif.gif)
+<!-- ![Alt text](OutputScreenshot.png) -->

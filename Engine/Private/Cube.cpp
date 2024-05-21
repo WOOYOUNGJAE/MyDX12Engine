@@ -70,10 +70,11 @@ HRESULT CCube::Initialize(void* pArg)
 
 	GAMEOBJECT_INIT_DESC* pCastedArg = static_cast<GAMEOBJECT_INIT_DESC*>(pArg);
 
-	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
-	m_pTransformCom->Set_Scale(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartScale);
+	m_pTransformCom->Set_Position(pCastedArg->vStartPos);
+	m_pTransformCom->Set_Scale(pCastedArg->vStartScale);
 #if DXR_ON
 	m_uqpBlAS = m_pMeshObjectCom->Move_BuiltBLAS();
+	m_pUav_BLAS = m_uqpBlAS.get()->uav_BLAS;
 
 	CSDSManager::Get_Instance()->Register_SceneNode(CGameObject::Make_NodeBLAS(), this, SDS_AS);
 #endif
@@ -83,7 +84,8 @@ HRESULT CCube::Initialize(void* pArg)
 
 void CCube::Tick(_float fDeltaTime)
 {
-	int a = 0;
+	m_pTransformCom->Rotate(m_pTransformCom->Up(), 3.f * fDeltaTime);
+	//m_pTransformCom->Move_Forward(0.5f * fDeltaTime);
 }
 
 void CCube::Late_Tick(_float fDeltaTime)

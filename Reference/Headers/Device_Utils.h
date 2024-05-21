@@ -1,6 +1,7 @@
 #pragma once
 #include "DXRResource.h"
 #include "Engine_Defines.h"
+#include "GameObject.h"
 #include "MeshData.h"
 #include "SceneNode_AABB.h"
 
@@ -197,6 +198,9 @@ NAMESPACE_(DXR_Util)
 	}
 }
 
+void Build_BLAS(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCommandList, DXR::BLAS* pBLAS,
+	ID3D12Resource* pIndexBuffer, ID3D12Resource* pVertexBuffer, DXGI_FORMAT IndexFormat, UINT iTriangleIndexCount, UINT iTriangleVertexCount, UINT64 iVertexStrideInBytes);
+
 inline void Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** ppOutInstanceDescResource, ID3D12Resource***
                        ppUAV_BLASArr, UINT iNumBlas)
 {
@@ -285,7 +289,8 @@ inline void Create_IB_VB_SRV_Serialized(ID3D12Device5* pDevice, DXR::BLAS** pBla
 #pragma endregion Create Serial SRV of VB	
 }
 
-inline void Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** ppOutInstanceDescResource, DXR::BLAS** pBlassArr, UINT
+inline void Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** ppOutInstanceDescResource, CGameObject
+                        ** pGameObjArr, UINT
                         * iNumberingArr, UINT iNumBlas)
 {
 	// TLAS
@@ -304,9 +309,19 @@ inline void Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCom
 	for (UINT i = 0; i < iNumBlas; ++i)
 	{
 		instanceDescArr[i].InstanceID = iNumberingArr[i];
-		instanceDescArr[i].Transform[0][0] = instanceDescArr[i].Transform[1][1] = instanceDescArr[i].Transform[2][2] = 1;
 		instanceDescArr[i].InstanceMask = 1;
-		instanceDescArr[i].AccelerationStructure = pBlassArr[i]->uav_BLAS->GetGPUVirtualAddress();
+		instanceDescArr[i].AccelerationStructure = pGameObjArr[i]->Get_BLAS_Resource()->GetGPUVirtualAddress();
+
+		Matrix worldMat = pGameObjArr[i]->Get_WorldMatrix();
+		Vector3 pos = pGameObjArr[i]->Get_Pos();
+		memcpy(instanceDescArr[i].Transform[0], &worldMat.m[0], sizeof(FLOAT) * 3);
+		memcpy(instanceDescArr[i].Transform[1], &worldMat.m[1], sizeof(FLOAT) * 3);
+		memcpy(instanceDescArr[i].Transform[2], &worldMat.m[2], sizeof(FLOAT) * 3);
+		instanceDescArr[i].Transform[0][3] = pos.x;
+		instanceDescArr[i].Transform[1][3] = pos.y;
+		instanceDescArr[i].Transform[2][3] = pos.z;
+
+		//instanceDescArr[i].Transform[0][0] = instanceDescArr[i].Transform[1][1] = instanceDescArr[i].Transform[2][2] = 1;
 	}
 	MyUtils::AllocateUploadBuffer(pDevice, instanceDescArr, sizeof(D3D12_RAYTRACING_INSTANCE_DESC) * 1, ppOutInstanceDescResource);
 	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC topLevelBuildDesc = {};
@@ -331,7 +346,7 @@ inline void Update_ShaderRecord(ID3D12GraphicsCommandList4* pCommandList, ID3D12
 		pCommandList->CopyBufferRegion(pDstShaderTable,
 			iSingleRecordSize * iRecordIndex + D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
 			pSrcResource,
-			 MyUtils::Align256(iLocalArgumentSize) * iRecordIndex,
+			 UINT64(MyUtils::Align256(iLocalArgumentSize) * iRecordIndex),
 			iLocalArgumentSize);
 	}
 }
