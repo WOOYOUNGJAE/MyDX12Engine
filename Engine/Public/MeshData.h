@@ -79,7 +79,7 @@ public:
 	virtual void Build_BLAS(UINT64 iIndexDataSize, UINT64 iVertexDataSize);
 	DXR::BLAS Get_BLAS() { return m_BLAS; }
 protected:
-	DXR::BLAS m_BLAS;
+	DXR::BLAS m_BLAS{};
 #endif
 };
 

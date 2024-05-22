@@ -81,24 +81,28 @@ HRESULT CMainApp::Initialize()
 #endif
 
 	objDesc.strTag = L"Cube";
-	objDesc.vStartPos = Vector3::Zero;
+	objDesc.vStartPos = Vector3::One;
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
+	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
+	/*objDesc.vStartPos = Vector3(2,0,0);
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }*/
+#if DXR_ON
+	//gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
+	//CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
+#endif DXR_ON
+
+
+	objDesc.strTag = L"Triangle";
+	objDesc.vStartPos = Vector3::Zero;
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }
+	//m_pGameInstance->Add_ClonedObj_To_Array_For_ShaderTable(pObjectControlling);
 #if DXR_ON
 	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
 	CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
 #endif DXR_ON
-
-
-	/*objDesc.strTag = L"Triangle";
-	objDesc.vStartPos = Vector3::Zero;
-	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling, &objDesc);
-	if (FAILED(hr)) { return hr; }
-	m_pGameInstance->Add_ClonedObj_To_Array_For_ShaderTable(pObjectControlling);
-#if DXR_ON
-	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
-	CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
-#endif DXR_ON*/
 
 
 #pragma endregion Static GameObject 

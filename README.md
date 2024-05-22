@@ -1,7 +1,7 @@
 # MyDX12Engine
  
-마지막 결과물 스크린샷 : 24.05.21
-[DXR] 실시간 BLAS 트랜스폼 적용 (매 프레임 TLAS 리빌드)
+마지막 결과물 스크린샷 : 24.05.22
+[DXR] 2개 이상의 오브젝트 ConstantBuffer, 버텍스 정보 읽기
 
-![Example GIF](OutputGif.gif)
-<!-- ![Alt text](OutputScreenshot.png) -->
+<!-- ![Example GIF](OutputGif.gif) -->
+![Alt text](OutputScreenshot.png)

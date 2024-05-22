@@ -26,7 +26,11 @@ HRESULT CSceneNode::Initialize(CSceneNode** pChildNodeArr, UINT* iNumberingArr, 
 {
 	HRESULT hr = S_OK;
 
+#if DXR_ON
+	if (iChildArrSize == 2 && bIsTLAS == false) // Acceleration Structure가 아닌 일반 bvh의 노드
+#else
 	if (iChildArrSize == 2)
+#endif
 	{
 		m_pLeftChild = pChildNodeArr[0];
 		m_pRightChild = pChildNodeArr[1];
@@ -54,17 +58,78 @@ HRESULT CSceneNode::Initialize(CSceneNode** pChildNodeArr, UINT* iNumberingArr, 
 	memcpy(m_iNumberingArr, iNumberingArr, sizeof(UINT) * iChildArrSize);
 	DXR::BLAS** pBlasArr = new DXR::BLAS*[iChildArrSize];
 	CGameObject** pGameObjArr = new CGameObject*[iChildArrSize];
+	UINT iNumAllIndices = 0;
+	UINT iNumAllVertices = 0;
 	for (UINT i = 0; i < iChildArrSize; ++i)
 	{
-		pBlasArr[i] = dynamic_cast<CSceneNode_AABB*>(pChildNodeArr[i])->Get_BLAS();
-		pGameObjArr[i] = pChildNodeArr[i]->Get_ContainingObj();
+		pBlasArr[i] = dynamic_cast<CSceneNode_AABB*>(m_vecChildNode[i])->Get_BLAS();
+		pGameObjArr[i] = m_vecChildNode[i]->Get_ContainingObj();
+
+		iNumAllIndices += pBlasArr[i]->vecIndices.size();
+		iNumAllVertices += pBlasArr[i]->vecVertices.size();
 	}
-	
-	DXR_Util::Create_IB_VB_SRV_Serialized(pDevice, pBlasArr, iChildArrSize, &m_TLAS.IB_VB_SRV_startOffsetInDescriptors);
+
+
+	std::vector<UINT16> vecAllIndices;
+	auto iterIndicesDest = vecAllIndices.begin();
+	UINT iStartIndex_in_SRV = 0;
+	for (UINT i = 0; i < iChildArrSize; ++i)
+	{
+		const auto& vecSrc = pBlasArr[i]->vecIndices;
+		pChildNodeArr[i]->Get_ContainingObj()->Get_BLAS_Ptr()->iStartIndex_in_IB_SRV = iStartIndex_in_SRV;
+		
+		for (UINT j = 0; j < pBlasArr[i]->vecIndices.size(); ++j)
+		{
+			vecAllIndices.emplace_back(vecSrc[j]);
+		}
+		INT iLackCount = 4 - (pBlasArr[i]->vecIndices.size() % 4);
+		if (iLackCount == 4) // 딱 4바이트 단위로 맞아 떨어지면
+		{
+			iStartIndex_in_SRV = vecAllIndices.size();
+			continue;
+		}
+		for (UINT i = 0; i < iLackCount; ++i)
+		{
+			vecAllIndices.emplace_back(0); // 3의 배수에 2개가 부족하면
+		}
+		iStartIndex_in_SRV = vecAllIndices.size();
+	}
+	vecAllIndices.shrink_to_fit();
+	MyUtils::Create_Buffer_Default(pDevice, pCommandList, vecAllIndices.data(), sizeof(UINT16) * vecAllIndices.size(), &m_pUploadBuffer_CombinedIndices, &m_pCombinedIndices);
+
+
+	iStartIndex_in_SRV = 0;
+	VertexPositionNormalColorTexture* allVertices = new VertexPositionNormalColorTexture[iNumAllVertices];
+	VertexPositionNormalColorTexture* pVerticesCopyDst = allVertices;
+	for (UINT i = 0; i < iChildArrSize; ++i)
+	{
+		pChildNodeArr[i]->Get_ContainingObj()->Get_BLAS_Ptr()->iStartIndex_in_VB_SRV = iStartIndex_in_SRV;
+		std::copy(pBlasArr[i]->vecVertices.begin(), pBlasArr[i]->vecVertices.end(), pVerticesCopyDst);
+		UINT iCurVerticesSize = pBlasArr[i]->vecVertices.size();
+		pVerticesCopyDst += iCurVerticesSize;
+		iStartIndex_in_SRV += iCurVerticesSize;
+	}
+	MyUtils::Create_Buffer_Default(pDevice, pCommandList, allVertices, sizeof(VertexPositionNormalColorTexture) * iNumAllVertices, &m_pUploadBuffer_CombinedVertices, &m_pCombinedVertices);
+
+	CDXRResource* pDxrResource = CDXRResource::Get_Instance();
+	pDxrResource->Close_CommandList();
+	pDxrResource->Execute_CommandList();
+	pDxrResource->Flush_CommandQueue();
+	pDxrResource->Reset_CommandList();
+
+	DXR_Util::Create_IB_VB_SRV_Serialized(pDevice, vecAllIndices.size(), iNumAllVertices, m_pCombinedIndices, m_pCombinedVertices, pBlasArr[0]->dxrGeometryDesc.Triangles.VertexBuffer.StrideInBytes, &m_TLAS.IB_VB_SRV_startOffsetInDescriptors);
 	DXR_Util::Build_TLAS0(pDevice, pCommandList, &m_TLAS.uav_TLAS, &m_TLAS.pInstanceDesc, pGameObjArr, iNumberingArr, iChildArrSize);
 
+	for (UINT i = 0; i < m_iNumBLAS; ++i)
+	{
+		pBlasArr[i]->vecVertices.clear();
+		pBlasArr[i]->vecIndices.clear();
+	}
+
+	Safe_Delete_Array(allVertices);
 	Safe_Delete_Array(pBlasArr);
 	Safe_Delete_Array(pGameObjArr);
+
 
 #endif
 
@@ -74,6 +139,10 @@ HRESULT CSceneNode::Initialize(CSceneNode** pChildNodeArr, UINT* iNumberingArr, 
 HRESULT CSceneNode::Free()
 {
 #if DXR_ON
+	Safe_Release(m_pUploadBuffer_CombinedIndices);
+	Safe_Release(m_pUploadBuffer_CombinedVertices);
+	Safe_Release(m_pCombinedIndices);
+	Safe_Release(m_pCombinedVertices);
 	Safe_Delete_Array(m_iNumberingArr);
 	Safe_Release(m_TLAS.uav_TLAS);
 	Safe_Release(m_TLAS.pInstanceDesc);

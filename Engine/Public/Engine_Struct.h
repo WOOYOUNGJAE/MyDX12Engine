@@ -111,6 +111,10 @@ namespace Engine
 		D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC accelerationStructureDesc;
 		D3D12_RAYTRACING_GEOMETRY_DESC dxrGeometryDesc;
 		D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO prebuildInfo;
+		std::vector<UINT16> vecIndices;
+		std::vector<VertexPositionNormalColorTexture> vecVertices;
+		UINT iStartIndex_in_IB_SRV;
+		UINT iStartIndex_in_VB_SRV;
 	};
 
 	struct TLAS

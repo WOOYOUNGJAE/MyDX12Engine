@@ -62,7 +62,26 @@ HRESULT CCube::Initialize(void* pArg)
 	hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_ice"));
 	if (FAILED(hr)) return hr;
 
+#if DXR_ON
+	struct MATERIAL_INFO_2ELEMENTS
+	{
+		MATERIAL_INFO rastMatInfo;
+		DXR::MATERIAL_INFO DXRMatInfo;
+	}matInfo{};
+	matInfo.rastMatInfo = { Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f };
+	static int i = 0;
+	if (i++ == 0)
+	{
+		matInfo.DXRMatInfo = { Vector4::Zero};
+		matInfo.DXRMatInfo = { Vector4(1,0,0,1) };
+	}
+	else
+	{
+		matInfo.DXRMatInfo = { Vector4::One * 0.9f};
+	}
+#else
 	MATERIAL_INFO matInfo{ Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f};
+#endif
 	hr = Add_Component(L"Material", reinterpret_cast<CComponent**>(&m_pMaterialCom), &matInfo);
 
 
@@ -84,7 +103,7 @@ HRESULT CCube::Initialize(void* pArg)
 
 void CCube::Tick(_float fDeltaTime)
 {
-	m_pTransformCom->Rotate(m_pTransformCom->Up(), 3.f * fDeltaTime);
+	//m_pTransformCom->Rotate(m_pTransformCom->Up(), 3.f * fDeltaTime);
 	//m_pTransformCom->Move_Forward(0.5f * fDeltaTime);
 }
 

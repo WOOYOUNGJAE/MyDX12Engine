@@ -239,22 +239,24 @@ void CDXRRenderer::Update_Static_Object_CB()
                 CMaterial* pMaterial = iterGameObject->Get_Material();
                 if (pMaterial == nullptr)
                 {
+                    // 렌더링되는 오브젝트가 아닌 경우
                     continue;
                 }
                 DXR::OBJECT_CB_STATIC objectCB_Static{};
                 objectCB_Static.albedo = pMaterial->Get_DXR_MaterialInfo().albedo;
-                
+                objectCB_Static.startIndex_in_IB_SRV = iterGameObject->Get_BLAS_Ptr()->iStartIndex_in_IB_SRV;
+                objectCB_Static.startIndex_in_VB_SRV= iterGameObject->Get_BLAS_Ptr()->iStartIndex_in_VB_SRV;
+
                 m_pCurFrameResource->pObjectCB_Static_DXR->CopyData(iRenderNumbering_ZeroIfNotRendered - 1, objectCB_Static);
 		    }
 	    }
     }
-    auto a = m_pCurFrameResource->pObjectCB_Static_DXR->Get_UploadBuffer()->GetDesc().Width;
-    auto b = m_pDXRResources->m_pHitGroupShaderTable->GetDesc().Width;
+
     DXR_Util::Update_ShaderRecord(m_pCommandList,
                                   m_pCurFrameResource->pObjectCB_Static_DXR->Get_UploadBuffer(),
                                   m_pDXRResources->m_pHitGroupShaderTable,
-        D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES + sizeof(DXR::OBJECT_CB_STATIC),
-        NUM_OBJECTS, sizeof(DXR::OBJECT_CB_STATIC));
+                                  D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
+                                  NUM_OBJECTS, sizeof(DXR::OBJECT_CB_STATIC));
 }
 
 void CDXRRenderer::Update_Dynamic_Object_CB()

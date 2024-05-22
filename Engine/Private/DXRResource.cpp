@@ -344,7 +344,7 @@ LOCAL_BLOCK_// Hit Group Shader Table
 	using DXR::TABLE_RECORD_DESC;
 	struct RootArguments
 	{
-		DXR::OBJECT_CB_STATIC cb{};
+		DXR::OBJECT_CB_STATIC cb[NUM_OBJECTS]{};
 	}rootArguments;
 	//rootArguments.cb = DXR::OBJECT_CB_STATIC{ XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) };
 
@@ -352,11 +352,11 @@ LOCAL_BLOCK_// Hit Group Shader Table
 	{
 		D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
 		pHitGroupShaderIdentifier,
-		 MyUtils::Align256(sizeof(DXR::OBJECT_CB_STATIC)),
+		 (sizeof(DXR::OBJECT_CB_STATIC)),
 		&rootArguments
 	};
 
-	iNumShaderRecords = NUM_OBJECTS;
+	iNumShaderRecords = 1;
 	iSingleRecordSize = iShaderIdentifierSize + sizeof(RootArguments);
 
 	CDXRShaderTable* pTableInstance = CDXRShaderTable::Create(

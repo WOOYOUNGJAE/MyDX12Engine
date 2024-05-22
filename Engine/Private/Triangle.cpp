@@ -64,7 +64,17 @@ HRESULT CTriangle::Initialize(void* pArg)
 	//hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_ice"));
 	if (FAILED(hr)) return hr;
 
+#if DXR_ON
+	struct MATERIAL_INFO_2ELEMENTS
+	{
+		MATERIAL_INFO rastMatInfo;
+		DXR::MATERIAL_INFO DXRMatInfo;
+	}matInfo{};
+	matInfo.rastMatInfo = { Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f };
+	matInfo.DXRMatInfo = { Vector4(0,1,0,1)};
+#else
 	MATERIAL_INFO matInfo{ Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f };
+#endif
 	hr = Add_Component(L"Material", reinterpret_cast<CComponent**>(&m_pMaterialCom), &matInfo);
 
 	m_iTextureSrvOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
@@ -75,6 +85,7 @@ HRESULT CTriangle::Initialize(void* pArg)
 
 #if DXR_ON
 	m_uqpBlAS = m_pMeshObjectCom->Move_BuiltBLAS();
+	m_pUav_BLAS = m_uqpBlAS.get()->uav_BLAS;
 
 	CSDSManager::Get_Instance()->Register_SceneNode(CGameObject::Make_NodeBLAS(), this, SDS_AS);
 #endif

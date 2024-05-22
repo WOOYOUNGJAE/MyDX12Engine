@@ -246,110 +246,16 @@ inline void Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS, I
 	CDXRResource::BuildRaytracingAccelerationStructure(&topLevelBuildDesc, 0, nullptr);
 	Safe_Delete_Array(instanceDescArr);
 }
-inline void Create_IB_VB_SRV_Serialized(ID3D12Device5* pDevice, DXR::BLAS** pBlassArr, UINT iNumBlas, UINT64* pOutIBStartOffsetInDescriptors)
-{
-	// 모든 BLAS에 대한 Index SRV를 연속적으로 만든 후 Vertex SRV 만들기
-	CDXRResource* pDXRResource = CDXRResource::Get_Instance();
-	*pOutIBStartOffsetInDescriptors = pDXRResource->Get_CurOffsetInDescriptors();
-	CD3DX12_CPU_DESCRIPTOR_HANDLE& cpuHandle = pDXRResource->Get_refHeapHandle_CPU();
-	UINT iDescriptorSize = CDXRResource::Get_Instance()->Get_DescriptorSize();
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-#pragma region Create Serial SRV of IB
-	for (UINT i = 0; i < iNumBlas; ++i)
-	{
-		UINT iSingleIdexElementSize =
-			pBlassArr[i]->dxrGeometryDesc.Triangles.IndexFormat == DXGI_FORMAT_R32_UINT ?
-			sizeof(UINT32) : sizeof(UINT16);
+void Create_IB_VB_SRV_Serialized(ID3D12Device5* pDevice, UINT iNumAllIndices, UINT iNumAllVertices, ID3D12Resource* pCombinedIndicesResource, ID3D12Resource*
+                                 pCombinedVerticesResource, UINT iStructureByteStride, UINT64* pOutIBStartOffsetInDescriptors);
 
-		// Create Index SRV
-		srvDesc.Buffer.NumElements =
-			(iSingleIdexElementSize * pBlassArr[i]->dxrGeometryDesc.Triangles.IndexCount) / sizeof(UINT32); // 단순 인덱스 원소 개수가 아니라 UINT32로 얼마나 만들어지는지
-		srvDesc.Format = DXGI_FORMAT_R32_TYPELESS; // for Index Srv
-		srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW; // 인덱스는 단순 정수 나열이므로 raw타입으로
-		srvDesc.Buffer.StructureByteStride = 0; //  D3D12_BUFFER_SRV_FLAG_RAW, 즉 원시 데이터로 접근할 때
-		//cpuHandle.Offset(1, iDescriptorSize);
-		pDevice->CreateShaderResourceView(pBlassArr[i]->indexBuffer, &srvDesc, cpuHandle); // Index Srv
-		pDXRResource->Apply_DescriptorHandleOffset();
-	}
-#pragma endregion Create Serial SRV of IB
-#pragma region Create Serial SRV of VB
-	for (UINT i = 0; i < iNumBlas; ++i)
-	{
-		// Create Vertex SRV
-		srvDesc.Buffer.NumElements = pBlassArr[i]->dxrGeometryDesc.Triangles.VertexCount;
-		srvDesc.Format = DXGI_FORMAT_UNKNOWN;
-		srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-		srvDesc.Buffer.StructureByteStride = pBlassArr[i]->dxrGeometryDesc.Triangles.VertexBuffer.StrideInBytes;
-		//cpuHandle.Offset(1, iDescriptorSize);
-		pDevice->CreateShaderResourceView(pBlassArr[i]->vertexBuffer, &srvDesc, cpuHandle); // Vertex Srv
-		pDXRResource->Apply_DescriptorHandleOffset();
-	}
-#pragma endregion Create Serial SRV of VB	
-}
+void Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** ppOutInstanceDescResource, CGameObject
+	** pGameObjArr, UINT
+	* iNumberingArr, UINT iNumBlas);
 
-inline void Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** ppOutInstanceDescResource, CGameObject
-                        ** pGameObjArr, UINT
-                        * iNumberingArr, UINT iNumBlas)
-{
-	// TLAS
-	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS topLevelInputs = {};
-	topLevelInputs.DescsLayout = D3D12_ELEMENTS_LAYOUT_ARRAY;
-	topLevelInputs.Flags = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_PREFER_FAST_TRACE;
-	topLevelInputs.NumDescs = 1;
-	topLevelInputs.Type = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL;
+void Update_ShaderRecord(ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource* pSrcResource, ID3D12Resource* pDstShaderTable, UINT64 ShaderIDSize, UINT
+                         iNumRecords, UINT iSingleArgumentSize);
 
-	D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO topLevelPrebuildInfo = {};
-	pDevice->GetRaytracingAccelerationStructurePrebuildInfo(&topLevelInputs, &topLevelPrebuildInfo);
-	DXR_Util::AllocateScratch_IfBigger(pDevice, topLevelPrebuildInfo.ScratchDataSizeInBytes);
-	MyUtils::AllocateUAVBuffer(pDevice, topLevelPrebuildInfo.ResultDataMaxSizeInBytes, ppOutUAV_TLAS, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, L"TopLevelAccelerationStructure");
-
-	D3D12_RAYTRACING_INSTANCE_DESC* instanceDescArr = new D3D12_RAYTRACING_INSTANCE_DESC[1]{};
-	for (UINT i = 0; i < iNumBlas; ++i)
-	{
-		instanceDescArr[i].InstanceID = iNumberingArr[i];
-		instanceDescArr[i].InstanceMask = 1;
-		instanceDescArr[i].AccelerationStructure = pGameObjArr[i]->Get_BLAS_Resource()->GetGPUVirtualAddress();
-
-		Matrix worldMat = pGameObjArr[i]->Get_WorldMatrix();
-		Vector3 pos = pGameObjArr[i]->Get_Pos();
-		memcpy(instanceDescArr[i].Transform[0], &worldMat.m[0], sizeof(FLOAT) * 3);
-		memcpy(instanceDescArr[i].Transform[1], &worldMat.m[1], sizeof(FLOAT) * 3);
-		memcpy(instanceDescArr[i].Transform[2], &worldMat.m[2], sizeof(FLOAT) * 3);
-		instanceDescArr[i].Transform[0][3] = pos.x;
-		instanceDescArr[i].Transform[1][3] = pos.y;
-		instanceDescArr[i].Transform[2][3] = pos.z;
-
-		//instanceDescArr[i].Transform[0][0] = instanceDescArr[i].Transform[1][1] = instanceDescArr[i].Transform[2][2] = 1;
-	}
-	MyUtils::AllocateUploadBuffer(pDevice, instanceDescArr, sizeof(D3D12_RAYTRACING_INSTANCE_DESC) * 1, ppOutInstanceDescResource);
-	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC topLevelBuildDesc = {};
-	{
-		topLevelInputs.InstanceDescs = (*ppOutInstanceDescResource)->GetGPUVirtualAddress();
-		topLevelBuildDesc.Inputs = topLevelInputs;
-		topLevelBuildDesc.DestAccelerationStructureData = (*ppOutUAV_TLAS)->GetGPUVirtualAddress();
-		topLevelBuildDesc.ScratchAccelerationStructureData = (*CDXRResource::Get_Instance()->Get_ScratchBufferPtr())->GetGPUVirtualAddress();
-	}
-	pCommandList->BuildRaytracingAccelerationStructure(&topLevelBuildDesc, 0, nullptr);
-	pCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::UAV(*ppOutUAV_TLAS));
-
-
-	Safe_Delete_Array(instanceDescArr);
-}
-
-inline void Update_ShaderRecord(ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource* pSrcResource, ID3D12Resource* pDstShaderTable, UINT64 iSingleRecordSize, UINT
-                                iNumRecords, UINT iLocalArgumentSize)
-{
-	for (UINT iRecordIndex = 0; iRecordIndex < iNumRecords; ++iRecordIndex)
-	{
-		pCommandList->CopyBufferRegion(pDstShaderTable,
-			iSingleRecordSize * iRecordIndex + D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
-			pSrcResource,
-			 UINT64(MyUtils::Align256(iLocalArgumentSize) * iRecordIndex),
-			iLocalArgumentSize);
-	}
-}
 
 _NAMESPACE//DXR_Util
 

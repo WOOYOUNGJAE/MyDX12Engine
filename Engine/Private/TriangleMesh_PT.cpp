@@ -127,6 +127,17 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 
 	CMeshData::Init_VBV_IBV();
 #if DXR_ON
+	m_BLAS.vecIndices.reserve(_countof(indicesData));
+	for (UINT i = 0; i < m_iNumIndices; ++i)
+	{
+		m_BLAS.vecIndices.emplace_back(indicesData[i]);
+	}
+	m_BLAS.vecVertices.reserve(_countof(tempVertices));
+	for (UINT i = 0; i < m_iNumVertices; ++i)
+	{
+		m_BLAS.vecVertices.emplace_back(tempVertices[i]);
+	}
+
 	DXR_Util::Build_BLAS(
 		CDeviceResource::Get_Instance()->Get_Device5(),
 		m_pCommandList,

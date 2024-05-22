@@ -12,7 +12,7 @@ CMeshData::CMeshData() :
 #endif
 {
 #if DXR_ON
-	ZeroMemory(&m_BLAS, sizeof(DXR::BLAS));
+	//ZeroMemory(&m_BLAS, sizeof(DXR::BLAS));
 #endif
 }
 

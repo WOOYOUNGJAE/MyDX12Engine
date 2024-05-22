@@ -74,8 +74,16 @@ NAMESPACE_(DXR)
 		Vector4 lightDiffuseColor;
 	};
 
+	struct MATERIAL_INFO
+	{
+		Vector4 albedo; // 반사율
+	};
+
 	struct OBJECT_CB_STATIC
 	{
+		UINT startIndex_in_IB_SRV; // Index Buffer ShaderResourceView의 시작 인덱스
+		UINT startIndex_in_VB_SRV; // Vertex Buffer ShaderResourceView의 시작 인덱스
+		Vector2 padding;
 		Vector4 albedo; // 반사율
 	};
 _NAMESPACE

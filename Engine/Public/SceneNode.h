@@ -38,6 +38,10 @@ protected:
 	UINT m_iNumBLAS = 0;
 	UINT* m_iNumberingArr = nullptr;
 	DXR::TLAS m_TLAS{};
+	ID3D12Resource* m_pUploadBuffer_CombinedIndices = nullptr;
+	ID3D12Resource* m_pUploadBuffer_CombinedVertices = nullptr;
+	ID3D12Resource* m_pCombinedIndices = nullptr;
+	ID3D12Resource* m_pCombinedVertices = nullptr;
 #endif
 };
 
