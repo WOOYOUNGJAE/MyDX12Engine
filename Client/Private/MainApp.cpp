@@ -81,7 +81,7 @@ HRESULT CMainApp::Initialize()
 #endif
 
 	objDesc.strTag = L"Cube";
-	objDesc.vStartPos = Vector3::One;
+	objDesc.vStartPos = Vector3(0,0,3);
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
 	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);

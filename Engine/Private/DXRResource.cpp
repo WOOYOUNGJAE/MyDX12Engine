@@ -248,7 +248,7 @@ HRESULT CDXRResource::Create_PSOs()
 	{
 		CD3DX12_RAYTRACING_PIPELINE_CONFIG_SUBOBJECT* pipelineConfig =
 			psoDesc.CreateSubobject<CD3DX12_RAYTRACING_PIPELINE_CONFIG_SUBOBJECT>();
-		UINT iMaxRecursionDepth = 1; // ~ primary rays only. 
+		UINT iMaxRecursionDepth = 2; // ~ primary rays only. 
 		pipelineConfig->Config(iMaxRecursionDepth);
 	}
 

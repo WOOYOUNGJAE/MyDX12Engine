@@ -55,7 +55,7 @@ inline void GenerateCameraRay(DXR_Scene_CB sceneCB, uint2 index, out float3 orig
 }
 
 // Generate a ray in world space for a camera pixel corresponding to an index from the dispatched 2D grid.
-inline MyRay GenerateCameraRay(int2 index, in float3 cameraPosition, in float4x4 projectionToWorld)
+inline MyRay GenerateCameraRay(int2 index, in float3 cameraPosition, in float4x4 viewProjectionInv)
 {
     float2 xy = index + 0.5f; // center in the middle of the pixel.
     float2 screenPos = xy / DispatchRaysDimensions().xy * 2.0 - 1.0;
@@ -64,7 +64,7 @@ inline MyRay GenerateCameraRay(int2 index, in float3 cameraPosition, in float4x4
     screenPos.y = -screenPos.y;
 
 	// Unproject the pixel coordinate into a world positon.
-    float4 world = mul(float4(screenPos, 0, 1), projectionToWorld);
+    float4 world = mul(float4(screenPos, 0, 1), viewProjectionInv);
     world.xyz /= world.w;
 
     MyRay ray;
@@ -97,6 +97,11 @@ float4 CalculateDiffuseLighting(DXR_Scene_CB sceneCB, float3 hitWorldPos, float3
     return sceneCB.lightDiffuseColor * fNDotL; // TODO : LocalRootSig의 오브젝트 알베도 적용
 }
 
-
+// Fresnel reflectance - schlick approximation.
+float3 FresnelReflectanceSchlick(in float3 I, in float3 N, in float3 f0)
+{
+    float cosi = saturate(dot(-I, N));
+    return f0 + (1 - f0) * pow(1 - cosi, 5);
+}
 
 #endif

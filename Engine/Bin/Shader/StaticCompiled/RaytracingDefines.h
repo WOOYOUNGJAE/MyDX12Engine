@@ -12,7 +12,8 @@
 #ifndef RAYTRACING_DEFINES
 #define RAYTRACING_DEFINES
 
-#define MAX_RAY_RECURSION_DEPTH 3    // ~ primary rays + reflections + shadow rays from reflected geometry.
+#define MAX_RAY_RECURSION_DEPTH 2
+//#define MAX_RAY_RECURSION_DEPTH 3    // ~ primary rays + reflections + shadow rays from reflected geometry.
 #ifdef HLSL
 #include "HlslCompat.h"
 #else
