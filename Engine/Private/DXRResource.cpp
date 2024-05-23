@@ -219,7 +219,7 @@ HRESULT CDXRResource::Create_PSOs()
 	{
 		CD3DX12_RAYTRACING_SHADER_CONFIG_SUBOBJECT* shaderConfig =
 			psoDesc.CreateSubobject<CD3DX12_RAYTRACING_SHADER_CONFIG_SUBOBJECT>();
-		UINT payloadSize = sizeof(Vector4);   // float4 color
+		UINT payloadSize = sizeof(Vector4) + sizeof(UINT);   // float4 color
 		UINT attributeSize = sizeof(Vector2); // float2 barycentrics
 		shaderConfig->Config(payloadSize, attributeSize);
 	}

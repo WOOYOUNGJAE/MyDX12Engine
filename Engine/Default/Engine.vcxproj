@@ -259,8 +259,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\External\MS_SampleCode\DirectXRaytracingHelper.h" />
     <ClInclude Include="..\..\External\MS_SampleCode\DXSampleHelper.h" />
-    <ClInclude Include="..\Bin\Shader\StaticCompiled\HlslCompat.h" />
-    <ClInclude Include="..\Bin\Shader\StaticCompiled\RaytracingHlslCompat.h" />
+    <ClInclude Include="..\Bin\Shader\StaticCompiled\RaytracingDefines.h" />
     <ClInclude Include="..\Public\Asset.h" />
     <ClInclude Include="..\Public\AssetManager.h" />
     <ClInclude Include="..\Public\Base.h" />
@@ -414,6 +413,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Tool|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="..\Bin\Shader\StaticCompiled\RaytracingFunctions.hlsli" />
     <None Include="..\Bin\Shader\struct_Include0.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Tool|x64'">true</ExcludedFromBuild>

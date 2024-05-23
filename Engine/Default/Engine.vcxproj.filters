@@ -339,10 +339,7 @@
     <ClInclude Include="..\Public\DXRRenderer.h">
       <Filter>System\D3D Graphics\DXR\DXRRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Bin\Shader\StaticCompiled\HlslCompat.h">
-      <Filter>0.Shaders\DXR</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Bin\Shader\StaticCompiled\RaytracingHlslCompat.h">
+    <ClInclude Include="..\Bin\Shader\StaticCompiled\RaytracingDefines.h">
       <Filter>0.Shaders\DXR</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\DXRResource.h">
@@ -551,6 +548,9 @@
     </None>
     <None Include="..\Bin\Shader\light.hlsli">
       <Filter>0.Shaders\Includes</Filter>
+    </None>
+    <None Include="..\Bin\Shader\StaticCompiled\RaytracingFunctions.hlsli">
+      <Filter>0.Shaders\DXR</Filter>
     </None>
   </ItemGroup>
 </Project>
