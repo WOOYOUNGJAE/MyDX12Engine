@@ -13,6 +13,7 @@
 #define RAYTRACING_DEFINES
 
 #define MAX_RAY_RECURSION_DEPTH 2
+#define NUM_OBJECTS 3 // TODO 개수 TEMP
 //#define MAX_RAY_RECURSION_DEPTH 3    // ~ primary rays + reflections + shadow rays from reflected geometry.
 #ifdef HLSL
 #include "HlslCompat.h"
@@ -47,7 +48,17 @@ struct OBJECT_CB_STATIC
 };
 struct OBJECT_CB_STATIC_Arr
 {
-    OBJECT_CB_STATIC object_cb_static[2]; // TODO 개수 TEMP
+    OBJECT_CB_STATIC object_cb_static[NUM_OBJECTS];
+};
+
+struct OBJECT_CB_DYNAMIC
+{
+    float4x4 InvTranspose;
+};
+
+struct OBJECT_CB_DYNAMIC_Arr
+{
+    OBJECT_CB_DYNAMIC object_cb_dynamic[NUM_OBJECTS];
 };
 
 struct VertexPositionNormalColorTexture

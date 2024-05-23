@@ -72,9 +72,9 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 	
 	VertexPositionNormalColorTexture tempVertices[]
 	{
-		{Vector3(0.0f, 0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f),Color(1,0,0,1), Vector2(0.5f, 0.0f)},
-		{Vector3(0.25f, -0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f),Color(0,1,0,1),Vector2(1.0f, 1.0f)},
-		{Vector3(-0.25f, -0.25f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Color(0,0,1,1),Vector2(0.0f, 1.0f)}
+		{Vector3(0.0f, 0.25f, 0.0f), Vector3(0.0f, 0.0f, 1.0f),Color(1,0,0,1), Vector2(0.5f, 0.0f)},
+		{Vector3(-0.25f, -0.25f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Color(0,0,1,1),Vector2(0.0f, 1.0f)},
+		{Vector3(0.25f, -0.25f, 0.0f), Vector3(0.0f, 0.0f, 1.0f),Color(0,1,0,1),Vector2(1.0f, 1.0f)}
 	};
 	/*{
 		{Vector3(0.f, -1, 1.5f), Vector3(0.0f, 0.0f, -1.0f),Color(1,0,0,1),  Vector2(0.5f, 0.0f)},

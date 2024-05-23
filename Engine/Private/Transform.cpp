@@ -74,8 +74,11 @@ void CTransform::Refresh_WorldMatrix(TRANSFORM_ENUM eEnum)
 		{
 		Vector3 ScaleLength = Get_ScaleXYZ(); // 기존 스케일 저장
 
+		m_vLook.Normalize();
 		m_vRight = Vector3::Up.Cross(m_vLook);
+		m_vRight.Normalize();
 		m_vUp = m_vLook.Cross(m_vRight);
+		m_vUp.Normalize();
 
 		Set_WorldMatrix(MAT_RIGHT, m_vRight);
 		Set_WorldMatrix(MAT_UP, m_vUp);

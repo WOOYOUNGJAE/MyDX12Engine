@@ -124,9 +124,20 @@ void CGameInstance::Render_Tick()
 	m_pGameObjectManager->Render_Tick();
 #if DXR_ON
 	// Rebuild TLAS as BLAS Transform changed
+	// Execute Commands Made in Begin Render
+	m_pDxrResource->Close_CommandList();
+	m_pDxrResource->Execute_CommandList();
+	m_pDxrResource->Flush_CommandQueue();
+
+	m_pDxrResource->Reset_CommandList(); // start to Create new Commands
+
 	m_pSDSManager->Get_vecAccelerationTree()[SDS_AS]->Rebuild_Root_TLAS();
 	m_pDxrRenderer->Update_Dynamic_PassCB();
 	m_pDxrRenderer->Update_Dynamic_Object_CB();
+
+	m_pDxrResource->Close_CommandList();
+	m_pDxrResource->Execute_CommandList();
+	m_pDxrResource->Flush_CommandQueue();
 #endif
 }
 

@@ -156,8 +156,9 @@ _LOCAL_BLOCK
 
 LOCAL_BLOCK_
 	// Local RootSignature
-	CD3DX12_ROOT_PARAMETER rootParameters[1];
-	rootParameters[LocalRootSigSlot::OBJECT_CB_STATIC].InitAsConstants(SizeOfInUint32(DXR::OBJECT_CB_STATIC) * 10/*TODO °³¼ö TEMP*/, 1, 1);
+	CD3DX12_ROOT_PARAMETER rootParameters[2];
+	rootParameters[LocalRootSigSlot::OBJECT_CB_STATIC].InitAsConstants(SizeOfInUint32(DXR::OBJECT_CB_STATIC) * NUM_OBJECTS, 1, 1);
+	rootParameters[LocalRootSigSlot::OBJECT_CB_DYNAMIC].InitAsConstants(SizeOfInUint32(DXR::OBJECT_CB_DYNAMIC) * NUM_OBJECTS, 2, 1);
 	CD3DX12_ROOT_SIGNATURE_DESC localRootSignatureDesc(ARRAYSIZE(rootParameters), rootParameters);
 	localRootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE;
 
@@ -344,7 +345,8 @@ LOCAL_BLOCK_// Hit Group Shader Table
 	using DXR::TABLE_RECORD_DESC;
 	struct RootArguments
 	{
-		DXR::OBJECT_CB_STATIC cb[NUM_OBJECTS]{};
+		DXR::OBJECT_CB_STATIC cb_static[NUM_OBJECTS]{};
+		DXR::OBJECT_CB_DYNAMIC cb_dynamic[NUM_OBJECTS]{};
 	}rootArguments;
 	//rootArguments.cb = DXR::OBJECT_CB_STATIC{ XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) };
 
@@ -352,7 +354,8 @@ LOCAL_BLOCK_// Hit Group Shader Table
 	{
 		D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
 		pHitGroupShaderIdentifier,
-		 (sizeof(DXR::OBJECT_CB_STATIC)),
+		 //sizeof(DXR::OBJECT_CB_STATIC),
+		 (sizeof(DXR::OBJECT_CB_STATIC) + sizeof(DXR::OBJECT_CB_DYNAMIC)),
 		&rootArguments
 	};
 

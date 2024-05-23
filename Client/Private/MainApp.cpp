@@ -81,10 +81,12 @@ HRESULT CMainApp::Initialize()
 #endif
 
 	objDesc.strTag = L"Cube";
-	objDesc.vStartPos = Vector3(0,0,3);
+	objDesc.vStartPos = Vector3(0,0,2.5f);
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
+#if DXR_ON
 	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
+#endif
 	/*objDesc.vStartPos = Vector3(2,0,0);
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }*/
@@ -98,10 +100,22 @@ HRESULT CMainApp::Initialize()
 	objDesc.vStartPos = Vector3::Zero;
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
-	//m_pGameInstance->Add_ClonedObj_To_Array_For_ShaderTable(pObjectControlling);
 #if DXR_ON
 	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
-	CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
+#endif DXR_ON
+
+	objDesc.strTag = L"Triangle";
+	objDesc.vStartPos = Vector3::Zero;
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }
+#if DXR_ON
+	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
+#endif DXR_ON
+	objDesc.vStartLook = Vector3(0,0,-1);
+	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }
+#if DXR_ON
+	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
 #endif DXR_ON
 
 
@@ -148,6 +162,9 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(hr)) { return hr; }*/
 #pragma endregion InLevel
 
+#if DXR_ON
+	CGameInstance::Get_Instance()->Build_AccelerationStructureTree(gameObjArr_For_AccelerationTree_Static.data(), gameObjArr_For_AccelerationTree_Static.size());
+#endif
 	hr = m_pGameInstance->Scene_Start(
 		/*TODO Clone된(프로토타입제외) 모든 렌더링해야 하는 오브젝트 개수, Factory패턴으로 수집한 정보 대입 예정*/
 		15);
@@ -155,9 +172,7 @@ HRESULT CMainApp::Initialize()
 
 
 	// Build DXR Shader Table
-#if DXR_ON
 
-#endif
 	m_pGameInstance->Clear_ClonedObjArray();
 
 	// Renderer

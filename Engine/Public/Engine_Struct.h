@@ -18,6 +18,7 @@ namespace Engine
 	{
 		bool bMakeBLAS;
 		Vector3 vStartPos;
+		Vector3 vStartLook = Vector3(0, 0, 1);
 		Vector3 vStartScale;
 		std::wstring strTag;
 		void* pArg;

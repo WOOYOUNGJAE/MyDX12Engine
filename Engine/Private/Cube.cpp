@@ -90,6 +90,7 @@ HRESULT CCube::Initialize(void* pArg)
 	GAMEOBJECT_INIT_DESC* pCastedArg = static_cast<GAMEOBJECT_INIT_DESC*>(pArg);
 
 	m_pTransformCom->Set_Position(pCastedArg->vStartPos);
+	m_pTransformCom->Set_Look(pCastedArg->vStartLook);
 	m_pTransformCom->Set_Scale(pCastedArg->vStartScale);
 #if DXR_ON
 	m_uqpBlAS = m_pMeshObjectCom->Move_BuiltBLAS();
@@ -103,7 +104,7 @@ HRESULT CCube::Initialize(void* pArg)
 
 void CCube::Tick(_float fDeltaTime)
 {
-	//m_pTransformCom->Rotate(m_pTransformCom->Up(), 3.f * fDeltaTime);
+	m_pTransformCom->Rotate(m_pTransformCom->Up(), 0.5f * fDeltaTime);
 	//m_pTransformCom->Move_Forward(0.5f * fDeltaTime);
 }
 

@@ -54,3 +54,5 @@ unsigned long  ClassName::Destroy_Instance()			\
 
 // UINT32 크기의 배수 얻기
 #define SizeOfInUint32(obj) ((sizeof(obj) - 1) / sizeof(UINT32) + 1)
+
+#define PRINT_VECTOR3(vector3) (cout << "x: " << vector3.x << " y: " << vector3.y << " z: " << vector3.z << endl)

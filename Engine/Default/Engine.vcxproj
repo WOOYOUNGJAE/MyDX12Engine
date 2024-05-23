@@ -319,7 +319,6 @@
     <ClInclude Include="..\Public\TextureCompo.h" />
     <ClInclude Include="..\Public\Transform.h" />
     <ClInclude Include="..\Public\Triangle.h" />
-    <ClInclude Include="..\Public\TriangleMesh.h" />
     <ClInclude Include="..\Public\TriangleMesh_PT.h" />
     <ClInclude Include="..\Public\UploadBuffer.h" />
   </ItemGroup>

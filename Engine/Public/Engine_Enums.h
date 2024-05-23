@@ -45,12 +45,12 @@ namespace Engine
 #if DXR_ON
 	namespace GlobalRootSigSlot
 	{
-		enum SLOT_INDEX {RENDER_TARGET, AS, PASS_CONSTANT, IB_VB_SRV};
+		enum SLOT_INDEX {RENDER_TARGET, AS, PASS_CONSTANT, IB_VB_SRV, SLOT_COUNT};
 		
 	}
 	namespace LocalRootSigSlot
 	{
-		enum SLOT_INDEX {OBJECT_CB_STATIC};
+		enum SLOT_INDEX {OBJECT_CB_STATIC, OBJECT_CB_DYNAMIC, SLOT_COUNT};
 	}
 #endif
 

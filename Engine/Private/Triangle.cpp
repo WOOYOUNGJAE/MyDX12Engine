@@ -1,4 +1,7 @@
 #include "Triangle.h"
+
+#include "Camera.h"
+#include "CameraManager.h"
 #include "TriangleMesh.h"
 #include "TriangleMesh_PT.h"
 #include "Transform.h"
@@ -79,9 +82,11 @@ HRESULT CTriangle::Initialize(void* pArg)
 
 	m_iTextureSrvOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
 
+	GAMEOBJECT_INIT_DESC* pCastedArg = static_cast<GAMEOBJECT_INIT_DESC*>(pArg);
 
-	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
-	m_pTransformCom->Set_Scale(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartScale);
+	m_pTransformCom->Set_Position(pCastedArg->vStartPos);
+	m_pTransformCom->Set_Look(pCastedArg->vStartLook);
+	m_pTransformCom->Set_Scale(pCastedArg->vStartScale);
 
 #if DXR_ON
 	m_uqpBlAS = m_pMeshObjectCom->Move_BuiltBLAS();
@@ -94,6 +99,20 @@ HRESULT CTriangle::Initialize(void* pArg)
 
 void CTriangle::Tick(_float fDeltaTime)
 {
+	//auto cam = CCameraManager::Get_Instance()->Get_MainCam();
+	//float fDistance = 2.f;
+	//Vector3 camLook = -cam->Get_WorldMatrix().Forward();
+	//auto a = cam->Get_WorldMatrix();
+	////Set_Position(cam->Get_Pos() + camLook);
+	//Vector3 newPos = cam->Get_Pos() + camLook * fDistance;
+	//Set_Position(newPos);
+	//m_pTransformCom->Set_Look(camLook);
+
+	//
+	//PRINT_VECTOR3(camLook);
+	//PRINT_VECTOR3(-Get_WorldMatrix().Forward());
+	//cout << endl;
+
 	/*m_pTransformCom->m_vPosition += Vector3(0.001f, 0.f, 0.f);
 	m_pTransformCom->Refresh_WorldMatrix(CTransform::POSITION);*/
 }

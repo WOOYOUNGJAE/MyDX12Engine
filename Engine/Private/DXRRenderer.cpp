@@ -252,17 +252,49 @@ void CDXRRenderer::Update_Static_Object_CB()
 	    }
     }
 
+    /*DXR_Util::Update_ShaderRecord(m_pCommandList,
+        m_pCurFrameResource->pObjectCB_Static_DXR->Get_UploadBuffer(),
+        m_pDXRResources->m_pHitGroupShaderTable,
+        D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
+        NUM_OBJECTS, sizeof(DXR::OBJECT_CB_STATIC));*/
+
+
     DXR_Util::Update_ShaderRecord(m_pCommandList,
                                   m_pCurFrameResource->pObjectCB_Static_DXR->Get_UploadBuffer(),
                                   m_pDXRResources->m_pHitGroupShaderTable,
                                   D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
-                                  NUM_OBJECTS, sizeof(DXR::OBJECT_CB_STATIC));
+                                  NUM_OBJECTS,
+                                  sizeof(DXR::OBJECT_CB_STATIC),
+                                  0/*STATIC CB is First*/);
 }
 
 void CDXRRenderer::Update_Dynamic_Object_CB()
 {
+    for (auto& pair : *pAllObjLayers)
+    {
+        // pair.second == 오브젝트 리스트 관리하는 레이어
+        for (auto& iterGameObject : pair.second->Get_ObjList())
+        {
+            UINT iRenderNumbering_ZeroIfNotRendered = iterGameObject->Get_RenderNumbering();
+            if (iRenderNumbering_ZeroIfNotRendered > 0)
+            {
+                Matrix worldMatrix = iterGameObject->Get_WorldMatrix();
+                DXR::OBJECT_CB_DYNAMIC objectCB_Dynamic{};
+                // 역행렬의 전치행렬
+                objectCB_Dynamic.InvTranspose = worldMatrix.Invert().Transpose();
 
-    m_pCurFrameResource->pObjectCB_Dynamic_DXR;
+                m_pCurFrameResource->pObjectCB_Dynamic_DXR->CopyData(iRenderNumbering_ZeroIfNotRendered - 1, objectCB_Dynamic);
+            }
+        }
+    }
+
+    DXR_Util::Update_ShaderRecord(m_pCommandList,
+        m_pCurFrameResource->pObjectCB_Dynamic_DXR->Get_UploadBuffer(),
+        m_pDXRResources->m_pHitGroupShaderTable,
+        D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
+        NUM_OBJECTS,
+        sizeof(DXR::OBJECT_CB_DYNAMIC),
+        sizeof(DXR::OBJECT_CB_STATIC) * NUM_OBJECTS/*STATIC CB is First*/);
 }
 
 
@@ -282,6 +314,9 @@ void CDXRRenderer::BeginRender()
 
 void CDXRRenderer::MainRender()
 {
+    // start to Create new Commands
+    m_pCommandList->Reset(m_pCommandAllocatorArr[m_pDeviceResource->m_iCurrBackBuffer], nullptr);
+
     Set_ComputeRootDescriptorTable_Global();
 
     DispatchRay();
@@ -289,7 +324,6 @@ void CDXRRenderer::MainRender()
 
 void CDXRRenderer::EndRender()
 {
-
 #pragma region Copy DXR Output to Back Buffer
     D3D12_RESOURCE_BARRIER preCopyBarriers[2];
     // 렌더 타겟 쓸 수 있도록

@@ -254,9 +254,10 @@ void Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCommandLis
 	* iNumberingArr, UINT iNumBlas);
 
 void Update_ShaderRecord(ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource* pSrcResource, ID3D12Resource* pDstShaderTable, UINT64 ShaderIDSize, UINT
-                         iNumRecords, UINT iSingleArgumentSize);
+                         iNumRecords, UINT iSingleArgumentSize, UINT iOffsetBytesInArguments);
 
-
+void Update_ShaderRecord(ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource* pSrcResource,
+	ID3D12Resource* pDstShaderTable, UINT64 ShaderIDSize, UINT iNumRecords, UINT iSingleArgumentSize);
 _NAMESPACE//DXR_Util
 
 #endif DXR_ON

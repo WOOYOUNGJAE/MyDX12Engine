@@ -300,9 +300,6 @@
     <ClInclude Include="..\Public\AssetMesh.h">
       <Filter>Utility\MeshData\3D\AssetMesh</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\TriangleMesh.h">
-      <Filter>Utility\MeshData\2D\TriangleMesh</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\TriangleMesh_PT.h">
       <Filter>Utility\MeshData\2D\TriangleMesh</Filter>
     </ClInclude>

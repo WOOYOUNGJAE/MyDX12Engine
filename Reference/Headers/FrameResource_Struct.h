@@ -62,7 +62,7 @@ namespace Engine
 NAMESPACE_(DXR)
 	struct OBJECT_CB_DYNAMIC
 	{
-		Vector4 albedo; // π›ªÁ¿≤
+		Matrix InvTranspose;
 	};
 
 	struct SCENE_CB

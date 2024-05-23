@@ -141,7 +141,22 @@ void DXR_Util::Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* p
 }
 
 void DXR_Util::Update_ShaderRecord(ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource* pSrcResource,
-                                   ID3D12Resource* pDstShaderTable, UINT64 ShaderIDSize, UINT iNumRecords, UINT iSingleArgumentSize)
+                                   ID3D12Resource* pDstShaderTable, UINT64 ShaderIDSize, UINT iNumRecords, UINT iSingleArgumentSize, UINT
+                                   iOffsetBytesInArguments)
+{
+	for (UINT iRecordIndex = 0; iRecordIndex < iNumRecords; ++iRecordIndex)
+	{
+		pCommandList->CopyBufferRegion(pDstShaderTable,
+// |ID|...OffsetBytesInArguments|SingleArgumentSize(0)|SingleArgumentSize(1)|SingleArgumentSize(2)|..
+			ShaderIDSize + iOffsetBytesInArguments + UINT64(iSingleArgumentSize) * iRecordIndex,
+			pSrcResource,
+			UINT64(MyUtils::Align256(iSingleArgumentSize) * iRecordIndex),
+			iSingleArgumentSize);
+	}
+}
+
+void DXR_Util::Update_ShaderRecord(ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource* pSrcResource,
+	ID3D12Resource* pDstShaderTable, UINT64 ShaderIDSize, UINT iNumRecords, UINT iSingleArgumentSize)
 {
 	for (UINT iRecordIndex = 0; iRecordIndex < iNumRecords; ++iRecordIndex)
 	{

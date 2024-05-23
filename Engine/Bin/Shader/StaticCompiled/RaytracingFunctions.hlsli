@@ -75,7 +75,7 @@ inline MyRay GenerateCameraRay(int2 index, in float3 cameraPosition, in float4x4
 }
 
 // 무게중심 가중치 적용
-float4 Apply_Barycentric_Float4(DXR_Scene_CB sceneCB, float4 vertexAttribute[3], BuiltInTriangleIntersectionAttributes attr)
+float4 Apply_Barycentric_Float4(float4 vertexAttribute[3], BuiltInTriangleIntersectionAttributes attr)
 {
     return vertexAttribute[0] +
         attr.barycentrics.x * (vertexAttribute[1] - vertexAttribute[0]) +

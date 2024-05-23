@@ -187,7 +187,8 @@ void CRenderer::Update_ObjCB(CGameObject* pGameObj)
 {
 	OBJECT_CB objConstants;
 	objConstants.mWorldMat = pGameObj->Get_WorldMatrix().Transpose();
-	objConstants.mInvTranspose = pGameObj->Get_WorldMatrix().Invert(); // Transpose 두번
+	// 역행렬의 전치행렬 -> 역행렬에 Transpose 두번 == 역행렬만
+	objConstants.mInvTranspose = pGameObj->Get_WorldMatrix().Invert();
 	objConstants.material = pGameObj->Get_MaterialInfo();
 	m_pCurFrameResource->pObjectCB->CopyData(pGameObj->Get_ClonedNum() - 1, objConstants);
 }

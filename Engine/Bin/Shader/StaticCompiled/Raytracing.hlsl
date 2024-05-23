@@ -12,7 +12,8 @@ StructuredBuffer<VertexPositionNormalColorTexture> Vertices : register(t2, space
 ConstantBuffer<DXR_Scene_CB> g_sceneCB : register(b0, space1);
 
 // Local RootSig
-ConstantBuffer<OBJECT_CB_STATIC_Arr> l_ObjectCB : register(b1, space1);
+ConstantBuffer<OBJECT_CB_STATIC_Arr> l_ObjectCB_Static : register(b1, space1);
+ConstantBuffer<OBJECT_CB_DYNAMIC_Arr> l_ObjectCB_Dynamic : register(b2, space1);
 
 // Trace a radiance ray into the scene and returns a shaded color.
 float4 TraceRadianceRay(RaytracingAccelerationStructure scene, in MyRay ray, in UINT currentRayRecursionDepth)
@@ -33,8 +34,8 @@ float4 TraceRadianceRay(RaytracingAccelerationStructure scene, in MyRay ray, in 
     MyRayPayload rayPayload = { float4(0, 0, 0, 0), currentRayRecursionDepth + 1 };
 
     TraceRay(scene,
-    //RAY_FLAG_CULL_BACK_FACING_TRIANGLES,
-    0,
+    RAY_FLAG_CULL_BACK_FACING_TRIANGLES,
+    //0,
     TraceRayParameters::InstanceMask,
     TraceRayParameters::HitGroup::Offset[RayType::Radiance],
     TraceRayParameters::HitGroup::GeometryStride,
@@ -97,12 +98,12 @@ void MyClosestHitShader(inout MyRayPayload payload, in MyAttributes attr)
 {
     uint indexSizeInBytes = 2; // UINT16
     uint iTriangleIndexStrideInBytes = indexSizeInBytes * 3;
-    uint iBaseOffsetInBytes = (l_ObjectCB.object_cb_static[InstanceIndex()].startIndex_in_IB_SRV / 3 + PrimitiveIndex())
+    uint iBaseOffsetInBytes = (l_ObjectCB_Static.object_cb_static[InstanceIndex()].startIndex_in_IB_SRV / 3 + PrimitiveIndex())
      * iTriangleIndexStrideInBytes; // 삼각형의 첫 인덱스 원소의 offset (바이트 단위)
     
-    uint startIndex_in_VB_SRV = l_ObjectCB.object_cb_static[InstanceIndex()].startIndex_in_VB_SRV; //0 or 24
+    uint startIndex_in_VB_SRV = l_ObjectCB_Static.object_cb_static[InstanceIndex()].startIndex_in_VB_SRV; //0 or 24
     const uint3 indices3 = Load3x16BitIndices(Indices, iBaseOffsetInBytes);
-    
+
     float4 triangleColorArr[3] =
     {
         Vertices[startIndex_in_VB_SRV + indices3[0]].color,
@@ -121,10 +122,15 @@ void MyClosestHitShader(inout MyRayPayload payload, in MyAttributes attr)
 
     float3 triangleNormal = Apply_Barycentric_Float3(vertexNormalArr, attr);
 
+    triangleNormal = mul(triangleNormal, l_ObjectCB_Dynamic.object_cb_dynamic[InstanceIndex()].InvTranspose).xyz;
+    triangleNormal = normalize(triangleNormal);
+
+        
+
     float4 reflectedColor = float4(0, 0, 0, 0);
     if (true)
     {
-	   // Trace a reflection ray.
+   // Trace a reflection ray.
         MyRay reflectionRay = { HitWorldPosition(), reflect(WorldRayDirection(), triangleNormal) };
         float4 reflectionColor = TraceRadianceRay(Scene_TLAS, reflectionRay, payload.recursionDepth);
 
@@ -136,12 +142,12 @@ void MyClosestHitShader(inout MyRayPayload payload, in MyAttributes attr)
     float4 diffuseColor = CalculateDiffuseLighting(g_sceneCB, hitWorldPos, triangleNormal);
     float4 lightColor = diffuseColor + g_sceneCB.lightAmbientColor;
     //payload.color = Apply_Barycentric_Float4(triangleColorArr, attr) * lightColor;
-    payload.color = l_ObjectCB.object_cb_static[InstanceIndex()].albedo; // for debug albedo
-    payload.color = Apply_Barycentric_Float4(g_sceneCB, triangleColorArr, attr);
+    payload.color = l_ObjectCB_Static.object_cb_static[InstanceIndex()].albedo; // for debug albedo
+    payload.color = Apply_Barycentric_Float4(triangleColorArr, attr);
 
    
 
-    payload.color += reflectedColor;
+        payload.color += reflectedColor;
 
 }
 
