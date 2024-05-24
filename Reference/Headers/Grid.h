@@ -11,7 +11,7 @@ protected:
 	~CGrid() override = default;
 
 public: // LifeCycle
-	static CGrid* Create(const wstring& strGridMeshTag);
+	static CGrid* Create(GEOMETRY_TYPE eGeometryType);
 	CGameObject* Clone(UINT* pInOutRenderNumbering, void* pArg) override;
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override;
@@ -39,6 +39,7 @@ protected:
 	class CMaterial* m_pMaterialCom = nullptr;
 
 private:
+	GEOMETRY_TYPE m_eGeometryType;
 	wstring m_strGridMeshTag;
 };
 

@@ -55,7 +55,7 @@ private: // Pass Info
 private:
 	D3D12_DISPATCH_RAYS_DESC m_disptchRaysDesc{};
 private:
-	map<UINT, class CObjLayer*>* pAllObjLayers = nullptr;
+	map<UINT, class CObjLayer*>* m_pAllObjLayers = nullptr;
 public:
 	static ID3D12Resource* m_bottomLevelAccelerationStructure;
 };

@@ -18,6 +18,7 @@
 #include "SceneNode_AABB.h"
 #include "FrameResourceManager.h"
 #include "GameObject.h"
+#include "ObjLayer.h"
 #include "Renderer.h"
 #pragma endregion
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -288,6 +289,10 @@ void CGameInstance::Set_MainCam(wstring strName)
 #if DXR_ON
 void CGameInstance::Build_AccelerationStructureTree(CGameObject** pGameObjArr, UINT iArrSize)
 {
+	m_pDxrResource->Reset_CommandList();
+	
+	m_pAssetManager->Build_IB_VB_SRV_Serialized(m_pDeviceResource->Get_Device5(), m_pDxrResource->Get_CommandList4(), sizeof(VertexPositionNormalColorTexture));
+
 	CBVH* pAccelerationTreeInstance = CBVH::Create(); // Manager에서 삭제
 
 	CSceneNode** pChildNodeArr = new CSceneNode*[iArrSize];
@@ -304,7 +309,6 @@ void CGameInstance::Build_AccelerationStructureTree(CGameObject** pGameObjArr, U
 		iRenderNumberingArr[i] = pGameObjArr[i]->Get_RenderNumbering();
 	}
 
-	m_pDxrResource->Reset_CommandList();
 
 	CSceneNode_AABB* pSceneRootNode = CSceneNode_AABB::Create(pChildNodeArr, iRenderNumberingArr, iArrSize, true);
 	pAccelerationTreeInstance->Set_Root(pSceneRootNode);

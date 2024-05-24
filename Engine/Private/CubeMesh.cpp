@@ -176,6 +176,7 @@ HRESULT CCubeMesh::Initialize_Prototype()
 
 	CMeshData::Init_VBV_IBV();
 #if DXR_ON
+	m_BLAS.eGeometryType = GEOMETRY_TYPE::CUBE;
 	m_BLAS.vecIndices.reserve(_countof(indicesData));
 	for (UINT i = 0; i < m_iNumIndices; ++i)
 	{

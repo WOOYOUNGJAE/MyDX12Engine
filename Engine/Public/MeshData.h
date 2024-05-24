@@ -77,9 +77,9 @@ protected:
 public:
 	//D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC 정보만 기록
 	virtual void Build_BLAS(UINT64 iIndexDataSize, UINT64 iVertexDataSize);
-	DXR::BLAS Get_BLAS() { return m_BLAS; }
+	DXR::BLAS_INFOS& Get_refBLAS() { return m_BLAS; }
 protected:
-	DXR::BLAS m_BLAS{};
+	DXR::BLAS_INFOS m_BLAS{};
 #endif
 };
 

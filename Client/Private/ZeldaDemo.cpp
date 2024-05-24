@@ -49,7 +49,7 @@ HRESULT CZeldaDemo::Initialize(void* pArg)
 	// ±âº» ÄÄÆ÷³ÍÆ® ºÎÂø
 	hr = Add_Component(L"Transform", reinterpret_cast<CComponent**>(&m_pTransformCom));
 	if (FAILED(hr)) return hr;
-	MESHOBJ_INIT_DESC meshInitDesc{ false, L"zeldaPosed001" };
+	MESHOBJ_INIT_DESC meshInitDesc{ false, 0, L"zeldaPosed001" };
 	hr = Add_Component(L"MeshObject", reinterpret_cast<CComponent**>(&m_pMeshObjectCom), &meshInitDesc);
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));

@@ -12,18 +12,12 @@ m_strGridMeshTag(rhs.m_strGridMeshTag)
 {
 }
 
-CGrid* CGrid::Create(const wstring& strGridMeshTag)
+CGrid* CGrid::Create(GEOMETRY_TYPE eGeometryType)
 {
 	CGrid* pInstance = new CGrid;
-	if (strGridMeshTag.empty())
-	{
-		MSG_BOX("CGrid : Enter Grid Tag");
-		return nullptr;
-	}
-	else
-	{
-		pInstance->m_strGridMeshTag = strGridMeshTag;
-	}
+
+	//pInstance->m_strGridMeshTag = eGeometryType;
+	pInstance->m_eGeometryType = eGeometryType;
 
 	pInstance->m_bIsPrototype = true;
 	if (pInstance)
@@ -66,7 +60,7 @@ HRESULT CGrid::Initialize(void* pArg)
 	if (FAILED(hr)) return hr;
 	/*hr = Add_Component(L"TriangleMesh", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
 	if (FAILED(hr)) return hr;*/
-	MESHOBJ_INIT_DESC meshObjDesc{ true, m_strGridMeshTag };
+	MESHOBJ_INIT_DESC meshObjDesc{ true, (UINT)m_eGeometryType, std::wstring()};
 	hr = Add_Component(L"MeshObject", reinterpret_cast<CComponent**>(&m_pMeshObjectCom), &meshObjDesc);
 	if (FAILED(hr)) return hr;
 

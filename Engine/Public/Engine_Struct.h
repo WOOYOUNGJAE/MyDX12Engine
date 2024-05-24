@@ -52,6 +52,7 @@ namespace Engine
 	struct MESHOBJ_INIT_DESC
 	{
 		bool bIsSingle;
+		UINT eGeometryType;
 		std::wstring strPrototypeTag;
 	};
 #pragma endregion
@@ -104,7 +105,7 @@ namespace Engine
 		ID3D12Resource* srv_Index;
 		D3D12_RAYTRACING_GEOMETRY_DESC dxrGeometryDesc; // BLAS에는 무조건 필요
 	};
-	struct BLAS
+	struct BLAS_INFOS
 	{
 		ID3D12Resource* indexBuffer; // Rasterize 파이프라인의 리소스 그대로
 		ID3D12Resource* vertexBuffer; 
@@ -116,13 +117,13 @@ namespace Engine
 		std::vector<VertexPositionNormalColorTexture> vecVertices;
 		UINT iStartIndex_in_IB_SRV;
 		UINT iStartIndex_in_VB_SRV;
+		UINT eGeometryType;
 	};
 
 	struct TLAS
 	{
 		ID3D12Resource* uav_TLAS;
 		ID3D12Resource* pInstanceDesc;
-		UINT64 IB_VB_SRV_startOffsetInDescriptors;
 	};
 
 	struct TLAS_NODE_INIT_DESC

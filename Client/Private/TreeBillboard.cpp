@@ -13,7 +13,6 @@
 #include "MeshData.h"
 #include "CameraManager.h"
 
-
 CTreeBillboard* CTreeBillboard::Create()
 {
 	CTreeBillboard* pInstance = new CTreeBillboard;
@@ -55,7 +54,7 @@ HRESULT CTreeBillboard::Initialize(void* pArg)
 	// ±âº» ÄÄÆ÷³ÍÆ® ºÎÂø
 	hr = Add_Component(L"Transform", reinterpret_cast<CComponent**>(&m_pTransformCom));
 	if (FAILED(hr)) return hr;
-	MESHOBJ_INIT_DESC meshObjDesc{ true, L"SingleVertexMesh" };
+	MESHOBJ_INIT_DESC meshObjDesc{ true, Engine::SINGLE_VERTEX, L"SingleVertexMesh" };
 	hr = Add_Component(L"MeshObject", reinterpret_cast<CComponent**>(&m_pMeshObjectCom), &meshObjDesc);
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));

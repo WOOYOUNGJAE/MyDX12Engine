@@ -198,7 +198,7 @@ NAMESPACE_(DXR_Util)
 	}
 }
 
-void Build_BLAS(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCommandList, DXR::BLAS* pBLAS,
+void Build_BLAS(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCommandList, DXR::BLAS_INFOS* pBLAS,
 	ID3D12Resource* pIndexBuffer, ID3D12Resource* pVertexBuffer, DXGI_FORMAT IndexFormat, UINT iTriangleIndexCount, UINT iTriangleVertexCount, UINT64 iVertexStrideInBytes);
 
 inline void Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** ppOutInstanceDescResource, ID3D12Resource***
@@ -247,11 +247,11 @@ inline void Build_TLAS(ID3D12Device5* pDevice, ID3D12Resource** ppOutUAV_TLAS, I
 	Safe_Delete_Array(instanceDescArr);
 }
 void Create_IB_VB_SRV_Serialized(ID3D12Device5* pDevice, UINT iNumAllIndices, UINT iNumAllVertices, ID3D12Resource* pCombinedIndicesResource, ID3D12Resource*
-                                 pCombinedVerticesResource, UINT iStructureByteStride, UINT64* pOutIBStartOffsetInDescriptors);
+                                 pCombinedVerticesResource, UINT iStructureByteStride);
 
 void Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource** ppOutUAV_TLAS, ID3D12Resource** ppOutInstanceDescResource, CGameObject
-	** pGameObjArr, UINT
-	* iNumberingArr, UINT iNumBlas);
+                 ** pGameObjArr, UINT
+                 * iNumberingArr, UINT iNumBlas);
 
 void Update_ShaderRecord(ID3D12GraphicsCommandList4* pCommandList, ID3D12Resource* pSrcResource, ID3D12Resource* pDstShaderTable, UINT64 ShaderIDSize, UINT
                          iNumRecords, UINT iSingleArgumentSize, UINT iOffsetBytesInArguments);

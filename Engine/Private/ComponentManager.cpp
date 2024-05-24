@@ -87,8 +87,8 @@ HRESULT CComponentManager::Initialize()
 #if DXR_ON
 	CDXRResource::Get_Instance()->Reset_CommandList();
 #endif
-	pAssetManager->Add_MeshDataPrototype(L"CubeMesh", CCubeMesh::Create());
-	pAssetManager->Add_MeshDataPrototype(L"TriangleMesh_PT", CTriangleMesh_PT::Create());
+	pAssetManager->Add_MeshDataPrototype(GEOMETRY_TYPE::CUBE, CCubeMesh::Create());
+	pAssetManager->Add_MeshDataPrototype(GEOMETRY_TYPE::TRIANGLE, CTriangleMesh_PT::Create());
 	/*pAssetManager->Add_MeshDataPrototype(L"TriangleMesh", CTriangleMesh::Create());*/
 
 	/*pAssetManager->Add_MeshDataPrototype(L"Grid_1X1", CGridMesh::Create(1, 1));

@@ -44,7 +44,7 @@ HRESULT CMeshObject::Initialize(void* pArg)
 
 	if (init_desc->bIsSingle == true) // Single은 MeshData 하나를 받아옴
 	{
-		CMeshData* pInstance = CAssetManager::Get_Instance()->Clone_MeshData(init_desc->strPrototypeTag, nullptr);
+		CMeshData* pInstance = CAssetManager::Get_Instance()->Clone_MeshData(GEOMETRY_TYPE(init_desc->eGeometryType), nullptr);
 
 		if (pInstance)
 		{
@@ -54,7 +54,7 @@ HRESULT CMeshObject::Initialize(void* pArg)
 			vecTempBLAS.reserve(1);
 			vecTempBLAS.emplace_back(pInstance->Get_BLAS());
 			DXR::BLAS tempBLAS = pInstance->Get_BLAS();*/
-			m_uqpBuiltBLAS = make_unique<DXR::BLAS>(pInstance->Get_BLAS());
+			m_uqpBuiltBLAS = make_unique<DXR::BLAS_INFOS>(pInstance->Get_refBLAS());
 #endif
 		}
 	}
@@ -66,7 +66,7 @@ HRESULT CMeshObject::Initialize(void* pArg)
 			m_vecMeshData.emplace_back(std::move(iterMesh));
 #if DXR_ON
 			m_vecBlas.reserve(meshList.size());
-			m_vecBlas.emplace_back(iterMesh->Get_BLAS());
+			m_vecBlas.emplace_back(iterMesh->Get_refBLAS());
 #endif
 			//m_vecAS_CPU.emplace_back(iter->Get_refAS_CPU()); // build as cpu
 		}

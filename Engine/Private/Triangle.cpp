@@ -17,6 +17,7 @@ CTriangle* CTriangle::Create()
 {
 	CTriangle* pInstance = new CTriangle;
 	pInstance->m_bIsPrototype = true;
+	pInstance->m_eGeometryType = GEOMETRY_TYPE::TRIANGLE;
 	if (pInstance)
 	{
 		pInstance->Initialize_Prototype();
@@ -56,7 +57,7 @@ HRESULT CTriangle::Initialize(void* pArg)
 	if (FAILED(hr)) return hr;
 	/*hr = Add_Component(L"TriangleMesh", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
 	if (FAILED(hr)) return hr;*/
-	MESHOBJ_INIT_DESC meshObjDesc{ true, L"TriangleMesh_PT" };
+	MESHOBJ_INIT_DESC meshObjDesc{ true, (UINT)m_eGeometryType, std::wstring()};
 	hr = Add_Component(L"MeshObject", reinterpret_cast<CComponent**>(&m_pMeshObjectCom), &meshObjDesc);
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));
@@ -100,7 +101,7 @@ HRESULT CTriangle::Initialize(void* pArg)
 void CTriangle::Tick(_float fDeltaTime)
 {
 	//auto cam = CCameraManager::Get_Instance()->Get_MainCam();
-	//float fDistance = 2.f;
+	//float fDistance = 1.f;
 	//Vector3 camLook = -cam->Get_WorldMatrix().Forward();
 	//auto a = cam->Get_WorldMatrix();
 	////Set_Position(cam->Get_Pos() + camLook);

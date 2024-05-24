@@ -12,6 +12,7 @@ CCube* CCube::Create()
 {
 	CCube* pInstance = new CCube;
 	pInstance->m_bIsPrototype = true;
+	pInstance->m_eGeometryType = GEOMETRY_TYPE::CUBE;
 	if (pInstance)
 	{
 		pInstance->Initialize_Prototype();
@@ -51,7 +52,7 @@ HRESULT CCube::Initialize(void* pArg)
 	/*hr = Add_Component(L"TriangleMesh", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
 	if (FAILED(hr)) return hr;*/
 
-	MESHOBJ_INIT_DESC meshObjDesc { true, L"CubeMesh" };
+	MESHOBJ_INIT_DESC meshObjDesc { true, (UINT)m_eGeometryType, std::wstring() };
 	hr = Add_Component(L"MeshObject", reinterpret_cast<CComponent**>(&m_pMeshObjectCom), &meshObjDesc);
 	if (FAILED(hr)) return hr;
 	hr = Add_Component(L"Renderer", reinterpret_cast<CComponent**>(&m_pRendererCom));

@@ -1,4 +1,6 @@
 #include "DXRRenderer.h"
+
+#include "Asset.h"
 #include "DXRResource.h"
 #include "DeviceResource.h"
 #include "MeshData.h"
@@ -44,7 +46,7 @@ HRESULT CDXRRenderer::Initialize()
     m_pCommandList = m_pDXRResources->m_pCommandList;
     m_pDXR_PSO = m_pDXRResources->m_pDXR_PSO;
     m_pRenderTargetArr = CDeviceResource::Get_Instance()->m_pRenderTargets->GetAddressOf();
-    pAllObjLayers = CGameObjectManager::Get_Instance()->Get_AllObjLayers();
+    m_pAllObjLayers = CGameObjectManager::Get_Instance()->Get_AllObjLayers();
 
     // Since each shader table has only one shader record, the stride is same as the size. 임시로 레코드 1개일 떄
     ZeroMemory(&m_disptchRaysDesc, sizeof(D3D12_DISPATCH_RAYS_DESC));
@@ -228,7 +230,9 @@ void CDXRRenderer::Update_Dynamic_PassCB()
 
 void CDXRRenderer::Update_Static_Object_CB()
 {
-    for (auto& pair : *pAllObjLayers)
+    CMeshData** pSingleMeshDataArr = CAssetManager::Get_Instance()->Get_SingleMeshDataArr();
+
+    for (auto& pair : *m_pAllObjLayers)
     {
         // pair.second == 오브젝트 리스트 관리하는 레이어
 	    for(auto& iterGameObject : pair.second->Get_ObjList())
@@ -244,8 +248,11 @@ void CDXRRenderer::Update_Static_Object_CB()
                 }
                 DXR::OBJECT_CB_STATIC objectCB_Static{};
                 objectCB_Static.albedo = pMaterial->Get_DXR_MaterialInfo().albedo;
-                objectCB_Static.startIndex_in_IB_SRV = iterGameObject->Get_BLAS_Ptr()->iStartIndex_in_IB_SRV;
-                objectCB_Static.startIndex_in_VB_SRV= iterGameObject->Get_BLAS_Ptr()->iStartIndex_in_VB_SRV;
+
+                objectCB_Static.startIndex_in_IB_SRV = pSingleMeshDataArr[iterGameObject->Get_GeometryType()]->Get_refBLAS().iStartIndex_in_IB_SRV;
+                objectCB_Static.startIndex_in_VB_SRV = pSingleMeshDataArr[iterGameObject->Get_GeometryType()]->Get_refBLAS().iStartIndex_in_VB_SRV;
+                /*objectCB_Static.startIndex_in_IB_SRV = iterGameObject->Get_BLAS_Ptr()->iStartIndex_in_IB_SRV;
+                objectCB_Static.startIndex_in_VB_SRV= iterGameObject->Get_BLAS_Ptr()->iStartIndex_in_VB_SRV;*/
 
                 m_pCurFrameResource->pObjectCB_Static_DXR->CopyData(iRenderNumbering_ZeroIfNotRendered - 1, objectCB_Static);
 		    }
@@ -270,7 +277,7 @@ void CDXRRenderer::Update_Static_Object_CB()
 
 void CDXRRenderer::Update_Dynamic_Object_CB()
 {
-    for (auto& pair : *pAllObjLayers)
+    for (auto& pair : *m_pAllObjLayers)
     {
         // pair.second == 오브젝트 리스트 관리하는 레이어
         for (auto& iterGameObject : pair.second->Get_ObjList())
@@ -281,7 +288,7 @@ void CDXRRenderer::Update_Dynamic_Object_CB()
                 Matrix worldMatrix = iterGameObject->Get_WorldMatrix();
                 DXR::OBJECT_CB_DYNAMIC objectCB_Dynamic{};
                 // 역행렬의 전치행렬
-                objectCB_Dynamic.InvTranspose = worldMatrix.Invert().Transpose();
+                objectCB_Dynamic.InvTranspose = worldMatrix.Invert();
 
                 m_pCurFrameResource->pObjectCB_Dynamic_DXR->CopyData(iRenderNumbering_ZeroIfNotRendered - 1, objectCB_Dynamic);
             }
@@ -369,7 +376,8 @@ void CDXRRenderer::Set_ComputeRootDescriptorTable_Global()
     D3D12_GPU_VIRTUAL_ADDRESS TLAS_GPU_Adress = refVecAccelerationTree[SDS_AS]->Get_Root()->Get_TLAS().uav_TLAS->GetGPUVirtualAddress();
 
     CD3DX12_GPU_DESCRIPTOR_HANDLE IB_VB_SRV_Handle_GPU =
-        m_pDXRResources->Get_HeapHandleGPU(refVecAccelerationTree[SDS_AS]->Get_Root()->Get_TLAS().IB_VB_SRV_startOffsetInDescriptors);
+        m_pDXRResources->Get_HeapHandleGPU(CAssetManager::Get_Instance()->Get_IB_VB_SRV_startOffset());
+        //m_pDXRResources->Get_HeapHandleGPU(refVecAccelerationTree[SDS_AS]->Get_Root()->Get_TLAS().IB_VB_SRV_startOffsetInDescriptors);
 
     m_pCommandList->SetDescriptorHeaps(1, &m_pDXRResources->m_pDescriptorHeap);
     m_pCommandList->SetComputeRootSignature(m_pDXRResources->m_pRootSigArr[DXR_ROOTSIG_GLOBAL]);

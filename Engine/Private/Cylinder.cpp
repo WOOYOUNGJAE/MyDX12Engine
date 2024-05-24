@@ -66,7 +66,7 @@ HRESULT CCylinder::Initialize(void* pArg)
 	if (FAILED(hr)) return hr;
 	/*hr = Add_Component(L"TriangleMesh", reinterpret_cast<CComponent**>(&m_pTriangleMeshCom));
 	if (FAILED(hr)) return hr;*/
-	MESHOBJ_INIT_DESC meshObjDesc{ true, m_strCylinderMeshTag };
+	MESHOBJ_INIT_DESC meshObjDesc{ true, (UINT)GEOMETRY_TYPE::CYLINDER, std::wstring() };
 	hr = Add_Component(L"MeshObject", reinterpret_cast<CComponent**>(&m_pMeshObjectCom), &meshObjDesc);
 	if (FAILED(hr)) return hr;
 

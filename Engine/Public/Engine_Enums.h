@@ -42,6 +42,7 @@ namespace Engine
 
 	enum SDS_TREE_TYPE {SDS_AS, SDS_TREE_TYPE_END};
 
+	enum GEOMETRY_TYPE { CUBE, TRIANGLE, CYLINDER, SPHERE, GRID_1X1, SINGLE_VERTEX, GEOMETRY_TYPE_COUNT};
 #if DXR_ON
 	namespace GlobalRootSigSlot
 	{
@@ -53,5 +54,6 @@ namespace Engine
 		enum SLOT_INDEX {OBJECT_CB_STATIC, OBJECT_CB_DYNAMIC, SLOT_COUNT};
 	}
 #endif
+
 
 }

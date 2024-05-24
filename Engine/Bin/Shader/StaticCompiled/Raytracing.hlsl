@@ -141,13 +141,13 @@ void MyClosestHitShader(inout MyRayPayload payload, in MyAttributes attr)
 
     float4 diffuseColor = CalculateDiffuseLighting(g_sceneCB, hitWorldPos, triangleNormal);
     float4 lightColor = diffuseColor + g_sceneCB.lightAmbientColor;
-    //payload.color = Apply_Barycentric_Float4(triangleColorArr, attr) * lightColor;
-    payload.color = l_ObjectCB_Static.object_cb_static[InstanceIndex()].albedo; // for debug albedo
+    payload.color = Apply_Barycentric_Float4(triangleColorArr, attr) * lightColor;
+    //payload.color = l_ObjectCB_Static.object_cb_static[InstanceIndex()].albedo; // for debug albedo
     payload.color = Apply_Barycentric_Float4(triangleColorArr, attr);
 
    
 
-        payload.color += reflectedColor;
+    payload.color += reflectedColor;
 
 }
 

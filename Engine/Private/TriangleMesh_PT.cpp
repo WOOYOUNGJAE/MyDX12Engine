@@ -127,6 +127,7 @@ HRESULT CTriangleMesh_PT::Initialize_Prototype()
 
 	CMeshData::Init_VBV_IBV();
 #if DXR_ON
+	m_BLAS.eGeometryType = GEOMETRY_TYPE::TRIANGLE;
 	m_BLAS.vecIndices.reserve(_countof(indicesData));
 	for (UINT i = 0; i < m_iNumIndices; ++i)
 	{

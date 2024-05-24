@@ -33,13 +33,13 @@ public:
 	//DXR::ACCELERATION_STRUCTURE_CPU Create_AccelerationStructures_CPU(CMeshData* pMeshData);
 	HRESULT Build_AccelerationStructures();
 	HRESULT Build_BLAS(DXR::ACCELERATION_STRUCTURE_CPU& refAS_CPU);
-	unique_ptr<DXR::BLAS> Move_BuiltBLAS() { return std::move(m_uqpBuiltBLAS); }
+	unique_ptr<DXR::BLAS_INFOS> Move_BuiltBLAS() { return std::move(m_uqpBuiltBLAS); }
 public: // Acceleration Structure
 	/*ID3D12Resource* m_TLAS = nullptr;
 	vector<ID3D12Resource*> m_vecBLAS;
 	vector<DXR::ACCELERATION_STRUCTURE_CPU> m_vecAS_CPU;*/
-	vector<DXR::BLAS> m_vecBlas;
-	unique_ptr<DXR::BLAS> m_uqpBuiltBLAS; // meshData로부터 만들어진 BLAS, owner 인 GameObj가 소유권 가져감
+	vector<DXR::BLAS_INFOS> m_vecBlas;
+	unique_ptr<DXR::BLAS_INFOS> m_uqpBuiltBLAS; // meshData로부터 만들어진 BLAS, owner 인 GameObj가 소유권 가져감
 #endif
 
 };

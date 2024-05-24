@@ -1,7 +1,9 @@
 #include "Device_Utils.h"
 
-void DXR_Util::Build_BLAS(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCommandList, DXR::BLAS* pBLAS,
-	ID3D12Resource* pIndexBuffer, ID3D12Resource* pVertexBuffer, DXGI_FORMAT IndexFormat, UINT iTriangleIndexCount, UINT iTriangleVertexCount, UINT64 iVertexStrideInBytes)
+#include "AssetManager.h"
+
+void DXR_Util::Build_BLAS(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pCommandList, DXR::BLAS_INFOS* pBLAS,
+                          ID3D12Resource* pIndexBuffer, ID3D12Resource* pVertexBuffer, DXGI_FORMAT IndexFormat, UINT iTriangleIndexCount, UINT iTriangleVertexCount, UINT64 iVertexStrideInBytes)
 {
 	pBLAS->indexBuffer = pIndexBuffer;
 	pBLAS->vertexBuffer = pVertexBuffer;
@@ -54,11 +56,10 @@ void DXR_Util::Build_BLAS(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* pC
 
 void DXR_Util::Create_IB_VB_SRV_Serialized(ID3D12Device5* pDevice,
                                            UINT iNumAllIndices, UINT iNumAllVertices, ID3D12Resource* pCombinedIndicesResource, ID3D12Resource* pCombinedVerticesResource, UINT
-                                           iStructureByteStride, UINT64* pOutIBStartOffsetInDescriptors)
+                                           iStructureByteStride)
 {
 	// 모든 BLAS에 대한 Index SRV를 연속적으로 만든 후 Vertex SRV 만들기
 	CDXRResource* pDXRResource = CDXRResource::Get_Instance();
-	*pOutIBStartOffsetInDescriptors = pDXRResource->Get_CurOffsetInDescriptors();
 	CD3DX12_CPU_DESCRIPTOR_HANDLE& cpuHandle = pDXRResource->Get_refHeapHandle_CPU();
 	UINT iDescriptorSize = CDXRResource::Get_Instance()->Get_DescriptorSize();
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
@@ -95,6 +96,9 @@ void DXR_Util::Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* p
                            * iNumberingArr, UINT iNumBlas)
 
 {
+	CMeshData** pSingleMeshDataArr = CAssetManager::Get_Instance()->Get_SingleMeshDataArr();
+
+
 	// TLAS
 	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS topLevelInputs = {};
 	topLevelInputs.DescsLayout = D3D12_ELEMENTS_LAYOUT_ARRAY;
@@ -112,7 +116,7 @@ void DXR_Util::Build_TLAS0(ID3D12Device5* pDevice, ID3D12GraphicsCommandList4* p
 	{
 		instanceDescArr[i].InstanceID = iNumberingArr[i] - 1;
 		instanceDescArr[i].InstanceMask = 1;
-		instanceDescArr[i].AccelerationStructure = pGameObjArr[i]->Get_BLAS_Resource()->GetGPUVirtualAddress();
+		instanceDescArr[i].AccelerationStructure = pSingleMeshDataArr[pGameObjArr[i]->Get_GeometryType()]->Get_refBLAS().uav_BLAS->GetGPUVirtualAddress();
 
 		Matrix worldMat = pGameObjArr[i]->Get_WorldMatrix();
 		Vector3 pos = pGameObjArr[i]->Get_Pos();
