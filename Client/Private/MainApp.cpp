@@ -98,14 +98,24 @@ HRESULT CMainApp::Initialize()
 
 	objDesc.strTag = L"Triangle";
 	objDesc.vStartPos = Vector3::Zero;
-	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
 #if DXR_ON
 	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
 #endif DXR_ON
 
 	objDesc.vStartLook = Vector3(0,0,-1);
-	hr = m_pGameInstance->Add_GameObject_InScene(L"Triangle", OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
+	if (FAILED(hr)) { return hr; }
+#if DXR_ON
+	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
+#endif DXR_ON
+
+
+	objDesc.strTag = L"Grid_1X1";
+	objDesc.vStartPos = Vector3(-2.f, 0.f, 5.f);
+	objDesc.vStartScale = Vector3::One * 15;
+	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
 #if DXR_ON
 	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);

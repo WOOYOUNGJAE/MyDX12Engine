@@ -90,9 +90,6 @@ HRESULT CTriangle::Initialize(void* pArg)
 	m_pTransformCom->Set_Scale(pCastedArg->vStartScale);
 
 #if DXR_ON
-	m_uqpBlAS = m_pMeshObjectCom->Move_BuiltBLAS();
-	m_pUav_BLAS = m_uqpBlAS.get()->uav_BLAS;
-
 	CSDSManager::Get_Instance()->Register_SceneNode(CGameObject::Make_NodeBLAS(), this, SDS_AS);
 #endif
 	return hr;

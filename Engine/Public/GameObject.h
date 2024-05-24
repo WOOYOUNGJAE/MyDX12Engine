@@ -52,13 +52,8 @@ protected:
 	UINT m_iRenderNumbering_ZeroIfNotRendered = 0; // 모든 렌더 대상 오브젝트 중에서 몇 번째인가?, dxr 오브젝트 넘버링에 사용
 	GEOMETRY_TYPE m_eGeometryType = GEOMETRY_TYPE::GEOMETRY_TYPE_COUNT; // 메쉬 없으면 의미 없는 값
 #if DXR_ON
-public:
-	CSceneNode* Make_NodeBLAS();
-	DXR::BLAS_INFOS* Get_BLAS_Ptr() { return m_uqpBlAS.get(); }
-	ID3D12Resource* Get_BLAS_Resource() { return m_pUav_BLAS; }
 protected:
-	unique_ptr<DXR::BLAS_INFOS> m_uqpBlAS; // 컴포넌트인 MeshObject에서 소유권 가져옴
-	ID3D12Resource* m_pUav_BLAS;
+	CSceneNode* Make_NodeBLAS();
 #endif
 };
 

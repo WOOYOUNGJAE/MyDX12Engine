@@ -45,9 +45,5 @@ void CSceneNode_AABB::Set_ContainingObj(CGameObject* pGameObj)
 
 	CSceneNode::Set_ContainingObj(pGameObj);
 
-#if DXR_ON
-	m_pContainingBLAS = m_pContainingObj->Get_BLAS_Ptr();
-	m_pContainingBLAS_Resource = m_pContainingObj->Get_BLAS_Resource();
-#endif
 
 }

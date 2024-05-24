@@ -70,16 +70,7 @@ HRESULT CCube::Initialize(void* pArg)
 		DXR::MATERIAL_INFO DXRMatInfo;
 	}matInfo{};
 	matInfo.rastMatInfo = { Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f };
-	static int i = 0;
-	if (i++ == 0)
-	{
-		matInfo.DXRMatInfo = { Vector4::Zero};
-		matInfo.DXRMatInfo = { Vector4(1,0,0,1) };
-	}
-	else
-	{
-		matInfo.DXRMatInfo = { Vector4::One * 0.9f};
-	}
+	matInfo.DXRMatInfo = { Vector4::One * 0.9f};
 #else
 	MATERIAL_INFO matInfo{ Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f};
 #endif
@@ -94,8 +85,8 @@ HRESULT CCube::Initialize(void* pArg)
 	m_pTransformCom->Set_Look(pCastedArg->vStartLook);
 	m_pTransformCom->Set_Scale(pCastedArg->vStartScale);
 #if DXR_ON
-	m_uqpBlAS = m_pMeshObjectCom->Move_BuiltBLAS();
-	m_pUav_BLAS = m_uqpBlAS.get()->uav_BLAS;
+	//m_uqpBlAS = m_pMeshObjectCom->Move_BuiltBLAS();
+	//m_pUav_BLAS = m_uqpBlAS.get()->uav_BLAS;
 
 	CSDSManager::Get_Instance()->Register_SceneNode(CGameObject::Make_NodeBLAS(), this, SDS_AS);
 #endif

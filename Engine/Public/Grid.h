@@ -39,7 +39,6 @@ protected:
 	class CMaterial* m_pMaterialCom = nullptr;
 
 private:
-	GEOMETRY_TYPE m_eGeometryType;
 	wstring m_strGridMeshTag;
 };
 

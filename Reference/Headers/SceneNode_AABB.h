@@ -25,14 +25,7 @@ private:
 	Vector3 mBoxMax = Vector3::Zero;
 
 
-#if DXR_ON
-public:
-	DXR::BLAS_INFOS*& Get_BLAS() { return m_pContainingBLAS; }
-	ID3D12Resource* Get_BLAS_Resource() { return m_pContainingBLAS_Resource; }
-private:
-	DXR::BLAS_INFOS* m_pContainingBLAS = nullptr; // pointer
-	ID3D12Resource* m_pContainingBLAS_Resource = nullptr;
-#endif
+
 };
 
 _NAMESPACE

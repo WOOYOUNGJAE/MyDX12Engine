@@ -159,7 +159,7 @@ void CAssetManager::Build_IB_VB_SRV_Serialized(ID3D12Device5* pDevice, ID3D12Gra
 	std::vector<UINT16> vecAllIndices;
 	auto iterIndicesDest = vecAllIndices.begin();
 	UINT iStartIndex_in_SRV = 0;
-	UINT iNumBlas = 2;
+	UINT iNumBlas = 3;
 	for (UINT i = 0; i < iNumBlas/*TODO*/; ++i)
 	{
 		DXR::BLAS_INFOS& refBlasInfo = m_pSingleMeshDataArr[i]->Get_refBLAS();

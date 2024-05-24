@@ -1,5 +1,6 @@
 #include "GridMesh.h"
 
+#include "DeviceResource.h"
 #include "Device_Utils.h"
 
 CGridMesh::CGridMesh()
@@ -89,7 +90,7 @@ HRESULT CGridMesh::Initialize_Prototype()
 			v.normal = Vector3(0.f, 0.f, -1.f);
 
 			v.textureCoordinate = Vector2(j / (FLOAT)m_iNumSlices, 1.f - i / (FLOAT)m_iNumStacks);
-
+			v.color = Vector4::One * 0.7f;
 			m_vecVertexData.push_back(v);
 		}
 	}
@@ -155,8 +156,31 @@ HRESULT CGridMesh::Initialize_Prototype()
 	}
 
 	CMeshData::Init_VBV_IBV();
+
 #if DXR_ON
-	CMeshData::Build_BLAS(iIndexBufferSize, sizeof(VertexPositionNormalColorTexture) * m_iNumVertices);
+	m_BLAS.eGeometryType = GEOMETRY_TYPE::CUBE;
+	m_BLAS.vecIndices.reserve((vecIndex16Data.size()));
+	for (UINT i = 0; i < m_iNumIndices; ++i)
+	{
+		m_BLAS.vecIndices.emplace_back(vecIndex16Data[i]);
+	}
+	m_BLAS.vecVertices.reserve(m_vecVertexData.size());
+	for (UINT i = 0; i < m_iNumVertices; ++i)
+	{
+		m_BLAS.vecVertices.emplace_back(m_vecVertexData[i]);
+	}
+
+	DXR_Util::Build_BLAS(
+		CDeviceResource::Get_Instance()->Get_Device5(),
+		m_pCommandList,
+		&m_BLAS,
+		m_indexBufferGPU,
+		m_vertexBufferGPU,
+		m_IndexFormat,
+		m_iNumIndices,
+		m_iNumVertices,
+		UINT64(Get_SingleVertexSize()));
+	//CMeshData::Build_BLAS(sizeof(UINT16)* _countof(indicesData), sizeof(VertexPositionNormalColorTexture)* m_iNumVertices);
 #endif
 	return hr;
 }

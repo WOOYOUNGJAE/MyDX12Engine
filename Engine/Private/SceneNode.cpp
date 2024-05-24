@@ -56,17 +56,17 @@ HRESULT CSceneNode::Initialize(CSceneNode** pChildNodeArr, UINT* iNumberingArr, 
 	m_iNumBLAS = iChildArrSize;
 	m_iNumberingArr = new UINT[iChildArrSize];
 	memcpy(m_iNumberingArr, iNumberingArr, sizeof(UINT) * iChildArrSize);
-	DXR::BLAS_INFOS** pBlasArr = new DXR::BLAS_INFOS*[iChildArrSize];
+	//DXR::BLAS_INFOS** pBlasArr = new DXR::BLAS_INFOS*[iChildArrSize];
 	CGameObject** pGameObjArr = new CGameObject*[iChildArrSize];
 	UINT iNumAllIndices = 0;
 	UINT iNumAllVertices = 0;
 	for (UINT i = 0; i < iChildArrSize; ++i)
 	{
-		pBlasArr[i] = dynamic_cast<CSceneNode_AABB*>(m_vecChildNode[i])->Get_BLAS();
+		//pBlasArr[i] = dynamic_cast<CSceneNode_AABB*>(m_vecChildNode[i])->Get_BLAS();
 		pGameObjArr[i] = m_vecChildNode[i]->Get_ContainingObj();
 
-		iNumAllIndices += pBlasArr[i]->vecIndices.size();
-		iNumAllVertices += pBlasArr[i]->vecVertices.size();
+		//iNumAllIndices += pBlasArr[i]->vecIndices.size();
+		//iNumAllVertices += pBlasArr[i]->vecVertices.size();
 	}
 
 
@@ -120,14 +120,14 @@ HRESULT CSceneNode::Initialize(CSceneNode** pChildNodeArr, UINT* iNumberingArr, 
 	//DXR_Util::Create_IB_VB_SRV_Serialized(pDevice, vecAllIndices.size(), iNumAllVertices, m_pCombinedIndices, m_pCombinedVertices, pBlasArr[0]->dxrGeometryDesc.Triangles.VertexBuffer.StrideInBytes, );
 	DXR_Util::Build_TLAS0(pDevice, pCommandList, &m_TLAS.uav_TLAS, &m_TLAS.pInstanceDesc, pGameObjArr, iNumberingArr, iChildArrSize);
 
-	for (UINT i = 0; i < m_iNumBLAS; ++i)
+	/*for (UINT i = 0; i < m_iNumBLAS; ++i)
 	{
 		pBlasArr[i]->vecVertices.clear();
 		pBlasArr[i]->vecIndices.clear();
-	}
+	}*/
 
 	//Safe_Delete_Array(allVertices);
-	Safe_Delete_Array(pBlasArr);
+	//Safe_Delete_Array(pBlasArr);
 	Safe_Delete_Array(pGameObjArr);
 
 

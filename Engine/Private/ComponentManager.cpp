@@ -89,9 +89,8 @@ HRESULT CComponentManager::Initialize()
 #endif
 	pAssetManager->Add_MeshDataPrototype(GEOMETRY_TYPE::CUBE, CCubeMesh::Create());
 	pAssetManager->Add_MeshDataPrototype(GEOMETRY_TYPE::TRIANGLE, CTriangleMesh_PT::Create());
-	/*pAssetManager->Add_MeshDataPrototype(L"TriangleMesh", CTriangleMesh::Create());*/
-
-	/*pAssetManager->Add_MeshDataPrototype(L"Grid_1X1", CGridMesh::Create(1, 1));
+	pAssetManager->Add_MeshDataPrototype(GEOMETRY_TYPE::GRID_1X1, CGridMesh::Create(1, 1));
+	/*
 	pAssetManager->Add_MeshDataPrototype(L"Grid_10X10", CGridMesh::Create(10, 10));
 	pAssetManager->Add_MeshDataPrototype(L"Cylinder_20_05_05", CCylinderMesh::Create(20, 0.5f, 0.5f));
 	pAssetManager->Add_MeshDataPrototype(L"Sphere_15X15", CSphereMesh::Create(15, 15));

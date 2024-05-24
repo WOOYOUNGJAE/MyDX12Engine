@@ -12,7 +12,7 @@ HRESULT CGameObjectManager::Initialize()
 #pragma region Init_Basic_GameObject
 	Add_Prototype(L"Cube", CCube::Create());
 	Add_Prototype(L"Triangle", CTriangle::Create());
-	//Add_Prototype(L"Grid_1X1", CGrid::Create(GEOMETRY_TYPE::GRID_1X1));
+	Add_Prototype(L"Grid_1X1", CGrid::Create(GEOMETRY_TYPE::GRID_1X1));
 	//Add_Prototype(L"Grid_10X10", CGrid::Create(GEOMETRY_TYPE::GRID_1X1));
 	//Add_Prototype(L"Cylinder_20_05_05", CCylinder::Create(L"Cylinder_20_05_05"));
 	//Add_Prototype(L"Sphere_15X15", CSphere::Create(L"Sphere_15X15"));

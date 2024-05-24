@@ -13,7 +13,7 @@
 #define RAYTRACING_DEFINES
 
 #define MAX_RAY_RECURSION_DEPTH 2
-#define NUM_OBJECTS 3 // TODO 개수 TEMP
+#define NUM_OBJECTS 4 // TODO 개수 TEMP
 //#define MAX_RAY_RECURSION_DEPTH 3    // ~ primary rays + reflections + shadow rays from reflected geometry.
 #ifdef HLSL
 #include "HlslCompat.h"

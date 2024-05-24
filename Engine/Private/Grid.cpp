@@ -7,8 +7,10 @@
 #include "Material.h"
 #include "MeshData.h"
 #include "FrameResource.h"
+#include "SDSManager.h"
+
 CGrid::CGrid(CGrid& rhs) : CGameObject(rhs),
-m_strGridMeshTag(rhs.m_strGridMeshTag)
+                           m_strGridMeshTag(rhs.m_strGridMeshTag)
 {
 }
 
@@ -72,7 +74,17 @@ HRESULT CGrid::Initialize(void* pArg)
 	hr = Add_Component(L"Texture", reinterpret_cast<CComponent**>(&m_pTextureCom), &wstring(L"Texture_ice"));
 	if (FAILED(hr)) return hr; 
 
+#if DXR_ON
+	struct MATERIAL_INFO_2ELEMENTS
+	{
+		MATERIAL_INFO rastMatInfo;
+		DXR::MATERIAL_INFO DXRMatInfo;
+	}matInfo{};
+	matInfo.rastMatInfo = { Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f };
+	matInfo.DXRMatInfo = { Vector4::One * 0.9f };
+#else
 	MATERIAL_INFO matInfo{ Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f };
+#endif
 	hr = Add_Component(L"Material", reinterpret_cast<CComponent**>(&m_pMaterialCom), &matInfo);
 
 
@@ -80,6 +92,11 @@ HRESULT CGrid::Initialize(void* pArg)
 
 	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
 	m_pTransformCom->Set_Scale(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartScale);
+
+
+#if DXR_ON
+	CSDSManager::Get_Instance()->Register_SceneNode(CGameObject::Make_NodeBLAS(), this, SDS_AS);
+#endif
 
 	return hr;
 }
