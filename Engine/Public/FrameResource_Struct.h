@@ -76,16 +76,72 @@ NAMESPACE_(DXR)
 
 	struct MATERIAL_INFO
 	{
-		Vector4 albedo; // 반사율
-	};
+		Vector4 albedo = Vector4::Zero; // 반사율
 
+		FLOAT reflectanceCoef = 0.f;
+		FLOAT diffuseCoef = 0.9f;
+		FLOAT specularCoef = 0.7f;
+		FLOAT specularPower = 50.f;
+
+		FLOAT stepScale = 1.f;
+	};
 	struct OBJECT_CB_STATIC
 	{
+		OBJECT_CB_STATIC() = default;
+		OBJECT_CB_STATIC(MATERIAL_INFO& rhsMaterial)
+		{
+			albedo = rhsMaterial.albedo;
+			reflectanceCoef = rhsMaterial.reflectanceCoef;
+			diffuseCoef = rhsMaterial.diffuseCoef;
+			specularCoef = rhsMaterial.specularCoef;
+			specularPower = rhsMaterial.specularPower;
+			stepScale = rhsMaterial.stepScale;
+			startIndex_in_IB_SRV = 0;
+			startIndex_in_VB_SRV = 0;
+			padding = {};
+		}
+		~OBJECT_CB_STATIC() = default;
+		Vector4 albedo;
+
 		UINT startIndex_in_IB_SRV; // Index Buffer ShaderResourceView의 시작 인덱스
-		UINT startIndex_in_VB_SRV; // Vertex Buffer ShaderResourceView의 시작 인덱스
-		Vector2 padding;
-		Vector4 albedo; // 반사율
+		UINT startIndex_in_VB_SRV;
+		FLOAT reflectanceCoef;
+		FLOAT diffuseCoef;
+
+		FLOAT specularCoef;
+		FLOAT specularPower;
+		FLOAT stepScale;                      // Step scale for ray marching of signed distance primitives. 
+		FLOAT padding;
 	};
+	//struct OBJECT_CB_STATIC
+	//{
+	//	OBJECT_CB_STATIC(MATERIAL_INFO& rhs)
+	//	{
+	//		albedo = rhs.albedo;
+	//		reflectanceCoef = rhs.reflectanceCoef;
+	//		diffuseCoef = rhs.diffuseCoef;
+	//		specularCoef = rhs.specularCoef;
+	//		specularPower = rhs.specularPower;
+	//		stepScale = rhs.stepScale;
+	//		startIndex_in_IB_SRV = 0;
+	//		startIndex_in_VB_SRV = 0;
+	//	}
+	//	OBJECT_CB_STATIC() = default;
+	//	~OBJECT_CB_STATIC() = default;
+	//	Vector4 albedo;
+	//	UINT startIndex_in_IB_SRV; // Index Buffer ShaderResourceView의 시작 인덱스
+	//	UINT startIndex_in_VB_SRV;
+
+	//	FLOAT reflectanceCoef;
+	//	FLOAT diffuseCoef;
+	//	FLOAT specularCoef;
+	//	FLOAT specularPower;
+
+	//	FLOAT stepScale;                      // Step scale for ray marching of signed distance primitives. 
+	//	// - Some object transformations don't preserve the distances and 
+	//	//   thus require shorter steps.
+	//	Vector3 padding;
+	//};
 _NAMESPACE
 #endif
 

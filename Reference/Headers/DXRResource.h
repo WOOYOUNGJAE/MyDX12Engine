@@ -42,7 +42,8 @@ public:
 	HRESULT Reset_CommandList();
 	HRESULT Close_CommandList();
 	HRESULT Execute_CommandList();
-	void AssignShaderIdentifiers(ID3D12StateObjectProperties* stateObjectProperties, void** ppRayGenShaderIdentifier, void** ppMissShaderIdentifier, void** ppHitGroupShaderIdentifier);
+	/*void AssignShaderIdentifiers(ID3D12StateObjectProperties* stateObjectProperties, void** ppRayGenShaderIdentifier, void** ppMissShaderIdentifier_Default, void
+	                             ** ppMissShaderIdentifier_Shadow, void** ppHitGroupShaderIdentifier_Default, void** ppHitGroupShaderIdentifier_Shadow);*/
 	static void BuildRaytracingAccelerationStructure(
 		_In_  const D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC* pDesc,
 		_In_  UINT NumPostbuildInfoDescs,
@@ -65,6 +66,8 @@ private: // Shader Table
 	ID3D12Resource* m_pRayGenShaderTable = nullptr;
 	ID3D12Resource* m_pMissShaderTable = nullptr;
 	ID3D12Resource* m_pHitGroupShaderTable = nullptr;
+	UINT m_iMissRecordSizeInBytes = 0;
+	UINT m_iHitGroupRecordSizeInBytes = 0;
 private: // pointer
 	ID3D12Device5* m_pDevice = nullptr;
 	ID3D12CommandQueue* m_pCommandQueue = nullptr; // CommandQueue는 기존거와 공유
@@ -83,10 +86,10 @@ private:
 	UINT m_iScreenWidth = 0;
 	UINT m_iScreenHeight = 0;
 private: // entry point str
-	static const wchar_t* m_tszHitGroupName;
+	static const wchar_t* m_tszHitGroupName[RAY_TYPE::Count];
 	static const wchar_t* m_tszRaygenShaderName;
 	static const wchar_t* m_tszClosestHitShaderName;
-	static const wchar_t* m_tszMissShaderName;
+	static const wchar_t* m_tszMissShaderName[RAY_TYPE::Count];
 };
 
 _NAMESPACE

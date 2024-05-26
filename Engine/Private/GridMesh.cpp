@@ -90,7 +90,7 @@ HRESULT CGridMesh::Initialize_Prototype()
 			v.normal = Vector3(0.f, 0.f, -1.f);
 
 			v.textureCoordinate = Vector2(j / (FLOAT)m_iNumSlices, 1.f - i / (FLOAT)m_iNumStacks);
-			v.color = Vector4::One * 0.7f;
+			v.color = Vector4::One * 0.5f;
 			m_vecVertexData.push_back(v);
 		}
 	}

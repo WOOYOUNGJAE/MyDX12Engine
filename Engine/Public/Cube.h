@@ -37,6 +37,8 @@ protected:
 	class CRenderer* m_pRendererCom = nullptr;
 	class CTextureCompo* m_pTextureCom = nullptr;
 	class CMaterial* m_pMaterialCom = nullptr;
+private:
+	Vector3 m_vStartPos;
 };
 
 _NAMESPACE

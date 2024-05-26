@@ -78,10 +78,11 @@ HRESULT CGrid::Initialize(void* pArg)
 	struct MATERIAL_INFO_2ELEMENTS
 	{
 		MATERIAL_INFO rastMatInfo;
-		DXR::MATERIAL_INFO DXRMatInfo;
+		DXR::MATERIAL_INFO DXRMatInfo = DXR::MATERIAL_INFO();
 	}matInfo{};
 	matInfo.rastMatInfo = { Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f };
-	matInfo.DXRMatInfo = { Vector4::One * 0.9f };
+	matInfo.DXRMatInfo.reflectanceCoef = 1.f;
+	matInfo.DXRMatInfo.albedo = Vector4::One * 1.f;
 #else
 	MATERIAL_INFO matInfo{ Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f };
 #endif
@@ -90,8 +91,11 @@ HRESULT CGrid::Initialize(void* pArg)
 
 	m_iTextureSrvOffset = m_pTextureCom->m_iCbvSrvUavHeapOffset;
 
-	m_pTransformCom->Set_Position(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartPos);
-	m_pTransformCom->Set_Scale(static_cast<GAMEOBJECT_INIT_DESC*>(pArg)->vStartScale);
+	GAMEOBJECT_INIT_DESC* pCastedArg = static_cast<GAMEOBJECT_INIT_DESC*>(pArg);
+
+	m_pTransformCom->Set_Position(pCastedArg->vStartPos);
+	m_pTransformCom->Set_Look(pCastedArg->vStartLook);
+	m_pTransformCom->Set_Scale(pCastedArg->vStartScale);
 
 
 #if DXR_ON

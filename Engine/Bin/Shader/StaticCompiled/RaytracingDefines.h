@@ -12,7 +12,7 @@
 #ifndef RAYTRACING_DEFINES
 #define RAYTRACING_DEFINES
 
-#define MAX_RAY_RECURSION_DEPTH 2
+#define MAX_RAY_RECURSION_DEPTH 3
 #define NUM_OBJECTS 4 // TODO 개수 TEMP
 //#define MAX_RAY_RECURSION_DEPTH 3    // ~ primary rays + reflections + shadow rays from reflected geometry.
 #ifdef HLSL
@@ -30,6 +30,7 @@ typedef uint UINT;
 typedef UINT16 Index;
 #endif
 
+#pragma region Structs
 struct DXR_Scene_CB
 {
 	float4x4 viewProjectionInv;
@@ -41,10 +42,19 @@ struct DXR_Scene_CB
 
 struct OBJECT_CB_STATIC
 {
+    XMFLOAT4 albedo;
+
     UINT startIndex_in_IB_SRV; // Index Buffer ShaderResourceView의 시작 인덱스
     UINT startIndex_in_VB_SRV;
-    float2 padding;
-    XMFLOAT4 albedo;
+    float reflectanceCoef;
+    float diffuseCoef;
+
+    float specularCoef;
+    float specularPower;
+    float stepScale;                      // Step scale for ray marching of signed distance primitives. 
+    // - Some object transformations don't preserve the distances and 
+    //   thus require shorter steps.
+    float padding;
 };
 struct OBJECT_CB_STATIC_Arr
 {
@@ -80,14 +90,24 @@ struct MyRayPayload
     UINT   recursionDepth;
 };
 
+struct ShadowRayPayload
+{
+    bool hit;
+};
+#pragma endregion Structs
+
 // Ray types traced
 namespace RayType {
     enum Enum {
         Radiance = 0,   // ~ Primary, reflected camera/view rays calculating color for each hit.
-        //Shadow,         // ~ Shadow/visibility rays, only testing for occlusion
+        Shadow,         // ~ Shadow/visibility rays, only testing for occlusion
         Count
     };
 }
+
+#pragma region Constants
+static const float InShadowRadiance = 0.35f;
+#pragma endregion Constants
 
 namespace TraceRayParameters
 {
@@ -96,7 +116,7 @@ namespace TraceRayParameters
         static const UINT Offset[RayType::Count] =
         {
             0, // Radiance ray
-            //1  // Shadow ray
+            1  // Shadow ray
         };
         static const UINT GeometryStride = RayType::Count;
     }
@@ -104,7 +124,7 @@ namespace TraceRayParameters
         static const UINT Offset[RayType::Count] =
         {
             0, // Radiance ray
-            //1  // Shadow ray
+            1  // Shadow ray
         };
     }
 }

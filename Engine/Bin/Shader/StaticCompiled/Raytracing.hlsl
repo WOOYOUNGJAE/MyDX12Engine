@@ -15,36 +15,7 @@ ConstantBuffer<DXR_Scene_CB> g_sceneCB : register(b0, space1);
 ConstantBuffer<OBJECT_CB_STATIC_Arr> l_ObjectCB_Static : register(b1, space1);
 ConstantBuffer<OBJECT_CB_DYNAMIC_Arr> l_ObjectCB_Dynamic : register(b2, space1);
 
-// Trace a radiance ray into the scene and returns a shaded color.
-float4 TraceRadianceRay(RaytracingAccelerationStructure scene, in MyRay ray, in UINT currentRayRecursionDepth)
-{
-    if (currentRayRecursionDepth >= MAX_RAY_RECURSION_DEPTH)
-    {
-        return float4(0, 0, 0, 0);
-    }
-//----------------------
-	// Set the ray's extents.
-    RayDesc rayDesc;
-    rayDesc.Origin = ray.origin;
-	rayDesc.Direction = ray.direction;
-	// Set TMin to a zero value to avoid aliasing artifacts along contact areas.
-	// Note: make sure to enable face culling so as to avoid surface face fighting.
-    rayDesc.TMin = 0.001;
-    rayDesc.TMax = 10000;
-    MyRayPayload rayPayload = { float4(0, 0, 0, 0), currentRayRecursionDepth + 1 };
 
-    TraceRay(scene,
-    RAY_FLAG_CULL_BACK_FACING_TRIANGLES,
-    //0,
-    TraceRayParameters::InstanceMask,
-    TraceRayParameters::HitGroup::Offset[RayType::Radiance],
-    TraceRayParameters::HitGroup::GeometryStride,
-    TraceRayParameters::MissShader::Offset[RayType::Radiance],
-    rayDesc,
-    rayPayload);
-
-    return rayPayload.color;
-}
 
 [shader("raygeneration")]
 void MyRaygenShader()
@@ -96,67 +67,85 @@ float3 HitWorldPosition()
 [shader("closesthit")]
 void MyClosestHitShader(inout MyRayPayload payload, in MyAttributes attr)
 {
+    uint instanceIndex = InstanceIndex();
+    OBJECT_CB_STATIC cur_object_cb_static = l_ObjectCB_Static.object_cb_static[instanceIndex];
+#pragma region 충돌한 삼각형 추적하여 버텍스 정보 가져오기
     uint indexSizeInBytes = 2; // UINT16
     uint iTriangleIndexStrideInBytes = indexSizeInBytes * 3;
-    uint iBaseOffsetInBytes = (l_ObjectCB_Static.object_cb_static[InstanceIndex()].startIndex_in_IB_SRV / 3 + PrimitiveIndex())
+    uint iBaseOffsetInBytes = (cur_object_cb_static.startIndex_in_IB_SRV / 3 + PrimitiveIndex())
      * iTriangleIndexStrideInBytes; // 삼각형의 첫 인덱스 원소의 offset (바이트 단위)
-    
-    uint startIndex_in_VB_SRV = l_ObjectCB_Static.object_cb_static[InstanceIndex()].startIndex_in_VB_SRV; //0 or 24
-    const uint3 indices3 = Load3x16BitIndices(Indices, iBaseOffsetInBytes);
+        
+    uint startIndex_in_VB_SRV = cur_object_cb_static.startIndex_in_VB_SRV;
 
+    const uint3 indices3 = Load3x16BitIndices(Indices, iBaseOffsetInBytes);
+    
     float4 triangleColorArr[3] =
     {
         Vertices[startIndex_in_VB_SRV + indices3[0]].color,
         Vertices[startIndex_in_VB_SRV + indices3[1]].color,
         Vertices[startIndex_in_VB_SRV + indices3[2]].color
     };
-
+    float4 barycentricColor = Apply_Barycentric_Float4(triangleColorArr, attr);
     float3 vertexNormalArr[3] =
     {
         Vertices[startIndex_in_VB_SRV + indices3[0]].normal,
 		Vertices[startIndex_in_VB_SRV + indices3[1]].normal,
 		Vertices[startIndex_in_VB_SRV + indices3[2]].normal
     };
-
+    float3 barycentricNormal = Apply_Barycentric_Float3(vertexNormalArr, attr);
     float3 hitWorldPos = WorldRayOrigin() + RayTCurrent() * WorldRayDirection();
 
-    float3 triangleNormal = Apply_Barycentric_Float3(vertexNormalArr, attr);
+    float3 triangleNormal = barycentricNormal;
 
-    triangleNormal = mul(triangleNormal, l_ObjectCB_Dynamic.object_cb_dynamic[InstanceIndex()].InvTranspose).xyz;
+    triangleNormal = mul(triangleNormal, l_ObjectCB_Dynamic.object_cb_dynamic[instanceIndex].InvTranspose).xyz;
     triangleNormal = normalize(triangleNormal);
+#pragma endregion 충돌한 삼각형 추적하여 버텍스 정보 가져오기
 
+    float3 hitWorldPosition = HitWorldPosition();
+    MyRay shadowRay = { hitWorldPosition, normalize(g_sceneCB.lightPosition.xyz - hitWorldPosition) };
+    bool shadowRayHit = TraceShadowRayAndReportIfHit(Scene_TLAS, shadowRay, payload.recursionDepth);
         
 
     float4 reflectedColor = float4(0, 0, 0, 0);
-    if (true)
+    if (cur_object_cb_static.reflectanceCoef > 0.001f)
     {
-   // Trace a reflection ray.
-        MyRay reflectionRay = { HitWorldPosition(), reflect(WorldRayDirection(), triangleNormal) };
+		// Trace a reflection ray.
+        MyRay reflectionRay = { hitWorldPosition, reflect(WorldRayDirection(), triangleNormal) };
         float4 reflectionColor = TraceRadianceRay(Scene_TLAS, reflectionRay, payload.recursionDepth);
 
-        float3 fresnelR = FresnelReflectanceSchlick(WorldRayDirection(), triangleNormal, float3(0.9f, 0.9f, 0.9f) /*albedo*/);
-        reflectedColor = 0.25f /*reflectanceCoef*/ * float4(fresnelR, 1) * reflectionColor;
+        // 금속같은 물체 반사
+        float3 fresnelR = FresnelReflectanceSchlick(WorldRayDirection(), triangleNormal, barycentricColor);
+        reflectedColor = cur_object_cb_static.reflectanceCoef * float4(fresnelR, 1) * reflectionColor;
     }
 
 
-    float4 diffuseColor = CalculateDiffuseLighting(g_sceneCB, hitWorldPos, triangleNormal);
+    float4 phongColor = CalculatePhongLighting(g_sceneCB, hitWorldPosition, barycentricColor, triangleNormal, shadowRayHit);
+    float4 diffuseColor = CalculateDiffuseLighting(g_sceneCB, cur_object_cb_static.albedo, hitWorldPos, triangleNormal);
     float4 lightColor = diffuseColor + g_sceneCB.lightAmbientColor;
-    payload.color = Apply_Barycentric_Float4(triangleColorArr, attr) * lightColor;
     //payload.color = l_ObjectCB_Static.object_cb_static[InstanceIndex()].albedo; // for debug albedo
+
+
+    payload.color = Apply_Barycentric_Float4(triangleColorArr, attr) * lightColor;
     payload.color = Apply_Barycentric_Float4(triangleColorArr, attr);
+    payload.color = Apply_Barycentric_Float4(triangleColorArr, attr) * phongColor;
+    payload.color += reflectedColor;
 
    
 
-    payload.color += reflectedColor;
 
 }
 
 [shader("miss")]
-void MyMissShader(inout MyRayPayload payload)
+void MissShader_Default(inout MyRayPayload payload)
 {
     float4 background = float4(0.8f, 1.f, 1.f, 1.000000000f);
     payload.color = background;
 
 }
+[shader("miss")]
+void MissShader_ShadowRay(inout ShadowRayPayload rayPayload)
+{
+    rayPayload.hit = false;
 
+}
 #endif // RAYTRACING_HLSL

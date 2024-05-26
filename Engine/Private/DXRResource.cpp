@@ -13,10 +13,16 @@
 
 IMPLEMENT_SINGLETON(CDXRResource)
 
-const wchar_t* CDXRResource::m_tszHitGroupName = L"MyHitGroup";
+const wchar_t* CDXRResource::m_tszHitGroupName[RAY_TYPE::Count]
+{
+	L"HitGroup_Default", L"HitGroup_ShadowRay"
+};
 const wchar_t* CDXRResource::m_tszRaygenShaderName = L"MyRaygenShader";
 const wchar_t* CDXRResource::m_tszClosestHitShaderName = L"MyClosestHitShader";
-const wchar_t* CDXRResource::m_tszMissShaderName = L"MyMissShader";
+const wchar_t* CDXRResource::m_tszMissShaderName[RAY_TYPE::Count]
+{
+	L"MissShader_Default", L"MissShader_ShadowRay"
+};
 
 HRESULT CDXRResource::Initialize()
 {
@@ -202,16 +208,21 @@ HRESULT CDXRResource::Create_PSOs()
 			// 라이브러리에서 Export 정의 -> PSO에서는 Import[
 			lib->DefineExport(m_tszRaygenShaderName);
 			lib->DefineExport(m_tszClosestHitShaderName);
-			lib->DefineExport(m_tszMissShaderName);
+			lib->DefineExport(m_tszMissShaderName[RAY_TYPE::Default]);
+			lib->DefineExport(m_tszMissShaderName[RAY_TYPE::Shadow]);
 		}
 	}
 
 	// Triangle HitGroup
 	{
-		CD3DX12_HIT_GROUP_SUBOBJECT* hitGroup = psoDesc.CreateSubobject<CD3DX12_HIT_GROUP_SUBOBJECT>();
-		hitGroup->SetClosestHitShaderImport(m_tszClosestHitShaderName);
-		hitGroup->SetHitGroupExport(m_tszHitGroupName);
-		hitGroup->SetHitGroupType(D3D12_HIT_GROUP_TYPE_TRIANGLES);
+		CD3DX12_HIT_GROUP_SUBOBJECT* hitGroup_Default = psoDesc.CreateSubobject<CD3DX12_HIT_GROUP_SUBOBJECT>();
+		hitGroup_Default->SetClosestHitShaderImport(m_tszClosestHitShaderName);
+		hitGroup_Default->SetHitGroupExport(m_tszHitGroupName[RAY_TYPE::Default]);
+		hitGroup_Default->SetHitGroupType(D3D12_HIT_GROUP_TYPE_TRIANGLES);
+		CD3DX12_HIT_GROUP_SUBOBJECT* hitGroup_Shadow = psoDesc.CreateSubobject<CD3DX12_HIT_GROUP_SUBOBJECT>();
+		hitGroup_Shadow->SetClosestHitShaderImport(m_tszClosestHitShaderName);
+		hitGroup_Shadow->SetHitGroupExport(m_tszHitGroupName[RAY_TYPE::Shadow]);
+		hitGroup_Shadow->SetHitGroupType(D3D12_HIT_GROUP_TYPE_TRIANGLES);
 	}
 
 	// Shader config, Attribute에는 무게중심 좌표, Payload는 레이가 진행하면서 데이터 저장하는 공간
@@ -234,7 +245,7 @@ HRESULT CDXRResource::Create_PSOs()
 		// associaton 객체를 만들어서 루트시그니처 서브오브젝트를 바인딩, 그 후 AddExport로 실제 쉐이더 프로그램에 연결
 		CD3DX12_SUBOBJECT_TO_EXPORTS_ASSOCIATION_SUBOBJECT* rootSignatureAssociation = psoDesc.CreateSubobject<CD3DX12_SUBOBJECT_TO_EXPORTS_ASSOCIATION_SUBOBJECT>();
 		rootSignatureAssociation->SetSubobjectToAssociate(*localRootSignature);
-		rootSignatureAssociation->AddExport(m_tszHitGroupName);
+		rootSignatureAssociation->AddExports(m_tszHitGroupName);
 	}
 
 	// RootSignature SubObject - GLOBAL, 모든 Shader에서 공통으로 참조 가능
@@ -249,7 +260,7 @@ HRESULT CDXRResource::Create_PSOs()
 	{
 		CD3DX12_RAYTRACING_PIPELINE_CONFIG_SUBOBJECT* pipelineConfig =
 			psoDesc.CreateSubobject<CD3DX12_RAYTRACING_PIPELINE_CONFIG_SUBOBJECT>();
-		UINT iMaxRecursionDepth = 2; // ~ primary rays only. 
+		UINT iMaxRecursionDepth = 3; // ~ primary rays only. 
 		pipelineConfig->Config(iMaxRecursionDepth);
 	}
 
@@ -267,18 +278,22 @@ HRESULT CDXRResource::Build_ShaderTable()
 	HRESULT hr = S_OK;
 
 	void* pRayGenShaderIdentifier;
-	void* pMissShaderIdentifier;
-	void* pHitGroupShaderIdentifier;
+	void* pMissShaderIdentifier[RAY_TYPE::Count];
+	void* pHitGroupShaderIdentifier[RAY_TYPE::Count];
 
 	ID3D12StateObjectProperties* pStateObjectProperties = nullptr;
 	hr = m_pDXR_PSO->QueryInterface(&pStateObjectProperties);
 	if (FAILED(hr)) { return hr; }
 
 	pRayGenShaderIdentifier = pStateObjectProperties->GetShaderIdentifier(m_tszRaygenShaderName);
-	pMissShaderIdentifier = pStateObjectProperties->GetShaderIdentifier(m_tszMissShaderName);
-	pHitGroupShaderIdentifier = pStateObjectProperties->GetShaderIdentifier(m_tszHitGroupName);
+	pMissShaderIdentifier[RAY_TYPE::Default] = pStateObjectProperties->GetShaderIdentifier(m_tszMissShaderName[RAY_TYPE::Default]);
+	pMissShaderIdentifier[RAY_TYPE::Shadow] = pStateObjectProperties->GetShaderIdentifier(m_tszMissShaderName[RAY_TYPE::Shadow]);
+	pHitGroupShaderIdentifier[RAY_TYPE::Default] = pStateObjectProperties->GetShaderIdentifier(m_tszHitGroupName[RAY_TYPE::Default]);
+	pHitGroupShaderIdentifier[RAY_TYPE::Shadow] = pStateObjectProperties->GetShaderIdentifier(m_tszHitGroupName[RAY_TYPE::Shadow]);
 
-	if (pRayGenShaderIdentifier == nullptr || pMissShaderIdentifier == nullptr || pHitGroupShaderIdentifier == nullptr)
+	if (pRayGenShaderIdentifier == nullptr || 
+		pMissShaderIdentifier[RAY_TYPE::Default] == nullptr || pMissShaderIdentifier[RAY_TYPE::Shadow] == nullptr ||
+		pHitGroupShaderIdentifier[RAY_TYPE::Default] == nullptr || pHitGroupShaderIdentifier[RAY_TYPE::Shadow] == nullptr)
 	{
 		return E_FAIL;
 	}
@@ -316,15 +331,23 @@ _LOCAL_BLOCK
 
 LOCAL_BLOCK_// Miss Shader Table
 	using DXR::TABLE_RECORD_DESC;
-	TABLE_RECORD_DESC tableRecordDesc = TABLE_RECORD_DESC
+	TABLE_RECORD_DESC tableRecordDescArr[RAY_TYPE::Count]
 	{
+		TABLE_RECORD_DESC{
 		D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
-		pMissShaderIdentifier,
+		pMissShaderIdentifier[RAY_TYPE::Default],
 		0,
 		nullptr
+		},
+		TABLE_RECORD_DESC{
+		D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
+		pMissShaderIdentifier[RAY_TYPE::Shadow],
+		0,
+		nullptr
+		}
 	};
 
-	iNumShaderRecords = 1;
+	iNumShaderRecords = RAY_TYPE::Count;
 	iSingleRecordSize = iShaderIdentifierSize;
 
 	CDXRShaderTable* pTableInstance = CDXRShaderTable::Create(
@@ -334,9 +357,13 @@ LOCAL_BLOCK_// Miss Shader Table
 		L"MissShaderTable");
 
 	// ShaderTable에 Record 등록
-	pTableInstance->Register_Record(tableRecordDesc);
+	for (UINT i = 0; i < RAY_TYPE::Count; ++i)
+	{
+		pTableInstance->Register_Record(tableRecordDescArr[i]);		
+	}
 
 	m_pMissShaderTable = pTableInstance->Get_TableResource();
+	m_iMissRecordSizeInBytes = iSingleRecordSize;
 	Safe_Release(pTableInstance);
 _LOCAL_BLOCK
 
@@ -350,16 +377,22 @@ LOCAL_BLOCK_// Hit Group Shader Table
 	}rootArguments;
 	//rootArguments.cb = DXR::OBJECT_CB_STATIC{ XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) };
 
-	TABLE_RECORD_DESC tableRecordDesc = TABLE_RECORD_DESC
+	TABLE_RECORD_DESC tableRecordDescArr[RAY_TYPE::Count]
 	{
-		D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
-		pHitGroupShaderIdentifier,
-		 //sizeof(DXR::OBJECT_CB_STATIC),
-		 (sizeof(DXR::OBJECT_CB_STATIC) + sizeof(DXR::OBJECT_CB_DYNAMIC)),
-		&rootArguments
+		TABLE_RECORD_DESC{D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
+		pHitGroupShaderIdentifier[RAY_TYPE::Default],
+		//sizeof(DXR::OBJECT_CB_STATIC),
+		(sizeof(DXR::OBJECT_CB_STATIC) + sizeof(DXR::OBJECT_CB_DYNAMIC)),
+	   &rootArguments},
+	   
+		TABLE_RECORD_DESC{D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES,
+		pHitGroupShaderIdentifier[RAY_TYPE::Shadow],
+		//sizeof(DXR::OBJECT_CB_STATIC),
+		(sizeof(DXR::OBJECT_CB_STATIC) + sizeof(DXR::OBJECT_CB_DYNAMIC)),
+	   &rootArguments}		
 	};
 
-	iNumShaderRecords = 1;
+	iNumShaderRecords = RAY_TYPE::Count;
 	iSingleRecordSize = iShaderIdentifierSize + sizeof(RootArguments);
 
 	CDXRShaderTable* pTableInstance = CDXRShaderTable::Create(
@@ -369,9 +402,13 @@ LOCAL_BLOCK_// Hit Group Shader Table
 		L"HitGroupShaderTable");
 
 	// ShaderTable에 Record 등록
-	pTableInstance->Register_Record(tableRecordDesc);
+	for (UINT i = 0; i < RAY_TYPE::Count; ++i)
+	{
+		pTableInstance->Register_Record(tableRecordDescArr[i]);
+	}
 
 	m_pHitGroupShaderTable = pTableInstance->Get_TableResource();
+	m_iHitGroupRecordSizeInBytes = iSingleRecordSize;
 	Safe_Release(pTableInstance);
 
 _LOCAL_BLOCK
@@ -443,13 +480,16 @@ HRESULT CDXRResource::Execute_CommandList()
 	return S_OK;
 }
 
-void CDXRResource::AssignShaderIdentifiers(ID3D12StateObjectProperties* stateObjectProperties,
-	void** ppRayGenShaderIdentifier, void** ppMissShaderIdentifier, void** ppHitGroupShaderIdentifier)
-{
-	*ppRayGenShaderIdentifier = stateObjectProperties->GetShaderIdentifier(m_tszRaygenShaderName);
-	*ppMissShaderIdentifier = stateObjectProperties->GetShaderIdentifier(m_tszMissShaderName);
-	*ppHitGroupShaderIdentifier = stateObjectProperties->GetShaderIdentifier(m_tszHitGroupName);
-}
+//void CDXRResource::AssignShaderIdentifiers(ID3D12StateObjectProperties* stateObjectProperties,
+//                                           void** ppRayGenShaderIdentifier, void** ppMissShaderIdentifier_Default, void** ppMissShaderIdentifier_Shadow, void** ppHitGroupShaderIdentifier_Default, void
+//                                           ** ppHitGroupShaderIdentifier_Shadow)
+//{
+//	*ppRayGenShaderIdentifier = stateObjectProperties->GetShaderIdentifier(m_tszRaygenShaderName);
+//	*ppMissShaderIdentifier_Default = stateObjectProperties->GetShaderIdentifier(m_tszMissShaderName[RAY_TYPE::Default]);
+//	*ppMissShaderIdentifier_Shadow = stateObjectProperties->GetShaderIdentifier(m_tszMissShaderName[RAY_TYPE::Shadow]);
+//	*ppHitGroupShaderIdentifier_Default = stateObjectProperties->GetShaderIdentifier(m_tszHitGroupName[RAY_TYPE::Default]);
+//	*ppHitGroupShaderIdentifier_Shadow = stateObjectProperties->GetShaderIdentifier(m_tszHitGroupName[RAY_TYPE::Shadow]);
+//}
 
 void CDXRResource::Flush_CommandQueue()
 {

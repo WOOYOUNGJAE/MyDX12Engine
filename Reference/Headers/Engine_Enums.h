@@ -53,6 +53,11 @@ namespace Engine
 	{
 		enum SLOT_INDEX {OBJECT_CB_STATIC, OBJECT_CB_DYNAMIC, SLOT_COUNT};
 	}
+	enum RAY_TYPE {
+		Default,   // ~ Primary, reflected camera/view rays calculating color for each hit.
+		Shadow,         // ~ Shadow/visibility rays, only testing for occlusion
+		Count
+	};
 #endif
 
 

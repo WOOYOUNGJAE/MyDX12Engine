@@ -67,10 +67,10 @@ HRESULT CCube::Initialize(void* pArg)
 	struct MATERIAL_INFO_2ELEMENTS
 	{
 		MATERIAL_INFO rastMatInfo;
-		DXR::MATERIAL_INFO DXRMatInfo;
+		DXR::MATERIAL_INFO DXRMatInfo = DXR::MATERIAL_INFO();
 	}matInfo{};
 	matInfo.rastMatInfo = { Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f };
-	matInfo.DXRMatInfo = { Vector4::One * 0.9f};
+	matInfo.DXRMatInfo.albedo = Vector4::One * 0.f;
 #else
 	MATERIAL_INFO matInfo{ Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f};
 #endif
@@ -84,6 +84,7 @@ HRESULT CCube::Initialize(void* pArg)
 	m_pTransformCom->Set_Position(pCastedArg->vStartPos);
 	m_pTransformCom->Set_Look(pCastedArg->vStartLook);
 	m_pTransformCom->Set_Scale(pCastedArg->vStartScale);
+	m_vStartPos = Get_Pos();
 #if DXR_ON
 	//m_uqpBlAS = m_pMeshObjectCom->Move_BuiltBLAS();
 	//m_pUav_BLAS = m_uqpBlAS.get()->uav_BLAS;
@@ -97,7 +98,14 @@ HRESULT CCube::Initialize(void* pArg)
 void CCube::Tick(_float fDeltaTime)
 {
 	m_pTransformCom->Rotate(m_pTransformCom->Up(), 0.5f * fDeltaTime);
-	//m_pTransformCom->Move_Forward(0.5f * fDeltaTime);
+	//m_pTransformCom->Rotate(m_pTransformCom->Right(), 0.5f * fDeltaTime);
+	//m_pTransformCom->Rotate(m_pTransformCom->Look(), 0.5f * fDeltaTime);
+	////m_pTransformCom->Move_Forward(0.5f * fDeltaTime);
+	//static FLOAT fAcc = 0;
+	//FLOAT fMoveSpeed = 3.f;
+	//fAcc += fDeltaTime * fMoveSpeed;
+	//FLOAT fAddingY = sinf(fAcc) * 0.5;
+	//m_pTransformCom->Set_Position(m_vStartPos + Vector3(0.f, fAddingY, 0.f));
 }
 
 void CCube::Late_Tick(_float fDeltaTime)

@@ -72,10 +72,10 @@ HRESULT CTriangle::Initialize(void* pArg)
 	struct MATERIAL_INFO_2ELEMENTS
 	{
 		MATERIAL_INFO rastMatInfo;
-		DXR::MATERIAL_INFO DXRMatInfo;
+		DXR::MATERIAL_INFO DXRMatInfo = DXR::MATERIAL_INFO();
 	}matInfo{};
 	matInfo.rastMatInfo = { Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f };
-	matInfo.DXRMatInfo = { Vector4(0,1,0,1)};
+	
 #else
 	MATERIAL_INFO matInfo{ Vector3::Zero * 0.5f, 0.5f, Vector3::One * 0.5f, 0.f, Vector3::One * 0.5f };
 #endif

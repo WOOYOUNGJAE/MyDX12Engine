@@ -30,11 +30,6 @@ CDXRRenderer* CDXRRenderer::Create()
 
 	return pInstance;
 }
-ID3D12Resource* m_vertexBuffer;
-ID3D12Resource* m_indexBuffer;
-ID3D12Resource* CDXRRenderer::m_bottomLevelAccelerationStructure;
-ID3D12Resource* m_topLevelAccelerationStructure;
-
 HRESULT CDXRRenderer::Initialize()
 {
 	HRESULT hr = S_OK;	
@@ -54,140 +49,13 @@ HRESULT CDXRRenderer::Initialize()
     m_disptchRaysDesc.RayGenerationShaderRecord.SizeInBytes = m_pDXRResources->m_pRayGenShaderTable->GetDesc().Width;
     m_disptchRaysDesc.HitGroupTable.StartAddress = m_pDXRResources->m_pHitGroupShaderTable->GetGPUVirtualAddress();
     m_disptchRaysDesc.HitGroupTable.SizeInBytes = m_pDXRResources->m_pHitGroupShaderTable->GetDesc().Width;
-    m_disptchRaysDesc.HitGroupTable.StrideInBytes = m_disptchRaysDesc.HitGroupTable.SizeInBytes; // 
+    m_disptchRaysDesc.HitGroupTable.StrideInBytes = m_pDXRResources->m_iHitGroupRecordSizeInBytes;
     m_disptchRaysDesc.MissShaderTable.StartAddress = m_pDXRResources->m_pMissShaderTable->GetGPUVirtualAddress();
     m_disptchRaysDesc.MissShaderTable.SizeInBytes = m_pDXRResources->m_pMissShaderTable->GetDesc().Width;
-    m_disptchRaysDesc.MissShaderTable.StrideInBytes = m_disptchRaysDesc.MissShaderTable.SizeInBytes; //
+    m_disptchRaysDesc.MissShaderTable.StrideInBytes = m_pDXRResources->m_iMissRecordSizeInBytes;
     m_disptchRaysDesc.Width = m_pDXRResources->m_iScreenWidth;
     m_disptchRaysDesc.Height = m_pDXRResources->m_iScreenHeight;
     m_disptchRaysDesc.Depth = 1;
-
-//
-//#pragma region TempTest
-//    auto device = m_pDeviceResource->Get_Device5();
-//    UINT16 indices[] =
-//    {
-//        0, 1, 2
-//    };
-//
-//    float depthValue = 1.0;
-//    float offset = 0.7f;
-//
-//    VertexPositionNormalColorTexture vertices[]
-//    { {Vector3(0.f, 100.f, 1.5f), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.5f, 0.0f)},
-//        {Vector3(100.f, -100.f, 1.5f), Vector3(0.0f, 0.0f, -1.0f),Vector2(1.0f, 1.0f)},
-//        {Vector3(-100.f, -100.f, 1.5f), Vector3(0.0f, 0.0f, -1.0f),Vector2(0.0f, 1.0f)}
-//    };
-//
-//    //VertexPosition vertices[]
-//    //{
-//    //    // The sample raytraces in screen space coordinates.
-//    //    // Since DirectX screen space coordinates are right handed (i.e. Y axis points down).
-//    //    // Define the vertices in counter clockwise order ~ clockwise in left handed.
-//    //    Vector3{  0, -offset, depthValue },
-//    //    Vector3{ -offset, offset, depthValue },
-//    //    Vector3{ offset, offset, depthValue }
-//    //};
-//
-//    /*MyUtils::AllocateUploadBuffer(device, vertices, sizeof(vertices), &m_vertexBuffer);
-//    MyUtils::AllocateUploadBuffer(device, indices, sizeof(indices), &m_indexBuffer);*/
-//    //--
-//    auto commandList = m_pCommandList;
-//    auto commandQueue = m_pDXRResources->m_pCommandQueue;
-//    auto commandAllocator = m_pCommandAllocatorArr[0];
-//
-//    // Reset the command list for the acceleration structure construction.
-//    commandList->Reset(commandAllocator, nullptr);
-//
-//    ID3D12Resource* intermediateBufferVertex = nullptr;
-//    ID3D12Resource* intermediateBufferIndex = nullptr;
-//    MyUtils::Create_Buffer_Default(device, commandList, vertices, sizeof(VertexPositionNormalColorTexture) * 3, &intermediateBufferVertex, &m_vertexBuffer);
-//    MyUtils::Create_Buffer_Default(device, commandList, indices, sizeof(UINT16) * 3, &intermediateBufferIndex, &m_indexBuffer);
-//
-//
-//    D3D12_RAYTRACING_GEOMETRY_DESC geometryDesc = {};
-//    geometryDesc.Type = D3D12_RAYTRACING_GEOMETRY_TYPE_TRIANGLES;
-//    geometryDesc.Triangles.IndexBuffer = m_indexBuffer->GetGPUVirtualAddress();
-//    geometryDesc.Triangles.IndexCount = static_cast<UINT>(m_indexBuffer->GetDesc().Width) / sizeof(UINT16);
-//    geometryDesc.Triangles.IndexFormat = DXGI_FORMAT_R16_UINT;
-//    geometryDesc.Triangles.Transform3x4 = 0;
-//    geometryDesc.Triangles.VertexFormat = DXGI_FORMAT_R32G32B32_FLOAT;
-//    geometryDesc.Triangles.VertexCount = static_cast<UINT>(m_vertexBuffer->GetDesc().Width) / sizeof(VertexPositionNormalColorTexture);
-//    geometryDesc.Triangles.VertexBuffer.StartAddress = m_vertexBuffer->GetGPUVirtualAddress();
-//    geometryDesc.Triangles.VertexBuffer.StrideInBytes = sizeof(VertexPositionNormalColorTexture);
-//    geometryDesc.Flags = D3D12_RAYTRACING_GEOMETRY_FLAG_OPAQUE;
-//
-//    D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS bottomLevelInputs{};
-//    bottomLevelInputs.DescsLayout = D3D12_ELEMENTS_LAYOUT_ARRAY;
-//    bottomLevelInputs.Flags = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_PREFER_FAST_TRACE;
-//    bottomLevelInputs.NumDescs = 1;
-//    bottomLevelInputs.Type = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL;
-//    bottomLevelInputs.pGeometryDescs = &geometryDesc;
-//
-//    D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS topLevelInputs = {};
-//    topLevelInputs.DescsLayout = D3D12_ELEMENTS_LAYOUT_ARRAY;
-//    topLevelInputs.Flags = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_PREFER_FAST_TRACE;
-//    topLevelInputs.NumDescs = 1;
-//    topLevelInputs.Type = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL;
-//
-//    D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO bottomLevelPrebuildInfo = {};
-//    device->GetRaytracingAccelerationStructurePrebuildInfo(&bottomLevelInputs, &bottomLevelPrebuildInfo);
-//    D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO topLevelPrebuildInfo = {};
-//    device->GetRaytracingAccelerationStructurePrebuildInfo(&topLevelInputs, &topLevelPrebuildInfo);
-//    ComPtr<ID3D12Resource> scratchResource;
-//	MyUtils::AllocateUAVBuffer(device, max(topLevelPrebuildInfo.ScratchDataSizeInBytes, bottomLevelPrebuildInfo.ScratchDataSizeInBytes), &scratchResource, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, L"ScratchResource");
-//    {
-//        MyUtils::AllocateUAVBuffer(device, bottomLevelPrebuildInfo.ResultDataMaxSizeInBytes, &m_bottomLevelAccelerationStructure, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, L"BottomLevelAccelerationStructure");
-//        MyUtils::AllocateUAVBuffer(device, topLevelPrebuildInfo.ResultDataMaxSizeInBytes, &m_topLevelAccelerationStructure, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, L"TopLevelAccelerationStructure");
-//    }
-//    
-//    ComPtr<ID3D12Resource> instanceDescs;
-//    D3D12_RAYTRACING_INSTANCE_DESC* instanceDescArr = new D3D12_RAYTRACING_INSTANCE_DESC[1]{};
-//    for (UINT i = 0; i < 1; ++i)
-//    {
-//        instanceDescArr[i].Transform[0][0] = instanceDescArr[i].Transform[1][1] = instanceDescArr[i].Transform[2][2] = 1;
-//        instanceDescArr[i].InstanceMask = 1;
-//        instanceDescArr[i].AccelerationStructure = m_bottomLevelAccelerationStructure->GetGPUVirtualAddress();
-//    }
-//    MyUtils::AllocateUploadBuffer(device, instanceDescArr, sizeof(D3D12_RAYTRACING_INSTANCE_DESC) * 1, &instanceDescs);
-//
-//
-//    // Bottom Level Acceleration Structure desc
-//    D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC bottomLevelBuildDesc = {};
-//    {
-//        bottomLevelBuildDesc.Inputs = bottomLevelInputs;
-//        bottomLevelBuildDesc.ScratchAccelerationStructureData = scratchResource->GetGPUVirtualAddress();
-//        bottomLevelBuildDesc.DestAccelerationStructureData = m_bottomLevelAccelerationStructure->GetGPUVirtualAddress();
-//    }
-//
-//    // Top Level Acceleration Structure desc
-//    D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC topLevelBuildDesc = {};
-//    {
-//        topLevelInputs.InstanceDescs = instanceDescs->GetGPUVirtualAddress();
-//        topLevelBuildDesc.Inputs = topLevelInputs;
-//        topLevelBuildDesc.DestAccelerationStructureData = m_topLevelAccelerationStructure->GetGPUVirtualAddress();
-//        topLevelBuildDesc.ScratchAccelerationStructureData = scratchResource->GetGPUVirtualAddress();
-//    }
-//
-//    auto BuildAccelerationStructure = [&](auto* raytracingCommandList)
-//    {
-//        raytracingCommandList->BuildRaytracingAccelerationStructure(&bottomLevelBuildDesc, 0, nullptr);
-//        commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::UAV(m_bottomLevelAccelerationStructure));
-//        raytracingCommandList->BuildRaytracingAccelerationStructure(&topLevelBuildDesc, 0, nullptr);
-//        commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::UAV(m_topLevelAccelerationStructure));
-//    };
-//
-//    // Build acceleration structure.
-//    BuildAccelerationStructure(m_pCommandList);
-//
-//    // Kick off acceleration structure construction.
-//    m_pDXRResources->Close_CommandList();
-//    m_pDXRResources->Execute_CommandList();
-//    m_pDXRResources->Flush_CommandQueue();
-//
-//#pragma endregion TempTest
-
-
 
 	return hr;
 }
@@ -207,7 +75,7 @@ void CDXRRenderer::Update_Static_PassCB(const CAMERA_DESC& camDesc)
     m_mProj = XMMatrixPerspectiveFovLH(camDesc.fFovy, camDesc.fAspectRatio, camDesc.fNear, camDesc.fFar);
 
     // Light Info
-    curSceneCB.lightPosition = Vector4(10.0f, 18.0f, -20.0f, 0.0f);
+    curSceneCB.lightPosition = Vector4(20.0f, 20.0f, -20.0f, 0.0f);
     curSceneCB.lightAmbientColor = Vector4::One * 0.25f;
     curSceneCB.lightDiffuseColor = Vector4::One;
     //curSceneCB.lightDiffuseColor = Vector4(0.6f, 0.6f, 0.6f, 1.f);
@@ -246,13 +114,10 @@ void CDXRRenderer::Update_Static_Object_CB()
                     // 렌더링되는 오브젝트가 아닌 경우
                     continue;
                 }
-                DXR::OBJECT_CB_STATIC objectCB_Static{};
-                objectCB_Static.albedo = pMaterial->Get_DXR_MaterialInfo().albedo;
-
+                DXR::OBJECT_CB_STATIC objectCB_Static = DXR::OBJECT_CB_STATIC(pMaterial->Get_DXR_MaterialInfo());
                 objectCB_Static.startIndex_in_IB_SRV = pSingleMeshDataArr[iterGameObject->Get_GeometryType()]->Get_refBLAS().iStartIndex_in_IB_SRV;
                 objectCB_Static.startIndex_in_VB_SRV = pSingleMeshDataArr[iterGameObject->Get_GeometryType()]->Get_refBLAS().iStartIndex_in_VB_SRV;
-                /*objectCB_Static.startIndex_in_IB_SRV = iterGameObject->Get_BLAS_Ptr()->iStartIndex_in_IB_SRV;
-                objectCB_Static.startIndex_in_VB_SRV= iterGameObject->Get_BLAS_Ptr()->iStartIndex_in_VB_SRV;*/
+                
 
                 m_pCurFrameResource->pObjectCB_Static_DXR->CopyData(iRenderNumbering_ZeroIfNotRendered - 1, objectCB_Static);
 		    }
@@ -288,7 +153,8 @@ void CDXRRenderer::Update_Dynamic_Object_CB()
                 Matrix worldMatrix = iterGameObject->Get_WorldMatrix();
                 DXR::OBJECT_CB_DYNAMIC objectCB_Dynamic{};
                 // 역행렬의 전치행렬
-                objectCB_Dynamic.InvTranspose = worldMatrix.Invert();
+                objectCB_Dynamic.InvTranspose = worldMatrix.Invert().Transpose();
+                //objectCB_Dynamic.InvTranspose = worldMatrix.Invert();
 
                 m_pCurFrameResource->pObjectCB_Dynamic_DXR->CopyData(iRenderNumbering_ZeroIfNotRendered - 1, objectCB_Dynamic);
             }

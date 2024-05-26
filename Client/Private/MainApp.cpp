@@ -81,7 +81,7 @@ HRESULT CMainApp::Initialize()
 #endif
 
 	objDesc.strTag = L"Cube";
-	objDesc.vStartPos = Vector3(0,0,2.5f);
+	objDesc.vStartPos = Vector3(0,0.8f,2.5f);
 	hr = m_pGameInstance->Add_GameObject_InScene(L"Cube", OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
 #if DXR_ON
@@ -111,9 +111,10 @@ HRESULT CMainApp::Initialize()
 	gameObjArr_For_AccelerationTree_Static.emplace_back(pObjectControlling);
 #endif DXR_ON
 
-
+	objDesc.vStartLook = Vector3(0, 1, 0.0001f);
+	objDesc.vStartLook.Normalize();
 	objDesc.strTag = L"Grid_1X1";
-	objDesc.vStartPos = Vector3(-2.f, 0.f, 5.f);
+	objDesc.vStartPos = Vector3(-2.f, -2.f, 5.f);
 	objDesc.vStartScale = Vector3::One * 15;
 	hr = m_pGameInstance->Add_GameObject_InScene(objDesc.strTag, OBJ_LAYER_0, &pObjectControlling, &objDesc);
 	if (FAILED(hr)) { return hr; }
